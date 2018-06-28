@@ -1,5 +1,5 @@
 # pycfmodel
-
+[![Build Status](https://travis-ci.org/Skyscanner/pycfmodel.svg?branch=master)](https://travis-ci.org/Skyscanner/pycfmodel)
 *A python model for Cloud Formation scripts.*
 
 **pycfmodel** makes it easier to work with CloudFormation scripts in Python by
