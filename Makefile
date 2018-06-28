@@ -1,10 +1,10 @@
 SOURCES = $(shell find . -name "*.py")
 
 install:
-	PIP_CONFIG_FILE=pip.conf pip install -r requirements.txt
+	pip install -r requirements.txt
 
 install-dev: install
-	PIP_CONFIG_FILE=pip.conf pip install -e ".[dev]"
+	pip install -e ".[dev]"
 
 lint:
 	flake8 pycfmodel/ # tests/

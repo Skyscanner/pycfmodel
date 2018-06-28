@@ -3,7 +3,7 @@ python:
 - '3.6'
 - nightly
 install:
-- make install
+- make install-dev
 script:
 - make coverage
 deploy:
