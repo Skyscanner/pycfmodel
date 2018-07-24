@@ -14,7 +14,7 @@ dev_requires = [
 
 setup(
     name='pycfmodel',
-    version='0.2.4',
+    version='0.2.5',
     description='A python model for CloudFormation scripts',
     author='Skyscanner Product Security',
     author_email='security@skyscanner.net',
