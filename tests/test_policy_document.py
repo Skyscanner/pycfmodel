@@ -139,27 +139,27 @@ def test_not_principla():
 def test_get_iam_actions():
 
     correct_list = [
-        "iam:DeleteAccountPasswordPolicy",
-        "iam:DeleteServiceLinkedRole",
-        "iam:DeleteRole",
-        "iam:DeleteOpenIDConnectProvider",
-        "iam:DeleteGroup",
-        "iam:DeleteRolePolicy",
-        "iam:DeleteSSHPublicKey",
-        "iam:DeleteLoginProfile",
-        "iam:DeleteServiceSpecificCredential",
-        "iam:DeleteUserPolicy",
-        "iam:DeleteVirtualMFADevice",
-        "iam:DeletePolicyVersion",
-        "iam:DeleteGroupPolicy",
-        "iam:DeleteAccountAlias",
-        "iam:DeleteSigningCertificate",
-        "iam:DeleteUser",
-        "iam:DeletePolicy",
-        "iam:DeleteSAMLProvider",
-        "iam:DeleteAccessKey",
-        "iam:DeleteServerCertificate",
-        "iam:DeleteInstanceProfile",
+        "IAM:DeleteAccountPasswordPolicy",
+        "IAM:DeleteServiceLinkedRole",
+        "IAM:DeleteRole",
+        "IAM:DeleteOpenIDConnectProvider",
+        "IAM:DeleteGroup",
+        "IAM:DeleteRolePolicy",
+        "IAM:DeleteSSHPublicKey",
+        "IAM:DeleteLoginProfile",
+        "IAM:DeleteServiceSpecificCredential",
+        "IAM:DeleteUserPolicy",
+        "IAM:DeleteVirtualMFADevice",
+        "IAM:DeletePolicyVersion",
+        "IAM:DeleteGroupPolicy",
+        "IAM:DeleteAccountAlias",
+        "IAM:DeleteSigningCertificate",
+        "IAM:DeleteUser",
+        "IAM:DeletePolicy",
+        "IAM:DeleteSAMLProvider",
+        "IAM:DeleteAccessKey",
+        "IAM:DeleteServerCertificate",
+        "IAM:DeleteInstanceProfile",
     ]
 
     pd = {
@@ -167,7 +167,7 @@ def test_get_iam_actions():
             "Statement": [
                 {
                     "Action": [
-                        "iam:Delete*"
+                        "IAM:Delete*"
                     ],
                     "Effect": "Allow",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
