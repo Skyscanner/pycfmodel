@@ -233,6 +233,9 @@ class PolicyDocument(object):
                 continue
 
             for action in action_list:
+                if not isinstance(action, str):
+                    # TODO: handle dicts
+                    continue
                 wildcard = action.find("*")
 
                 if wildcard > 0:
