@@ -27,11 +27,16 @@ class IAMGroup(Resource):
         super().__init__(logical_id, value)
 
         self.group_name = None
-        self.managed_policy_arns = []
         self.path = None
         self.policies = []
 
         self.policies = self.get_policies(
             value.get("Properties", {}).get("Policies"),
         )
-        self.set_generic_keys(value.get("Properties", {}), ["Policies"])
+        self.managed_policy_arns = self.get_managed_policy_arns(
+            value.get("Properties", {}).get("ManagedPolicyArns"),
+        )
+        self.set_generic_keys(
+            value.get("Properties", {}),
+            ["Policies", "ManagedPolicyArns"],
+        )
