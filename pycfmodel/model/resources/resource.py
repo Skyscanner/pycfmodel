@@ -55,6 +55,18 @@ class Resource(object):
                 new_policies.append(Policy(p))
         return new_policies
 
+    def get_managed_policy_arns(self, arns):
+        if not arns:
+            return []
+
+        # TODO: a generic function to get if conditions and apply something
+        if isinstance(arns, dict) and "Fn::If" in arns:
+            return arns["Fn::If"][1] + arns["Fn::If"][2]
+        elif isinstance(arns, list):
+            return arns
+
+        return []
+
     def _convert_to_snake_case(self, name):
         s1 = self._first_cap_re.sub(r'\1_\2', name)
         return self._all_cap_re.sub(r'\1_\2', s1).lower()
