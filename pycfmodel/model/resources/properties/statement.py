@@ -45,13 +45,13 @@ class Statement(object):
 
         return [a for a in self.action if "*" in str(a)]
 
-    def wildcard_principals(self):
+    def wildcard_principals(self, pattern):
         if not self.principal:
             return []
 
         wildcard_principals = []
         for principal in self.principal:
-            if principal.has_wildcard_principals():
+            if principal.has_wildcard_principals(pattern):
                 wildcard_principals.append(principal)
 
         return wildcard_principals

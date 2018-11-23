@@ -13,6 +13,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+import re
+
 
 class Principal(object):
 
@@ -30,9 +32,11 @@ class Principal(object):
         # TODO: unhandled cases
         return []
 
-    def has_wildcard_principals(self):
+    def has_wildcard_principals(self, pattern=None):
         for principal in self.principals:
-            if principal == "*":
+            if pattern and re.match(pattern, principal):
+                return True
+            elif principal == "*":
                 return True
         return False
 
