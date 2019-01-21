@@ -57,7 +57,7 @@ class Statement(object):
         return wildcard_principals
 
     def non_whitelisted_principals(self, whitelist):
-        if not self.principal:
+        if not self.principal or self.condition:
             return []
 
         nonwhitelisted_principals = []
