@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 install_requires = []
 
 dev_requires = [
-    'pytest==3.5.0',
+    'pytest>=3.6',
     'flake8>=3.3.0',
     'pytest-cov>=2.5.1',
     'pip-tools==2.0.2',
