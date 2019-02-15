@@ -1,2 +1,3 @@
 [flake8]
 ignore = E501
+exclude = pycfmodel/__init__.py
