@@ -39,7 +39,7 @@ class ResourceFactory(object):
         "AWS::EC2::SecurityGroupIngress": SecurityGroupIngress,
         "AWS::SQS::QueuePolicy": SQSQueuePolicy,
         "AWS::SNS::TopicPolicy": SNSTopicPolicy,
-        "AWS::KMS:Key": KMSKey,
+        "AWS::KMS::Key": KMSKey,
     }
 
     def create_resource(self, logical_id, value):
