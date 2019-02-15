@@ -34,7 +34,7 @@ class Principal(object):
 
     def has_wildcard_principals(self, pattern=None):
         for principal in self.principals:
-            if pattern and re.match(pattern, principal):
+            if pattern and isinstance(principal, str) and re.match(pattern, principal):
                 return True
             elif principal == "*":
                 return True

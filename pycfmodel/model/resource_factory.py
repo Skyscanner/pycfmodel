@@ -24,6 +24,7 @@ from .resources.security_group_egress import SecurityGroupEgress
 from .resources.security_group_ingress import SecurityGroupIngress
 from .resources.sqs_queue_policy import SQSQueuePolicy
 from .resources.sns_topic_policy import SNSTopicPolicy
+from .resources.kms_key import KMSKey
 
 
 class ResourceFactory(object):
@@ -38,6 +39,7 @@ class ResourceFactory(object):
         "AWS::EC2::SecurityGroupIngress": SecurityGroupIngress,
         "AWS::SQS::QueuePolicy": SQSQueuePolicy,
         "AWS::SNS::TopicPolicy": SNSTopicPolicy,
+        "AWS::KMS:Key": KMSKey,
     }
 
     def create_resource(self, logical_id, value):
