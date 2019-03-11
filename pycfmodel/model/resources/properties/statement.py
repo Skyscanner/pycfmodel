@@ -17,8 +17,6 @@ import re
 
 from .principal import PrincipalFactory
 
-import pdb
-
 
 class Statement(object):
 
@@ -36,12 +34,9 @@ class Statement(object):
         return principals_factory.generate_principals(principals)
 
     def wildcard_actions(self, pattern=None):
-        # pdb.set_trace()
         if not self.action:
             return []
 
-        # if type(self.action) != list:
-        #     self.action = [self.action]
         if not isinstance(self.action, list):
             self.action = [self.action]
 
