@@ -37,6 +37,9 @@ class Statement(object):
         if not self.action:
             return []
 
+        if type(self.action) != list:
+            self.action = [self.action]
+
         if pattern:
             return [
                 a for a in self.action
