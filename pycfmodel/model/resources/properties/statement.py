@@ -37,7 +37,7 @@ class Statement(object):
         if not self.action:
             return []
 
-        if type(self.action) != list:
+        if not isinstance(self.action, list):
             self.action = [self.action]
 
         if pattern:
