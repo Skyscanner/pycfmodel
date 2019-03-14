@@ -22,7 +22,7 @@ class Statement(object):
 
     def __init__(self, statement):
         self.action = statement.get("Action", [])
-        self.resource = statement.get("Resource")
+        self.resource = statement.get("Resource", [])
         self.principal = self.__parse_principals(statement.get("Principal"))
         self.effect = statement.get("Effect")
         self.condition = statement.get("Condition", {})
