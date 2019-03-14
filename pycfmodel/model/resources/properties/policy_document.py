@@ -55,7 +55,7 @@ class PolicyDocument(object):
         "IAM:CreateInstanceProfile",
         "IAM:PutUserPolicy",
         "IAM:ChangePassword",
-        "IAM:GenerateServiceLastAccessedDetails"
+        "IAM:GenerateServiceLastAccessedDetails",
         "IAM:CreateOpenIDConnectProvider",
         "IAM:GetOpenIDConnectProvider",
         "IAM:DeleteGroup",
@@ -241,14 +241,14 @@ class PolicyDocument(object):
                 if wildcard > 0:
                     actions = [
                         iam for iam in self.IAM_ACTIONS
-                        if iam.startswith(action[:wildcard])
+                        if action[:wildcard].lower() in iam.lower()
                     ]
                 elif wildcard == 0:
                     actions = self.IAM_ACTIONS
-                elif action in self.IAM_ACTIONS:
-                    actions = [action]
+                elif action.lower() in [iam.lower() for iam in self.IAM_ACTIONS]:
+                    actions.append(action)
 
                 if difference:
-                    return list(set(self.IAM_ACTIONS).difference(set(actions)))
+                    return list(set([iam.lower() for iam in self.IAM_ACTIONS]).difference(set([act.lower() for act in actions])))
 
         return actions
