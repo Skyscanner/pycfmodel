@@ -21,13 +21,17 @@ from .principal import PrincipalFactory
 class Statement(object):
 
     def __init__(self, statement):
-        self.action = statement.get("Action")
-        self.resource = statement.get("Resource")
+        self.action = statement.get("Action", [])
+        self.resource = statement.get("Resource", [])
         self.principal = self.__parse_principals(statement.get("Principal"))
         self.effect = statement.get("Effect")
         self.condition = statement.get("Condition", {})
         self.not_action = statement.get("NotAction", {})
         self.not_principal = statement.get("NotPrincipal", {})
+        if not isinstance(self.action, list):
+            self.action = [self.action]
+        if not isinstance(self.resource, list):
+            self.resource = [self.resource]
 
     def __parse_principals(self, principals):
         principals_factory = PrincipalFactory()
@@ -36,9 +40,6 @@ class Statement(object):
     def wildcard_actions(self, pattern=None):
         if not self.action:
             return []
-
-        if not isinstance(self.action, list):
-            self.action = [self.action]
 
         if pattern:
             return [
