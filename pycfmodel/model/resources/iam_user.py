@@ -28,13 +28,12 @@ class IAMUser(Resource):
 
         self.user_name = None
         self.path = None
-        self.policies = []
 
         self.policies = self.get_policies(
-            value.get("Properties", {}).get("Policies"),
+            value.get("Properties", []).get("Policies"),
         )
         self.managed_policy_arns = self.get_managed_policy_arns(
-            value.get("Properties", {}).get("ManagedPolicyArns"),
+            value.get("Properties", []).get("ManagedPolicyArns"),
         )
         self.set_generic_keys(
             value.get("Properties", {}),
