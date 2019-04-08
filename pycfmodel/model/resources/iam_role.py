@@ -29,17 +29,16 @@ class IAMRole(Resource):
         super().__init__(logical_id, value)
 
         self.path = None
-        self.policies = []
         self.role_name = None
 
         self.assume_role_policy_document = PolicyDocument(
             value.get("Properties", {}).get("AssumeRolePolicyDocument"),
         )
         self.policies = self.get_policies(
-            value.get("Properties", {}).get("Policies"),
+            value.get("Properties", {}).get("Policies", []),
         )
         self.managed_policy_arns = self.get_managed_policy_arns(
-            value.get("Properties", {}).get("ManagedPolicyArns"),
+            value.get("Properties", {}).get("ManagedPolicyArns", []),
         )
         self.set_generic_keys(
             value.get("Properties", {}),
