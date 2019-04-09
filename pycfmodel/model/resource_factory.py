@@ -15,6 +15,7 @@ specific language governing permissions and limitations under the License.
 
 from .resources.generic_resource import GenericResource
 from .resources.iam_group import IAMGroup
+from .resources.iam_user import IAMUser
 from .resources.iam_managed_policy import IAMManagedPolicy
 from .resources.iam_policy import IAMPolicy
 from .resources.iam_role import IAMRole
@@ -34,6 +35,7 @@ class ResourceFactory(object):
         "AWS::S3::BucketPolicy": S3BucketPolicy,
         "AWS::IAM::ManagedPolicy": IAMManagedPolicy,
         "AWS::IAM::Group": IAMGroup,
+        "AWS::IAM::User": IAMUser,
         "AWS::EC2::SecurityGroup": SecurityGroup,
         "AWS::EC2::SecurityGroupEgress": SecurityGroupEgress,
         "AWS::EC2::SecurityGroupIngress": SecurityGroupIngress,

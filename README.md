@@ -13,9 +13,10 @@ inspecting CloudFormation scripts.
 * parameters
 * resources
     * Generic Resource
+    * IAM User
     * IAM Group
     * IAM Managed Policy
-    * IAM role
+    * IAM Role
     * S3 Bucket Policy
     * Security Group Egress
     * Security Group Ingress

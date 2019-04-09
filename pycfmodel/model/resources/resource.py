@@ -27,6 +27,7 @@ class Resource(object):
         self.logical_id = logical_id
         self.resource_type = value.get("Type")
         self.metadata = {}
+        self.properties = {}
 
     def set_generic_keys(self, properties, exclude_list):
         generic_keys = set(properties.keys()) - set(exclude_list)
@@ -38,6 +39,9 @@ class Resource(object):
 
     def set_metadata(self, metadata):
         self.metadata = metadata
+
+    def set_properties(self, properties):
+        self.properties = properties
 
     def get_policies(self, policies):
         if not policies:
@@ -72,6 +76,11 @@ class Resource(object):
         return self._all_cap_re.sub(r'\1_\2', s1).lower()
 
     def has_hardcoded_credentials(self):
+        if self.resource_type == "AWS::IAM::User" and self.properties:
+            login_profile = self.properties.get("LoginProfile", {})
+            if "Password" in list(login_profile):
+                return True
+
         if not self.metadata or not self.metadata.get("AWS::CloudFormation::Authentication"):
             return False
 
