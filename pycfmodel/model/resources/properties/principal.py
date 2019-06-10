@@ -40,6 +40,12 @@ class Principal(object):
                 return True
         return False
 
+    def has_matching_principals(self, pattern=r"*"):
+        for principal in self.principals:
+            if isinstance(principal, str) and re.match(pattern, principal):
+                return True
+        return False
+
     def has_nonwhitelisted_principals(self, whitelist):
         for principal in self.principals:
             if principal not in whitelist:

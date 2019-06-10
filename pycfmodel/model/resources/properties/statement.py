@@ -60,6 +60,17 @@ class Statement(object):
 
         return wildcard_principals
 
+    def matching_principals(self, pattern=r"*"):
+        if not self.principal:
+            return []
+
+        matching_principals = []
+        for principal in self.principal:
+            if principal.has_matching_principals(pattern):
+                matching_principals.append(principal)
+
+        return matching_principals
+
     def non_whitelisted_principals(self, whitelist):
         if not self.principal or self.condition:
             return []

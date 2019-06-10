@@ -203,6 +203,22 @@ class PolicyDocument(object):
 
         return wildcard_allowed
 
+    def matching_principals(self, pattern=r"*", effects=["Allow"]):
+        """
+        Find statements which match the given pattern and effect
+
+        If no pattern is specified it will match all principals
+        If no effects are specified it will match statements with the Allow effect
+        """
+
+        matching_statements = []
+
+        for statement in self.statements:
+            if statement.matching_principals(pattern) and statement.effect in effects:
+                matching_statements.append(statement)
+
+        return matching_statements
+
     def nonwhitelisted_allowed_principals(self, whitelist=None):
         """Find non whitelisted allowed principals."""
 
