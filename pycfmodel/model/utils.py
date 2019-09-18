@@ -1,4 +1,4 @@
-from pycfmodel.model.regexs import FIRST_CAP, ALL_CAP
+from .regexs import FIRST_CAP, ALL_CAP
 
 
 def convert_to_snake_case(name):
