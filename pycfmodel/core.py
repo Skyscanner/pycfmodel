@@ -15,5 +15,5 @@ specific language governing permissions and limitations under the License.
 from .model.cf_model import CFModel
 
 
-def parse(tmeplate):
-    return CFModel(tmeplate)
+def parse(template):
+    return CFModel(template)
