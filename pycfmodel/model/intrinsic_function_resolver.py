@@ -13,6 +13,9 @@ class IntrinsicFunctionResolver(object):
 
         (function, function_body), = function.items()
 
+        # TODO: Implement condition resolver
+        # {"Condition": "SomeOtherCondition"}
+
         if function in ["Ref", "Fn::ImportValue"]:
             return self.params.get(function_body)
 
@@ -43,6 +46,21 @@ class IntrinsicFunctionResolver(object):
             delimeter, source_string = function_body
             return self.resolve(source_string).split(delimeter)
 
+        elif function == "Fn::And":
+            part_1, part_2 = function_body
+            return self.resolve(part_1) and self.resolve(part_2)
+
+        elif function == "Fn::Or":
+            part_1, part_2 = function_body
+            return self.resolve(part_1) or self.resolve(part_2)
+
+        elif function == "Fn::Not":
+            return not self.resolve(function_body[0])
+
+        elif function == "Fn::Equals":
+            part_1, part_2 = function_body
+            return self.resolve(part_1) == self.resolve(part_2)
+
         elif function == "Fn::If":
             condition, true_section, false_section = function_body
 
@@ -52,4 +70,4 @@ class IntrinsicFunctionResolver(object):
                 return self.resolve(false_section)
 
         elif function == "Fn::Base64":
-            return b64encode(self.resolve(function_body))
+            return b64encode(bytes(self.resolve(function_body), "utf-8")).decode("utf-8")
