@@ -22,3 +22,6 @@ class GenericResource(Resource):
         super().__init__(logical_id, value)
         self.set_generic_keys(value.get("Properties", {}), [])
         self.set_metadata(value.get("Metadata", {}))
+
+    def resolve(self, intrinsic_function_resolver):
+        return None
