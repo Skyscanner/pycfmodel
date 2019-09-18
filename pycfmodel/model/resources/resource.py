@@ -12,16 +12,13 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-import re
-
+from pycfmodel.model.utils import convert_to_snake_case
 from .properties.policy import Policy
 
 
 class Resource(object):
 
     # metadata = None
-    _first_cap_re = re.compile('(.)([A-Z][a-z]+)')
-    _all_cap_re = re.compile('([a-z0-9])([A-Z])')
 
     def __init__(self, logical_id, value):
         self.logical_id = logical_id
@@ -33,7 +30,7 @@ class Resource(object):
         generic_keys = set(properties.keys()) - set(exclude_list)
         for generic_key in generic_keys:
             self.__setattr__(
-                self._convert_to_snake_case(generic_key),
+                convert_to_snake_case(generic_key),
                 properties[generic_key],
             )
 
@@ -70,10 +67,6 @@ class Resource(object):
             return arns
 
         return []
-
-    def _convert_to_snake_case(self, name):
-        s1 = self._first_cap_re.sub(r'\1_\2', name)
-        return self._all_cap_re.sub(r'\1_\2', s1).lower()
 
     def has_hardcoded_credentials(self):
         if self.resource_type == "AWS::IAM::User" and self.properties:
