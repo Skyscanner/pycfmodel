@@ -1,4 +1,4 @@
-"""
+ """
 Copyright 2018 Skyscanner Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -44,3 +44,8 @@ class IAMRole(Resource):
             value.get("Properties", {}),
             ["AssumeRolePolicyDocument", "Policies", "ManagedPolicyArns"],
         )
+
+    def resolve(self, intrinsic_function_resolver):
+        for policies in [[self.assume_role_policy_document], self.policies, self.managed_policy_arns]:
+            for policy in policies:
+                policy.resolve(intrinsic_function_resolver)

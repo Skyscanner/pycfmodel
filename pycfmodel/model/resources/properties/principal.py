@@ -46,6 +46,9 @@ class Principal(object):
                 return True
         return False
 
+    def resolve(self, intrinsic_function_resolver):
+        self.principals = [intrinsic_function_resolver.resolve(principal) for principal in self.principals]
+
 
 class PrincipalFactory(object):
 

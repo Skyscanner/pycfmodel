@@ -77,3 +77,11 @@ class Statement(object):
         elif isinstance(self.action, list):
             return self.action
         return []
+
+    def resolve(self, intrinsic_function_resolver):
+        for principal in self.principal:
+            principal.resolve(intrinsic_function_resolver)
+
+        self.computed_resources = []
+        for resource in self.resource:
+            self.computed_resources.append(intrinsic_function_resolver.resolve(resource))

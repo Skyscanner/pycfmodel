@@ -12,9 +12,8 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from pprint import pprint
 
-from pycfmodel.model.intrinsic_function_resolver import IntrinsicFunctionResolver
+from .intrinsic_function_resolver import IntrinsicFunctionResolver
 from .parameter import Parameter
 from .condition import Condition
 from .resource_factory import ResourceFactory
@@ -93,5 +92,4 @@ class CFModel(object):
         intrinsic_function_resolver = IntrinsicFunctionResolver(self.computed_parameters, self.mappings)
         for resource_type in self.resources.values():
             for resource in resource_type:
-                pprint(resource)
                 resource.resolve(intrinsic_function_resolver)

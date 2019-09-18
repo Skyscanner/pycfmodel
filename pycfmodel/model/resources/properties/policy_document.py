@@ -252,3 +252,7 @@ class PolicyDocument(object):
                     return list(set([iam.lower() for iam in self.IAM_ACTIONS]).difference(set([act.lower() for act in actions])))
 
         return actions
+
+    def resolve(self, intrinsic_function_resolver):
+        for statement in self.statements:
+            statement.resolve(intrinsic_function_resolver)

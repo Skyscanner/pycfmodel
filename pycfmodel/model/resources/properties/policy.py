@@ -24,3 +24,6 @@ class Policy(object):
         """
         self.policy_name = value.get("PolicyName")
         self.policy_document = PolicyDocument(value.get('PolicyDocument'))
+
+    def resolve(self, intrinsic_function_resolver):
+        self.policy_document.resolve(intrinsic_function_resolver)
