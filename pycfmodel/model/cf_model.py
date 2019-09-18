@@ -12,7 +12,6 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from pycfmodel.model.intrinsic_function_resolver import IntrinsicFunctionResolver
 from .parameter import Parameter
 from .condition import Condition
 from .resource_factory import ResourceFactory
@@ -30,8 +29,6 @@ class CFModel(object):
         self.conditions = self._parse_conditions(cf_script.get("Conditions", {}))
         self.resources = self._parse_resources(cf_script.get("Resources", {}))
         self.outputs = self._parse_outputs(cf_script.get("Outputs", {}))
-
-        self.resolve()
 
     def _parse_parameters(self, template_params):
         """Parses and sets parameters in the model."""
@@ -76,15 +73,3 @@ class CFModel(object):
         for output_name, output_value in template_outputs.items():
             outputs[output_name] = Condition(output_name, output_value)
         return outputs
-
-    def resolve(self, custom_pseudo_parameters={}, custom_parameters={}, import_values={}):
-        params = {
-            **self.default_parameters,
-            **custom_pseudo_parameters,
-            **import_values,
-            **custom_parameters,
-        }
-
-        intrinsic_function_resolver = IntrinsicFunctionResolver(params, self.mappings)
-        for resource in self.resources:
-            intrinsic_function_resolver.resolve(function)
