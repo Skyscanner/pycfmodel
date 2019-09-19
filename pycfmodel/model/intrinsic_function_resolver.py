@@ -13,9 +13,6 @@ class IntrinsicFunctionResolver(object):
 
         (function, function_body), = function.items()
 
-        # TODO: Implement condition resolver
-        # {"Condition": "SomeOtherCondition"}
-
         if function in ["Ref", "Fn::ImportValue"]:
             return self.params.get(function_body)
 
@@ -34,7 +31,6 @@ class IntrinsicFunctionResolver(object):
                 replacements.update(custom_replacements)
             else:
                 string = function_body
-
             for var_name, var_value in replacements.items():
                 var_value = self.resolve(var_value)
                 if isinstance(var_value, str):
@@ -64,13 +60,16 @@ class IntrinsicFunctionResolver(object):
             part_1, part_2 = function_body
             return self.resolve(part_1) == self.resolve(part_2)
 
-        elif function == "Fn::If":
-            condition, true_section, false_section = function_body
-
-            if self.resolve(condition):
-                return self.resolve(true_section)
-            else:
-                return self.resolve(false_section)
+        # TODO: Implement condition resolver
+        # elif function == "Condition":
+        # {"Condition": "SomeOtherCondition"}
+        # TODO:Conditions aren't supported yet, so this code can't be evaluated
+        # elif function == "Fn::If":
+        #     condition, true_section, false_section = function_body
+        #     if self.resolve(condition):
+        #         return self.resolve(true_section)
+        #     else:
+        #         return self.resolve(false_section)
 
         elif function == "Fn::Base64":
             return b64encode(bytes(self.resolve(function_body), "utf-8")).decode("utf-8")

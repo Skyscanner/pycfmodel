@@ -17,32 +17,32 @@ from pycfmodel.model.regexs import CONTAINS_STAR
 
 class Principal(object):
 
-    def __init__(self, principal):
-        self.principal_raw = principal
-        self.principal = self.principal_raw
+    def __init__(self, identifier):
+        self.identifiers_raw = identifier
+        self.identifiers = self.identifiers_raw
 
-    def has_wildcard_principals(self):
-        return self.has_principals_with(CONTAINS_STAR)
+    def has_wildcard_identifiers(self):
+        return self.has_identifiers_with(CONTAINS_STAR)
 
-    def has_non_whitelisted_principals(self, whitelist):
-        for type, lst in self.principal.items():
+    def has_non_whitelisted_identifiers(self, whitelist):
+        for type, lst in self.identifiers.items():
             for identifier in lst:
                 if identifier not in whitelist:
                     return True
         return False
 
-    def has_principals_with(self, pattern):
-        for type, lst in self.principal.items():
+    def has_identifiers_with(self, pattern):
+        for type, lst in self.identifiers.items():
             for identifier in lst:
                 if pattern.match(identifier):
                     return True
         return False
 
     def resolve(self, intrinsic_function_resolver):
-        self.principal = {}
-        for type, lst in self.principal_raw.items():
-            self.principal[type] = []
+        self.identifiers = {}
+        for type, lst in self.identifiers_raw.items():
+            self.identifiers[type] = []
             if not isinstance(lst, list):
                 lst = [lst]
             for identifier in lst:
-                self.principal[type].append(intrinsic_function_resolver.resolve(identifier))
+                self.identifiers[type].append(intrinsic_function_resolver.resolve(identifier))
