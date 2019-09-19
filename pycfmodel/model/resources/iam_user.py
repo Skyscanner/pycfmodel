@@ -42,16 +42,3 @@ class IAMUser(Resource):
         self.set_properties(
             value.get("Properties", {})
         )
-
-    def has_hardcoded_credentials(self):
-        if self.properties:
-            login_profile = self.properties.get("LoginProfile", {})
-            if "Password" in list(login_profile):
-                return True
-
-        if not self.metadata or not self.metadata.get("AWS::CloudFormation::Authentication"):
-            return False
-
-        for auth_name, auth in self.metadata.get("AWS::CloudFormation::Authentication", {}).items():
-            if auth.get("accessKeyId") or auth.get("password") or auth.get("secretKey"):
-                return True
