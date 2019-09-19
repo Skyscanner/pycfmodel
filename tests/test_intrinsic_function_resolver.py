@@ -152,11 +152,6 @@ def test_equals():
     assert intrinsic_function_resolver.resolve(function) == True
 
 
-def test_if():
-    # TODO: implement
-    pass
-
-
 def test_base64():
     computed_parameters = {}
     mappings = {}
@@ -236,20 +231,3 @@ def test_find_in_map_and_ref():
 
     function = {"Fn::FindInMap": ["RegionMap", {"Ref": "AWS::Region"}, "HVM64"]}
     assert intrinsic_function_resolver.resolve(function) == "ami-0ff8a91507f77f867"
-
-
-# def test_if_and_ref():
-#     computed_parameters = {"NewSecurityGroup" "OldSecurityGroup": ""}
-#     mappings = {}
-#     intrinsic_function_resolver = IntrinsicFunctionResolver(
-#         computed_parameters, mappings
-#     )
-#
-#     function = {
-#         "Fn::If": [
-#             "CreateNewSecurityGroup",
-#             {"Ref": "NewSecurityGroup"},
-#             {"Ref": "OldSecurityGroup"},
-#         ]
-#     }
-#     assert intrinsic_function_resolver.resolve(function) == "aG9sYXAgOik="
