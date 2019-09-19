@@ -22,7 +22,7 @@ class Statement(object):
         self.effect_raw = statement.get("Effect")
         self.effect = self.effect_raw
 
-        # @TODO Process condition
+        # TODO: Process condition
         self.condition = statement.get("Condition")
 
         self.principal = None
@@ -91,33 +91,33 @@ class Statement(object):
             self.not_principal.resolve(intrinsic_function_resolver)
 
         # Action
-        to_process = []
-        if not isinstance(self.action_raw, list):
-            to_process = [self.action_raw]
+        to_process = self.action_raw
+        if not isinstance(to_process, list):
+            to_process = [to_process]
         self.action = []
         for identifier in to_process:
             self.action.append(intrinsic_function_resolver.resolve(identifier))
 
         # NotAction
-        to_process = []
-        if not isinstance(self.not_action_raw, list):
-            to_process = [self.not_action_raw]
+        to_process = self.not_action_raw
+        if not isinstance(to_process, list):
+            to_process = [to_process]
         self.not_action = []
         for identifier in to_process:
             self.not_action.append(intrinsic_function_resolver.resolve(identifier))
 
         # Resource
-        to_process = []
-        if not isinstance(self.resource_raw, list):
-            to_process = [self.resource_raw]
+        to_process = self.resource_raw
+        if not isinstance(to_process, list):
+            to_process = [to_process]
         self.resource = []
         for identifier in to_process:
             self.resource.append(intrinsic_function_resolver.resolve(identifier))
 
         # NotResource
-        to_process = []
-        if not isinstance(self.not_resource_raw, list):
-            to_process = [self.not_resource_raw]
+        to_process = self.not_resource_raw
+        if not isinstance(to_process, list):
+            to_process = [to_process]
         self.not_resource = []
         for identifier in to_process:
             self.not_resource.append(intrinsic_function_resolver.resolve(identifier))
