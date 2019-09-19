@@ -17,19 +17,13 @@ from .utils import convert_to_snake_case
 
 class Parameter(object):
 
-    def __init__(self, logical_id, properties, value=None):
+    def __init__(self, logical_id, properties):
         if not isinstance(properties, dict):
             return
         self.logical_id = logical_id
         self.type = properties.get("Type")
-        self.default = properties.get("Default")
-        if value:
-            self.value = value
-        else:
-            self.value = self.default
-        self.description = properties.get("Description")
 
-        self.set_generic_keys(properties, ["Type", "Default", "Description"])
+        self.set_generic_keys(properties, ["Type"])
 
     def set_generic_keys(self, properties, exclude_list):
         """

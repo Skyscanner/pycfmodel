@@ -32,22 +32,7 @@ class CFModel(object):
 
     def _parse_parameters(self, template_params):
         """Parses and sets parameters in the model."""
-        parameters = {
-            # Default pseudo parameters
-            "AWS::AccountId": Parameter("AWS::AccountId", "123456789012"),
-            "AWS::NotificationARNs": Parameter("AWS::NotificationARNs", []),
-            "AWS::NoValue": Parameter("AWS::NoValue", None),
-            "AWS::Partition": Parameter("AWS::Partition", "aws"),
-            "AWS::Region": Parameter("AWS::Region", "eu-west-1"),
-            "AWS::StackId": Parameter("AWS::StackId", ""),
-            "AWS::StackName": Parameter("AWS::StackName", ""),
-            "AWS::URLSuffix": Parameter("AWS::URLSuffix", "amazonaws.com"),
-        }
-
-        for param_name, param_value in template_params.items():
-            parameters[param_name] = Parameter(param_name, param_value)
-
-        return parameters
+        return [Parameter(param_name, param_value) for param_name, param_value in template_params.items()]
 
     def _parse_conditions(self, template_conditions):
         conditions = {}
