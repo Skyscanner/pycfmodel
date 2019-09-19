@@ -13,7 +13,6 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 from .parameter import Parameter
-from .condition import Condition
 from .resource_factory import ResourceFactory
 
 
@@ -24,21 +23,15 @@ class CFModel(object):
         self.description = cf_script.get("Description")
         self.metadata = cf_script.get("Metadata")
 
-        self.default_parameters = self._parse_parameters(cf_script.get("Parameters", {}))
+        self.parameters = self._parse_parameters(cf_script.get("Parameters", {}))
         self.mappings = cf_script.get("Mappings")
-        self.conditions = self._parse_conditions(cf_script.get("Conditions", {}))
+        self.conditions = cf_script.get("Conditions")
         self.resources = self._parse_resources(cf_script.get("Resources", {}))
-        self.outputs = self._parse_outputs(cf_script.get("Outputs", {}))
+        self.outputs = cf_script.get("Outputs")
 
     def _parse_parameters(self, template_params):
         """Parses and sets parameters in the model."""
         return [Parameter(param_name, param_value) for param_name, param_value in template_params.items()]
-
-    def _parse_conditions(self, template_conditions):
-        conditions = {}
-        for condition_name, condition_value in template_conditions.items():
-            conditions[condition_name] = Condition(condition_name, condition_value)
-        return conditions
 
     def _parse_resources(self, template_resources):
         """Parses and sets resources in the model using a factory."""
@@ -52,9 +45,3 @@ class CFModel(object):
                 else:
                     resources[r.resource_type] = [r]
         return resources
-
-    def _parse_outputs(self, template_outputs):
-        outputs = {}
-        for output_name, output_value in template_outputs.items():
-            outputs[output_name] = Condition(output_name, output_value)
-        return outputs
