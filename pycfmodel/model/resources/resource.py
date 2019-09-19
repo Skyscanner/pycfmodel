@@ -67,7 +67,7 @@ class Resource(object):
             return arns
 
         return []
-    
+
     def has_hardcoded_credentials(self):
         if self.resource_type == "AWS::IAM::User" and self.properties:
             login_profile = self.properties.get("LoginProfile", {})
@@ -80,3 +80,5 @@ class Resource(object):
         for auth_name, auth in self.metadata.get("AWS::CloudFormation::Authentication", {}).items():
             if auth.get("accessKeyId") or auth.get("password") or auth.get("secretKey"):
                 return True
+
+

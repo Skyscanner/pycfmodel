@@ -70,6 +70,14 @@ class Statement(object):
             all.extend(self.not_principal)
         return [principal for principal in all if principal.has_non_whitelisted_principals(whitelist)]
 
+    def get_action_list(self):
+        all = []
+        if self.action:
+            all.extend(self.action)
+        if self.not_action:
+            all.extend(self.not_action)
+        return all
+
     def resolve(self, intrinsic_function_resolver):
         # Effect
         self.effect = intrinsic_function_resolver.resolve(self.effect_raw)

@@ -25,7 +25,7 @@ class CFModel(object):
         self.description = cf_script.get("Description")
         self.metadata = cf_script.get("Metadata")
 
-        self.parameters = self._parse_parameters(cf_script.get("Parameters", {}))
+        self.default_parameters = self._parse_parameters(cf_script.get("Parameters", {}))
         self.mappings = cf_script.get("Mappings")
         self.conditions = cf_script.get("Conditions")
         self.resources = self._parse_resources(cf_script.get("Resources", {}))
