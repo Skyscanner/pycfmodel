@@ -22,7 +22,7 @@ class IAMUser(Resource):
         "UserName": String,
         "ManagedPolicyArns": [ String, ... ],
         "Path": String,
-        "Policies": [ Policies, ... ]pycfmodel/model/resources/iam_user.py
+        "Policies": [ Policies, ... ]
         """
         super().__init__(logical_id, value)
 
