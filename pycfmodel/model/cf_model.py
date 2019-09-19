@@ -39,22 +39,10 @@ class CFModel(object):
 
     def _parse_parameters(self, template_params):
         """Parses and sets parameters in the model."""
-        parameters = {
-            # Default pseudo parameters
-            "AWS::AccountId": Parameter("AWS::AccountId", "123456789012"),
-            "AWS::NotificationARNs": Parameter("AWS::NotificationARNs", []),
-            "AWS::NoValue": Parameter("AWS::NoValue", None),
-            "AWS::Partition": Parameter("AWS::Partition", "aws"),
-            "AWS::Region": Parameter("AWS::Region", "eu-west-1"),
-            "AWS::StackId": Parameter("AWS::StackId", ""),
-            "AWS::StackName": Parameter("AWS::StackName", ""),
-            "AWS::URLSuffix": Parameter("AWS::URLSuffix", "amazonaws.com"),
+        return {
+            param_name: Parameter(param_name, param_value)
+            for param_name, param_value in template_params.items()
         }
-
-        for param_name, param_value in template_params.items():
-            parameters[param_name] = Parameter(param_name, param_value)
-
-        return parameters
 
     def _parse_conditions(self, template_conditions):
         conditions = {}
@@ -81,9 +69,25 @@ class CFModel(object):
             outputs[output_name] = Condition(output_name, output_value)
         return outputs
 
-    def resolve(self, custom_pseudo_parameters={}, custom_parameters={}, import_values={}):
+    def resolve(self, custom_pseudo_parameters={}, import_values={}, custom_parameters={}):
         self.computed_parameters = {
-            **self.default_parameters,
+            # default pseudo parameters
+            **{
+                "AWS::AccountId": "123456789012",
+                "AWS::NotificationARNs": [],
+                "AWS::NoValue": None,
+                "AWS::Partition": "aws",
+                "AWS::Region": "eu-west-1",
+                "AWS::StackId": "",
+                "AWS::StackName": "",
+                "AWS::URLSuffix": "amazonaws.com",
+            },
+            # default parameters
+            **{
+                key: parameter.default
+                for key, parameter in self.default_parameters.items()
+                if parameter.default
+            },
             **custom_pseudo_parameters,
             **import_values,
             **custom_parameters,

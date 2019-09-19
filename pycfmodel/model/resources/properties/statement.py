@@ -12,76 +12,104 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-
-import re
-
-from .principal import PrincipalFactory
+from pycfmodel.model.regexs import CONTAINS_STAR
+from .principal import Principal
 
 
 class Statement(object):
 
     def __init__(self, statement):
-        self.action = statement.get("Action", [])
-        self.resource = statement.get("Resource", [])
-        self.principal = self.__parse_principals(statement.get("Principal"))
-        self.effect = statement.get("Effect")
-        self.condition = statement.get("Condition", {})
-        self.not_action = statement.get("NotAction", {})
-        self.not_principal = statement.get("NotPrincipal", {})
-        if not isinstance(self.action, list):
-            self.action = [self.action]
-        if not isinstance(self.resource, list):
-            self.resource = [self.resource]
+        self.effect_raw = statement.get("Effect")
+        self.effect = self.effect_raw
 
-    def __parse_principals(self, principals):
-        principals_factory = PrincipalFactory()
-        return principals_factory.generate_principals(principals)
+        # @TODO Process condition
+        self.condition = statement.get("Condition")
 
-    def wildcard_actions(self, pattern=None):
-        if not self.action:
-            return []
+        self.principal = None
+        self.not_principal = None
 
-        if pattern:
-            return [
-                a for a in self.action
-                if re.match(pattern, a)
-            ]
+        if "Principal" in statement:
+            self.principal = Principal(statement.get("Principal"))
+        if "NotPrincipal" in statement:
+            self.not_principal = Principal(statement.get("NotPrincipal"))
 
-        return [a for a in self.action if "*" in str(a)]
+        self.action_raw = statement.get("Action", [])
+        self.action = self.action_raw
+        self.not_action_raw = statement.get("NotAction", [])
+        self.not_action = self.not_action_raw
 
-    def wildcard_principals(self, pattern):
-        if not self.principal:
-            return []
+        self.resource_raw = statement.get("Resource", [])
+        self.resource = self.resource_raw
+        self.not_resource_raw = statement.get("NotResource", [])
+        self.not_resource = self.not_resource_raw
 
-        wildcard_principals = []
-        for principal in self.principal:
-            if principal.has_wildcard_principals(pattern):
-                wildcard_principals.append(principal)
+    def has_actions_with(self, pattern):
+        all = []
+        if self.action:
+            all.extend(self.action)
+        if self.not_action:
+            all.extend(self.not_action)
+        return [action for action in all if pattern.match(action)]
 
-        return wildcard_principals
+    def wildcard_actions(self):
+        return self.has_actions_with(CONTAINS_STAR)
+
+    def wildcard_principals(self):
+        all = []
+        if self.principal:
+            all.extend(self.principal)
+        if self.not_principal:
+            all.extend(self.not_principal)
+        return [principal for principal in all if principal.has_wildcard_principals()]
 
     def non_whitelisted_principals(self, whitelist):
-        if not self.principal or self.condition:
-            return []
-
-        nonwhitelisted_principals = []
-        for principal in self.principal:
-            if principal.has_nonwhitelisted_principals(whitelist):
-                nonwhitelisted_principals.append(principal)
-
-        return nonwhitelisted_principals
-
-    def get_action_list(self):
-        if isinstance(self.action, str):
-            return [self.action]
-        elif isinstance(self.action, list):
-            return self.action
-        return []
+        all = []
+        if self.principal:
+            all.extend(self.principal)
+        if self.not_principal:
+            all.extend(self.not_principal)
+        return [principal for principal in all if principal.has_non_whitelisted_principals(whitelist)]
 
     def resolve(self, intrinsic_function_resolver):
-        for principal in self.principal:
-            principal.resolve(intrinsic_function_resolver)
+        # Effect
+        self.effect = intrinsic_function_resolver.resolve(self.effect_raw)
 
-        self.computed_resources = []
-        for resource in self.resource:
-            self.computed_resources.append(intrinsic_function_resolver.resolve(resource))
+        # Principal
+        if self.principal:
+            self.principal.resolve(intrinsic_function_resolver)
+
+        # NotPrincipal
+        if self.not_principal:
+            self.not_principal.resolve(intrinsic_function_resolver)
+
+        # Action
+        to_process = []
+        if not isinstance(self.action_raw, list):
+            to_process = [self.action_raw]
+        self.action = []
+        for identifier in to_process:
+            self.action.append(intrinsic_function_resolver.resolve(identifier))
+
+        # NotAction
+        to_process = []
+        if not isinstance(self.not_action_raw, list):
+            to_process = [self.not_action_raw]
+        self.not_action = []
+        for identifier in to_process:
+            self.not_action.append(intrinsic_function_resolver.resolve(identifier))
+
+        # Resource
+        to_process = []
+        if not isinstance(self.resource_raw, list):
+            to_process = [self.resource_raw]
+        self.resource = []
+        for identifier in to_process:
+            self.resource.append(intrinsic_function_resolver.resolve(identifier))
+
+        # NotResource
+        to_process = []
+        if not isinstance(self.not_resource_raw, list):
+            to_process = [self.not_resource_raw]
+        self.not_resource = []
+        for identifier in to_process:
+            self.not_resource.append(intrinsic_function_resolver.resolve(identifier))

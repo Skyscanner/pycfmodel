@@ -183,7 +183,7 @@ class PolicyDocument(object):
         wildcard_allowed = []
 
         for statement in self.statements:
-            if statement.wildcard_actions(pattern) and statement.effect == "Allow":
+            if statement.wildcard_actions() and statement.effect == "Allow":
                 wildcard_allowed.append(statement)
 
         return wildcard_allowed

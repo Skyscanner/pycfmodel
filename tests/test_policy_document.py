@@ -113,7 +113,7 @@ def test_wildcard_actions():
         pattern=r"^(\w*:){0,1}\*$")) == 1
 
 
-def test_not_principla():
+def test_not_principal():
     pd = {
         "PolicyDocument": {
             "Statement": [

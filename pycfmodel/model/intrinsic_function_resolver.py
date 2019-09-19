@@ -8,7 +8,7 @@ class IntrinsicFunctionResolver(object):
         self.mappings = mappings
 
     def resolve(self, function):
-        if type(function) is not dict:
+        if not isinstance(function, dict):
             return function
 
         (function, function_body), = function.items()
@@ -28,14 +28,17 @@ class IntrinsicFunctionResolver(object):
             return self.mappings[self.resolve(map_name)][self.resolve(top_level_key)][self.resolve(second_level_key)]
 
         elif function == "Fn::Sub":
+            replacements = self.params
             if type(function_body) is list:
-                string, replaces = function_body
-                for var_name, var_value in replaces.items():
-                    string = string.replace(f"${{{var_name}}}", self.resolve(var_value))
+                string, custom_replacements = function_body
+                replacements.update(custom_replacements)
             else:
                 string = function_body
-                for var_name, var_value in self.params.items():
-                    string = string.replace(f"${{{var_name}}}", self.resolve(var_value))
+
+            for var_name, var_value in replacements.items():
+                var_value = self.resolve(var_value)
+                if isinstance(var_value, str):
+                    string = string.replace(f"${{{var_name}}}", var_value)
             return string
 
         elif function == "Fn::Select":
