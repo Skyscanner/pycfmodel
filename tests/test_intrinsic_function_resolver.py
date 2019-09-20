@@ -163,6 +163,17 @@ def test_base64():
     assert intrinsic_function_resolver.resolve(function) == "aG9sYXAgOik="
 
 
+def test_empty_sub():
+    computed_parameters = {}
+    mappings = {}
+    intrinsic_function_resolver = IntrinsicFunctionResolver(
+        computed_parameters, mappings
+    )
+
+    function = {"Fn::Sub": "www.skyscanner.net"}
+    assert intrinsic_function_resolver.resolve(function) == "www.skyscanner.net"
+
+
 def test_select_and_ref():
     computed_parameters = {
         "DbSubnetIpBlocks": ["10.0.48.0/24", "10.0.112.0/24", "10.0.176.0/24"]
