@@ -29,7 +29,9 @@ class IAMRole(Resource):
         super().__init__(logical_id, value)
 
         self.path = None
-        self.role_name = None
+
+        self.role_name_raw = value.get("Properties", {}).get("RoleName")
+        self.role_name = self.role_name_raw
 
         self.assume_role_policy_document = PolicyDocument(
             value.get("Properties", {}).get("AssumeRolePolicyDocument"),
@@ -42,10 +44,11 @@ class IAMRole(Resource):
         )
         self.set_generic_keys(
             value.get("Properties", {}),
-            ["AssumeRolePolicyDocument", "Policies", "ManagedPolicyArns"],
+            ["RoleName", "AssumeRolePolicyDocument", "Policies", "ManagedPolicyArns"],
         )
 
     def resolve(self, intrinsic_function_resolver):
+        self.role_name = intrinsic_function_resolver.resolve(self.role_name_raw)
         for policies in [[self.assume_role_policy_document], self.policies, self.managed_policy_arns]:
             for policy in policies:
                 policy.resolve(intrinsic_function_resolver)
