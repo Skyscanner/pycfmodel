@@ -17,7 +17,7 @@ import re
 from deprecation import deprecated
 
 from pycfmodel.model.regexs import CONTAINS_STAR
-from .principal import Principal
+from .principal import PrincipalFactory
 
 
 class Statement(object):
@@ -29,13 +29,8 @@ class Statement(object):
         # TODO: Process condition
         self.condition = statement.get("Condition")
 
-        self./Users/oscarblanco/Documents/github/cfripper/py3env/lib/python3.7/site-packages/cfripper/rules/S3CrossAccountTrustRule.py = None
-        self.not_principal = None
-
-        if "Principal" in statement:
-            self.principal = Principal(statement.get("Principal"))
-        if "NotPrincipal" in statement:
-            self.not_principal = Principal(statement.get("NotPrincipal"))
+        self.principal = self.__parse_principals(statement.get("Principal"))
+        self.not_principal = self.__parse_principals(statement.get("NotPrincipal"))
 
         self.action_raw = statement.get("Action", [])
         self.action = self.action_raw
@@ -47,9 +42,12 @@ class Statement(object):
         self.not_resource_raw = statement.get("NotResource", [])
         self.not_resource = self.not_resource_raw
 
+    def __parse_principals(self, principals):
+        principals_factory = PrincipalFactory()
+        return principals_factory.generate_principals(principals)
+
     def actions_with(self, pattern):
-        all = self.action + self.not_action
-        return [action for action in all if pattern.match(action)]
+        return [action for action in self.get_action_list() if pattern.match(action)]
 
     def principals_with(self, pattern):
         all = []
@@ -57,7 +55,7 @@ class Statement(object):
             all.extend(self.principal)
         if self.not_principal:
             all.extend(self.not_principal)
-        return [principal for principal in all if principal.has_identifiers_with(pattern)]
+        return [principal for principal in all if principal.has_principals_with(pattern)]
 
     @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see actions_with")
     def wildcard_actions(self, pattern=None):
@@ -83,8 +81,8 @@ class Statement(object):
         elif self.not_principal:
             all.append(self.not_principal)
         if pattern:
-            return [principal for principal in all if principal.has_identifiers_with(re.compile(pattern))]
-        return [principal for principal in all if principal.has_wildcard_identifiers()]
+            return [principal for principal in all if principal.has_principals_with(re.compile(pattern))]
+        return [principal for principal in all if principal.has_wildcard_principals(CONTAINS_STAR)]
 
     def non_whitelisted_principals(self, whitelist):
         all = []
@@ -112,12 +110,12 @@ class Statement(object):
         self.effect = intrinsic_function_resolver.resolve(self.effect_raw)
 
         # Principal
-        if self.principal:
-            self.principal.resolve(intrinsic_function_resolver)
+        for principal in self.principal:
+            principal.resolve(intrinsic_function_resolver)
 
         # NotPrincipal
-        if self.not_principal:
-            self.not_principal.resolve(intrinsic_function_resolver)
+        for principal in self.not_principal:
+            principal.resolve(intrinsic_function_resolver)
 
         # Action
         to_process = self.action_raw

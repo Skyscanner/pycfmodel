@@ -14,7 +14,11 @@ class IntrinsicFunctionResolver(object):
         (function, function_body), = function.items()
 
         if function in ["Ref", "Fn::ImportValue"]:
-            return self.params.get(function_body)
+            if function not in self.params:
+                # Add loging
+                print("value not available")
+                return "NOVALUE"
+            return self.params[function_body]
 
         elif function == "Fn::Join":
             delimiter, values = function_body
@@ -22,7 +26,10 @@ class IntrinsicFunctionResolver(object):
 
         elif function == "Fn::FindInMap":
             map_name, top_level_key, second_level_key = function_body
-            return self.mappings[self.resolve(map_name)][self.resolve(top_level_key)][self.resolve(second_level_key)]
+            try:
+                return self.mappings[self.resolve(map_name)][self.resolve(top_level_key)][self.resolve(second_level_key)]
+            except KeyError:
+                return ""
 
         elif function == "Fn::Sub":
             replacements = self.params

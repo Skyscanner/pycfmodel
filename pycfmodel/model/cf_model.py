@@ -68,7 +68,7 @@ class CFModel(object):
             **{
                 "AWS::AccountId": "123456789012",
                 "AWS::NotificationARNs": [],
-                "AWS::NoValue": None,
+                "AWS::NoValue": "NOVALUE",
                 "AWS::Partition": "aws",
                 "AWS::Region": "eu-west-1",
                 "AWS::StackId": "",

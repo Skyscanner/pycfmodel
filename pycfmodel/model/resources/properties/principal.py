@@ -21,42 +21,54 @@ from pycfmodel.model.regexs import CONTAINS_STAR
 
 class Principal(object):
 
-    def __init__(self, identifier):
-        self.identifiers_raw = identifier
-        self.identifiers = self.identifiers_raw
+    def __init__(self, _type, principals):
+        self._type = _type
+        self.principals_raw = principals
+        self.principals = self.principals_raw
 
-    @deprecated(deprecated_in="0.4.0", details="Use has_identifiers_with / has_wildcard_identifiers")
+    @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see has_principals_with")
     def has_wildcard_principals(self, pattern=None):
         if pattern:
-            return self.has_identifiers_with(re.compile(pattern))
-        return self.has_identifiers_with(CONTAINS_STAR)
+            return self.has_principals_with(re.compile(pattern))
+        return self.has_principals_with(CONTAINS_STAR)
 
-    def has_wildcard_identifiers(self):
-        return self.has_identifiers_with(CONTAINS_STAR)
-
-    @deprecated(deprecated_in="0.4.0", details="Use has_non_whitelisted_identifiers")
+    @deprecated(deprecated_in="0.4.0", details="Use has_non_whitelisted_principals")
     def has_nonwhitelisted_principals(self, whitelist):
-        return self.has_non_whitelisted_identifiers(whitelist)
+        return self.has_non_whitelisted_principals(whitelist)
 
-    def has_non_whitelisted_identifiers(self, whitelist):
-        for type, lst in self.identifiers.items():
-            for identifier in lst:
-                if identifier not in whitelist:
-                    return True
+    def has_non_whitelisted_principals(self, whitelist):
+        for principal in self.principals:
+            if principal not in whitelist:
+                return True
         return False
 
-    def has_identifiers_with(self, pattern):
-        for type, lst in self.identifiers.items():
-            for identifier in lst:
-                if pattern.match(identifier):
-                    return True
+    def has_principals_with(self, pattern):
+        for principal in self.principals:
+            if pattern.match(principal):
+                return True
         return False
 
     def resolve(self, intrinsic_function_resolver):
-        self.identifiers = {}
-        for type, lst in self.identifiers_raw.items():
-            self.identifiers[type] = []
-            if not isinstance(lst, list):
-                lst = [lst]
-            for identifier in lst:
-                self.identifiers[type].append(intrinsic_function_resolver.resolve(identifier))
+        to_process = self.principals_raw
+        if not isinstance(to_process, list):
+            to_process = [to_process]
+        self.principals = []
+        for arn in to_process:
+            self.principals.append(intrinsic_function_resolver.resolve(arn))
+
+
+class PrincipalFactory(object):
+
+    @staticmethod
+    def generate_principals(principal_dict):
+        if not principal_dict:
+            return []
+
+        if isinstance(principal_dict, str):
+            return [Principal(principal_dict, principal_dict)]
+
+        principal_list = []
+        for _type, principals in principal_dict.items():
+            principal_list.append(Principal(_type, principals))
+
+        return principal_list
