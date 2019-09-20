@@ -81,4 +81,5 @@ class Resource(object):
             if auth.get("accessKeyId") or auth.get("password") or auth.get("secretKey"):
                 return True
 
-
+    def resolve(self, intrinsic_function_resolver):
+        return None
