@@ -72,4 +72,4 @@ class IntrinsicFunctionResolver(object):
         #         return self.resolve(false_section)
 
         elif function == "Fn::Base64":
-            return b64encode(bytes(self.resolve(function_body), "utf-8")).decode("utf-8")
+            return str(b64encode(self.resolve(function_body).encode("utf-8")), "utf-8")
