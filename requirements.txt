@@ -4,3 +4,7 @@
 #
 #    pip-compile --output-file requirements.txt setup.py
 #
+deprecation==2.0.7
+packaging==19.2           # via deprecation
+pyparsing==2.4.2          # via packaging
+six==1.12.0               # via packaging

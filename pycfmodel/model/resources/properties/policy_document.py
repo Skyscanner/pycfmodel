@@ -12,6 +12,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from pycfmodel.model.regexs import CONTAINS_STAR
 from .statement import Statement
 
 
@@ -183,7 +184,7 @@ class PolicyDocument(object):
         wildcard_allowed = []
 
         for statement in self.statements:
-            if statement.wildcard_actions() and statement.effect == "Allow":
+            if statement.actions_with(CONTAINS_STAR) and statement.effect == "Allow":
                 wildcard_allowed.append(statement)
 
         return wildcard_allowed
@@ -198,7 +199,7 @@ class PolicyDocument(object):
         wildcard_allowed = []
 
         for statement in self.statements:
-            if statement.wildcard_principals(pattern) and statement.effect == "Allow":
+            if statement.wildcard_principals() and statement.effect == "Allow":
                 wildcard_allowed.append(statement)
 
         return wildcard_allowed

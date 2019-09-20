@@ -12,6 +12,10 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import re
+
+from deprecation import deprecated
+
 from pycfmodel.model.regexs import CONTAINS_STAR
 from .principal import Principal
 
@@ -25,7 +29,7 @@ class Statement(object):
         # TODO: Process condition
         self.condition = statement.get("Condition")
 
-        self.principal = None
+        self./Users/oscarblanco/Documents/github/cfripper/py3env/lib/python3.7/site-packages/cfripper/rules/S3CrossAccountTrustRule.py = None
         self.not_principal = None
 
         if "Principal" in statement:
@@ -43,24 +47,44 @@ class Statement(object):
         self.not_resource_raw = statement.get("NotResource", [])
         self.not_resource = self.not_resource_raw
 
-    def has_actions_with(self, pattern):
-        all = []
-        if self.action:
-            all.extend(self.action)
-        if self.not_action:
-            all.extend(self.not_action)
+    def actions_with(self, pattern):
+        all = self.action + self.not_action
         return [action for action in all if pattern.match(action)]
 
-    def wildcard_actions(self):
-        return self.has_actions_with(CONTAINS_STAR)
-
-    def wildcard_principals(self):
+    def principals_with(self, pattern):
         all = []
         if self.principal:
             all.extend(self.principal)
         if self.not_principal:
             all.extend(self.not_principal)
-        return [principal for principal in all if principal.has_wildcard_principals()]
+        return [principal for principal in all if principal.has_identifiers_with(pattern)]
+
+    @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see actions_with")
+    def wildcard_actions(self, pattern=None):
+        if pattern:
+            return self.actions_with(re.compile(pattern))
+        return self.actions_with(CONTAINS_STAR)
+
+    @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see principals_with")
+    def wildcard_principals(self, pattern=None):
+        # TODO: change when all classes have implemented resolve
+        # all = []
+        # if self.principal:
+        #     all.extend(self.principal)
+        # if self.not_principal:
+        #     all.extend(self.not_principal)
+        all = []
+        if self.principal and isinstance(self.principal, list):
+            all.extend(self.principal)
+        elif self.principal:
+            all.append(self.principal)
+        if self.not_principal and isinstance(self.not_principal, list):
+            all.extend(self.not_principal)
+        elif self.not_principal:
+            all.append(self.not_principal)
+        if pattern:
+            return [principal for principal in all if principal.has_identifiers_with(re.compile(pattern))]
+        return [principal for principal in all if principal.has_wildcard_identifiers()]
 
     def non_whitelisted_principals(self, whitelist):
         all = []
@@ -71,11 +95,16 @@ class Statement(object):
         return [principal for principal in all if principal.has_non_whitelisted_principals(whitelist)]
 
     def get_action_list(self):
+        # TODO: change to return self.action + self.not_action when all classes have implemented resolve
         all = []
-        if self.action:
+        if self.action and isinstance(self.action, list):
             all.extend(self.action)
-        if self.not_action:
+        elif self.action:
+            all.append(self.action)
+        if self.not_action and isinstance(self.not_action, list):
             all.extend(self.not_action)
+        elif self.not_action:
+            all.append(self.not_action)
         return all
 
     def resolve(self, intrinsic_function_resolver):

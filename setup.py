@@ -3,7 +3,9 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-install_requires = []
+install_requires = [
+    'deprecation>=2.0.7'
+]
 
 dev_requires = [
     'pytest==3.6.0',

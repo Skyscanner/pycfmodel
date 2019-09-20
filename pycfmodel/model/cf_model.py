@@ -12,6 +12,8 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from deprecation import deprecated
+
 from .intrinsic_function_resolver import IntrinsicFunctionResolver
 from .parameter import Parameter
 from .resource_factory import ResourceFactory
@@ -54,6 +56,11 @@ class CFModel(object):
                 else:
                     resources[r.resource_type] = [r]
         return resources
+
+    @deprecated(deprecated_in="0.4.0", details="Use has_identifiers_with / has_wildcard_identifiers")
+    @property
+    def parameters(self):
+        return self.default_parameters.values()
 
     def resolve(self, custom_pseudo_parameters={}, import_values={}, custom_parameters={}):
         self.computed_parameters = {

@@ -12,6 +12,10 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import re
+
+from deprecation import deprecated
+
 from pycfmodel.model.regexs import CONTAINS_STAR
 
 
@@ -21,8 +25,18 @@ class Principal(object):
         self.identifiers_raw = identifier
         self.identifiers = self.identifiers_raw
 
+    @deprecated(deprecated_in="0.4.0", details="Use has_identifiers_with / has_wildcard_identifiers")
+    def has_wildcard_principals(self, pattern=None):
+        if pattern:
+            return self.has_identifiers_with(re.compile(pattern))
+        return self.has_identifiers_with(CONTAINS_STAR)
+
     def has_wildcard_identifiers(self):
         return self.has_identifiers_with(CONTAINS_STAR)
+
+    @deprecated(deprecated_in="0.4.0", details="Use has_non_whitelisted_identifiers")
+    def has_nonwhitelisted_principals(self, whitelist):
+        return self.has_non_whitelisted_identifiers(whitelist)
 
     def has_non_whitelisted_identifiers(self, whitelist):
         for type, lst in self.identifiers.items():
