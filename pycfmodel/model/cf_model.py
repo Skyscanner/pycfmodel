@@ -57,7 +57,7 @@ class CFModel(object):
                     resources[r.resource_type] = [r]
         return resources
 
-    @deprecated(deprecated_in="0.4.0", details="Use has_identifiers_with / has_wildcard_identifiers")
+    @deprecated(deprecated_in="0.4.0", details="Use default_parameters")
     @property
     def parameters(self):
         return self.default_parameters.values()

@@ -56,11 +56,7 @@ class Statement(object):
         return [action for action in self.get_action_list() if pattern.match(action)]
 
     def principals_with(self, pattern):
-        all = []
-        if self.principal:
-            all.extend(self.principal)
-        if self.not_principal:
-            all.extend(self.not_principal)
+        all = self.principal + self.not_principal
         return [principal for principal in all if principal.has_principals_with(pattern)]
 
     @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see actions_with")
@@ -71,45 +67,17 @@ class Statement(object):
 
     @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see principals_with")
     def wildcard_principals(self, pattern=None):
-        # TODO: change when all classes have implemented resolve
-        # all = []
-        # if self.principal:
-        #     all.extend(self.principal)
-        # if self.not_principal:
-        #     all.extend(self.not_principal)
-        all = []
-        if self.principal and isinstance(self.principal, list):
-            all.extend(self.principal)
-        elif self.principal:
-            all.append(self.principal)
-        if self.not_principal and isinstance(self.not_principal, list):
-            all.extend(self.not_principal)
-        elif self.not_principal:
-            all.append(self.not_principal)
+        all = self.principal + self.not_principal
         if pattern:
             return [principal for principal in all if principal.has_principals_with(re.compile(pattern))]
         return [principal for principal in all if principal.has_wildcard_principals(CONTAINS_STAR)]
 
     def non_whitelisted_principals(self, whitelist):
-        all = []
-        if self.principal:
-            all.extend(self.principal)
-        if self.not_principal:
-            all.extend(self.not_principal)
+        all = self.principal + self.not_principal
         return [principal for principal in all if principal.has_non_whitelisted_principals(whitelist)]
 
     def get_action_list(self):
-        # TODO: change to return self.action + self.not_action when all classes have implemented resolve
-        all = []
-        if self.action and isinstance(self.action, list):
-            all.extend(self.action)
-        elif self.action:
-            all.append(self.action)
-        if self.not_action and isinstance(self.not_action, list):
-            all.extend(self.not_action)
-        elif self.not_action:
-            all.append(self.not_action)
-        return all
+        return self.action + self.not_action
 
     def resolve(self, intrinsic_function_resolver):
         # Effect
