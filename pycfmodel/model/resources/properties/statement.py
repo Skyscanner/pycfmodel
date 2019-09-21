@@ -27,7 +27,7 @@ class Statement(object):
         self.effect = self.effect_raw
 
         # TODO: Process condition
-        self.condition = statement.get("Condition")
+        self.condition = statement.get("Condition", {})
 
         self.principal = self.__parse_principals(statement.get("Principal"))
         self.not_principal = self.__parse_principals(statement.get("NotPrincipal"))
