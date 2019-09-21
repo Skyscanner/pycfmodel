@@ -29,8 +29,8 @@ class Statement(object):
         # TODO: Process condition
         self.condition = statement.get("Condition", {})
 
-        self.principal = self.__parse_principals(statement.get("Principal"))
-        self.not_principal = self.__parse_principals(statement.get("NotPrincipal"))
+        self.principal = PrincipalFactory().generate_principals(statement.get("Principal"))
+        self.not_principal = PrincipalFactory().generate_principals(statement.get("NotPrincipal"))
 
         self.action_raw = statement.get("Action", [])
         if not isinstance(self.action_raw, list):
@@ -51,10 +51,6 @@ class Statement(object):
         if not isinstance(self.not_resource_raw, list):
             self.not_resource_raw = [self.not_resource_raw]
         self.not_resource = self.not_resource_raw
-
-    def __parse_principals(self, principals):
-        principals_factory = PrincipalFactory()
-        return principals_factory.generate_principals(principals)
 
     def actions_with(self, pattern):
         return [action for action in self.get_action_list() if pattern.match(action)]
