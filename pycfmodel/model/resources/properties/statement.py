@@ -33,13 +33,23 @@ class Statement(object):
         self.not_principal = self.__parse_principals(statement.get("NotPrincipal"))
 
         self.action_raw = statement.get("Action", [])
+        if not isinstance(self.action_raw, list):
+            self.action_raw = [self.action_raw]
         self.action = self.action_raw
+
         self.not_action_raw = statement.get("NotAction", [])
+        if not isinstance(self.not_action_raw, list):
+            self.not_action_raw = [self.not_action_raw]
         self.not_action = self.not_action_raw
 
         self.resource_raw = statement.get("Resource", [])
+        if not isinstance(self.resource_raw, list):
+            self.resource_raw = [self.resource_raw]
         self.resource = self.resource_raw
+
         self.not_resource_raw = statement.get("NotResource", [])
+        if not isinstance(self.not_resource_raw, list):
+            self.not_resource_raw = [self.not_resource_raw]
         self.not_resource = self.not_resource_raw
 
     def __parse_principals(self, principals):
@@ -118,33 +128,21 @@ class Statement(object):
             principal.resolve(intrinsic_function_resolver)
 
         # Action
-        to_process = self.action_raw
-        if not isinstance(to_process, list):
-            to_process = [to_process]
         self.action = []
-        for identifier in to_process:
+        for identifier in self.action_raw:
             self.action.append(intrinsic_function_resolver.resolve(identifier))
 
         # NotAction
-        to_process = self.not_action_raw
-        if not isinstance(to_process, list):
-            to_process = [to_process]
         self.not_action = []
-        for identifier in to_process:
+        for identifier in self.not_action_raw:
             self.not_action.append(intrinsic_function_resolver.resolve(identifier))
 
         # Resource
-        to_process = self.resource_raw
-        if not isinstance(to_process, list):
-            to_process = [to_process]
         self.resource = []
-        for identifier in to_process:
+        for identifier in self.resource_raw:
             self.resource.append(intrinsic_function_resolver.resolve(identifier))
 
         # NotResource
-        to_process = self.not_resource_raw
-        if not isinstance(to_process, list):
-            to_process = [to_process]
         self.not_resource = []
-        for identifier in to_process:
+        for identifier in self.not_resource_raw:
             self.not_resource.append(intrinsic_function_resolver.resolve(identifier))

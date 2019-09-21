@@ -24,6 +24,8 @@ class Principal(object):
     def __init__(self, _type, principals):
         self._type = _type
         self.principals_raw = principals
+        if not isinstance(self.principals_raw, list):
+            self.principals_raw = [self.principals_raw]
         self.principals = self.principals_raw
 
     @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see has_principals_with")
@@ -49,11 +51,8 @@ class Principal(object):
         return False
 
     def resolve(self, intrinsic_function_resolver):
-        to_process = self.principals_raw
-        if not isinstance(to_process, list):
-            to_process = [to_process]
         self.principals = []
-        for arn in to_process:
+        for arn in self.principals_raw:
             self.principals.append(intrinsic_function_resolver.resolve(arn))
 
 
