@@ -26,11 +26,11 @@ sns_t = {
                     "Effect": "Allow",
                     "Principal": "*",
                     "Action": "sns:Publish",
-                    "Resource": "*"
-                }
+                    "Resource": "*",
+                },
             },
-            "Topics": [{"Ref": "MySNSTopic"}]
-        }
+            "Topics": [{"Ref": "MySNSTopic"}],
+        },
     }
 }
 

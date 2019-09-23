@@ -12,8 +12,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import Any, Dict
 
-from .resources.generic_resource import GenericResource
+from .resources.resource import Resource
 from .resources.iam_group import IAMGroup
 from .resources.iam_user import IAMUser
 from .resources.iam_managed_policy import IAMManagedPolicy
@@ -28,25 +29,23 @@ from .resources.sns_topic_policy import SNSTopicPolicy
 from .resources.kms_key import KMSKey
 
 
-class ResourceFactory(object):
-    resource_classes = {
-        "AWS::IAM::Policy": IAMPolicy,
-        "AWS::IAM::Role": IAMRole,
-        "AWS::S3::BucketPolicy": S3BucketPolicy,
-        "AWS::IAM::ManagedPolicy": IAMManagedPolicy,
-        "AWS::IAM::Group": IAMGroup,
-        "AWS::IAM::User": IAMUser,
-        "AWS::EC2::SecurityGroup": SecurityGroup,
-        "AWS::EC2::SecurityGroupEgress": SecurityGroupEgress,
-        "AWS::EC2::SecurityGroupIngress": SecurityGroupIngress,
-        "AWS::SQS::QueuePolicy": SQSQueuePolicy,
-        "AWS::SNS::TopicPolicy": SNSTopicPolicy,
-        "AWS::KMS::Key": KMSKey,
-    }
+_RESOURCE_MAP = {
+    "AWS::EC2::SecurityGroup": SecurityGroup,
+    "AWS::EC2::SecurityGroupEgress": SecurityGroupEgress,
+    "AWS::EC2::SecurityGroupIngress": SecurityGroupIngress,
+    "AWS::IAM::Group": IAMGroup,
+    "AWS::IAM::ManagedPolicy": IAMManagedPolicy,
+    "AWS::IAM::Policy": IAMPolicy,
+    "AWS::IAM::Role": IAMRole,
+    "AWS::IAM::User": IAMUser,
+    "AWS::KMS::Key": KMSKey,
+    "AWS::S3::BucketPolicy": S3BucketPolicy,
+    "AWS::SNS::TopicPolicy": SNSTopicPolicy,
+    "AWS::SQS::QueuePolicy": SQSQueuePolicy,
+}
+_DEFAULT_RESOURCE = Resource
 
-    def create_resource(self, logical_id, value):
-        resource = self.resource_classes.get(
-            value.get("Type"),
-            GenericResource,
-        )
-        return resource(logical_id, value)
+
+def create_resource(logical_id: str, value: Dict[str, Any]) -> Resource:
+    resource = _RESOURCE_MAP.get(value.get("Type"), _DEFAULT_RESOURCE)
+    return resource(logical_id, value)

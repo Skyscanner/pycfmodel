@@ -25,28 +25,24 @@ cf_script = {
                 "Path": "/",
                 "UserName": "TestUser",
                 "LoginProfile": {"Password": "ThisMyBestP@ssword", "PasswordResetRequired": False},
-                    "Policies": [
-                        {
-                            "PolicyName": "BadPolicy",
-                            "PolicyDocument": {
-                                "Version": "2012-10-17",
-                                "Statement": [
-                                    {
-                                        "Effect": "Allow",
-                                        "Action": [
-                                            "lambda:AddPermission",
-                                            "ssm:SendCommand",
-                                            "kms:Decrypt"
-                                        ],
-                                        "Resource": "*"
-                                    }
-                                ]
-                            }
-                        }
-                ]
-            }
+                "Policies": [
+                    {
+                        "PolicyName": "BadPolicy",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": ["lambda:AddPermission", "ssm:SendCommand", "kms:Decrypt"],
+                                    "Resource": "*",
+                                }
+                            ],
+                        },
+                    }
+                ],
+            },
         }
-    }
+    },
 }
 
 

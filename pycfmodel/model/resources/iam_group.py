@@ -16,7 +16,6 @@ from .resource import Resource
 
 
 class IAMGroup(Resource):
-
     def __init__(self, logical_id, value):
         """
         "GroupName": String,
@@ -29,13 +28,8 @@ class IAMGroup(Resource):
         self.group_name = None
         self.path = None
 
-        self.policies = self.get_policies(
-            value.get("Properties", {}).get("Policies", []),
-        )
+        self.policies = self.get_policies(value.get("Properties", {}).get("Policies", []))
         self.managed_policy_arns = self.get_managed_policy_arns(
-            value.get("Properties", {}).get("ManagedPolicyArns", []),
+            value.get("Properties", {}).get("ManagedPolicyArns", [])
         )
-        self.set_generic_keys(
-            value.get("Properties", {}),
-            ["Policies", "ManagedPolicyArns"],
-        )
+        self.set_generic_keys(value.get("Properties", {}), ["Policies", "ManagedPolicyArns"])

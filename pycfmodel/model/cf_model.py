@@ -12,36 +12,34 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from collections import defaultdict
+from typing import Dict
+
+from .resource_factory import create_resource
 from .parameter import Parameter
-from .resource_factory import ResourceFactory
 
 
-class CFModel(object):
-
-    def __init__(self, cf_script):
+class CFModel:
+    def __init__(self, cf_script: Dict):
         self.aws_template_format_version = cf_script.get("AWSTemplateFormatVersion")
         self.description = cf_script.get("Description")
         self.metadata = cf_script.get("Metadata")
 
-        self.parameters = self._parse_parameters(cf_script.get("Parameters", {}))
+        self._parse_parameters(cf_script.get("Parameters", {}))
         self.mappings = cf_script.get("Mappings")
         self.conditions = cf_script.get("Conditions")
-        self.resources = self._parse_resources(cf_script.get("Resources", {}))
+        self._parse_resources(cf_script.get("Resources", {}))
         self.outputs = cf_script.get("Outputs")
 
     def _parse_parameters(self, template_params):
         """Parses and sets parameters in the model."""
-        return [Parameter(param_name, param_value) for param_name, param_value in template_params.items()]
+        self.parameters = [Parameter(param_name, param_value) for param_name, param_value in template_params.items()]
 
     def _parse_resources(self, template_resources):
         """Parses and sets resources in the model using a factory."""
-        resources = {}
-        resource_factory = ResourceFactory()
+        resources = defaultdict(list)
         for res_id, res_value in template_resources.items():
-            r = resource_factory.create_resource(res_id, res_value)
+            r = create_resource(res_id, res_value)
             if r:
-                if r.resource_type in resources:
-                    resources[r.resource_type].append(r)
-                else:
-                    resources[r.resource_type] = [r]
-        return resources
+                resources[r.resource_type].append(r)
+        self.resources = dict(resources)

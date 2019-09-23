@@ -6,7 +6,11 @@ install:
 install-dev: install
 	pip install -e ".[dev]"
 
+format:
+	black .
+
 lint:
+	black --check .
 	flake8 pycfmodel/ # tests/
 
 component:
@@ -20,6 +24,6 @@ coverage:
 test: lint component
 
 freeze:
-	PIP_CONFIG_FILE=pip.conf pip-compile --output-file requirements.txt setup.py
+	PIP_CONFIG_FILE=pip.conf pip-compile --no-index --output-file requirements.txt setup.py
 
-.PHONY: install install-dev lint component coverage test freeze
+.PHONY: install install-dev lint component coverage test freeze format

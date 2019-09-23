@@ -14,15 +14,15 @@ specific language governing permissions and limitations under the License.
 """
 
 import re
+from typing import List, Collection
 
 
-class Principal(object):
+class Principal:
+    def __init__(self, principal_type, principals):
+        self.principal_type = principal_type
+        self.principals = self._parse_principals(principals)
 
-    def __init__(self, _type, principals):
-        self._type = _type
-        self.principals = self.parse_principals(principals)
-
-    def parse_principals(self, principals):
+    def _parse_principals(self, principals) -> List[str]:
         if isinstance(principals, str):
             return [principals]
 
@@ -32,7 +32,7 @@ class Principal(object):
         # TODO: unhandled cases
         return []
 
-    def has_wildcard_principals(self, pattern=None):
+    def has_wildcard_principals(self, pattern=None) -> bool:
         for principal in self.principals:
             if pattern and isinstance(principal, str) and re.match(pattern, principal):
                 return True
@@ -40,17 +40,14 @@ class Principal(object):
                 return True
         return False
 
-    def has_nonwhitelisted_principals(self, whitelist):
+    def has_nonwhitelisted_principals(self, whitelist: Collection) -> bool:
         for principal in self.principals:
             if principal not in whitelist:
                 return True
         return False
 
-
-class PrincipalFactory(object):
-
     @staticmethod
-    def generate_principals(principal_dict):
+    def generate_principals(principal_dict) -> List["Principal"]:
         if not principal_dict:
             return []
 

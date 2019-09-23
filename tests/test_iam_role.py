@@ -26,12 +26,9 @@ cf_script = {
                     "Version": "2012-10-17",
                     "Statement": {
                         "Effect": "Allow",
-                        "Principal": {
-                            "Service": ["ec2.amazonaws.com"],
-                            "AWS": "arn:aws:iam::111111111111:root"
-                        },
-                        "Action": ["sts:AssumeRole"]
-                    }
+                        "Principal": {"Service": ["ec2.amazonaws.com"], "AWS": "arn:aws:iam::111111111111:root"},
+                        "Action": ["sts:AssumeRole"],
+                    },
                 },
                 "Path": "/",
                 "Policies": [
@@ -39,17 +36,13 @@ cf_script = {
                         "PolicyName": "root",
                         "PolicyDocument": {
                             "Version": "2012-10-17",
-                            "Statement": {
-                                "Effect": "Allow",
-                                "Action": "*",
-                                "Resource": "*"
-                            }
-                        }
+                            "Statement": {"Effect": "Allow", "Action": "*", "Resource": "*"},
+                        },
                     }
-                ]
-            }
+                ],
+            },
         }
-    }
+    },
 }
 
 

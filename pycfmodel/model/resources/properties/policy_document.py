@@ -12,141 +12,142 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import List
+
 from .statement import Statement
 
+_IAM_ACTIONS = [
+    "IAM:AddClientIDToOpenIDConnectProvider",
+    "IAM:AddRoleToInstanceProfile",
+    "IAM:AddUserToGroup",
+    "IAM:AttachGroupPolicy",
+    "IAM:AttachRolePolicy",
+    "IAM:AttachUserPolicy",
+    "IAM:ChangePassword",
+    "IAM:CreateAccessKey",
+    "IAM:CreateAccountAlias",
+    "IAM:CreateGroup",
+    "IAM:CreateInstanceProfile",
+    "IAM:CreateLoginProfile",
+    "IAM:CreateOpenIDConnectProvider",
+    "IAM:CreatePolicy",
+    "IAM:CreatePolicyVersion",
+    "IAM:CreateRole",
+    "IAM:CreateSAMLProvider",
+    "IAM:CreateServiceLinkedRole",
+    "IAM:CreateServiceSpecificCredential",
+    "IAM:CreateUser",
+    "IAM:CreateVirtualMFADevice",
+    "IAM:DeactivateMFADevice",
+    "IAM:DeleteAccessKey",
+    "IAM:DeleteAccountAlias",
+    "IAM:DeleteAccountPasswordPolicy",
+    "IAM:DeleteGroup",
+    "IAM:DeleteGroupPolicy",
+    "IAM:DeleteInstanceProfile",
+    "IAM:DeleteLoginProfile",
+    "IAM:DeleteOpenIDConnectProvider",
+    "IAM:DeletePolicy",
+    "IAM:DeletePolicyVersion",
+    "IAM:DeleteRole",
+    "IAM:DeleteRolePolicy",
+    "IAM:DeleteSAMLProvider",
+    "IAM:DeleteServerCertificate",
+    "IAM:DeleteServiceLinkedRole",
+    "IAM:DeleteServiceSpecificCredential",
+    "IAM:DeleteSigningCertificate",
+    "IAM:DeleteSSHPublicKey",
+    "IAM:DeleteUser",
+    "IAM:DeleteUserPolicy",
+    "IAM:DeleteVirtualMFADevice",
+    "IAM:DetachGroupPolicy",
+    "IAM:DetachRolePolicy",
+    "IAM:DetachUserPolicy",
+    "IAM:EnableMFADevice",
+    "IAM:GenerateCredentialReport",
+    "IAM:GenerateServiceLastAccessedDetails",
+    "IAM:GetAccessKeyLastUsed",
+    "IAM:GetAccountAuthorizationDetails",
+    "IAM:GetAccountPasswordPolicy",
+    "IAM:GetAccountSummary",
+    "IAM:GetContextKeysForCustomPolicy",
+    "IAM:GetContextKeysForPrincipalPolicy",
+    "IAM:GetCredentialReport",
+    "IAM:GetGroup",
+    "IAM:GetGroupPolicy",
+    "IAM:GetInstanceProfile",
+    "IAM:GetLoginProfile",
+    "IAM:GetOpenIDConnectProvider",
+    "IAM:GetPolicy",
+    "IAM:GetPolicyVersion",
+    "IAM:GetRole",
+    "IAM:GetRolePolicy",
+    "IAM:GetSAMLProvider",
+    "IAM:GetServerCertificate",
+    "IAM:GetServiceLastAccessedDetails",
+    "IAM:GetServiceLastAccessedDetailsWithEntities",
+    "IAM:GetServiceLinkedRoleDeletionStatus",
+    "IAM:GetSSHPublicKey",
+    "IAM:GetUser",
+    "IAM:GetUserPolicy",
+    "IAM:ListAccessKeys",
+    "IAM:ListAccountAliases",
+    "IAM:ListAttachedGroupPolicies",
+    "IAM:ListAttachedRolePolicies",
+    "IAM:ListAttachedUserPolicies",
+    "IAM:ListEntitiesForPolicy",
+    "IAM:ListGroupPolicies",
+    "IAM:ListGroups",
+    "IAM:ListGroupsForUser",
+    "IAM:ListInstanceProfiles",
+    "IAM:ListInstanceProfilesForRole",
+    "IAM:ListMFADevices",
+    "IAM:ListOpenIDConnectProviders",
+    "IAM:ListPolicies",
+    "IAM:ListPoliciesGrantingServiceAccess",
+    "IAM:ListPolicyVersions",
+    "IAM:ListRolePolicies",
+    "IAM:ListRoles",
+    "IAM:ListSAMLProviders",
+    "IAM:ListServerCertificates",
+    "IAM:ListServiceSpecificCredentials",
+    "IAM:ListSigningCertificates",
+    "IAM:ListSSHPublicKeys",
+    "IAM:ListUserPolicies",
+    "IAM:ListUsers",
+    "IAM:ListVirtualMFADevices",
+    "IAM:PassRole",
+    "IAM:PutGroupPolicy",
+    "IAM:PutRolePolicy",
+    "IAM:PutUserPolicy",
+    "IAM:RemoveClientIDFromOpenIDConnectProvider",
+    "IAM:RemoveRoleFromInstanceProfile",
+    "IAM:RemoveUserFromGroup",
+    "IAM:ResetServiceSpecificCredential",
+    "IAM:ResyncMFADevice",
+    "IAM:SetDefaultPolicyVersion",
+    "IAM:SimulateCustomPolicy",
+    "IAM:SimulatePrincipalPolicy",
+    "IAM:UpdateAccessKey",
+    "IAM:UpdateAccountPasswordPolicy",
+    "IAM:UpdateAssumeRolePolicy",
+    "IAM:UpdateGroup",
+    "IAM:UpdateLoginProfile",
+    "IAM:UpdateOpenIDConnectProviderThumbprint",
+    "IAM:UpdateRoleDescription",
+    "IAM:UpdateSAMLProvider",
+    "IAM:UpdateServerCertificate",
+    "IAM:UpdateServiceSpecificCredential",
+    "IAM:UpdateSigningCertificate",
+    "IAM:UpdateSSHPublicKey",
+    "IAM:UpdateUser",
+    "IAM:UploadServerCertificate",
+    "IAM:UploadSigningCertificate",
+    "IAM:UploadSSHPublicKey",
+]
 
-class PolicyDocument(object):
 
-    IAM_ACTIONS = [
-        "IAM:ResetServiceSpecificCredential",
-        "IAM:UpdateServiceSpecificCredential",
-        "IAM:EnableMFADevice",
-        "IAM:ListUsers",
-        "IAM:CreateServiceLinkedRole",
-        "IAM:ListRolePolicies",
-        "IAM:PutRolePolicy",
-        "IAM:DeleteAccountPasswordPolicy",
-        "IAM:ListSSHPublicKeys",
-        "IAM:ListAttachedUserPolicies",
-        "IAM:AddUserToGroup",
-        "IAM:UpdateAssumeRolePolicy",
-        "IAM:ListEntitiesForPolicy",
-        "IAM:DeleteServiceLinkedRole",
-        "IAM:ListServerCertificates",
-        "IAM:ListAccountAliases",
-        "IAM:PassRole",
-        "IAM:GetContextKeysForCustomPolicy",
-        "IAM:ListInstanceProfiles",
-        "IAM:ListMFADevices",
-        "IAM:UploadSigningCertificate",
-        "IAM:DeleteRole",
-        "IAM:SimulateCustomPolicy",
-        "IAM:CreateServiceSpecificCredential",
-        "IAM:UpdateRoleDescription",
-        "IAM:ResyncMFADevice",
-        "IAM:AttachGroupPolicy",
-        "IAM:ListAttachedRolePolicies",
-        "IAM:ListPoliciesGrantingServiceAccess",
-        "IAM:GetInstanceProfile",
-        "IAM:UpdateAccessKey",
-        "IAM:AddClientIDToOpenIDConnectProvider",
-        "IAM:ListGroupPolicies",
-        "IAM:DeleteOpenIDConnectProvider",
-        "IAM:CreateInstanceProfile",
-        "IAM:PutUserPolicy",
-        "IAM:ChangePassword",
-        "IAM:GenerateServiceLastAccessedDetails",
-        "IAM:CreateOpenIDConnectProvider",
-        "IAM:GetOpenIDConnectProvider",
-        "IAM:DeleteGroup",
-        "IAM:DeleteRolePolicy",
-        "IAM:ListServiceSpecificCredentials",
-        "IAM:ListRoles",
-        "IAM:CreateSAMLProvider",
-        "IAM:ListPolicyVersions",
-        "IAM:DeleteSSHPublicKey",
-        "IAM:CreateGroup",
-        "IAM:CreateUser",
-        "IAM:ListAccessKeys",
-        "IAM:UploadServerCertificate",
-        "IAM:GetRole",
-        "IAM:UploadSSHPublicKey",
-        "IAM:RemoveRoleFromInstanceProfile",
-        "IAM:UpdateSigningCertificate",
-        "IAM:DeleteLoginProfile",
-        "IAM:UpdateUser",
-        "IAM:ListVirtualMFADevices",
-        "IAM:GetSAMLProvider",
-        "IAM:AttachRolePolicy",
-        "IAM:UpdateAccountPasswordPolicy",
-        "IAM:CreatePolicy",
-        "IAM:DeleteServiceSpecificCredential",
-        "IAM:GetServiceLinkedRoleDeletionStatus",
-        "IAM:GetGroupPolicy",
-        "IAM:GetServiceLastAccessedDetailsWithEntities",
-        "IAM:DetachUserPolicy",
-        "IAM:GetLoginProfile",
-        "IAM:DeleteUserPolicy",
-        "IAM:UpdateLoginProfile",
-        "IAM:GetPolicyVersion",
-        "IAM:AddRoleToInstanceProfile",
-        "IAM:UpdateServerCertificate",
-        "IAM:DeactivateMFADevice",
-        "IAM:GetAccountPasswordPolicy",
-        "IAM:GetUser",
-        "IAM:DeleteVirtualMFADevice",
-        "IAM:DeletePolicyVersion",
-        "IAM:GetServiceLastAccessedDetails",
-        "IAM:RemoveUserFromGroup",
-        "IAM:AttachUserPolicy",
-        "IAM:UpdateOpenIDConnectProviderThumbprint",
-        "IAM:GetAccessKeyLastUsed",
-        "IAM:DeleteGroupPolicy",
-        "IAM:DeleteAccountAlias",
-        "IAM:GetGroup",
-        "IAM:UpdateSSHPublicKey",
-        "IAM:CreateAccessKey",
-        "IAM:DetachRolePolicy",
-        "IAM:GetSSHPublicKey",
-        "IAM:ListAttachedGroupPolicies",
-        "IAM:CreateAccountAlias",
-        "IAM:DeleteSigningCertificate",
-        "IAM:ListGroupsForUser",
-        "IAM:ListOpenIDConnectProviders",
-        "IAM:UpdateSAMLProvider",
-        "IAM:ListInstanceProfilesForRole",
-        "IAM:CreateVirtualMFADevice",
-        "IAM:ListGroups",
-        "IAM:DeleteUser",
-        "IAM:GetAccountAuthorizationDetails",
-        "IAM:DeletePolicy",
-        "IAM:ListSigningCertificates",
-        "IAM:PutGroupPolicy",
-        "IAM:RemoveClientIDFromOpenIDConnectProvider",
-        "IAM:ListPolicies",
-        "IAM:GetContextKeysForPrincipalPolicy",
-        "IAM:GenerateCredentialReport",
-        "IAM:SetDefaultPolicyVersion",
-        "IAM:CreateRole",
-        "IAM:CreatePolicyVersion",
-        "IAM:GetAccountSummary",
-        "IAM:GetServerCertificate",
-        "IAM:DetachGroupPolicy",
-        "IAM:DeleteSAMLProvider",
-        "IAM:GetUserPolicy",
-        "IAM:GetCredentialReport",
-        "IAM:DeleteAccessKey",
-        "IAM:DeleteServerCertificate",
-        "IAM:ListUserPolicies",
-        "IAM:ListSAMLProviders",
-        "IAM:GetRolePolicy",
-        "IAM:DeleteInstanceProfile",
-        "IAM:CreateLoginProfile",
-        "IAM:SimulatePrincipalPolicy",
-        "IAM:UpdateGroup",
-        "IAM:GetPolicy"
-    ]
-
+class PolicyDocument:
     def __init__(self, document):
         self.statements = []
         if not document:
@@ -160,7 +161,7 @@ class PolicyDocument(object):
             # TODO: raise
             pass
 
-    def star_resource_statements(self):
+    def star_resource_statements(self) -> List[Statement]:
         """
         Find statements with a resources that is a * or has a * in it.
         """
@@ -173,7 +174,7 @@ class PolicyDocument(object):
                 star_resources.append(statement)
         return star_resources
 
-    def wildcard_allowed_actions(self, pattern=None):
+    def wildcard_allowed_actions(self, pattern=None) -> List[Statement]:
         """
         Find statements which allow wildcard actions.
 
@@ -188,7 +189,7 @@ class PolicyDocument(object):
 
         return wildcard_allowed
 
-    def wildcard_allowed_principals(self, pattern=None):
+    def wildcard_allowed_principals(self, pattern=None) -> List[Statement]:
         """
         Find statements which allow wildcard principals.
 
@@ -203,7 +204,7 @@ class PolicyDocument(object):
 
         return wildcard_allowed
 
-    def nonwhitelisted_allowed_principals(self, whitelist=None):
+    def nonwhitelisted_allowed_principals(self, whitelist=None) -> List[Statement]:
         """Find non whitelisted allowed principals."""
 
         if not whitelist:
@@ -216,7 +217,7 @@ class PolicyDocument(object):
 
         return nonwhitelisted
 
-    def allows_not_principal(self):
+    def allows_not_principal(self) -> List[Statement]:
         """Find allowed not-principals."""
         not_principals = []
         for statement in self.statements:
@@ -225,7 +226,7 @@ class PolicyDocument(object):
 
         return not_principals
 
-    def get_iam_actions(self, difference=False):
+    def get_iam_actions(self, difference=False) -> List[str]:
         actions = []
         for statement in self.statements:
             action_list = statement.action
@@ -239,16 +240,15 @@ class PolicyDocument(object):
                 wildcard = action.find("*")
 
                 if wildcard > 0:
-                    actions = [
-                        iam for iam in self.IAM_ACTIONS
-                        if action[:wildcard].lower() in iam.lower()
-                    ]
+                    actions = [iam for iam in _IAM_ACTIONS if action[:wildcard].lower() in iam.lower()]
                 elif wildcard == 0:
-                    actions = self.IAM_ACTIONS
-                elif action.lower() in [iam.lower() for iam in self.IAM_ACTIONS]:
+                    actions = _IAM_ACTIONS
+                elif action.lower() in [iam.lower() for iam in _IAM_ACTIONS]:
                     actions.append(action)
 
                 if difference:
-                    return list(set([iam.lower() for iam in self.IAM_ACTIONS]).difference(set([act.lower() for act in actions])))
+                    return list(
+                        set([iam.lower() for iam in _IAM_ACTIONS]).difference(set([act.lower() for act in actions]))
+                    )
 
         return actions

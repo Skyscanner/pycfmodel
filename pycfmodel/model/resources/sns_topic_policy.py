@@ -17,7 +17,6 @@ from .properties.policy_document import PolicyDocument
 
 
 class SNSTopicPolicy(Resource):
-
     def __init__(self, logical_id, value):
         """
         "PolicyDocument" : PolicyDocument,
@@ -27,7 +26,5 @@ class SNSTopicPolicy(Resource):
 
         self.topics = []
 
-        self.policy_document = PolicyDocument(
-            value.get("Properties", {}).get("PolicyDocument"),
-        )
+        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
         self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])

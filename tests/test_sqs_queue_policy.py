@@ -25,16 +25,15 @@ sqs_q = {
                         "Effect": "Allow",
                         "NotAction": ["sqs:Break*"],
                         "Principal": {"AWS": "arn:aws:iam::111111111111:user/dave.mustaine"},
-                        "Resource": "*"
+                        "Resource": "*",
                     }
                 ]
-            }
-        }
+            },
+        },
     }
 }
 
-sqs_q_policy = SQSQueuePolicy(
-    "QueuePolicyWithNotAction", sqs_q["QueuePolicyWithNotAction"])
+sqs_q_policy = SQSQueuePolicy("QueuePolicyWithNotAction", sqs_q["QueuePolicyWithNotAction"])
 
 
 def test_main():

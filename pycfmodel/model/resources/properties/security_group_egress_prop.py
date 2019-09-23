@@ -14,8 +14,7 @@ specific language governing permissions and limitations under the License.
 """
 
 
-class SecurityGroupEgressProp(object):
-
+class SecurityGroupEgressProp:
     def __init__(self, egress):
         """
         "CidrIp" : String,
@@ -39,9 +38,9 @@ class SecurityGroupEgressProp(object):
     def ipv4_slash_zero(self):
         if not self.cidr_ip or not isinstance(self.cidr_ip, str):
             return False
-        return self.cidr_ip.endswith('/0')
+        return self.cidr_ip.endswith("/0")
 
     def ipv6_slash_zero(self):
         if not self.cidr_ipv6 or not isinstance(self.cidr_ipv6, str):
             return False
-        return self.cidr_ipv6.endswith('/0')
+        return self.cidr_ipv6.endswith("/0")

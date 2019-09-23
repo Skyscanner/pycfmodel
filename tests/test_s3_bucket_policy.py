@@ -18,26 +18,18 @@ s3_bucket = {
     "S3BucketPolicy": {
         "Type": "AWS::S3::BucketPolicy",
         "Properties": {
-            "Bucket": {
-                "Ref": "S3Bucket"
-            },
+            "Bucket": {"Ref": "S3Bucket"},
             "PolicyDocument": {
                 "Statement": [
                     {
-                        "Action": [
-                            "*"
-                        ],
+                        "Action": ["*"],
                         "Effect": "Allow",
                         "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
-                        "Principal": {
-                            "AWS": [
-                                "156460612806"
-                            ]
-                        }
+                        "Principal": {"AWS": ["156460612806"]},
                     }
                 ]
-            }
-        }
+            },
+        },
     }
 }
 
