@@ -87,7 +87,7 @@ def test_wildcard_actions():
     assert len(document.wildcard_allowed_actions(pattern=r"^(\w*:){0,1}\*$")) == 1
 
 
-def test_not_principla():
+def test_not_principal():
     pd = {
         "PolicyDocument": {
             "Statement": [
