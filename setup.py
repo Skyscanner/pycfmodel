@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 readme = Path(__file__).parent / "README.md"
 long_description = readme.read_text()
@@ -19,7 +19,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Skyscanner/pycfmodel",
-    packages=find_packages(exclude=("tests", "docs")),
+    packages=find_namespace_packages(exclude=("tests", "docs")),
     python_requires=">=3.6",
     install_requires=install_requires,
     tests_require=dev_requires,
