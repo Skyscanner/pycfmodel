@@ -16,6 +16,7 @@ from typing import Dict, List
 
 import inflection
 
+from pycfmodel.model.intrinsic_function_resolver import IntrinsicFunctionResolver
 from .properties.policy import Policy
 
 
@@ -73,5 +74,5 @@ class Resource:
             if auth.get("accessKeyId") or auth.get("password") or auth.get("secretKey"):
                 return True
 
-    def resolve(self, intrinsic_function_resolver):
+    def resolve(self, intrinsic_function_resolver: IntrinsicFunctionResolver):
         return None

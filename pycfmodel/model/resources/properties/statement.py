@@ -13,10 +13,11 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import re
-from typing import List
+from typing import List, Pattern
 
 from deprecation import deprecated
 
+from pycfmodel.model.intrinsic_function_resolver import IntrinsicFunctionResolver
 from pycfmodel.model.regexs import CONTAINS_STAR
 from .principal import Principal
 
@@ -52,10 +53,10 @@ class Statement:
             self.not_resource_raw = [self.not_resource_raw]
         self.not_resource = self.not_resource_raw
 
-    def actions_with(self, pattern):
+    def actions_with(self, pattern: Pattern) -> List[str]:
         return [action for action in self.get_action_list() if pattern.match(action)]
 
-    def principals_with(self, pattern):
+    def principals_with(self, pattern) -> List[Principal]:
         all = self.principal + self.not_principal
         return [principal for principal in all if principal.has_principals_with(pattern)]
 
@@ -79,7 +80,7 @@ class Statement:
     def get_action_list(self) -> List[str]:
         return self.action + self.not_action
 
-    def resolve(self, intrinsic_function_resolver):
+    def resolve(self, intrinsic_function_resolver: IntrinsicFunctionResolver):
         # Effect
         self.effect = intrinsic_function_resolver.resolve(self.effect_raw)
 
