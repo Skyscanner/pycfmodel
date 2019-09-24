@@ -40,6 +40,5 @@ class CFModel:
         resources = defaultdict(list)
         for res_id, res_value in template_resources.items():
             r = create_resource(res_id, res_value)
-            if r:
-                resources[r.resource_type].append(r)
+            resources[r.resource_type].append(r)
         self.resources = dict(resources)
