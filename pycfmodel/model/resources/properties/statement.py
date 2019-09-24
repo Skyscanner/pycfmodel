@@ -13,15 +13,15 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import re
+from typing import List
 
 from deprecation import deprecated
 
 from pycfmodel.model.regexs import CONTAINS_STAR
-from .principal import PrincipalFactory
+from .principal import Principal
 
 
-class Statement(object):
-
+class Statement:
     def __init__(self, statement):
         self.effect_raw = statement.get("Effect")
         self.effect = self.effect_raw
@@ -29,8 +29,8 @@ class Statement(object):
         # TODO: Process condition
         self.condition = statement.get("Condition", {})
 
-        self.principal = PrincipalFactory().generate_principals(statement.get("Principal"))
-        self.not_principal = PrincipalFactory().generate_principals(statement.get("NotPrincipal"))
+        self.principal = Principal.generate_principals(statement.get("Principal"))
+        self.not_principal = Principal.generate_principals(statement.get("NotPrincipal"))
 
         self.action_raw = statement.get("Action", [])
         if not isinstance(self.action_raw, list):
@@ -52,6 +52,17 @@ class Statement(object):
             self.not_resource_raw = [self.not_resource_raw]
         self.not_resource = self.not_resource_raw
 
+    def wildcard_actions(self, pattern=None) -> List[str]:
+        if not self.action:
+            return []
+
+        if pattern:
+            return [a for a in self.action if re.match(pattern, a)]
+
+    def wildcard_principals(self, pattern: str) -> List[Principal]:
+        if not self.principal:
+            return []
+
     def actions_with(self, pattern):
         return [action for action in self.get_action_list() if pattern.match(action)]
 
@@ -65,6 +76,10 @@ class Statement(object):
             return self.actions_with(re.compile(pattern))
         return self.actions_with(CONTAINS_STAR)
 
+    def non_whitelisted_principals(self, whitelist: List[str]) -> List[Principal]:
+        if not self.principal or self.condition:
+            return []
+
     @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see principals_with")
     def wildcard_principals(self, pattern=None):
         all = self.principal + self.not_principal
@@ -76,7 +91,7 @@ class Statement(object):
         all = self.principal + self.not_principal
         return [principal for principal in all if principal.has_non_whitelisted_principals(whitelist)]
 
-    def get_action_list(self):
+    def get_action_list(self) -> List[str]:
         return self.action + self.not_action
 
     def resolve(self, intrinsic_function_resolver):

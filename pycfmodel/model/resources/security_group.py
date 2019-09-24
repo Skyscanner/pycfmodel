@@ -18,7 +18,6 @@ from .properties.security_group_egress_prop import SecurityGroupEgressProp
 
 
 class SecurityGroup(Resource):
-
     def __init__(self, logical_id, value):
         """
         "GroupName" : String,
@@ -36,43 +35,22 @@ class SecurityGroup(Resource):
         self.tags = []
         self.vpc_id = None
 
-        self._set_security_group_ingress(
-            value.get("Properties", {}).get("SecurityGroupIngress"),
-        )
-        self._set_security_group_egress(
-            value.get("Properties", {}).get("SecurityGroupEgress"),
-        )
-        self.set_generic_keys(
-            value.get("Properties", {}),
-            ["SecurityGroupIngress", "SecurityGroupEgress"],
-        )
+        self._set_security_group_ingress(value.get("Properties", {}).get("SecurityGroupIngress"))
+        self._set_security_group_egress(value.get("Properties", {}).get("SecurityGroupEgress"))
+        self.set_generic_keys(value.get("Properties", {}), ["SecurityGroupIngress", "SecurityGroupEgress"])
 
     def _set_security_group_ingress(self, sgi):
-        if not sgi:
-            return
         if isinstance(sgi, list):
-            self.security_group_ingress = [
-                SecurityGroupIngressProp(s)
-                for s in sgi
-            ]
-            return
+            self.security_group_ingress = [SecurityGroupIngressProp(s) for s in sgi]
         elif isinstance(sgi, dict):
             self.security_group_ingress = [SecurityGroupIngressProp(sgi)]
-            return
 
         # TODO: handle refs etc.
 
     def _set_security_group_egress(self, sge):
-        if not sge:
-            return
         if isinstance(sge, list):
-            self.security_group_egress = [
-                SecurityGroupEgressProp(s)
-                for s in sge
-            ]
-            return
+            self.security_group_egress = [SecurityGroupEgressProp(s) for s in sge]
         elif isinstance(sge, dict):
             self.security_group_egress = [SecurityGroupEgressProp(sge)]
-            return
 
         # TODO: handle refs etc.

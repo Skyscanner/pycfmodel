@@ -12,26 +12,23 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from .utils import convert_to_snake_case
+from typing import List
+
+import inflection
 
 
-class Parameter(object):
-
-    def __init__(self, logical_id, properties):
+class Parameter:
+    def __init__(self, logical_id: str, properties: dict):
         self.logical_id = logical_id
         self.type = properties.get("Type")
         self.default = properties.get("Default")
         self.description = properties.get("Description")
         self.set_generic_keys(properties, ["Type", "Default", "Description"])
 
-    def set_generic_keys(self, properties, exclude_list):
+    def set_generic_keys(self, properties: dict, exclude_list: List[str]):
         """
         Sets all the key value pairs that were not set manually in __init__.
         """
-
         generic_keys = set(properties.keys()) - set(exclude_list)
         for generic_key in generic_keys:
-            self.__setattr__(
-                convert_to_snake_case(generic_key),
-                properties[generic_key],
-            )
+            self.__setattr__(inflection.underscore(generic_key), properties[generic_key])

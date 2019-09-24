@@ -12,33 +12,25 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from pycfmodel.model.utils import convert_to_snake_case
+from typing import Dict, List
+
+import inflection
+
 from .properties.policy import Policy
 
 
-class Resource(object):
-
-    # metadata = None
-
+class Resource:
     def __init__(self, logical_id, value):
         self.logical_id = logical_id
         self.resource_type = value.get("Type")
-        self.metadata = {}
         self.properties = {}
+        self.metadata = value.get("Metadata", {})
+        self.set_generic_keys(value.get("Properties", {}), [])
 
-    def set_generic_keys(self, properties, exclude_list):
+    def set_generic_keys(self, properties: Dict, exclude_list: List):
         generic_keys = set(properties.keys()) - set(exclude_list)
         for generic_key in generic_keys:
-            self.__setattr__(
-                convert_to_snake_case(generic_key),
-                properties[generic_key],
-            )
-
-    def set_metadata(self, metadata):
-        self.metadata = metadata
-
-    def set_properties(self, properties):
-        self.properties = properties
+            self.__setattr__(inflection.underscore(generic_key), properties[generic_key])
 
     def get_policies(self, policies):
         if not policies:

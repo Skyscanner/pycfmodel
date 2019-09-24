@@ -18,35 +18,14 @@ import pycfmodel
 
 basic_template = {
     "AWSTemplateFormatVersion": "version date",
-
     "Description": "JSON string",
-
-    "Metadata": {
-    },
-
-    "Parameters": {
-    },
-
-    "Mappings": {
-    },
-
-    "Conditions": {
-    },
-
-    "Transform": {
-    },
-
-    "Resources": {
-        "Logical ID": {
-            "Type": "Resource type",
-            "Properties": {
-                "foo": "bar"
-            }
-        }
-    },
-
-    "Outputs": {
-    }
+    "Metadata": {},
+    "Parameters": {},
+    "Mappings": {},
+    "Conditions": {},
+    "Transform": {},
+    "Resources": {"Logical ID": {"Type": "Resource type", "Properties": {"foo": "bar"}}},
+    "Outputs": {},
 }
 
 

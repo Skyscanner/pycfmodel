@@ -13,16 +13,16 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import re
+from typing import List, Collection
 
 from deprecation import deprecated
 
 from pycfmodel.model.regexs import CONTAINS_STAR
 
 
-class Principal(object):
-
-    def __init__(self, _type, principals):
-        self._type = _type
+class Principal:
+    def __init__(self, principal_type, principals):
+        self._type = principal_type
         self.principals_raw = principals
         if not isinstance(self.principals_raw, list):
             self.principals_raw = [self.principals_raw]
@@ -38,13 +38,13 @@ class Principal(object):
     def has_nonwhitelisted_principals(self, whitelist):
         return self.has_non_whitelisted_principals(whitelist)
 
-    def has_non_whitelisted_principals(self, whitelist):
+    def has_non_whitelisted_principals(self, whitelist) -> bool:
         for principal in self.principals:
             if principal not in whitelist:
                 return True
         return False
 
-    def has_principals_with(self, pattern):
+    def has_principals_with(self, pattern) -> bool:
         for principal in self.principals:
             if pattern.match(principal):
                 return True
@@ -55,11 +55,8 @@ class Principal(object):
         for arn in self.principals_raw:
             self.principals.append(intrinsic_function_resolver.resolve(arn))
 
-
-class PrincipalFactory(object):
-
     @staticmethod
-    def generate_principals(principal_dict):
+    def generate_principals(principal_dict) -> List["Principal"]:
         if not principal_dict:
             return []
 

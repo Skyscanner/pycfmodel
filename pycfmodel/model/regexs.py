@@ -14,7 +14,5 @@ specific language governing permissions and limitations under the License.
 """
 import re
 
-FIRST_CAP = re.compile("(.)([A-Z][a-z]+)")
-ALL_CAP = re.compile("([a-z0-9])([A-Z])")
-CONTAINS_STAR = re.compile("^.*[*].*$")
+CONTAINS_STAR = re.compile(r"^.*[*].*$")
 CONTAINS_CF_PARAM = re.compile(r"(\$\{[\w\:]+\})")

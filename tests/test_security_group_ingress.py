@@ -22,8 +22,8 @@ sg_ingress = {
             "CidrIp": "0.0.0.0/0",
             "FromPort": 46,
             "ToPort": 46,
-            "IpProtocol": "tcp"
-        }
+            "IpProtocol": "tcp",
+        },
     }
 }
 sg_ingress2 = {
@@ -34,19 +34,13 @@ sg_ingress2 = {
             "CidrIpv6": "2001:0db8:0000:0000:0000:ff00:0042:8329/0",
             "FromPort": 46,
             "ToPort": 46,
-            "IpProtocol": "tcp"
-        }
+            "IpProtocol": "tcp",
+        },
     }
 }
 
-sg_ingres_obj = SecurityGroupIngress(
-    "securityGroupIngress",
-    sg_ingress["securityGroupIngress"],
-)
-sg_ingres_obj2 = SecurityGroupIngress(
-    "securityGroupIngress2",
-    sg_ingress2["securityGroupIngress2"],
-)
+sg_ingres_obj = SecurityGroupIngress("securityGroupIngress", sg_ingress["securityGroupIngress"])
+sg_ingres_obj2 = SecurityGroupIngress("securityGroupIngress2", sg_ingress2["securityGroupIngress2"])
 
 
 def test_main():

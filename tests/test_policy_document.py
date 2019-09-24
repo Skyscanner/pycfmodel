@@ -12,6 +12,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from collections import Counter
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 
 
@@ -21,12 +22,9 @@ def test_one_statement():
             "Version": "2012-10-17",
             "Statement": {
                 "Effect": "Allow",
-                "Principal": {
-                    "Service": ["ec2.amazonaws.com"],
-                    "AWS": "arn:aws:iam::324320755747:root"
-                },
-                "Action": ["sts:AssumeRole"]
-            }
+                "Principal": {"Service": ["ec2.amazonaws.com"], "AWS": "arn:aws:iam::324320755747:root"},
+                "Action": ["sts:AssumeRole"],
+            },
         }
     }
 
@@ -42,21 +40,15 @@ def test_multi_statements():
             "Statement": [
                 {
                     "Effect": "Allow",
-                    "Principal": {
-                        "Service": ["ec2.amazonaws.com"],
-                        "AWS": "arn:aws:iam::324320755747:root"
-                    },
-                    "Action": ["sts:AssumeRole"]
+                    "Principal": {"Service": ["ec2.amazonaws.com"], "AWS": "arn:aws:iam::324320755747:root"},
+                    "Action": ["sts:AssumeRole"],
                 },
                 {
                     "Effect": "bar",
-                    "Principal": {
-                        "Service": ["ec2.amazonaws.com"],
-                        "AWS": "arn:aws:iam::324320755747:root"
-                    },
-                    "Action": ["sts:AssumeRole"]
-                }
-            ]
+                    "Principal": {"Service": ["ec2.amazonaws.com"], "AWS": "arn:aws:iam::324320755747:root"},
+                    "Action": ["sts:AssumeRole"],
+                },
+            ],
         }
     }
 
@@ -70,20 +62,7 @@ def test_multi_statements():
 def test_star_resource():
     pd = {
         "PolicyDocument": {
-            "Statement": [
-                {
-                    "Action": [
-                        "*"
-                    ],
-                    "Effect": "Allow",
-                    "Resource": "*",
-                    "Principal": {
-                        "AWS": [
-                            "156460612806"
-                        ]
-                    }
-                }
-            ]
+            "Statement": [{"Action": ["*"], "Effect": "Allow", "Resource": "*", "Principal": {"AWS": ["156460612806"]}}]
         }
     }
     document = PolicyDocument(pd["PolicyDocument"])
@@ -95,22 +74,17 @@ def test_wildcard_actions():
         "PolicyDocument": {
             "Statement": [
                 {
-                    "Action": [
-                        "s3:*"
-                    ],
+                    "Action": ["s3:*"],
                     "Effect": "Allow",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket2/*",
-                    "Principal": {
-                        "AWS": "*"
-                    }
+                    "Principal": {"AWS": "*"},
                 }
             ]
         }
     }
     document = PolicyDocument(pd["PolicyDocument"])
     assert len(document.wildcard_allowed_actions()) == 1
-    assert len(document.wildcard_allowed_actions(
-        pattern=r"^(\w*:){0,1}\*$")) == 1
+    assert len(document.wildcard_allowed_actions(pattern=r"^(\w*:){0,1}\*$")) == 1
 
 
 def test_not_principal():
@@ -118,16 +92,10 @@ def test_not_principal():
         "PolicyDocument": {
             "Statement": [
                 {
-                    "Action": [
-                        "*"
-                    ],
+                    "Action": ["*"],
                     "Effect": "Allow",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
-                    "NotPrincipal": {
-                        "AWS": [
-                            "156460612806"
-                        ]
-                    }
+                    "NotPrincipal": {"AWS": ["156460612806"]},
                 }
             ]
         }
@@ -166,16 +134,10 @@ def test_get_iam_actions():
         "PolicyDocument": {
             "Statement": [
                 {
-                    "Action": [
-                        "IAM:Delete*"
-                    ],
+                    "Action": ["IAM:Delete*"],
                     "Effect": "Allow",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
-                    "NotPrincipal": {
-                        "AWS": [
-                            "156460612806"
-                        ]
-                    }
+                    "NotPrincipal": {"AWS": ["156460612806"]},
                 }
             ]
         }
@@ -184,5 +146,4 @@ def test_get_iam_actions():
 
     actions = document.get_iam_actions()
 
-    assert len(actions) == 21
-    assert correct_list == actions
+    assert Counter(correct_list) == Counter(actions)

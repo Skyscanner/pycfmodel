@@ -20,7 +20,6 @@ from pycfmodel.model.regexs import CONTAINS_CF_PARAM
 
 
 class IntrinsicFunctionResolver(object):
-
     def __init__(self, params, mappings):
         self.params = params
         self.mappings = mappings

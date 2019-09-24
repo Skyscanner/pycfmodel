@@ -17,7 +17,6 @@ from .properties.policy_document import PolicyDocument
 
 
 class IAMPolicy(Resource):
-
     def __init__(self, logical_id, value):
         """
         "Groups" : [ String, ... ],
@@ -33,7 +32,5 @@ class IAMPolicy(Resource):
         self.roles = []
         self.users = []
 
-        self.policy_document = PolicyDocument(
-            value.get("Properties", {}).get('PolicyDocument')
-        )
+        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
         self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])
