@@ -61,22 +61,26 @@ class CFModel:
     def resolve(self, custom_pseudo_parameters={}, import_values={}, custom_parameters={}):
         self.computed_parameters = {
             # default pseudo parameters
-            **{
-                "AWS::AccountId": "123456789012",
-                "AWS::NotificationARNs": [],
-                "AWS::NoValue": "NOVALUE",
-                "AWS::Partition": "aws",
-                "AWS::Region": "eu-west-1",
-                "AWS::StackId": "",
-                "AWS::StackName": "",
-                "AWS::URLSuffix": "amazonaws.com",
-            },
-            # default parameters
-            **{key: parameter.default for key, parameter in self.default_parameters.items() if parameter.default},
-            **custom_pseudo_parameters,
-            **import_values,
-            **custom_parameters,
+            "AWS::AccountId": "123456789012",
+            "AWS::NotificationARNs": [],
+            "AWS::NoValue": "NOVALUE",
+            "AWS::Partition": "aws",
+            "AWS::Region": "eu-west-1",
+            "AWS::StackId": "",
+            "AWS::StackName": "",
+            "AWS::URLSuffix": "amazonaws.com",
         }
+        self.computed_parameters.update(
+            {
+                # default parameters
+                key: parameter.default
+                for key, parameter in self.default_parameters.items()
+                if parameter.default
+            }
+        )
+        self.computed_parameters.update(custom_pseudo_parameters)
+        self.computed_parameters.update(import_values)
+        self.computed_parameters.update(custom_parameters)
 
         intrinsic_function_resolver = IntrinsicFunctionResolver(self.computed_parameters, self.mappings)
         for resource_type in self.resources.values():
