@@ -52,17 +52,6 @@ class Statement:
             self.not_resource_raw = [self.not_resource_raw]
         self.not_resource = self.not_resource_raw
 
-    def wildcard_actions(self, pattern=None) -> List[str]:
-        if not self.action:
-            return []
-
-        if pattern:
-            return [a for a in self.action if re.match(pattern, a)]
-
-    def wildcard_principals(self, pattern: str) -> List[Principal]:
-        if not self.principal:
-            return []
-
     def actions_with(self, pattern):
         return [action for action in self.get_action_list() if pattern.match(action)]
 
@@ -71,23 +60,19 @@ class Statement:
         return [principal for principal in all if principal.has_principals_with(pattern)]
 
     @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see actions_with")
-    def wildcard_actions(self, pattern=None):
+    def wildcard_actions(self, pattern=None) -> List[str]:
         if pattern:
             return self.actions_with(re.compile(pattern))
         return self.actions_with(CONTAINS_STAR)
 
-    def non_whitelisted_principals(self, whitelist: List[str]) -> List[Principal]:
-        if not self.principal or self.condition:
-            return []
-
     @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see principals_with")
-    def wildcard_principals(self, pattern=None):
+    def wildcard_principals(self, pattern: str) -> List[Principal]:
         all = self.principal + self.not_principal
         if pattern:
             return [principal for principal in all if principal.has_principals_with(re.compile(pattern))]
         return [principal for principal in all if principal.has_wildcard_principals(CONTAINS_STAR)]
 
-    def non_whitelisted_principals(self, whitelist):
+    def non_whitelisted_principals(self, whitelist: List[str]) -> List[Principal]:
         all = self.principal + self.not_principal
         return [principal for principal in all if principal.has_non_whitelisted_principals(whitelist)]
 

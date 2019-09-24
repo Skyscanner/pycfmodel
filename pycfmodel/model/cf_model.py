@@ -12,17 +12,12 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from collections import defaultdict
+from typing import Dict
 
 from deprecation import deprecated
 
 from .intrinsic_function_resolver import IntrinsicFunctionResolver
-from .parameter import Parameter
-from .resource_factory import ResourceFactory
-
-from collections import defaultdict
-from typing import Dict
-
-
 from .resource_factory import create_resource
 from .parameter import Parameter
 
