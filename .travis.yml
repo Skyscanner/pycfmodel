@@ -10,7 +10,7 @@ script:
 jobs:
   include:
     - stage: Deploy
-      script: skip     # usually you do not want to rerun any tests
+      script: skip  # We don't want to rerun any tests
       deploy:
         provider: pypi
         user: oscarbc
