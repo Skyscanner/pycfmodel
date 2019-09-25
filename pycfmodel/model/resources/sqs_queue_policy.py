@@ -17,7 +17,6 @@ from .properties.policy_document import PolicyDocument
 
 
 class SQSQueuePolicy(Resource):
-
     def __init__(self, logical_id, value):
         """
         "PolicyDocument" : JSON,
@@ -27,8 +26,6 @@ class SQSQueuePolicy(Resource):
 
         self.queues = []
 
-        self.policy_document = PolicyDocument(
-            value.get("Properties", {}).get("PolicyDocument"),
-        )
+        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
 
         self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])

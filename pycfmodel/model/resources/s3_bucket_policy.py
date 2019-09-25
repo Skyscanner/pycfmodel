@@ -17,7 +17,6 @@ from .properties.policy_document import PolicyDocument
 
 
 class S3BucketPolicy(Resource):
-
     def __init__(self, logical_id, value):
         """
         "Bucket" : String,
@@ -26,7 +25,5 @@ class S3BucketPolicy(Resource):
         super().__init__(logical_id, value)
         self.bucket = None
 
-        self.policy_document = PolicyDocument(
-            value.get("Properties", {}).get('PolicyDocument')
-        )
+        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
         self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])

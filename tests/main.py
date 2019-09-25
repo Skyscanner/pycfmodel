@@ -23,5 +23,5 @@ def main():
     pycfmodel.parse(template)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

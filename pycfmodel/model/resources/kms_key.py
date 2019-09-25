@@ -17,7 +17,6 @@ from .properties.policy_document import PolicyDocument
 
 
 class KMSKey(Resource):
-
     def __init__(self, logical_id, value):
         """
         "Description" : String,
@@ -37,7 +36,6 @@ class KMSKey(Resource):
         self.pending_window_in_days = None
         self.tags = []
 
-        self.key_policy = PolicyDocument(
-            value.get("Properties", {}).get("KeyPolicy"))
+        self.key_policy = PolicyDocument(value.get("Properties", {}).get("KeyPolicy"))
 
         self.set_generic_keys(value.get("Properties", {}), ["KeyPolicy"])

@@ -14,16 +14,16 @@ specific language governing permissions and limitations under the License.
 """
 
 import re
+from typing import List
 
-from .principal import PrincipalFactory
+from .principal import Principal
 
 
-class Statement(object):
-
+class Statement:
     def __init__(self, statement):
         self.action = statement.get("Action", [])
         self.resource = statement.get("Resource", [])
-        self.principal = self.__parse_principals(statement.get("Principal"))
+        self.principal = Principal.generate_principals(statement.get("Principal"))
         self.effect = statement.get("Effect")
         self.condition = statement.get("Condition", {})
         self.not_action = statement.get("NotAction", {})
@@ -33,23 +33,16 @@ class Statement(object):
         if not isinstance(self.resource, list):
             self.resource = [self.resource]
 
-    def __parse_principals(self, principals):
-        principals_factory = PrincipalFactory()
-        return principals_factory.generate_principals(principals)
-
-    def wildcard_actions(self, pattern=None):
+    def wildcard_actions(self, pattern=None) -> List[str]:
         if not self.action:
             return []
 
         if pattern:
-            return [
-                a for a in self.action
-                if re.match(pattern, a)
-            ]
+            return [a for a in self.action if re.match(pattern, a)]
 
         return [a for a in self.action if "*" in str(a)]
 
-    def wildcard_principals(self, pattern):
+    def wildcard_principals(self, pattern: str) -> List[Principal]:
         if not self.principal:
             return []
 
@@ -60,7 +53,7 @@ class Statement(object):
 
         return wildcard_principals
 
-    def non_whitelisted_principals(self, whitelist):
+    def non_whitelisted_principals(self, whitelist: List[str]) -> List[Principal]:
         if not self.principal or self.condition:
             return []
 
@@ -71,7 +64,7 @@ class Statement(object):
 
         return nonwhitelisted_principals
 
-    def get_action_list(self):
+    def get_action_list(self) -> List[str]:
         if isinstance(self.action, str):
             return [self.action]
         elif isinstance(self.action, list):

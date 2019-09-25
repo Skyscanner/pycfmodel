@@ -16,7 +16,6 @@ from .resource import Resource
 
 
 class SecurityGroupIngress(Resource):
-
     def __init__(self, logical_id, value):
         """
         "CidrIp" : String,
@@ -47,12 +46,12 @@ class SecurityGroupIngress(Resource):
 
         self.set_generic_keys(value.get("Properties", {}), [])
 
-    def ipv4_slash_zero(self):
+    def ipv4_slash_zero(self) -> bool:
         if not self.cidr_ip or not isinstance(self.cidr_ip, str):
             return False
-        return self.cidr_ip.endswith('/0')
+        return self.cidr_ip.endswith("/0")
 
-    def ipv6_slash_zero(self):
+    def ipv6_slash_zero(self) -> bool:
         if not self.cidr_ipv6 or not isinstance(self.cidr_ipv6, str):
             return False
-        return self.cidr_ipv6.endswith('/0')
+        return self.cidr_ipv6.endswith("/0")

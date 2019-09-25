@@ -12,36 +12,25 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-import re
+from typing import Dict, List
+
+import inflection
 
 from .properties.policy import Policy
 
 
-class Resource(object):
-
-    # metadata = None
-    _first_cap_re = re.compile('(.)([A-Z][a-z]+)')
-    _all_cap_re = re.compile('([a-z0-9])([A-Z])')
-
+class Resource:
     def __init__(self, logical_id, value):
         self.logical_id = logical_id
         self.resource_type = value.get("Type")
-        self.metadata = {}
         self.properties = {}
+        self.metadata = value.get("Metadata", {})
+        self.set_generic_keys(value.get("Properties", {}), [])
 
-    def set_generic_keys(self, properties, exclude_list):
+    def set_generic_keys(self, properties: Dict, exclude_list: List):
         generic_keys = set(properties.keys()) - set(exclude_list)
         for generic_key in generic_keys:
-            self.__setattr__(
-                self._convert_to_snake_case(generic_key),
-                properties[generic_key],
-            )
-
-    def set_metadata(self, metadata):
-        self.metadata = metadata
-
-    def set_properties(self, properties):
-        self.properties = properties
+            self.__setattr__(inflection.underscore(generic_key), properties[generic_key])
 
     def get_policies(self, policies):
         if not policies:
@@ -70,10 +59,6 @@ class Resource(object):
             return arns
 
         return []
-
-    def _convert_to_snake_case(self, name):
-        s1 = self._first_cap_re.sub(r'\1_\2', name)
-        return self._all_cap_re.sub(r'\1_\2', s1).lower()
 
     def has_hardcoded_credentials(self):
         if self.resource_type == "AWS::IAM::User" and self.properties:

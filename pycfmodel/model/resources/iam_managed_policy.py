@@ -17,7 +17,6 @@ from .properties.policy_document import PolicyDocument
 
 
 class IAMManagedPolicy(Resource):
-
     def __init__(self, logical_id, value):
         """
         "Description" : String,
@@ -37,7 +36,5 @@ class IAMManagedPolicy(Resource):
         self.users = []
         self.managed_policy_name = None
 
-        self.policy_document = PolicyDocument(
-            value.get("Properties", {}).get('PolicyDocument')
-        )
+        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
         self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])

@@ -1,30 +1,27 @@
-from setuptools import setup, find_packages
+from pathlib import Path
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+from setuptools import setup, find_namespace_packages
 
-install_requires = []
+readme = Path(__file__).parent / "README.md"
+long_description = readme.read_text()
 
-dev_requires = [
-    'pytest==3.6.0',
-    'flake8>=3.3.0',
-    'pytest-cov>=2.5.1',
-    'pip-tools==2.0.2',
-]
+
+install_requires = ["inflection>=0.3.1"]
+
+dev_requires = ["black==19.3b0", "pytest==3.6.0", "flake8>=3.3.0", "pytest-cov>=2.5.1", "pip-tools==2.0.2"]
 
 setup(
-    name='pycfmodel',
-    version='0.3.2',
-    description='A python model for CloudFormation scripts',
-    author='Skyscanner Product Security',
-    author_email='security@skyscanner.net',
+    name="pycfmodel",
+    version="0.4.0",
+    description="A python model for CloudFormation scripts",
+    author="Skyscanner Product Security",
+    author_email="security@skyscanner.net",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/Skyscanner/pycfmodel',
-    packages=find_packages(exclude=('tests', 'docs')),
+    url="https://github.com/Skyscanner/pycfmodel",
+    packages=find_namespace_packages(exclude=("tests", "docs")),
+    python_requires=">=3.6",
     install_requires=install_requires,
     tests_require=dev_requires,
-    extras_require={
-        'dev': dev_requires,
-    }
+    extras_require={"dev": dev_requires},
 )

@@ -22,8 +22,8 @@ sg_egress = {
             "CidrIp": "1.1.1.1/0",
             "FromPort": 41,
             "ToPort": 45,
-            "IpProtocol": "tcp"
-        }
+            "IpProtocol": "tcp",
+        },
     }
 }
 sg_egress2 = {
@@ -34,19 +34,13 @@ sg_egress2 = {
             "CidrIpv6": "1.1.1.1/0",
             "FromPort": 41,
             "ToPort": 45,
-            "IpProtocol": "tcp"
-        }
+            "IpProtocol": "tcp",
+        },
     }
 }
 
-sg_egress_obj1 = SecurityGroupEgress(
-    "securityGroupEgress",
-    sg_egress["securityGroupEgress"],
-)
-sg_egress_obj2 = SecurityGroupEgress(
-    "securityGroupEgress2",
-    sg_egress2["securityGroupEgress2"],
-)
+sg_egress_obj1 = SecurityGroupEgress("securityGroupEgress", sg_egress["securityGroupEgress"])
+sg_egress_obj2 = SecurityGroupEgress("securityGroupEgress2", sg_egress2["securityGroupEgress2"])
 
 
 def test_main():
