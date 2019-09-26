@@ -64,7 +64,7 @@ class CFModel:
             "AWS::URLSuffix": "amazonaws.com",
         }
         self.computed_parameters.update(
-            {pycfmodel/model/cf_model.py
+            {
                 # default parameters
                 key: parameter.default
                 for key, parameter in self.default_parameters.items()

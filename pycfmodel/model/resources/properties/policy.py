@@ -14,6 +14,7 @@ specific language governing permissions and limitations under the License.
 """
 from typing import Dict
 
+from pycfmodel.model.intrinsic_function_resolver import IntrinsicFunctionResolver
 from .policy_document import PolicyDocument
 
 
@@ -26,5 +27,5 @@ class Policy:
         self.policy_name = value.get("PolicyName")
         self.policy_document = PolicyDocument(value.get("PolicyDocument"))
 
-    def resolve(self, intrinsic_function_resolver):
+    def resolve(self, intrinsic_function_resolver: IntrinsicFunctionResolver):
         self.policy_document.resolve(intrinsic_function_resolver)

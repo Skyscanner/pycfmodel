@@ -12,13 +12,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-import re
 from typing import List, Pattern
 
-from deprecation import deprecated
-
 from pycfmodel.model.intrinsic_function_resolver import IntrinsicFunctionResolver
-from pycfmodel.model.regexs import CONTAINS_STAR
 from .principal import Principal
 
 
