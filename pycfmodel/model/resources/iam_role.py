@@ -46,6 +46,8 @@ class IAMRole(Resource):
 
     def resolve(self, intrinsic_function_resolver: IntrinsicFunctionResolver):
         self.role_name = intrinsic_function_resolver.resolve(self.role_name_raw)
-        for policies in [[self.assume_role_policy_document], self.policies, self.managed_policy_arns]:
-            for policy in policies:
+        self.assume_role_policy_document.resolve(intrinsic_function_resolver)
+
+        for policy in self.policies + self.managed_policy_arns:
+            if not isinstance(policy, str):
                 policy.resolve(intrinsic_function_resolver)

@@ -19,7 +19,7 @@ from pycfmodel.model.intrinsic_function_resolver import IntrinsicFunctionResolve
 
 class Principal:
     def __init__(self, principal_type, principals):
-        self._type = principal_type
+        self.principal_type = principal_type
         self.principals_raw = principals
         if not isinstance(self.principals_raw, list):
             self.principals_raw = [self.principals_raw]

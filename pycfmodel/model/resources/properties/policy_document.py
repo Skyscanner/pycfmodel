@@ -12,10 +12,8 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-import re
-from typing import List
+from typing import List, Pattern
 
-from pycfmodel.model.regexs import CONTAINS_STAR
 from .statement import Statement
 
 _IAM_ACTIONS = [
@@ -159,74 +157,35 @@ class PolicyDocument:
             self.statements = [Statement(statement)]
         elif isinstance(statement, list):
             self.statements = [Statement(s) for s in document.get("Statement")]
-        else:
-            # TODO: raise
-            pass
 
-    def star_resource_statements(self) -> List[Statement]:
-        """
-        Find statements with a resources that is a * or has a * in it.
-        """
+    def resources_with(self, pattern: Pattern) -> List[Statement]:
+        return [statement for statement in self.statements if statement.resources_with(pattern)]
 
-        star_resources = []
-        for statement in self.statements:
-            if not statement.resource:
-                continue
-            if statement.resource == "*" or (isinstance(statement.resource, list) and "*" in statement.resource):
-                star_resources.append(statement)
-        return star_resources
+    def allowed_actions_with(self, pattern: Pattern) -> List[Statement]:
+        return [
+            statement
+            for statement in self.statements
+            if statement.actions_with(pattern) and statement.effect == "Allow"
+        ]
 
-    def wildcard_allowed_actions(self, pattern=None) -> List[Statement]:
-        """
-        Find statements which allow wildcard actions.
+    def allowed_principals_with(self, pattern: Pattern) -> List[Statement]:
+        return [
+            statement
+            for statement in self.statements
+            if statement.principals_with(pattern) and statement.effect == "Allow"
+        ]
 
-        A pattern can be specified for the wildcard action
-        """
-
-        wildcard_allowed = []
-
-        for statement in self.statements:
-            if statement.actions_with(CONTAINS_STAR) and statement.effect == "Allow":
-                wildcard_allowed.append(statement)
-
-        return wildcard_allowed
-
-    def wildcard_allowed_principals(self, pattern=None) -> List[Statement]:
-        """
-        Find statements which allow wildcard principals.
-
-        A pattern can be specified for the wildcard principal
-        """
-
-        wildcard_allowed = []
-
-        for statement in self.statements:
-            if statement.wildcard_principals(re.compile(pattern)) and statement.effect == "Allow":
-                wildcard_allowed.append(statement)
-
-        return wildcard_allowed
-
-    def nonwhitelisted_allowed_principals(self, whitelist=None) -> List[Statement]:
+    def non_whitelisted_allowed_principals(self, whitelist: List[str]) -> List[Statement]:
         """Find non whitelisted allowed principals."""
-
-        if not whitelist:
-            return []
-
-        nonwhitelisted = []
-        for statement in self.statements:
-            if statement.non_whitelisted_principals(whitelist) and statement.effect == "Allow":
-                nonwhitelisted.append(statement)
-
-        return nonwhitelisted
+        return [
+            statement
+            for statement in self.statements
+            if statement.non_whitelisted_principals(whitelist) and statement.effect == "Allow"
+        ]
 
     def allows_not_principal(self) -> List[Statement]:
         """Find allowed not-principals."""
-        not_principals = []
-        for statement in self.statements:
-            if statement.not_principal and statement.effect == "Allow":
-                not_principals.append(statement)
-
-        return not_principals
+        return [statement for statement in self.statements if statement.not_principal and statement.effect == "Allow"]
 
     def get_iam_actions(self, difference=False) -> List[str]:
         actions = []

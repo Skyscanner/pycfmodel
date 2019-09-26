@@ -49,17 +49,28 @@ class Statement:
             self.not_resource_raw = [self.not_resource_raw]
         self.not_resource = self.not_resource_raw
 
+    def get_action_list(self) -> List[str]:
+        return self.action + self.not_action
+
+    def get_resource_list(self) -> List[str]:
+        return self.resource + self.not_resource
+
+    def get_principal_list(self) -> List[str]:
+        return self.principal + self.not_principal
+
     def actions_with(self, pattern: Pattern) -> List[str]:
-        all = self.action + self.not_action
-        return [action for action in all if pattern.match(action)]
+        return [action for action in self.get_action_list() if pattern.match(action)]
 
     def principals_with(self, pattern: Pattern) -> List[Principal]:
-        all = self.principal + self.not_principal
-        return [principal for principal in all if principal.has_principals_with(pattern)]
+        return [principal for principal in self.get_principal_list() if principal.has_principals_with(pattern)]
+
+    def resources_with(self, pattern: Pattern) -> List[Principal]:
+        return [resource for resource in self.get_resource_list() if pattern.match(resource)]
 
     def non_whitelisted_principals(self, whitelist: List[str]) -> List[Principal]:
-        all = self.principal + self.not_principal
-        return [principal for principal in all if principal.has_non_whitelisted_principals(whitelist)]
+        return [
+            principal for principal in self.get_principal_list() if principal.has_non_whitelisted_principals(whitelist)
+        ]
 
     def resolve(self, intrinsic_function_resolver: IntrinsicFunctionResolver):
         # Effect

@@ -12,7 +12,10 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import re
 from collections import Counter
+
+from pycfmodel.model.regexs import CONTAINS_STAR
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 
 
@@ -66,7 +69,7 @@ def test_star_resource():
         }
     }
     document = PolicyDocument(pd["PolicyDocument"])
-    assert len(document.star_resource_statements()) == 1
+    assert len(document.resources_with(CONTAINS_STAR)) == 1
 
 
 def test_wildcard_actions():
@@ -83,8 +86,8 @@ def test_wildcard_actions():
         }
     }
     document = PolicyDocument(pd["PolicyDocument"])
-    assert len(document.wildcard_allowed_actions()) == 1
-    assert len(document.wildcard_allowed_actions(pattern=r"^(\w*:){0,1}\*$")) == 1
+    assert len(document.allowed_actions_with(CONTAINS_STAR)) == 1
+    assert len(document.allowed_actions_with(re.compile(r"^(\w*:){0,1}\*$"))) == 1
 
 
 def test_not_principal():
@@ -101,7 +104,7 @@ def test_not_principal():
         }
     }
     document = PolicyDocument(pd["PolicyDocument"])
-    assert len(document.allows_not_principal()) == 1
+    assert len(document.allowed_actions_with(CONTAINS_STAR)) == 1
 
 
 def test_get_iam_actions():

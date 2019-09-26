@@ -53,7 +53,7 @@ class Resource:
         if not arns:
             return []
 
-        # TODO: a generic function to get if conditions and apply something
+        # TODO: Use resolver // Implement boto3 client to download managed policies
         if isinstance(arns, dict) and "Fn::If" in arns:
             return arns["Fn::If"][1] + arns["Fn::If"][2]
         elif isinstance(arns, list):
