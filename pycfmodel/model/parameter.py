@@ -18,7 +18,9 @@ from typing import List
 
 
 class Parameter:
-    def __init__(self, logical_id: str, properties: dict):
+    def __init__(self, logical_id: str, properties):
+        if not isinstance(properties, dict):
+            properties = {}
         self.logical_id = logical_id
         self.type = properties.get("Type")
         self.default = properties.get("Default")
