@@ -53,36 +53,17 @@ class Statement:
             self.not_resource_raw = [self.not_resource_raw]
         self.not_resource = self.not_resource_raw
 
-    def wildcard_principals(self, pattern: str) -> List[Principal]:
-        if not self.principal:
-            return []
-
     def actions_with(self, pattern: Pattern) -> List[str]:
-        return [action for action in self.get_action_list() if pattern.match(action)]
+        all = self.action + self.not_action
+        return [action for action in all if pattern.match(action)]
 
-    def principals_with(self, pattern) -> List[Principal]:
+    def principals_with(self, pattern: Pattern) -> List[Principal]:
         all = self.principal + self.not_principal
         return [principal for principal in all if principal.has_principals_with(pattern)]
-
-    @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see actions_with")
-    def wildcard_actions(self, pattern=None) -> List[str]:
-        if pattern:
-            return self.actions_with(re.compile(pattern))
-        return self.actions_with(CONTAINS_STAR)
-
-    @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see principals_with")
-    def wildcard_principals(self, pattern: str) -> List[Principal]:
-        all = self.principal + self.not_principal
-        if pattern:
-            return [principal for principal in all if principal.has_principals_with(re.compile(pattern))]
-        return [principal for principal in all if principal.has_wildcard_principals(CONTAINS_STAR)]
 
     def non_whitelisted_principals(self, whitelist: List[str]) -> List[Principal]:
         all = self.principal + self.not_principal
         return [principal for principal in all if principal.has_non_whitelisted_principals(whitelist)]
-
-    def get_action_list(self) -> List[str]:
-        return self.action + self.not_action
 
     def resolve(self, intrinsic_function_resolver: IntrinsicFunctionResolver):
         # Effect

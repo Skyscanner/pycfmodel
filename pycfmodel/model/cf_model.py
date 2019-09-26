@@ -15,10 +15,7 @@ specific language governing permissions and limitations under the License.
 from collections import defaultdict
 from typing import Dict
 
-from deprecation import deprecated
-
 from .intrinsic_function_resolver import IntrinsicFunctionResolver
-
 from .resource_factory import create_resource
 from .parameter import Parameter
 
@@ -40,13 +37,13 @@ class CFModel:
 
         self.resolve()
 
-    def _parse_parameters(self, template_params):
+    def _parse_parameters(self, template_params: Dict):
         """Parses and sets parameters in the model."""
         self.default_parameters = {
             param_name: Parameter(param_name, param_value) for param_name, param_value in template_params.items()
         }
 
-    def _parse_resources(self, template_resources):
+    def _parse_resources(self, template_resources: Dict):
         """Parses and sets resources in the model using a factory."""
         resources = defaultdict(list)
         for res_id, res_value in template_resources.items():
@@ -54,12 +51,7 @@ class CFModel:
             resources[r.resource_type].append(r)
         self.resources = dict(resources)
 
-    @deprecated(deprecated_in="0.4.0", details="Use default_parameters")
-    @property
-    def parameters(self):
-        return self.default_parameters.values()
-
-    def resolve(self, custom_pseudo_parameters={}, import_values={}, custom_parameters={}):
+    def resolve(self, custom_pseudo_parameters: Dict = {}, import_values: Dict = {}, custom_parameters: Dict = {}):
         self.computed_parameters = {
             # default pseudo parameters
             "AWS::AccountId": "123456789012",
@@ -72,7 +64,7 @@ class CFModel:
             "AWS::URLSuffix": "amazonaws.com",
         }
         self.computed_parameters.update(
-            {
+            {pycfmodel/model/cf_model.py
                 # default parameters
                 key: parameter.default
                 for key, parameter in self.default_parameters.items()

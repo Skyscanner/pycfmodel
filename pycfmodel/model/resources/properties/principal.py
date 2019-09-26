@@ -12,12 +12,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-import re
+from typing import List, Pattern
 
-from typing import List
-from deprecation import deprecated
-
-from pycfmodel.model.regexs import CONTAINS_STAR
+from pycfmodel.model.intrinsic_function_resolver import IntrinsicFunctionResolver
 
 
 class Principal:
@@ -28,29 +25,19 @@ class Principal:
             self.principals_raw = [self.principals_raw]
         self.principals = self.principals_raw
 
-    @deprecated(deprecated_in="0.4.0", details="Deprecated param pattern. For custom pattern see has_principals_with")
-    def has_wildcard_principals(self, pattern=None):
-        if pattern:
-            return self.has_principals_with(re.compile(pattern))
-        return self.has_principals_with(CONTAINS_STAR)
-
-    @deprecated(deprecated_in="0.4.0", details="Use has_non_whitelisted_principals")
-    def has_nonwhitelisted_principals(self, whitelist):
-        return self.has_non_whitelisted_principals(whitelist)
-
-    def has_non_whitelisted_principals(self, whitelist) -> bool:
+    def has_non_whitelisted_principals(self, whitelist: List[str]) -> bool:
         for principal in self.principals:
             if principal not in whitelist:
                 return True
         return False
 
-    def has_principals_with(self, pattern) -> bool:
+    def has_principals_with(self, pattern: Pattern) -> bool:
         for principal in self.principals:
             if pattern.match(principal):
                 return True
         return False
 
-    def resolve(self, intrinsic_function_resolver):
+    def resolve(self, intrinsic_function_resolver: IntrinsicFunctionResolver):
         self.principals = []
         for arn in self.principals_raw:
             self.principals.append(intrinsic_function_resolver.resolve(arn))
