@@ -53,6 +53,10 @@ class Statement:
             self.not_resource_raw = [self.not_resource_raw]
         self.not_resource = self.not_resource_raw
 
+    def wildcard_principals(self, pattern: str) -> List[Principal]:
+        if not self.principal:
+            return []
+
     def actions_with(self, pattern: Pattern) -> List[str]:
         return [action for action in self.get_action_list() if pattern.match(action)]
 

@@ -18,6 +18,7 @@ from typing import Dict
 from deprecation import deprecated
 
 from .intrinsic_function_resolver import IntrinsicFunctionResolver
+
 from .resource_factory import create_resource
 from .parameter import Parameter
 
