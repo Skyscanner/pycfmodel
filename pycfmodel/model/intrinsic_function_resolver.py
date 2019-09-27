@@ -20,7 +20,7 @@ from typing import Dict
 from pycfmodel.model.regexs import CONTAINS_CF_PARAM
 
 
-class IntrinsicFunctionResolver(object):
+class IntrinsicFunctionResolver:
     def __init__(self, params: Dict, mappings: Dict):
         self.params = params
         self.mappings = mappings
