@@ -12,42 +12,26 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import Dict
+from typing import Dict, ClassVar, List, Optional, Union
 
-from pycfmodel.model.intrinsic_function_resolver import IntrinsicFunctionResolver
+from ..types import ResolvableStr
+from ..base import CustomModel
+from .iam_policy import IAMPolicy
 from .resource import Resource
 from .properties.policy_document import PolicyDocument
 
 
+class IAMRoleProperties(CustomModel):
+    AssumeRolePolicyDocument: PolicyDocument
+    ManagedPolicyArns: Optional[List[ResolvableStr]] = None
+    MaxSessionDuration: Optional[Union[int, str, Dict]] = None
+    Path: Optional[str] = None
+    PermissionsBoundary: Optional[ResolvableStr] = None
+    Policies: Optional[List[IAMPolicy]] = None
+    RoleName: Optional[ResolvableStr] = None
+
+
 class IAMRole(Resource):
-    def __init__(self, logical_id, value: Dict):
-        """
-        "AssumeRolePolicyDocument": { JSON },
-        "ManagedPolicyArns": [ String, ... ],
-        "Path": String,
-        "Policies": [ Policies, ... ],
-        "RoleName": String
-        """
-        super().__init__(logical_id, value)
-
-        self.path = None
-
-        self.role_name_raw = value.get("Properties", {}).get("RoleName")
-        self.role_name = self.role_name_raw
-
-        self.assume_role_policy_document = PolicyDocument(value.get("Properties", {}).get("AssumeRolePolicyDocument"))
-        self.policies = self.get_policies(value.get("Properties", {}).get("Policies", []))
-        self.managed_policy_arns = self.get_managed_policy_arns(
-            value.get("Properties", {}).get("ManagedPolicyArns", [])
-        )
-        self.set_generic_keys(
-            value.get("Properties", {}), ["RoleName", "AssumeRolePolicyDocument", "Policies", "ManagedPolicyArns"]
-        )
-
-    def resolve(self, intrinsic_function_resolver: IntrinsicFunctionResolver):
-        self.role_name = intrinsic_function_resolver.resolve(self.role_name_raw)
-        self.assume_role_policy_document.resolve(intrinsic_function_resolver)
-
-        for policy in self.policies + self.managed_policy_arns:
-            if not isinstance(policy, str):
-                policy.resolve(intrinsic_function_resolver)
+    TYPE_VALUE: ClassVar = "AWS::IAM::Role"
+    Type: str = TYPE_VALUE
+    Properties: IAMRoleProperties

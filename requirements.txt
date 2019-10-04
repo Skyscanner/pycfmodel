@@ -4,4 +4,3 @@
 #
 #    pip-compile --no-index --output-file requirements.txt setup.py
 #
-inflection==0.3.1

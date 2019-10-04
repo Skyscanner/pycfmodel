@@ -12,29 +12,20 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import ClassVar, Optional, List
+
+from ..types import ResolvableStr
 from .resource import Resource
 from .properties.policy_document import PolicyDocument
 
 
 class IAMManagedPolicy(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "Description" : String,
-        "Groups" : [ String, ... ],
-        "Path" : String,
-        "PolicyDocument" : JSON object,
-        "Roles" : [ String, ... ],
-        "Users" : [ String, ... ],
-        "ManagedPolicyName" : String
-        """
-        super().__init__(logical_id, value)
-
-        self.description = None
-        self.groups = []
-        self.path = None
-        self.roles = []
-        self.users = []
-        self.managed_policy_name = None
-
-        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
-        self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])
+    TYPE_VALUE: ClassVar = "IAMManagedPolicy"
+    Type: str = TYPE_VALUE
+    Description: Optional[str] = None
+    Groups: Optional[List[ResolvableStr]] = None
+    ManagedPolicyName: Optional[str] = None
+    Path: Optional[str] = None
+    PolicyDocument: PolicyDocument
+    Roles: Optional[List[ResolvableStr]] = None
+    Users: Optional[List[ResolvableStr]] = None

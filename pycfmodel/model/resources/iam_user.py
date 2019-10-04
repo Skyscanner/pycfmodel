@@ -12,25 +12,25 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import ClassVar, List, Optional, Dict
+
+from ..types import ResolvableStr
+from ..base import CustomModel
+from .iam_policy import IAMPolicy
 from .resource import Resource
 
 
+class IAMUserProperties(CustomModel):
+    Groups: Optional[List[ResolvableStr]] = None
+    LoginProfile: Optional[Dict] = None
+    ManagedPolicyArns: Optional[List[ResolvableStr]] = None
+    Path: Optional[str] = None
+    PermissionsBoundary: Optional[ResolvableStr] = None
+    Policies: Optional[List[IAMPolicy]] = None
+    UserName: Optional[ResolvableStr] = None
+
+
 class IAMUser(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "UserName": String,
-        "ManagedPolicyArns": [ String, ... ],
-        "Path": String,
-        "Policies": [ Policies, ... ]
-        """
-        super().__init__(logical_id, value)
-
-        self.user_name = None
-        self.path = None
-
-        self.policies = self.get_policies(value.get("Properties", {}).get("Policies", []))
-        self.managed_policy_arns = self.get_managed_policy_arns(
-            value.get("Properties", {}).get("ManagedPolicyArns", [])
-        )
-        self.set_generic_keys(value.get("Properties", {}), ["Policies", "ManagedPolicyArns"])
-        self.properties = value.get("Properties", {})
+    TYPE_VALUE: ClassVar = "AWS::IAM::User"
+    Type: str = TYPE_VALUE
+    Properties: IAMUserProperties

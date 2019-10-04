@@ -12,26 +12,24 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-import inflection
+from typing import Dict, ClassVar, Optional
 
-from typing import Dict, List
+from pydantic import validator
 
-from pycfmodel.model.intrinsic_function_resolver import IntrinsicFunctionResolver
+from ..base import CustomModel
 from .properties.policy import Policy
 
 
-class Resource:
-    def __init__(self, logical_id, value):
-        self.logical_id = logical_id
-        self.resource_type = value.get("Type")
-        self.properties = {}
-        self.metadata = value.get("Metadata", {})
-        self.set_generic_keys(value.get("Properties", {}), [])
+class Resource(CustomModel):
+    TYPE_VALUE: ClassVar[str]
+    Type: str
+    Metadata: Optional[Dict] = None
 
-    def set_generic_keys(self, properties: Dict, exclude_list: List):
-        generic_keys = set(properties.keys()) - set(exclude_list)
-        for generic_key in generic_keys:
-            self.__setattr__(inflection.underscore(generic_key), properties[generic_key])
+    @validator("Type")
+    def check_type(cls, value):
+        if value != cls.TYPE_VALUE:
+            raise ValueError(f"Value needs to be {cls.TYPE_VALUE}")
+        return value
 
     def get_policies(self, policies):
         if not policies:
@@ -62,17 +60,14 @@ class Resource:
         return []
 
     def has_hardcoded_credentials(self):
-        if self.resource_type == "AWS::IAM::User" and self.properties:
-            login_profile = self.properties.get("LoginProfile", {})
-            if "Password" in list(login_profile):
+        if self.Type == "AWS::IAM::User" and self.Properties:
+            login_profile = self.Properties.LoginProfile
+            if login_profile and "Password" in login_profile.keys():
                 return True
 
-        if not self.metadata or not self.metadata.get("AWS::CloudFormation::Authentication"):
+        if not self.Metadata or not self.Metadata.get("AWS::CloudFormation::Authentication"):
             return False
 
-        for auth_name, auth in self.metadata.get("AWS::CloudFormation::Authentication", {}).items():
+        for auth_name, auth in self.Metadata.get("AWS::CloudFormation::Authentication", {}).items():
             if auth.get("accessKeyId") or auth.get("password") or auth.get("secretKey"):
                 return True
-
-    def resolve(self, intrinsic_function_resolver: IntrinsicFunctionResolver):
-        return None

@@ -12,8 +12,21 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from .model.cf_model import CFModel
+import pytest
+
+from pycfmodel.model.parameter import Parameter
 
 
-def parse(template):
-    return CFModel(template)
+@pytest.mark.parametrize(
+    "type, default, expected",
+    [
+        ("String", "abc", "abc"),
+        ("String", None, None),
+        ("Number", 1, "1"),
+        ("List<Number>", "1,2,3", ["1", "2", "3"]),
+        ("CommaDelimitedList", "a,b,c", ["a", "b", "c"]),
+    ],
+)
+def test_get_ref_value(type, default, expected):
+    parameter = Parameter(**{"Type": type, "Default": default})
+    assert parameter.get_ref_value() == expected

@@ -12,24 +12,17 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import ClassVar, List, Optional
+
+from ..types import ResolvableStr
+from .iam_policy import IAMPolicy
 from .resource import Resource
 
 
 class IAMGroup(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "GroupName": String,
-        "ManagedPolicyArns": [ String, ... ],
-        "Path": String,
-        "Policies": [ Policies, ... ]
-        """
-        super().__init__(logical_id, value)
-
-        self.group_name = None
-        self.path = None
-
-        self.policies = self.get_policies(value.get("Properties", {}).get("Policies", []))
-        self.managed_policy_arns = self.get_managed_policy_arns(
-            value.get("Properties", {}).get("ManagedPolicyArns", [])
-        )
-        self.set_generic_keys(value.get("Properties", {}), ["Policies", "ManagedPolicyArns"])
+    TYPE_VALUE: ClassVar = "AWS::IAM::Group"
+    Type: str = TYPE_VALUE
+    GroupName: Optional[ResolvableStr] = None
+    ManagedPolicyArns: Optional[List[ResolvableStr]] = None
+    Path: Optional[str] = None
+    Policies: Optional[List[IAMPolicy]] = None

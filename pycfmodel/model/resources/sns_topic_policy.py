@@ -12,19 +12,30 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import json
+
+from typing import ClassVar, List
+
+from pydantic import validator
+
+from ..types import ResolvableStr
+from ..base import CustomModel
 from .resource import Resource
 from .properties.policy_document import PolicyDocument
 
 
+class SNSTopicPolicyProperties(CustomModel):
+    PolicyDocument: PolicyDocument
+    Topics: List[ResolvableStr]
+
+    @validator("PolicyDocument", pre=True)
+    def handle_dual_policy_document(cls, value):
+        if isinstance(value, str):
+            return json.loads(value)
+        return value
+
+
 class SNSTopicPolicy(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "PolicyDocument" : PolicyDocument,
-        "Topics" : [ List of SNS topic ARNs, ... ]
-        """
-        super().__init__(logical_id, value)
-
-        self.topics = []
-
-        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
-        self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])
+    TYPE_VALUE: ClassVar = "AWS::SNS::TopicPolicy"
+    Type: str = TYPE_VALUE
+    Properties: SNSTopicPolicyProperties

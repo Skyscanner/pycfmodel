@@ -12,46 +12,39 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import ClassVar, Dict, Optional, Union
+
+from pycfmodel.model.types import ResolvableStr
+from ..base import CustomModel
 from .resource import Resource
 
 
+class SecurityGroupIngressProperties(CustomModel):
+    CidrIp: Optional[ResolvableStr]
+    CidrIpv6: Optional[ResolvableStr]
+    Description: Optional[ResolvableStr]
+    FromPort: Optional[Union[int, Dict]]
+    GroupId: Optional[ResolvableStr]
+    GroupName: Optional[ResolvableStr]
+    IpProtocol: Union[int, str, Dict]
+    SourcePrefixListId: Optional[ResolvableStr]
+    SourceSecurityGroupId: Optional[ResolvableStr]
+    SourceSecurityGroupName: Optional[ResolvableStr]
+    SourceSecurityGroupOwnerId: Optional[ResolvableStr]
+    ToPort: Optional[Union[int, Dict]]
+
+
 class SecurityGroupIngress(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "CidrIp" : String,
-        "CidrIpv6" : String,
-        "Description" : String,
-        "FromPort" : Integer,
-        "GroupId" : String,
-        "GroupName" : String,
-        "IpProtocol" : String,
-        "SourceSecurityGroupName" : String,
-        "SourceSecurityGroupId" : String,
-        "SourceSecurityGroupOwnerId" : String,
-        "ToPort" : Integer
-        """
-        super().__init__(logical_id, value)
-
-        self.cidr_ip = None
-        self.cidr_ipv6 = None
-        self.description = None
-        self.from_port = None
-        self.group_id = None
-        self.group_name = None
-        self.ip_protocol = None
-        self.source_security_group_name = None
-        self.source_security_group_id = None
-        self.source_security_group_owner_id = None
-        self.to_port = None
-
-        self.set_generic_keys(value.get("Properties", {}), [])
+    TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroupIngress"
+    Type: str = TYPE_VALUE
+    Properties: SecurityGroupIngressProperties
 
     def ipv4_slash_zero(self) -> bool:
-        if not self.cidr_ip or not isinstance(self.cidr_ip, str):
+        if not self.Properties.CidrIp or not isinstance(self.Properties.CidrIp, str):
             return False
-        return self.cidr_ip.endswith("/0")
+        return self.Properties.CidrIp.endswith("/0")
 
     def ipv6_slash_zero(self) -> bool:
-        if not self.cidr_ipv6 or not isinstance(self.cidr_ipv6, str):
+        if not self.Properties.CidrIpv6 or not isinstance(self.Properties.CidrIpv6, str):
             return False
-        return self.cidr_ipv6.endswith("/0")
+        return self.Properties.CidrIpv6.endswith("/0")

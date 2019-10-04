@@ -12,14 +12,15 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-
+import pytest
 
 from pycfmodel.model.resources.iam_user import IAMUser
 
-cf_script = {
-    "AWSTemplateFormatVersion": "2010-09-09",
-    "Resources": {
-        "myuser": {
+
+@pytest.fixture()
+def iam_user():
+    return IAMUser(
+        **{
             "Type": "AWS::IAM::User",
             "Properties": {
                 "Path": "/",
@@ -42,18 +43,13 @@ cf_script = {
                 ],
             },
         }
-    },
-}
+    )
 
 
-iam_user = IAMUser("myuser", cf_script["Resources"]["myuser"])
+def test_policies(iam_user):
+    assert len(iam_user.Properties.Policies) == 1
+    assert iam_user.Properties.Policies[0].PolicyName == "BadPolicy"
 
 
-def test_policies():
-    assert len(iam_user.policies) == 1
-    policy = iam_user.policies[0]
-    assert policy.policy_name == "BadPolicy"
-
-
-def test_credential_check():
+def test_credential_check(iam_user):
     assert iam_user.has_hardcoded_credentials()

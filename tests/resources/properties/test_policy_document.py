@@ -15,13 +15,16 @@ specific language governing permissions and limitations under the License.
 import re
 from collections import Counter
 
+import pytest
+
 from pycfmodel.model.regexs import CONTAINS_STAR
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 
 
-def test_one_statement():
-    pd = {
-        "doc": {
+@pytest.fixture()
+def policy_document_one_statement():
+    return PolicyDocument(
+        **{
             "Version": "2012-10-17",
             "Statement": {
                 "Effect": "Allow",
@@ -29,16 +32,13 @@ def test_one_statement():
                 "Action": ["sts:AssumeRole"],
             },
         }
-    }
-
-    document = PolicyDocument(pd["doc"])
-    statement = document.statements[0]
-    assert statement.effect == "Allow"
+    )
 
 
-def test_multi_statements():
-    pd = {
-        "doc": {
+@pytest.fixture()
+def policy_document_multi_statement():
+    return PolicyDocument(
+        **{
             "Version": "2012-10-17",
             "Statement": [
                 {
@@ -53,28 +53,20 @@ def test_multi_statements():
                 },
             ],
         }
-    }
-
-    document = PolicyDocument(pd["doc"])
-    statement1 = document.statements[0]
-    assert statement1.effect == "Allow"
-    statement2 = document.statements[1]
-    assert statement2.effect == "bar"
+    )
 
 
-def test_star_resource():
-    pd = {
-        "PolicyDocument": {
-            "Statement": [{"Action": ["*"], "Effect": "Allow", "Resource": "*", "Principal": {"AWS": ["156460612806"]}}]
-        }
-    }
-    document = PolicyDocument(pd["PolicyDocument"])
-    assert len(document.resources_with(CONTAINS_STAR)) == 1
+@pytest.fixture()
+def policy_document_star_resource():
+    return PolicyDocument(
+        **{"Statement": [{"Action": ["*"], "Effect": "Allow", "Resource": "*", "Principal": {"AWS": ["156460612806"]}}]}
+    )
 
 
-def test_wildcard_actions():
-    pd = {
-        "PolicyDocument": {
+@pytest.fixture()
+def policy_document_wildcard_actions():
+    return PolicyDocument(
+        **{
             "Statement": [
                 {
                     "Action": ["s3:*"],
@@ -84,15 +76,13 @@ def test_wildcard_actions():
                 }
             ]
         }
-    }
-    document = PolicyDocument(pd["PolicyDocument"])
-    assert len(document.allowed_actions_with(CONTAINS_STAR)) == 1
-    assert len(document.allowed_actions_with(re.compile(r"^(\w*:){0,1}\*$"))) == 1
+    )
 
 
-def test_not_principal():
-    pd = {
-        "PolicyDocument": {
+@pytest.fixture()
+def policy_document_not_principal():
+    return PolicyDocument(
+        **{
             "Statement": [
                 {
                     "Action": ["*"],
@@ -102,13 +92,32 @@ def test_not_principal():
                 }
             ]
         }
-    }
-    document = PolicyDocument(pd["PolicyDocument"])
-    assert len(document.allowed_actions_with(CONTAINS_STAR)) == 1
+    )
+
+
+def test_one_statement(policy_document_one_statement):
+    assert policy_document_one_statement.Statement.Effect == "Allow"
+
+
+def test_multi_statements(policy_document_multi_statement):
+    assert policy_document_multi_statement.Statement[0].Effect == "Allow"
+    assert policy_document_multi_statement.Statement[1].Effect == "bar"
+
+
+def test_star_resource(policy_document_star_resource):
+    assert len(policy_document_star_resource.resources_with(CONTAINS_STAR)) == 1
+
+
+def test_wildcard_actions(policy_document_wildcard_actions):
+    assert len(policy_document_wildcard_actions.allowed_actions_with(CONTAINS_STAR)) == 1
+    assert len(policy_document_wildcard_actions.allowed_actions_with(re.compile(r"^(\w*:){0,1}\*$"))) == 1
+
+
+def test_not_principal(policy_document_not_principal):
+    assert len(policy_document_not_principal.allowed_actions_with(CONTAINS_STAR)) == 1
 
 
 def test_get_iam_actions():
-
     correct_list = [
         "IAM:DeleteAccountPasswordPolicy",
         "IAM:DeleteServiceLinkedRole",
@@ -133,8 +142,8 @@ def test_get_iam_actions():
         "IAM:DeleteInstanceProfile",
     ]
 
-    pd = {
-        "PolicyDocument": {
+    document = PolicyDocument(
+        **{
             "Statement": [
                 {
                     "Action": ["IAM:Delete*"],
@@ -144,9 +153,6 @@ def test_get_iam_actions():
                 }
             ]
         }
-    }
-    document = PolicyDocument(pd["PolicyDocument"])
+    )
 
-    actions = document.get_iam_actions()
-
-    assert Counter(correct_list) == Counter(actions)
+    assert Counter(correct_list) == Counter(document.get_iam_actions())

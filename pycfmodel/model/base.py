@@ -12,29 +12,12 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from pydantic import BaseModel, Extra
 
 
-import pycfmodel
+class CustomModel(BaseModel):
+    class Config(BaseModel.Config):
+        extra = Extra.forbid
 
-basic_template = {
-    "AWSTemplateFormatVersion": "version date",
-    "Description": "JSON string",
-    "Metadata": {},
-    "Parameters": {},
-    "Mappings": {},
-    "Conditions": {},
-    "Transform": {},
-    "Resources": {"Logical ID": {"Type": "Resource type", "Properties": {"foo": "bar"}}},
-    "Outputs": {},
-}
-
-
-def test_basic_json():
-    model = pycfmodel.parse(basic_template)
-
-    assert type(model).__name__ == "CFModel"
-    assert len(model.resources) == 1
-
-
-def test_basic_yaml():
-    pass
+    def dict(self, *args, **kwargs):
+        return {k: v for k, v in super().dict(*args, **kwargs).items() if v is not None}

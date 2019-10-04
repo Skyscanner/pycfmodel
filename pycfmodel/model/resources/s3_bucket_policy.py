@@ -12,18 +12,20 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from .resource import Resource
+from typing import ClassVar
+
+from ..types import ResolvableStr
+from ..base import CustomModel
 from .properties.policy_document import PolicyDocument
+from .resource import Resource
+
+
+class S3BucketPolicyProperties(CustomModel):
+    Bucket: ResolvableStr
+    PolicyDocument: PolicyDocument
 
 
 class S3BucketPolicy(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "Bucket" : String,
-        "PolicyDocument" : JSON
-        """
-        super().__init__(logical_id, value)
-        self.bucket = None
-
-        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
-        self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])
+    TYPE_VALUE: ClassVar = "AWS::S3::BucketPolicy"
+    Type: str = TYPE_VALUE
+    Properties: S3BucketPolicyProperties
