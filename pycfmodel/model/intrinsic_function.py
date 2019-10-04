@@ -75,7 +75,7 @@ def resolve_sub(function_body, params: Dict, mappings: Dict[str, Dict]):
     replacements = params
     # Whenever we receive a list, first parameter is a text and the second one is a dict with custom replacements.
     # Whenever we receive a list, we need to resolve inlined variables
-    if type(function_body) is list:
+    if isinstance(function_body, list):
         text, custom_replacements = function_body
         replacements.update(custom_replacements)
     else:

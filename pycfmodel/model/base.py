@@ -20,4 +20,5 @@ class CustomModel(BaseModel):
         extra = Extra.forbid
 
     def dict(self, *args, **kwargs):
-        return {k: v for k, v in super().dict(*args, **kwargs).items() if v is not None}
+    def dict(self, *args, skip_defaults=True, **kwargs):
+        return super().dict(*args, **kwargs, skip_defaults=skip_defaults)
