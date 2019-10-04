@@ -27,7 +27,7 @@ class Parameter(CustomModel):
     Description: Optional[str] = None
     MaxLength: Optional[PositiveInt] = None
     MaxValue: Optional[PositiveInt] = None
-    MinLength: Optional[PositiveInt] = None
+    MinLength: Optional[int] = None
     MinValue: Optional[int] = None
     NoEcho: Optional[bool] = None
     Type: str

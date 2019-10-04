@@ -115,7 +115,7 @@ def test_split(input, expected_output):
     assert resolve(input, parameters, mappings) == expected_output
 
 
-@pytest.mark.parametrize("input, expected_output", [({"Fn::If": ["condition", "a", "b"]}, ["condition", "a", "b"])])
+@pytest.mark.parametrize("input, expected_output", [({"Fn::If": ["condition", "a", "b"]}, "IF")])
 def test_if(input, expected_output):
     parameters = {}
     mappings = {}
@@ -182,8 +182,7 @@ def test_base64(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    "input, expected_output",
-    [({"Fn::GetAtt": ["logicalNameOfResource", "attributeName"]}, ["logicalNameOfResource", "attributeName"])],
+    "input, expected_output", [({"Fn::GetAtt": ["logicalNameOfResource", "attributeName"]}, "GETATT")]
 )
 def test_get_attr(input, expected_output):
     parameters = {}
@@ -192,7 +191,15 @@ def test_get_attr(input, expected_output):
     assert resolve(input, parameters, mappings) == expected_output
 
 
-@pytest.mark.parametrize("input, expected_output", [({"Condition": "SomeOtherCondition"}, "SomeOtherCondition")])
+@pytest.mark.parametrize("input, expected_output", [({"Fn::GetAZs": ""}, "GETAZS")])
+def test_get_azs(input, expected_output):
+    parameters = {}
+    mappings = {}
+
+    assert resolve(input, parameters, mappings) == expected_output
+
+
+@pytest.mark.parametrize("input, expected_output", [({"Condition": "SomeOtherCondition"}, "CONDITION")])
 def test_condition(input, expected_output):
     parameters = {}
     mappings = {}

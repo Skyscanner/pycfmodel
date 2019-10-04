@@ -33,10 +33,11 @@ def resolve(input: ValidResolvers, params: Dict, mappings: Dict[str, Dict]):
         return [resolve(entry, params, mappings) for entry in input]
 
     elif isinstance(input, dict):
-        function_name = next(iter(input.keys()))
-        if len(input) == 1 and function_name in FUNCTION_MAPPINGS:
-            function_resolver = FUNCTION_MAPPINGS[function_name]
-            return function_resolver(input[function_name], params, mappings)
+        if len(input) == 1:
+            function_name = next(iter(input.keys()))
+            if function_name in FUNCTION_MAPPINGS:
+                function_resolver = FUNCTION_MAPPINGS[function_name]
+                return function_resolver(input[function_name], params, mappings)
 
         return {k: resolve(v, params, mappings) for k, v in input.items()}
 
@@ -54,7 +55,7 @@ def resolve_join(function_body, params: Dict, mappings: Dict[str, Dict]):
     delimiter, list_values = function_body
     resolved_delimiter = resolve(delimiter, params, mappings)
     resolved_list = resolve(list_values, params, mappings)
-    return resolved_delimiter.join(resolved_list)
+    return resolved_delimiter.join(str(e) for e in resolved_list)
 
 
 def resolve_find_in_map(function_body, params: Dict, mappings: Dict[str, Dict]):
@@ -77,15 +78,14 @@ def resolve_sub(function_body, params: Dict, mappings: Dict[str, Dict]):
     # Whenever we receive a list, we need to resolve inlined variables
     if isinstance(function_body, list):
         text, custom_replacements = function_body
-        replacements.update(custom_replacements)
+        replacements.update(resolve(custom_replacements, params, mappings))
     else:
         text = function_body
-
     for match in CONTAINS_CF_PARAM.findall(text):
         match_param = match[2:-1]  # Remove ${ and trailing }
         if match_param in replacements:
             value = resolve(replacements[match_param], params, mappings)
-            text = text.replace(match, value)
+            text = text.replace(match, str(value))
     return text
 
 
@@ -110,8 +110,8 @@ def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict]):
     #     return resolve(true_section, params, mappings)
     # else:
     #     return resolve(false_section, params, mappings)
-    logger.warning(f"`Fn::If` resolver not implemented, returning if body")
-    return function_body
+    logger.warning(f"`Fn::If` resolver not implemented, returning `IF`")
+    return "IF"
 
 
 def resolve_and(function_body: List, params: Dict, mappings: Dict[str, Dict]):
@@ -140,15 +140,21 @@ def resolve_base64(function_body: str, params: Dict, mappings: Dict[str, Dict]):
 
 def resolve_get_attr(function_body, params: Dict, mappings: Dict[str, Dict]):
     # TODO: Implement. Conditions aren't supported yet, so this code can't be evaluated
-    logger.warning(f"`Fn::GetAtt` resolver not implemented, returning getattr body")
-    return function_body
+    logger.warning(f"`Fn::GetAtt` resolver not implemented, returning `GETATT`")
+    return "GETATT"
+
+
+def resolve_get_azs(function_body, params: Dict, mappings: Dict[str, Dict]):
+    # TODO: Implement. Conditions aren't supported yet, so this code can't be evaluated
+    logger.warning(f"`Fn::GetAZs` resolver not implemented, returning `GETAZS`")
+    return "GETAZS"
 
 
 def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict]):
     # {"Condition": "SomeOtherCondition"}
     # TODO: Implement. Conditions aren't supported yet, so this code can't be evaluated
-    logger.warning(f"`Condition` resolver not implemented, returning condition body")
-    return function_body
+    logger.warning(f"`Condition` resolver not implemented, returning `CONDITION`")
+    return "CONDITION"
 
 
 FUNCTION_MAPPINGS = {
@@ -166,5 +172,6 @@ FUNCTION_MAPPINGS = {
     "Fn::Equals": resolve_equals,
     "Fn::Base64": resolve_base64,
     "Fn::GetAtt": resolve_get_attr,
+    "Fn::GetAZs": resolve_get_azs,
     "Condition": resolve_condition,
 }

@@ -13,7 +13,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 from datetime import date
-from typing import Dict, Union, ClassVar, Optional, List
+from typing import Dict, Union, ClassVar, Optional, List, Any
 
 from .base import CustomModel
 from .intrinsic_function import resolve
@@ -50,10 +50,10 @@ ResourceModels = Union[
 
 
 class CFModel(CustomModel):
-    AWSTemplateFormatVersion: date
+    AWSTemplateFormatVersion: Optional[date]
     Description: Optional[str] = None
     Metadata: Optional[Dict[str, Dict]] = None  # TODO, check schema
-    Mappings: Dict[str, Dict[str, Dict[str, str]]] = {}
+    Mappings: Dict[str, Dict[str, Dict[str, Any]]] = {}
     Conditions: Dict = {}
     Transform: Optional[List]
     Outputs: Dict[str, Dict[str, Union[str, Dict]]] = {}
