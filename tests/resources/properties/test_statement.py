@@ -178,45 +178,44 @@ def test_get_principal_list(statement, expected_output):
 # )
 # def test_actions_with(statement, pattern, expected_output):
 #     assert statement.actions_with(pattern) == expected_output
-#
-#
-# @pytest.mark.parametrize(
-#     "statement, pattern, expected_output",
-#     [
-#         (statement_principal_1(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_2(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_3(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_4(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_5(), re.compile(r"^$"), ["arn"]),
-#     ],
-# )
-# def test_principals_with(statement, pattern, expected_output):
-#     assert statement.principals_with(pattern) == expected_output
-#
-#
-# @pytest.mark.parametrize(
-#     "statement, pattern, expected_output",
-#     [
-#         (statement_principal_1(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_2(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_3(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_4(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_5(), re.compile(r"^$"), ["arn"]),
-#     ],
-# )
-# def test_resources_with(statement, pattern, expected_output):
-#     assert statement.resources_with(pattern) == expected_output
-#
-#
-# @pytest.mark.parametrize(
-#     "statement, whitelist, expected_output",
-#     [
-#         (statement_principal_1(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_2(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_3(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_4(), re.compile(r"^$"), ["arn"]),
-#         (statement_principal_5(), re.compile(r"^$"), ["arn"]),
-#     ],
-# )
-# def test_non_whitelisted_principals(statement, whitelist, expected_output):
-#     assert statement.non_whitelisted_principals(whitelist) == expected_output
+
+
+@pytest.mark.parametrize(
+    "statement, pattern, expected_output",
+    [
+        (statement_principal_1(), re.compile(r"^.*123456789012.*$"), ["arn:aws:iam::123456789012:root"]),
+        (statement_principal_2(), re.compile(r"^.*user-name-1$"), ["arn:aws:iam::AWS-account-ID:user/user-name-1"]),
+        (statement_principal_3(), re.compile(r"^.*\.amazonaws\.com$"), ["cognito-identity.amazonaws.com"]),
+    ],
+)
+def test_principals_with(statement, pattern, expected_output):
+    print(statement.principals_with(pattern))
+    assert statement.principals_with(pattern) == expected_output
+
+
+@pytest.mark.parametrize(
+    "statement, pattern, expected_output",
+    [
+        (statement_1(), re.compile(r"^[a]+$"), []),
+        (statement_2(), re.compile(r"^[arn]+$"), ["arn"]),
+        (statement_3(), re.compile(r"^.*1$"), ["arn1"]),
+        (statement_4(), re.compile(r"^.*2$"), ["arn2"]),
+    ],
+)
+def test_resources_with(statement, pattern, expected_output):
+    assert statement.resources_with(pattern) == expected_output
+
+
+@pytest.mark.parametrize(
+    "statement, whitelist, expected_output",
+    [
+        (statement_principal_1(), ["arn:aws:iam::123456789012:root"], []),
+        (
+            statement_principal_2(),
+            ["arn:aws:iam::AWS-account-ID:user/user-name-1"],
+            ["arn:aws:iam::AWS-account-ID:user/UserName2"],
+        ),
+    ],
+)
+def test_non_whitelisted_principals(statement, whitelist, expected_output):
+    assert statement.non_whitelisted_principals(whitelist) == expected_output

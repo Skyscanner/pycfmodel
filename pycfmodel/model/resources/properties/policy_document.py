@@ -12,6 +12,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import re
 from typing import List, Pattern, Union, Optional
 from datetime import date
 
@@ -188,37 +189,19 @@ class PolicyDocument(Property):
             if statement.non_whitelisted_principals(whitelist) and statement.Effect == "Allow"
         ]
 
-    def allows_not_principal(self) -> List[Statement]:
-        """Find allowed not-principals."""
-        return [
-            statement
-            for statement in self._statement_as_list()
-            if statement.not_principal and statement.Effect == "Allow"
-        ]
-
     def get_iam_actions(self, difference=False) -> List[str]:
-        actions = []
+        actions = set()
         for statement in self._statement_as_list():
-            action_list = statement.get_action_list()
-            if not action_list:
-                continue
-
-            for action in action_list:
+            for action in statement.get_action_list():
                 if not isinstance(action, str):
-                    # TODO: handle dicts
                     continue
-                wildcard = action.find("*")
 
-                if wildcard > 0:
-                    actions = [iam for iam in _IAM_ACTIONS if action[:wildcard].lower() in iam.lower()]
-                elif wildcard == 0:
-                    actions = _IAM_ACTIONS
-                elif action.lower() in [iam.lower() for iam in _IAM_ACTIONS]:
-                    actions.append(action)
+                pattern = re.compile(f"^{action}$".replace("*", ".*"))
+                for iam in _IAM_ACTIONS:
+                    if pattern.match(iam):
+                        actions.add(iam)
 
-                if difference:
-                    return list(
-                        set([iam.lower() for iam in _IAM_ACTIONS]).difference(set([act.lower() for act in actions]))
-                    )
+        if difference:
+            return list(set(_IAM_ACTIONS).difference(actions))
 
-        return actions
+        return list(actions)

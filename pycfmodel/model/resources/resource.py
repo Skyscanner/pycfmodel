@@ -38,7 +38,7 @@ class Resource(CustomModel):
         new_policies = []
         for p in policies:
 
-            # TODO: a generic function to get if conditions and apply something
+            # TODO: Wait to resolve to ve implemented
             if "Fn::If" in p:
                 if_policies = p["Fn::If"]
                 new_policies.append(Policy(if_policies[1]))

@@ -19,6 +19,5 @@ class CustomModel(BaseModel):
     class Config(BaseModel.Config):
         extra = Extra.forbid
 
-    def dict(self, *args, **kwargs):
     def dict(self, *args, skip_defaults=True, **kwargs):
         return super().dict(*args, **kwargs, skip_defaults=skip_defaults)

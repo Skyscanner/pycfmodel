@@ -36,84 +36,57 @@ class Statement(Property):
     NotResource: Optional[Union[str, List, Dict]] = None
 
     def get_action_list(self) -> List[ResolvableStr]:
-        actions = []
-
-        if isinstance(self.Action, List):
-            actions.extend(self.Action)
-        elif isinstance(self.Action, (str, dict)):
-            actions.append(self.Action)
-
-        if isinstance(self.NotAction, List):
-            actions.extend(self.NotAction)
-        elif isinstance(self.NotAction, (str, dict)):
-            actions.append(self.NotAction)
-
-        return actions
+        action_list = []
+        for actions in [self.Action, self.NotAction]:
+            if isinstance(actions, List):
+                action_list.extend(actions)
+            elif isinstance(actions, (str, dict)):
+                action_list.append(actions)
+        return action_list
 
     def get_resource_list(self) -> List[ResolvableStr]:
-        resources = []
-
-        if isinstance(self.Resource, List):
-            resources.extend(self.Resource)
-        elif isinstance(self.Resource, (str, dict)):
-            resources.append(self.Resource)
-
-        if isinstance(self.NotResource, List):
-            resources.extend(self.NotResource)
-        elif isinstance(self.NotResource, (str, dict)):
-            resources.append(self.NotResource)
-
-        return resources
+        resource_list = []
+        for resources in [self.Resource, self.NotResource]:
+            if isinstance(resources, List):
+                resource_list.extend(resources)
+            elif isinstance(resources, (str, dict)):
+                resource_list.append(resources)
+        return resource_list
 
     def get_principal_list(self) -> List[ResolvableStr]:
-        principals = []
-
-        if isinstance(self.Principal, list):
-            principals.extend(self.Principal)
-        elif isinstance(self.Principal, str):
-            principals.append(self.Principal)
-        elif isinstance(self.Principal, dict):
-            if len(self.Principal) == 1 and next(iter(self.Principal)).startswith("Fn"):
-                principals.append(self.Principal)
-            else:
-                for value in self.Principal.values():
-                    if isinstance(value, (str, Dict)):
-                        principals.append(value)
-                    elif isinstance(value, List):
-                        principals.extend(value)
-
-        if isinstance(self.NotPrincipal, list):
-            principals.extend(self.NotPrincipal)
-        elif isinstance(self.NotPrincipal, str):
-            principals.append(self.NotPrincipal)
-        elif isinstance(self.NotPrincipal, dict):
-            if len(self.NotPrincipal) == 1 and next(iter(self.NotPrincipal)).startswith("Fn"):
-                principals.append(self.NotPrincipal)
-            else:
-                for value in self.NotPrincipal.values():
-                    if isinstance(value, (str, Dict)):
-                        principals.append(value)
-                    elif isinstance(value, List):
-                        principals.extend(value)
-
-        return principals
+        principal_list = []
+        for principals in [self.Principal, self.NotPrincipal]:
+            if isinstance(principals, list):
+                principal_list.extend(principals)
+            elif isinstance(principals, str):
+                principal_list.append(principals)
+            elif isinstance(principals, dict):
+                if len(principals) == 1 and next(iter(principals)).startswith("Fn"):
+                    principal_list.append(principals)
+                else:
+                    for value in principals.values():
+                        if isinstance(value, (str, Dict)):
+                            principal_list.append(value)
+                        elif isinstance(value, List):
+                            principal_list.extend(value)
+        return principal_list
 
     def actions_with(self, pattern: Pattern) -> List[str]:
         return [action for action in self.get_action_list() if isinstance(action, str) and pattern.match(action)]
 
-    def principals_with(self, pattern: Pattern) -> List:
+    def principals_with(self, pattern: Pattern) -> List[str]:
         return [
             principal
             for principal in self.get_principal_list()
             if isinstance(principal, str) and pattern.match(principal)
         ]
 
-    def resources_with(self, pattern: Pattern) -> List:
+    def resources_with(self, pattern: Pattern) -> List[str]:
         return [
             resource for resource in self.get_resource_list() if isinstance(resource, str) and pattern.match(resource)
         ]
 
-    def non_whitelisted_principals(self, whitelist: List[str]) -> List:
+    def non_whitelisted_principals(self, whitelist: List[str]) -> List[str]:
         return [
             principal
             for principal in self.get_principal_list()

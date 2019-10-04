@@ -32,9 +32,6 @@ class Parameter(CustomModel):
     NoEcho: Optional[bool] = None
     Type: str
 
-    def dict(self, *args, **kwargs):
-        return {k: v for k, v in super().dict(*args, **kwargs).items() if v is not None}
-
     def get_ref_value(self):
         if self.Default is None:
             return None

@@ -85,7 +85,7 @@ def policy_document_not_principal():
         **{
             "Statement": [
                 {
-                    "Action": ["*"],
+                    "Action": ["IAM:Delete*"],
                     "Effect": "Allow",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
                     "NotPrincipal": {"AWS": ["156460612806"]},
@@ -117,7 +117,7 @@ def test_not_principal(policy_document_not_principal):
     assert len(policy_document_not_principal.allowed_actions_with(CONTAINS_STAR)) == 1
 
 
-def test_get_iam_actions():
+def test_get_iam_actions(policy_document_not_principal):
     correct_list = [
         "IAM:DeleteAccountPasswordPolicy",
         "IAM:DeleteServiceLinkedRole",
@@ -142,17 +142,4 @@ def test_get_iam_actions():
         "IAM:DeleteInstanceProfile",
     ]
 
-    document = PolicyDocument(
-        **{
-            "Statement": [
-                {
-                    "Action": ["IAM:Delete*"],
-                    "Effect": "Allow",
-                    "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
-                    "NotPrincipal": {"AWS": ["156460612806"]},
-                }
-            ]
-        }
-    )
-
-    assert Counter(correct_list) == Counter(document.get_iam_actions())
+    assert Counter(correct_list) == Counter(policy_document_not_principal.get_iam_actions())
