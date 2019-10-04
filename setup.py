@@ -6,7 +6,7 @@ from setuptools import setup, find_namespace_packages
 readme = Path(__file__).parent / "README.md"
 long_description = readme.read_text()
 
-install_requires = []
+install_requires = ["pydantic==1.0b1"]
 
 dev_requires = ["black==19.3b0", "pytest==3.6.0", "flake8>=3.3.0", "pytest-cov>=2.5.1", "pip-tools==2.0.2"]
 

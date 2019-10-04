@@ -4,3 +4,4 @@
 #
 #    pip-compile --no-index --output-file requirements.txt setup.py
 #
+pydantic==1.0b1
