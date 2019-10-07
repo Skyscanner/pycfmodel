@@ -175,19 +175,15 @@ class PolicyDocument(Property):
         ]
 
     def allowed_principals_with(self, pattern: Pattern) -> List[Statement]:
-        return [
-            statement
-            for statement in self._statement_as_list()
-            if statement.principals_with(pattern) and statement.Effect == "Allow"
-        ]
+        for statement in self._statement_as_list():
+            if statement.Effect == "Allow":
+                yield from statement.principals_with(pattern)
 
     def non_whitelisted_allowed_principals(self, whitelist: List[str]) -> List[Statement]:
         """Find non whitelisted allowed principals."""
-        return [
-            statement
-            for statement in self._statement_as_list()
-            if statement.non_whitelisted_principals(whitelist) and statement.Effect == "Allow"
-        ]
+        for statement in self._statement_as_list():
+            if statement.Effect == "Allow":
+                yield from statement.non_whitelisted_principals(whitelist)
 
     def get_iam_actions(self, difference=False) -> List[str]:
         actions = set()
