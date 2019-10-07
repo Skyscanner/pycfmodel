@@ -18,15 +18,19 @@ from pycfmodel.model.parameter import Parameter
 
 
 @pytest.mark.parametrize(
-    "type, default, expected",
+    "param, expected",
     [
-        ("String", "abc", "abc"),
-        ("String", None, None),
-        ("Number", 1, "1"),
-        ("List<Number>", "1,2,3", ["1", "2", "3"]),
-        ("CommaDelimitedList", "a,b,c", ["a", "b", "c"]),
+        ({"Type": "String", "NoEcho": True, "Default": "A"}, Parameter.NO_ECHO_WITH_DEFAULT),
+        ({"Type": "String", "NoEcho": True}, Parameter.NO_ECHO_NO_DEFAULT),
+        ({"Type": "String", "NoEcho": False, "Default": "A"}, "A"),
+        ({"Type": "String", "NoEcho": False}, None),
+        ({"Type": "String", "Default": "abc"}, "abc"),
+        ({"Type": "String", "Default": None}, None),
+        ({"Type": "Number", "Default": 1}, "1"),
+        ({"Type": "List<Number>", "Default": "1,2,3"}, ["1", "2", "3"]),
+        ({"Type": "CommaDelimitedList", "Default": "a,b,c"}, ["a", "b", "c"]),
     ],
 )
-def test_get_ref_value(type, default, expected):
-    parameter = Parameter(**{"Type": type, "Default": default})
+def test_get_ref_value(param, expected):
+    parameter = Parameter(**param)
     assert parameter.get_ref_value() == expected

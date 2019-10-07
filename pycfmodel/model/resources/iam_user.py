@@ -14,6 +14,7 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, List, Optional, Dict
 
+from ..parameter import Parameter
 from ..types import ResolvableStr
 from ..base import CustomModel
 from .iam_policy import IAMPolicy
@@ -34,3 +35,11 @@ class IAMUser(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::User"
     Type: str = TYPE_VALUE
     Properties: IAMUserProperties
+
+    def has_hardcoded_credentials(self):
+        if self.Type == "AWS::IAM::User" and self.Properties:
+            login_profile = self.Properties.LoginProfile
+            if login_profile and login_profile.get("Password"):
+                return not login_profile["Password"] == Parameter.NO_ECHO_NO_DEFAULT
+
+        return super().has_hardcoded_credentials()

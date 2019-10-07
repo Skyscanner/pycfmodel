@@ -18,6 +18,7 @@ from pydantic import validator
 
 from ..base import CustomModel
 from .properties.policy import Policy
+from ..parameter import Parameter
 
 
 class Resource(CustomModel):
@@ -60,14 +61,14 @@ class Resource(CustomModel):
         return []
 
     def has_hardcoded_credentials(self):
-        if self.Type == "AWS::IAM::User" and self.Properties:
-            login_profile = self.Properties.LoginProfile
-            if login_profile and "Password" in login_profile.keys():
-                return True
-
         if not self.Metadata or not self.Metadata.get("AWS::CloudFormation::Authentication"):
             return False
 
         for auth_name, auth in self.Metadata.get("AWS::CloudFormation::Authentication", {}).items():
-            if auth.get("accessKeyId") or auth.get("password") or auth.get("secretKey"):
-                return True
+            return not all(
+                [
+                    auth.get("accessKeyId", Parameter.NO_ECHO_NO_DEFAULT) == Parameter.NO_ECHO_NO_DEFAULT,
+                    auth.get("password", Parameter.NO_ECHO_NO_DEFAULT) == Parameter.NO_ECHO_NO_DEFAULT,
+                    auth.get("secretKey", Parameter.NO_ECHO_NO_DEFAULT) == Parameter.NO_ECHO_NO_DEFAULT,
+                ]
+            )

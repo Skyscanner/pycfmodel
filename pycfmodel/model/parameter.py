@@ -12,7 +12,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import List, Optional, Any
+from typing import List, Optional, Any, ClassVar
 
 from pydantic import PositiveInt
 
@@ -20,6 +20,8 @@ from .base import CustomModel
 
 
 class Parameter(CustomModel):
+    NO_ECHO_NO_DEFAULT: ClassVar[str] = "NO_ECHO_NO_DEFAULT"
+    NO_ECHO_WITH_DEFAULT: ClassVar[str] = "NO_ECHO_WITH_DEFAULT"
     AllowedPattern: Optional[str] = None
     AllowedValues: Optional[List] = None
     ConstraintDescription: Optional[str] = None
@@ -33,7 +35,11 @@ class Parameter(CustomModel):
     Type: str
 
     def get_ref_value(self):
-        if self.Default is None:
+        if self.NoEcho and self.Default:
+            return self.NO_ECHO_WITH_DEFAULT
+        elif self.NoEcho:
+            return self.NO_ECHO_NO_DEFAULT
+        elif self.Default is None:
             return None
         elif self.Type == "Number":
             return str(self.Default)

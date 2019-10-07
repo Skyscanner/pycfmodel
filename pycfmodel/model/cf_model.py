@@ -79,7 +79,6 @@ class CFModel(CustomModel):
                 # default parameters
                 key: parameter.get_ref_value()
                 for key, parameter in self.Parameters.items()
-                if parameter.Default
             },
             **extra_params,
         }
