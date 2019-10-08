@@ -14,10 +14,10 @@ specific language governing permissions and limitations under the License.
 """
 import re
 from typing import List, Pattern, Union, Optional
-from datetime import date
 
 from pydantic import Extra
 
+from ...types import ResolvableDate
 from .property import Property
 from .statement import Statement
 
@@ -157,14 +157,14 @@ class PolicyDocument(Property):
         extra = Extra.allow
 
     Statement: Union[Statement, List[Statement]]
-    Version: Optional[date]
+    Version: Optional[ResolvableDate]
 
     def _statement_as_list(self) -> List[Statement]:
         if isinstance(self.Statement, Statement):
             return [self.Statement]
         return self.Statement
 
-    def resources_with(self, pattern: Pattern) -> List[Statement]:
+    def statements_with(self, pattern: Pattern) -> List[Statement]:
         return [statement for statement in self._statement_as_list() if statement.resources_with(pattern)]
 
     def allowed_actions_with(self, pattern: Pattern) -> List[Statement]:

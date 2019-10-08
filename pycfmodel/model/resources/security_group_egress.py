@@ -12,9 +12,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import ClassVar, Dict, Optional, Union
+from typing import ClassVar, Optional
 
-from ..types import ResolvableStr
+from ..types import ResolvableStr, ResolvableInt, ResolvableIntOrStr
 from ..base import CustomModel
 from .resource import Resource
 
@@ -25,10 +25,10 @@ class SecurityGroupEgressProperties(CustomModel):
     Description: Optional[ResolvableStr]
     DestinationPrefixListId: Optional[ResolvableStr]
     DestinationSecurityGroupId: Optional[ResolvableStr]
-    FromPort: Optional[Union[int, Dict]]
+    FromPort: Optional[ResolvableInt]
     GroupId: Optional[ResolvableStr]
-    IpProtocol: Union[int, str, Dict]
-    ToPort: Optional[Union[int, Dict]]
+    IpProtocol: ResolvableIntOrStr
+    ToPort: Optional[ResolvableInt]
 
 
 class SecurityGroupEgress(Resource):

@@ -24,5 +24,5 @@ class IAMGroup(Resource):
     Type: str = TYPE_VALUE
     GroupName: Optional[ResolvableStr] = None
     ManagedPolicyArns: Optional[List[ResolvableStr]] = None
-    Path: Optional[str] = None
+    Path: Optional[ResolvableStr] = None
     Policies: Optional[List[IAMPolicy]] = None

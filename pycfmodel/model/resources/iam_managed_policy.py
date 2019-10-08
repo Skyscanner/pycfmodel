@@ -22,10 +22,10 @@ from .properties.policy_document import PolicyDocument
 class IAMManagedPolicy(Resource):
     TYPE_VALUE: ClassVar = "IAMManagedPolicy"
     Type: str = TYPE_VALUE
-    Description: Optional[str] = None
+    Description: Optional[ResolvableStr] = None
     Groups: Optional[List[ResolvableStr]] = None
-    ManagedPolicyName: Optional[str] = None
-    Path: Optional[str] = None
+    ManagedPolicyName: Optional[ResolvableStr] = None
+    Path: Optional[ResolvableStr] = None
     PolicyDocument: PolicyDocument
     Roles: Optional[List[ResolvableStr]] = None
     Users: Optional[List[ResolvableStr]] = None

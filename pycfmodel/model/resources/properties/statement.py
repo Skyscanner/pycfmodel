@@ -16,8 +16,9 @@ import logging
 
 from typing import List, Pattern, Optional, Union, Dict
 
+from ...intrinsic_function import is_resolvable_dict
+from ...types import ResolvableStr, ResolvableStrOrList
 from .property import Property
-from ...types import ResolvableStr
 
 logger = logging.getLogger(__file__)
 
@@ -25,15 +26,15 @@ PrincipalTypes = Union[ResolvableStr, List[ResolvableStr], Dict[str, Union[Resol
 
 
 class Statement(Property):
-    Sid: Optional[str] = None
-    Effect: Optional[str] = None
-    Condition: Optional[str] = None
+    Sid: Optional[ResolvableStr] = None
+    Effect: Optional[ResolvableStr] = None
+    Condition: Optional[ResolvableStr] = None
     Principal: Optional[PrincipalTypes] = None
     NotPrincipal: Optional[PrincipalTypes] = None
-    Action: Optional[Union[str, List, Dict]] = None
-    NotAction: Optional[Union[str, List, Dict]] = None
-    Resource: Optional[Union[str, List, Dict]] = None
-    NotResource: Optional[Union[str, List, Dict]] = None
+    Action: Optional[ResolvableStrOrList] = None
+    NotAction: Optional[ResolvableStrOrList] = None
+    Resource: Optional[ResolvableStrOrList] = None
+    NotResource: Optional[ResolvableStrOrList] = None
 
     def get_action_list(self) -> List[ResolvableStr]:
         action_list = []
@@ -60,15 +61,16 @@ class Statement(Property):
                 principal_list.extend(principals)
             elif isinstance(principals, str):
                 principal_list.append(principals)
+            elif is_resolvable_dict(principals):
+                principal_list.append(principals)
             elif isinstance(principals, dict):
-                if len(principals) == 1 and next(iter(principals)).startswith("Fn"):
-                    principal_list.append(principals)
-                else:
-                    for value in principals.values():
-                        if isinstance(value, (str, Dict)):
-                            principal_list.append(value)
-                        elif isinstance(value, List):
-                            principal_list.extend(value)
+                for value in principals.values():
+                    if isinstance(value, (str, Dict)):
+                        principal_list.append(value)
+                    elif isinstance(value, List):
+                        principal_list.extend(value)
+            elif principals is not None:
+                raise ValueError(f"Not supported type: {type(principals)}")
         return principal_list
 
     def actions_with(self, pattern: Pattern) -> List[str]:

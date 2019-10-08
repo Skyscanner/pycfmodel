@@ -25,7 +25,7 @@ class IAMUserProperties(CustomModel):
     Groups: Optional[List[ResolvableStr]] = None
     LoginProfile: Optional[Dict] = None
     ManagedPolicyArns: Optional[List[ResolvableStr]] = None
-    Path: Optional[str] = None
+    Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
     Policies: Optional[List[IAMPolicy]] = None
     UserName: Optional[ResolvableStr] = None

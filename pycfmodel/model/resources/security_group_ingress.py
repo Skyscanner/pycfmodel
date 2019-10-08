@@ -12,9 +12,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import ClassVar, Dict, Optional, Union
+from typing import ClassVar, Optional
 
-from pycfmodel.model.types import ResolvableStr
+from ..types import ResolvableStr, ResolvableIntOrStr, ResolvableInt
 from ..base import CustomModel
 from .resource import Resource
 
@@ -23,15 +23,15 @@ class SecurityGroupIngressProperties(CustomModel):
     CidrIp: Optional[ResolvableStr]
     CidrIpv6: Optional[ResolvableStr]
     Description: Optional[ResolvableStr]
-    FromPort: Optional[Union[int, Dict]]
+    FromPort: Optional[ResolvableInt]
     GroupId: Optional[ResolvableStr]
     GroupName: Optional[ResolvableStr]
-    IpProtocol: Union[int, str, Dict]
+    IpProtocol: ResolvableIntOrStr
     SourcePrefixListId: Optional[ResolvableStr]
     SourceSecurityGroupId: Optional[ResolvableStr]
     SourceSecurityGroupName: Optional[ResolvableStr]
     SourceSecurityGroupOwnerId: Optional[ResolvableStr]
-    ToPort: Optional[Union[int, Dict]]
+    ToPort: Optional[ResolvableInt]
 
 
 class SecurityGroupIngress(Resource):

@@ -24,6 +24,6 @@ class IAMPolicy(Resource):
     Type: str = TYPE_VALUE
     Groups: Optional[List[ResolvableStr]] = None
     PolicyDocument: PolicyDocument
-    PolicyName: str
+    PolicyName: ResolvableStr
     Roles: Optional[List[ResolvableStr]] = None
     Users: Optional[List[ResolvableStr]] = None

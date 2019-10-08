@@ -15,38 +15,11 @@ specific language governing permissions and limitations under the License.
 from datetime import date
 from typing import Dict, Union, ClassVar, Optional, List, Any
 
+from .resources.generic_resource import GenericResource
+from .resources.types import ResourceModels
 from .base import CustomModel
 from .intrinsic_function import resolve
-from .resources.genericresource import GenericResource
-from .resources.iam_group import IAMGroup
-from .resources.iam_managed_policy import IAMManagedPolicy
-from .resources.iam_policy import IAMPolicy
-from .resources.iam_role import IAMRole
-from .resources.iam_user import IAMUser
-from .resources.kms_key import KMSKey
-from .resources.s3_bucket_policy import S3BucketPolicy
-from .resources.security_group import SecurityGroup
-from .resources.security_group_egress import SecurityGroupEgress
-from .resources.security_group_ingress import SecurityGroupIngress
-from .resources.sns_topic_policy import SNSTopicPolicy
-from .resources.sqs_queue_policy import SQSQueuePolicy
 from .parameter import Parameter
-
-ResourceModels = Union[
-    IAMGroup,
-    IAMManagedPolicy,
-    IAMPolicy,
-    IAMRole,
-    IAMUser,
-    KMSKey,
-    S3BucketPolicy,
-    SecurityGroup,
-    SecurityGroupEgress,
-    SecurityGroupIngress,
-    SNSTopicPolicy,
-    SQSQueuePolicy,
-    GenericResource,
-]
 
 
 class CFModel(CustomModel):
@@ -57,7 +30,7 @@ class CFModel(CustomModel):
     Conditions: Dict = {}
     Transform: Optional[List]
     Outputs: Dict[str, Dict[str, Union[str, Dict]]] = {}
-    Resources: Dict[str, ResourceModels] = {}
+    Resources: Dict[str, Union[ResourceModels, GenericResource]] = {}
     Parameters: Dict[str, Parameter] = {}
     PSEUDO_PARAMETERS: ClassVar[Dict[str, str]] = {
         # default pseudo parameters

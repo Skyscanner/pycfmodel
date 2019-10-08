@@ -12,9 +12,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import ClassVar, Dict, List, Union, Optional
+from typing import ClassVar, List, Optional
 
-from pycfmodel.model.types import ResolvableStr
+from ..types import ResolvableStr, ResolvableInt, ResolvableBool
 from .properties.policy import Policy
 from .resource import Resource
 
@@ -23,9 +23,9 @@ class KMSKey(Resource):
     TYPE_VALUE: ClassVar = "AWS::KMS::Key"
     Type: str = TYPE_VALUE
     Description: Optional[ResolvableStr]
-    EnableKeyRotation: Optional[Union[str, bool]]
-    Enabled: Optional[Union[str, bool]]
+    EnableKeyRotation: Optional[ResolvableBool]
+    Enabled: Optional[ResolvableBool]
     KeyPolicy: Policy
     KeyUsage: Optional[ResolvableStr]
-    PendingWindowInDays: Optional[Union[int, Dict]]
+    PendingWindowInDays: Optional[ResolvableInt]
     Tags: Optional[List[ResolvableStr]]

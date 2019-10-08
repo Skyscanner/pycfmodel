@@ -16,30 +16,29 @@ import logging
 
 from base64 import b64encode
 from datetime import date
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Any
 
-from pycfmodel.model.regexs import CONTAINS_CF_PARAM
+from .regexs import CONTAINS_CF_PARAM
 
 logger = logging.getLogger(__file__)
 
 ValidResolvers = Union[str, int, bool, float, List, Dict, date]
 
 
-def resolve(input: ValidResolvers, params: Dict, mappings: Dict[str, Dict]):
-    if input is None or isinstance(input, (str, int, bool, float, date)):
-        return input
+def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict]):
+    if function is None or isinstance(function, (str, int, bool, float, date)):
+        return function
 
-    elif isinstance(input, list):
-        return [resolve(entry, params, mappings) for entry in input]
+    elif isinstance(function, list):
+        return [resolve(entry, params, mappings) for entry in function]
 
-    elif isinstance(input, dict):
-        if len(input) == 1:
-            function_name = next(iter(input.keys()))
-            if function_name in FUNCTION_MAPPINGS:
-                function_resolver = FUNCTION_MAPPINGS[function_name]
-                return function_resolver(input[function_name], params, mappings)
+    elif isinstance(function, dict):
+        if is_resolvable_dict(function):
+            function_name = next(iter(function))
+            function_resolver = FUNCTION_MAPPINGS[function_name]
+            return function_resolver(function[function_name], params, mappings)
 
-        return {k: resolve(v, params, mappings) for k, v in input.items()}
+        return {k: resolve(v, params, mappings) for k, v in function.items()}
 
 
 def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict]):
@@ -155,6 +154,10 @@ def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict]):
     # TODO: Implement. Conditions aren't supported yet, so this code can't be evaluated
     logger.warning(f"`Condition` resolver not implemented, returning `CONDITION`")
     return "CONDITION"
+
+
+def is_resolvable_dict(value: Any):
+    return isinstance(value, dict) and len(value) == 1 and next(iter(value)) in FUNCTION_MAPPINGS
 
 
 FUNCTION_MAPPINGS = {

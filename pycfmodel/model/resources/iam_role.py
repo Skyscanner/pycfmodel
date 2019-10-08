@@ -12,9 +12,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import Dict, ClassVar, List, Optional, Union
+from typing import ClassVar, List, Optional
 
-from ..types import ResolvableStr
+from ..types import ResolvableStr, ResolvableIntOrStr
 from ..base import CustomModel
 from .iam_policy import IAMPolicy
 from .resource import Resource
@@ -24,8 +24,8 @@ from .properties.policy_document import PolicyDocument
 class IAMRoleProperties(CustomModel):
     AssumeRolePolicyDocument: PolicyDocument
     ManagedPolicyArns: Optional[List[ResolvableStr]] = None
-    MaxSessionDuration: Optional[Union[int, str, Dict]] = None
-    Path: Optional[str] = None
+    MaxSessionDuration: Optional[ResolvableIntOrStr] = None
+    Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
     Policies: Optional[List[IAMPolicy]] = None
     RoleName: Optional[ResolvableStr] = None

@@ -105,7 +105,7 @@ def test_multi_statements(policy_document_multi_statement):
 
 
 def test_star_resource(policy_document_star_resource):
-    assert len(policy_document_star_resource.resources_with(CONTAINS_STAR)) == 1
+    assert len(policy_document_star_resource.statements_with(CONTAINS_STAR)) == 1
 
 
 def test_wildcard_actions(policy_document_wildcard_actions):
