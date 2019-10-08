@@ -25,7 +25,7 @@ from .parameter import Parameter
 class CFModel(CustomModel):
     AWSTemplateFormatVersion: Optional[date]
     Description: Optional[str] = None
-    Metadata: Optional[Dict[str, Dict]] = None  # TODO, check schema
+    Metadata: Optional[Dict[str, Dict]] = None
     Mappings: Dict[str, Dict[str, Dict[str, Any]]] = {}
     Conditions: Dict = {}
     Transform: Optional[List]
