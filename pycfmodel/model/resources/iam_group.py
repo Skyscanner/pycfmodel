@@ -14,15 +14,20 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, List, Optional
 
+from ..base import CustomModel
 from ..types import ResolvableStr
 from .iam_policy import IAMPolicy
 from .resource import Resource
 
 
-class IAMGroup(Resource):
-    TYPE_VALUE: ClassVar = "AWS::IAM::Group"
-    Type: str = TYPE_VALUE
+class IAMGroupProperties(CustomModel):
     GroupName: Optional[ResolvableStr] = None
     ManagedPolicyArns: Optional[List[ResolvableStr]] = None
     Path: Optional[ResolvableStr] = None
     Policies: Optional[List[IAMPolicy]] = None
+
+
+class IAMGroup(Resource):
+    TYPE_VALUE: ClassVar = "AWS::IAM::Group"
+    Type: str = TYPE_VALUE
+    Properties: IAMGroupProperties

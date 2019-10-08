@@ -16,9 +16,9 @@ from typing import ClassVar, List, Optional
 
 from ..types import ResolvableStr, ResolvableIntOrStr
 from ..base import CustomModel
-from .iam_policy import IAMPolicy
 from .resource import Resource
 from .properties.policy_document import PolicyDocument
+from .properties.policy import Policy
 
 
 class IAMRoleProperties(CustomModel):
@@ -27,7 +27,7 @@ class IAMRoleProperties(CustomModel):
     MaxSessionDuration: Optional[ResolvableIntOrStr] = None
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
-    Policies: Optional[List[IAMPolicy]] = None
+    Policies: Optional[List[Policy]] = None
     RoleName: Optional[ResolvableStr] = None
 
 

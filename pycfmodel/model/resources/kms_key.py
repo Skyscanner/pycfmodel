@@ -14,14 +14,13 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, List, Optional
 
+from ..base import CustomModel
 from ..types import ResolvableStr, ResolvableInt, ResolvableBool
 from .properties.policy import Policy
 from .resource import Resource
 
 
-class KMSKey(Resource):
-    TYPE_VALUE: ClassVar = "AWS::KMS::Key"
-    Type: str = TYPE_VALUE
+class KMSKeyProperties(CustomModel):
     Description: Optional[ResolvableStr]
     EnableKeyRotation: Optional[ResolvableBool]
     Enabled: Optional[ResolvableBool]
@@ -29,3 +28,9 @@ class KMSKey(Resource):
     KeyUsage: Optional[ResolvableStr]
     PendingWindowInDays: Optional[ResolvableInt]
     Tags: Optional[List[ResolvableStr]]
+
+
+class KMSKey(Resource):
+    TYPE_VALUE: ClassVar = "AWS::KMS::Key"
+    Type: str = TYPE_VALUE
+    Properties: KMSKeyProperties

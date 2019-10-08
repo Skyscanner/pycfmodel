@@ -14,16 +14,21 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, Optional, List
 
+from ..base import CustomModel
 from ..types import ResolvableStr
 from .resource import Resource
 from .properties.policy_document import PolicyDocument
 
 
-class IAMPolicy(Resource):
-    TYPE_VALUE: ClassVar = "AWS::IAM::Policy"
-    Type: str = TYPE_VALUE
+class IAMPolicyProperties(CustomModel):
     Groups: Optional[List[ResolvableStr]] = None
     PolicyDocument: PolicyDocument
     PolicyName: ResolvableStr
     Roles: Optional[List[ResolvableStr]] = None
     Users: Optional[List[ResolvableStr]] = None
+
+
+class IAMPolicy(Resource):
+    TYPE_VALUE: ClassVar = "AWS::IAM::Policy"
+    Type: str = TYPE_VALUE
+    Properties: IAMPolicyProperties

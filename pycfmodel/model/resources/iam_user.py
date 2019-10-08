@@ -17,8 +17,8 @@ from typing import ClassVar, List, Optional, Dict
 from ..parameter import Parameter
 from ..types import ResolvableStr
 from ..base import CustomModel
-from .iam_policy import IAMPolicy
 from .resource import Resource
+from .properties.policy import Policy
 
 
 class IAMUserProperties(CustomModel):
@@ -27,7 +27,7 @@ class IAMUserProperties(CustomModel):
     ManagedPolicyArns: Optional[List[ResolvableStr]] = None
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
-    Policies: Optional[List[IAMPolicy]] = None
+    Policies: Optional[List[Policy]] = None
     UserName: Optional[ResolvableStr] = None
 
 
