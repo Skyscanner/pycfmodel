@@ -25,26 +25,26 @@ logger = logging.getLogger(__file__)
 ValidResolvers = Union[str, int, bool, float, List, Dict, date]
 
 
-def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict]):
+def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]):
     if function is None or isinstance(function, (str, int, bool, float, date)):
         return function
 
     elif isinstance(function, list):
-        return [resolve(entry, params, mappings) for entry in function]
+        return [resolve(entry, params, mappings, conditions) for entry in function]
 
     elif isinstance(function, dict):
         if is_resolvable_dict(function):
             function_name = next(iter(function))
             function_resolver = FUNCTION_MAPPINGS[function_name]
-            return function_resolver(function[function_name], params, mappings)
+            return function_resolver(function[function_name], params, mappings, conditions)
 
-        return {k: resolve(v, params, mappings) for k, v in function.items()}
+        return {k: resolve(v, params, mappings, conditions) for k, v in function.items()}
 
     raise ValueError(f"Not supported type: {type(function)}")
 
 
-def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict]):
-    resolved_ref = resolve(function_body, params, mappings)
+def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]):
+    resolved_ref = resolve(function_body, params, mappings, conditions)
     if resolved_ref in params:
         return params[resolved_ref]
     else:
@@ -52,18 +52,18 @@ def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict]):
         return "UNDEFINED_PARAM"
 
 
-def resolve_join(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
+def resolve_join(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
     delimiter, list_values = function_body
-    resolved_delimiter = resolve(delimiter, params, mappings)
-    resolved_list = resolve(list_values, params, mappings)
+    resolved_delimiter = resolve(delimiter, params, mappings, conditions)
+    resolved_list = resolve(list_values, params, mappings, conditions)
     return resolved_delimiter.join(str(e) for e in resolved_list)
 
 
-def resolve_find_in_map(function_body, params: Dict, mappings: Dict[str, Dict]):
+def resolve_find_in_map(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]):
     map_name, top_level_key, second_level_key = function_body
-    map_name = resolve(map_name, params, mappings)
-    top_level_key = resolve(top_level_key, params, mappings)
-    second_level_key = resolve(second_level_key, params, mappings)
+    map_name = resolve(map_name, params, mappings, conditions)
+    top_level_key = resolve(top_level_key, params, mappings, conditions)
+    second_level_key = resolve(second_level_key, params, mappings, conditions)
 
     resolved_mapping = mappings.get(map_name, {}).get(top_level_key, {}).get(second_level_key)
     if resolved_mapping:
@@ -75,89 +75,85 @@ def resolve_find_in_map(function_body, params: Dict, mappings: Dict[str, Dict]):
         return "UNDEFINED_MAPPING"
 
 
-def resolve_sub(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
+def resolve_sub(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
     replacements = params
     # Whenever we receive a list, first parameter is a text and the second one is a dict with custom replacements.
     # Whenever we receive a string, we need to resolve inlined variables
     if isinstance(function_body, list):
         text, custom_replacements = function_body
-        replacements.update(resolve(custom_replacements, params, mappings))
+        replacements.update(resolve(custom_replacements, params, mappings, conditions))
     else:
         text = function_body
     for match in CONTAINS_CF_PARAM.findall(text):
         match_param = match[2:-1]  # Remove ${ and trailing }
         if match_param in replacements:
-            value = resolve(replacements[match_param], params, mappings)
+            value = resolve(replacements[match_param], params, mappings, conditions)
             text = text.replace(match, str(value))
     return text
 
 
-def resolve_select(function_body, params: Dict, mappings: Dict[str, Dict]):
+def resolve_select(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]):
     index, list_values = function_body
-    resolved_index = int(resolve(index, params, mappings))
-    resolved_list = resolve(list_values, params, mappings)
+    resolved_index = int(resolve(index, params, mappings, conditions))
+    resolved_list = resolve(list_values, params, mappings, conditions)
     return resolved_list[resolved_index]
 
 
-def resolve_split(function_body, params: Dict, mappings: Dict[str, Dict]) -> List[str]:
+def resolve_split(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> List[str]:
     delimiter, source_string = function_body
-    resolved_delimiter = resolve(delimiter, params, mappings)
-    resolved_source_string = resolve(source_string, params, mappings)
+    resolved_delimiter = resolve(delimiter, params, mappings, conditions)
+    resolved_source_string = resolve(source_string, params, mappings, conditions)
     return resolved_source_string.split(resolved_delimiter)
 
 
-def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
-    # TODO: Uncomment when Conditions are ready
-    # condition, true_section, false_section = function_body
-    # if resolve(condition, params, mappings):
-    #     return resolve(true_section, params, mappings)
-    # else:
-    #     return resolve(false_section, params, mappings)
-    logger.warning(f"`Fn::If` resolver not implemented, returning `IF`")
-    return "IF"
+def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
+    condition, true_section, false_section = function_body
+    if resolve({"Condition": condition}, params, mappings, conditions):
+        return resolve(true_section, params, mappings, conditions)
+    else:
+        return resolve(false_section, params, mappings, conditions)
+
+    return [true_section, false_section]
 
 
-def resolve_and(function_body: List, params: Dict, mappings: Dict[str, Dict]) -> bool:
+def resolve_and(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
     part_1, part_2 = function_body
-    return resolve(part_1, params, mappings) and resolve(part_2, params, mappings)
+    return resolve(part_1, params, mappings, conditions) and resolve(part_2, params, mappings, conditions)
 
 
-def resolve_or(function_body: List, params: Dict, mappings: Dict[str, Dict]) -> bool:
+def resolve_or(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
     part_1, part_2 = function_body
-    return resolve(part_1, params, mappings) or resolve(part_2, params, mappings)
+    return resolve(part_1, params, mappings, conditions) or resolve(part_2, params, mappings, conditions)
 
 
-def resolve_not(function_body: List, params: Dict, mappings: Dict[str, Dict]) -> bool:
-    return not resolve(function_body[0], params, mappings)
+def resolve_not(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
+    return not resolve(function_body[0], params, mappings, conditions)
 
 
-def resolve_equals(function_body: List, params: Dict, mappings: Dict[str, Dict]) -> bool:
+def resolve_equals(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
     part_1, part_2 = function_body
-    return resolve(part_1, params, mappings) == resolve(part_2, params, mappings)
+    return resolve(part_1, params, mappings, conditions) == resolve(part_2, params, mappings, conditions)
 
 
-def resolve_base64(function_body: str, params: Dict, mappings: Dict[str, Dict]) -> str:
-    resolved_string = resolve(function_body, params, mappings)
+def resolve_base64(function_body: str, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
+    resolved_string = resolve(function_body, params, mappings, conditions)
     return str(b64encode(resolved_string.encode("utf-8")), "utf-8")
 
 
-def resolve_get_attr(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
+def resolve_get_attr(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
     # TODO: Implement.
     logger.warning(f"`Fn::GetAtt` resolver not implemented, returning `GETATT`")
     return "GETATT"
 
 
-def resolve_get_azs(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
+def resolve_get_azs(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
     # TODO: Implement.
     logger.warning(f"`Fn::GetAZs` resolver not implemented, returning `GETAZS`")
     return "GETAZS"
 
 
-def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
-    # {"Condition": "SomeOtherCondition"}
-    # TODO: Implement. Conditions aren't supported yet, so this code can't be evaluated
-    logger.warning(f"`Condition` resolver not implemented, returning `CONDITION`")
-    return "CONDITION"
+def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
+    return conditions.get(function_body, False)
 
 
 def is_resolvable_dict(value: Any) -> bool:

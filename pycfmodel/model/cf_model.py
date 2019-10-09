@@ -56,8 +56,18 @@ class CFModel(CustomModel):
             **extra_params,
         }
         dict_value = self.dict()
+
+        if self.Conditions:
+            conditions = dict_value.pop("Conditions")
+        else:
+            conditions = {}
+        resolved_conditions = {
+            key: resolve(value, extended_parameters, self.Mappings, {}) for key, value in conditions.items()
+        }
+
         resources = dict_value.pop("Resources")
-        return CFModel(
-            **dict_value,
-            Resources={key: resolve(value, extended_parameters, self.Mappings) for key, value in resources.items()},
-        )
+        resolved_resources = {
+            key: resolve(value, extended_parameters, self.Mappings, resolved_conditions)
+            for key, value in resources.items()
+        }
+        return CFModel(**dict_value, Conditions=resolved_conditions, Resources=resolved_resources)
