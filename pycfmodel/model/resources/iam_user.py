@@ -36,10 +36,11 @@ class IAMUser(Resource):
     Type: str = TYPE_VALUE
     Properties: IAMUserProperties
 
-    def has_hardcoded_credentials(self):
-        if self.Type == "AWS::IAM::User" and self.Properties:
+    def has_hardcoded_credentials(self) -> bool:
+        if self.Properties:
             login_profile = self.Properties.LoginProfile
             if login_profile and login_profile.get("Password"):
-                return not login_profile["Password"] == Parameter.NO_ECHO_NO_DEFAULT
+                if login_profile["Password"] != Parameter.NO_ECHO_NO_DEFAULT:
+                    return True
 
         return super().has_hardcoded_credentials()

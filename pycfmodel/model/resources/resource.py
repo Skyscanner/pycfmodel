@@ -17,7 +17,6 @@ from typing import Dict, ClassVar, Optional
 from pydantic import validator
 
 from ..base import CustomModel
-from .properties.policy import Policy
 from ..parameter import Parameter
 
 
@@ -32,43 +31,18 @@ class Resource(CustomModel):
             raise ValueError(f"Value needs to be {cls.TYPE_VALUE}")
         return value
 
-    def get_policies(self, policies):
-        if not policies:
-            return []
-
-        new_policies = []
-        for p in policies:
-
-            # TODO: Wait to resolve to be implemented
-            if "Fn::If" in p:
-                if_policies = p["Fn::If"]
-                new_policies.append(Policy(if_policies[1]))
-                new_policies.append(Policy(if_policies[2]))
-            else:
-                new_policies.append(Policy(p))
-        return new_policies
-
-    def get_managed_policy_arns(self, arns):
-        if not arns:
-            return []
-
-        # TODO: Use resolver // Implement boto3 client to download managed policies
-        if isinstance(arns, dict) and "Fn::If" in arns:
-            return arns["Fn::If"][1] + arns["Fn::If"][2]
-        elif isinstance(arns, list):
-            return arns
-
-        return []
-
-    def has_hardcoded_credentials(self):
+    def has_hardcoded_credentials(self) -> bool:
         if not self.Metadata or not self.Metadata.get("AWS::CloudFormation::Authentication"):
             return False
 
-        for auth_name, auth in self.Metadata.get("AWS::CloudFormation::Authentication", {}).items():
-            return not all(
+        for auth in self.Metadata["AWS::CloudFormation::Authentication"].values():
+            if not all(
                 [
                     auth.get("accessKeyId", Parameter.NO_ECHO_NO_DEFAULT) == Parameter.NO_ECHO_NO_DEFAULT,
                     auth.get("password", Parameter.NO_ECHO_NO_DEFAULT) == Parameter.NO_ECHO_NO_DEFAULT,
                     auth.get("secretKey", Parameter.NO_ECHO_NO_DEFAULT) == Parameter.NO_ECHO_NO_DEFAULT,
                 ]
-            )
+            ):
+                return True
+
+        return False

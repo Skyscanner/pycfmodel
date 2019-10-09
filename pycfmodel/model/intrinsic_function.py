@@ -40,17 +40,19 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict]):
 
         return {k: resolve(v, params, mappings) for k, v in function.items()}
 
+    raise ValueError(f"Not supported type: {type(function)}")
+
 
 def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict]):
     resolved_ref = resolve(function_body, params, mappings)
     if resolved_ref in params:
         return params[resolved_ref]
     else:
-        logger.warning(f"Using default value for param {function_body}")
+        logger.warning(f"Using `UNDEFINED_PARAM` for {resolved_ref}. Original value wasn't available.")
         return "UNDEFINED_PARAM"
 
 
-def resolve_join(function_body, params: Dict, mappings: Dict[str, Dict]):
+def resolve_join(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
     delimiter, list_values = function_body
     resolved_delimiter = resolve(delimiter, params, mappings)
     resolved_list = resolve(list_values, params, mappings)
@@ -67,14 +69,16 @@ def resolve_find_in_map(function_body, params: Dict, mappings: Dict[str, Dict]):
     if resolved_mapping:
         return resolved_mapping
     else:
-        logger.warning(f"Using default value for mapping {[map_name, top_level_key, second_level_key]}")
+        logger.warning(
+            f"Using `UNDEFINED_MAPPING` for {[map_name, top_level_key, second_level_key]}. Original value wasn't available."
+        )
         return "UNDEFINED_MAPPING"
 
 
-def resolve_sub(function_body, params: Dict, mappings: Dict[str, Dict]):
+def resolve_sub(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
     replacements = params
     # Whenever we receive a list, first parameter is a text and the second one is a dict with custom replacements.
-    # Whenever we receive a list, we need to resolve inlined variables
+    # Whenever we receive a string, we need to resolve inlined variables
     if isinstance(function_body, list):
         text, custom_replacements = function_body
         replacements.update(resolve(custom_replacements, params, mappings))
@@ -95,14 +99,14 @@ def resolve_select(function_body, params: Dict, mappings: Dict[str, Dict]):
     return resolved_list[resolved_index]
 
 
-def resolve_split(function_body, params: Dict, mappings: Dict[str, Dict]):
+def resolve_split(function_body, params: Dict, mappings: Dict[str, Dict]) -> List[str]:
     delimiter, source_string = function_body
     resolved_delimiter = resolve(delimiter, params, mappings)
     resolved_source_string = resolve(source_string, params, mappings)
     return resolved_source_string.split(resolved_delimiter)
 
 
-def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict]):
+def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
     # TODO: Uncomment when Conditions are ready
     # condition, true_section, false_section = function_body
     # if resolve(condition, params, mappings):
@@ -113,50 +117,50 @@ def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict]):
     return "IF"
 
 
-def resolve_and(function_body: List, params: Dict, mappings: Dict[str, Dict]):
+def resolve_and(function_body: List, params: Dict, mappings: Dict[str, Dict]) -> bool:
     part_1, part_2 = function_body
     return resolve(part_1, params, mappings) and resolve(part_2, params, mappings)
 
 
-def resolve_or(function_body: List, params: Dict, mappings: Dict[str, Dict]):
+def resolve_or(function_body: List, params: Dict, mappings: Dict[str, Dict]) -> bool:
     part_1, part_2 = function_body
     return resolve(part_1, params, mappings) or resolve(part_2, params, mappings)
 
 
-def resolve_not(function_body: List, params: Dict, mappings: Dict[str, Dict]):
+def resolve_not(function_body: List, params: Dict, mappings: Dict[str, Dict]) -> bool:
     return not resolve(function_body[0], params, mappings)
 
 
-def resolve_equals(function_body: List, params: Dict, mappings: Dict[str, Dict]):
+def resolve_equals(function_body: List, params: Dict, mappings: Dict[str, Dict]) -> bool:
     part_1, part_2 = function_body
     return resolve(part_1, params, mappings) == resolve(part_2, params, mappings)
 
 
-def resolve_base64(function_body: str, params: Dict, mappings: Dict[str, Dict]):
+def resolve_base64(function_body: str, params: Dict, mappings: Dict[str, Dict]) -> str:
     resolved_string = resolve(function_body, params, mappings)
     return str(b64encode(resolved_string.encode("utf-8")), "utf-8")
 
 
-def resolve_get_attr(function_body, params: Dict, mappings: Dict[str, Dict]):
-    # TODO: Implement. Conditions aren't supported yet, so this code can't be evaluated
+def resolve_get_attr(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
+    # TODO: Implement.
     logger.warning(f"`Fn::GetAtt` resolver not implemented, returning `GETATT`")
     return "GETATT"
 
 
-def resolve_get_azs(function_body, params: Dict, mappings: Dict[str, Dict]):
-    # TODO: Implement. Conditions aren't supported yet, so this code can't be evaluated
+def resolve_get_azs(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
+    # TODO: Implement.
     logger.warning(f"`Fn::GetAZs` resolver not implemented, returning `GETAZS`")
     return "GETAZS"
 
 
-def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict]):
+def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict]) -> str:
     # {"Condition": "SomeOtherCondition"}
     # TODO: Implement. Conditions aren't supported yet, so this code can't be evaluated
     logger.warning(f"`Condition` resolver not implemented, returning `CONDITION`")
     return "CONDITION"
 
 
-def is_resolvable_dict(value: Any):
+def is_resolvable_dict(value: Any) -> bool:
     return isinstance(value, dict) and len(value) == 1 and next(iter(value)) in FUNCTION_MAPPINGS
 
 
