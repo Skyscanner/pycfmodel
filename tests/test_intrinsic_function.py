@@ -18,7 +18,9 @@ from pycfmodel import parse
 from pycfmodel.model.intrinsic_function import resolve
 
 
-@pytest.mark.parametrize("input, expected_output", [({"Ref": "abc"}, "ABC"), ({"Ref": "potato"}, "UNDEFINED_PARAM")])
+@pytest.mark.parametrize(
+    "input, expected_output", [({"Ref": "abc"}, "ABC"), ({"Ref": "potato"}, "UNDEFINED_PARAM_potato")]
+)
 def test_ref(input, expected_output):
     parameters = {"abc": "ABC"}
     mappings = {}
@@ -28,7 +30,8 @@ def test_ref(input, expected_output):
 
 
 @pytest.mark.parametrize(
-    "input, expected_output", [({"Fn::ImportValue": "abc"}, "ABC"), ({"Fn::ImportValue": "potato"}, "UNDEFINED_PARAM")]
+    "input, expected_output",
+    [({"Fn::ImportValue": "abc"}, "ABC"), ({"Fn::ImportValue": "potato"}, "UNDEFINED_PARAM_potato")],
 )
 def test_import_value(input, expected_output):
     parameters = {"abc": "ABC"}
@@ -60,8 +63,8 @@ def test_join(input, expected_output):
 @pytest.mark.parametrize(
     "input, expected_output",
     [
-        ({"Fn::FindInMap": ["RegionMap", "eu-west-1", "HVM64"]}, "UNDEFINED_MAPPING"),
-        ({"Fn::FindInMap": ["RegionMap", "us-east-1", "HVM128"]}, "UNDEFINED_MAPPING"),
+        ({"Fn::FindInMap": ["RegionMap", "eu-west-1", "HVM64"]}, "UNDEFINED_MAPPING_RegionMap_eu-west-1_HVM64"),
+        ({"Fn::FindInMap": ["RegionMap", "us-east-1", "HVM128"]}, "UNDEFINED_MAPPING_RegionMap_us-east-1_HVM128"),
         ({"Fn::FindInMap": ["RegionMap", "us-east-1", "HVM64"]}, "ami-0ff8a91507f77f867"),
     ],
 )

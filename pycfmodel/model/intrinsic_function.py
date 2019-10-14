@@ -48,8 +48,8 @@ def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict], conditio
     if resolved_ref in params:
         return params[resolved_ref]
     else:
-        logger.warning(f"Using `UNDEFINED_PARAM` for {resolved_ref}. Original value wasn't available.")
-        return "UNDEFINED_PARAM"
+        logger.warning(f"Using `UNDEFINED_PARAM_{resolved_ref}` for {resolved_ref}. Original value wasn't available.")
+        return f"UNDEFINED_PARAM_{resolved_ref}"
 
 
 def resolve_join(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
@@ -70,9 +70,9 @@ def resolve_find_in_map(function_body, params: Dict, mappings: Dict[str, Dict], 
         return resolved_mapping
     else:
         logger.warning(
-            f"Using `UNDEFINED_MAPPING` for {[map_name, top_level_key, second_level_key]}. Original value wasn't available."
+            f"Using `UNDEFINED_MAPPING_{map_name}_{top_level_key}_{second_level_key}` for {[map_name, top_level_key, second_level_key]}. Original value wasn't available."
         )
-        return "UNDEFINED_MAPPING"
+        return f"UNDEFINED_MAPPING_{map_name}_{top_level_key}_{second_level_key}"
 
 
 def resolve_sub(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
