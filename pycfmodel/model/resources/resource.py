@@ -16,6 +16,7 @@ from typing import Dict, ClassVar, Optional
 
 from pydantic import validator
 
+from ...model.types import ResolvableStrOrList, ResolvableStr
 from ..base import CustomModel
 from ..parameter import Parameter
 
@@ -23,7 +24,12 @@ from ..parameter import Parameter
 class Resource(CustomModel):
     TYPE_VALUE: ClassVar[str]
     Type: str
+    CreatePolicy: Optional[Dict] = None
+    DeletionPolicy: Optional[ResolvableStr] = None
+    DependsOn: Optional[ResolvableStrOrList] = None
     Metadata: Optional[Dict] = None
+    UpdatePolicy: Optional[Dict] = None
+    UpdateReplacePolicy: Optional[ResolvableStr] = None
 
     @validator("Type")
     def check_type(cls, value):

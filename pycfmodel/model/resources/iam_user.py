@@ -34,7 +34,7 @@ class IAMUserProperties(CustomModel):
 class IAMUser(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::User"
     Type: str = TYPE_VALUE
-    Properties: IAMUserProperties
+    Properties: Optional[IAMUserProperties]
 
     def has_hardcoded_credentials(self) -> bool:
         if self.Properties:
