@@ -192,7 +192,7 @@ class PolicyDocument(Property):
                 if not isinstance(action, str):
                     continue
 
-                pattern = re.compile(f"^{action}$".replace("*", ".*"))
+                pattern = re.compile(f"^{action}$".replace("*", ".*"), re.IGNORECASE)
                 for iam in _IAM_ACTIONS:
                     if pattern.match(iam):
                         actions.add(iam)
