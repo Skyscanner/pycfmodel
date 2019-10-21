@@ -14,15 +14,15 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar
 
-from ..types import ResolvableStr
+from ..types import ResolvableStr, Resolvable
 from ..base import CustomModel
 from .resource import Resource
-from .types import ResolvablePolicyDocument
+from .properties.policy_document import PolicyDocument
 
 
 class S3BucketPolicyProperties(CustomModel):
     Bucket: ResolvableStr
-    PolicyDocument: ResolvablePolicyDocument
+    PolicyDocument: Resolvable[PolicyDocument]
 
 
 class S3BucketPolicy(Resource):

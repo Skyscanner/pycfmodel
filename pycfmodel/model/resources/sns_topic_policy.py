@@ -14,14 +14,14 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, List
 
-from ..types import ResolvableStr
+from ..types import ResolvableStr, Resolvable
 from ..base import CustomModel
 from .resource import Resource
-from .types import ResolvablePolicyDocument
+from .properties.policy_document import PolicyDocument
 
 
 class SNSTopicPolicyProperties(CustomModel):
-    PolicyDocument: ResolvablePolicyDocument
+    PolicyDocument: Resolvable[PolicyDocument]
     Topics: List[ResolvableStr]
 
 

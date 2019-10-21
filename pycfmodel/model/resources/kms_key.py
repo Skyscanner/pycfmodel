@@ -14,17 +14,17 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, List, Optional
 
+from pycfmodel.model.resources.properties.policy import Policy
 from ..base import CustomModel
-from ..types import ResolvableStr, ResolvableInt, ResolvableBool
+from ..types import ResolvableStr, ResolvableInt, ResolvableBool, Resolvable
 from .resource import Resource
-from .types import ResolvablePolicy
 
 
 class KMSKeyProperties(CustomModel):
     Description: Optional[ResolvableStr]
     EnableKeyRotation: Optional[ResolvableBool]
     Enabled: Optional[ResolvableBool]
-    KeyPolicy: ResolvablePolicy
+    KeyPolicy: Resolvable[Policy]
     KeyUsage: Optional[ResolvableStr]
     PendingWindowInDays: Optional[ResolvableInt]
     Tags: Optional[List[ResolvableStr]]

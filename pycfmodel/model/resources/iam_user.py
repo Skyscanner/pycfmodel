@@ -14,11 +14,11 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, List, Optional, Dict
 
+from pycfmodel.model.resources.properties.policy import Policy
 from ..parameter import Parameter
-from ..types import ResolvableStr
+from ..types import ResolvableStr, Resolvable
 from ..base import CustomModel
 from .resource import Resource
-from .types import ResolvablePolicy
 
 
 class IAMUserProperties(CustomModel):
@@ -27,7 +27,7 @@ class IAMUserProperties(CustomModel):
     ManagedPolicyArns: Optional[List[ResolvableStr]] = None
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
-    Policies: Optional[List[ResolvablePolicy]] = None
+    Policies: Optional[List[Resolvable[Policy]]] = None
     UserName: Optional[ResolvableStr] = None
 
 

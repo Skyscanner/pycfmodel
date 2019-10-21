@@ -15,9 +15,9 @@ specific language governing permissions and limitations under the License.
 from typing import ClassVar, Optional, List
 
 from ..base import CustomModel
-from ..types import ResolvableStr
-from .types import ResolvablePolicyDocument
+from ..types import ResolvableStr, Resolvable
 from .resource import Resource
+from .properties.policy_document import PolicyDocument
 
 
 class IAMManagedPolicyProperties(CustomModel):
@@ -25,7 +25,7 @@ class IAMManagedPolicyProperties(CustomModel):
     Groups: Optional[List[ResolvableStr]] = None
     ManagedPolicyName: Optional[ResolvableStr] = None
     Path: Optional[ResolvableStr] = None
-    PolicyDocument: ResolvablePolicyDocument
+    PolicyDocument: Resolvable[PolicyDocument]
     Roles: Optional[List[ResolvableStr]] = None
     Users: Optional[List[ResolvableStr]] = None
 

@@ -17,8 +17,7 @@ from typing import List, Pattern, Union, Optional
 
 from pydantic import Extra
 
-from ...types import ResolvableDate
-from ..types import ResolvableStatement
+from ...types import ResolvableDate, Resolvable
 from .property import Property
 from .statement import Statement
 
@@ -157,7 +156,7 @@ class PolicyDocument(Property):
     class Config(Property.Config):
         extra = Extra.allow
 
-    Statement: Union[ResolvableStatement, List[ResolvableStatement]]
+    Statement: Resolvable[Union[Resolvable[Statement], List[Resolvable[Statement]]]]
     Version: Optional[ResolvableDate]
 
     def _statement_as_list(self) -> List[Statement]:

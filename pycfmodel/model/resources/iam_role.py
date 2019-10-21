@@ -14,19 +14,20 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, List, Optional
 
-from ..types import ResolvableStr, ResolvableIntOrStr
+from ..types import ResolvableStr, ResolvableIntOrStr, Resolvable
 from ..base import CustomModel
 from .resource import Resource
-from .types import ResolvablePolicy, ResolvablePolicyDocument
+from .properties.policy import Policy
+from .properties.policy_document import PolicyDocument
 
 
 class IAMRoleProperties(CustomModel):
-    AssumeRolePolicyDocument: ResolvablePolicyDocument
+    AssumeRolePolicyDocument: Resolvable[PolicyDocument]
     ManagedPolicyArns: Optional[List[ResolvableStr]] = None
     MaxSessionDuration: Optional[ResolvableIntOrStr] = None
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
-    Policies: Optional[List[ResolvablePolicy]] = None
+    Policies: Optional[Resolvable[List[Resolvable[Policy]]]] = None
     RoleName: Optional[ResolvableStr] = None
 
 

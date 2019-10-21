@@ -14,17 +14,20 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, Optional, List, Union
 
-from ..types import ResolvableStr
+from pycfmodel.model.resources.properties.security_group_egress_prop import SecurityGroupEgressProp
+from pycfmodel.model.resources.properties.security_group_ingress_prop import SecurityGroupIngressProp
+from ..types import ResolvableStr, Resolvable
 from ..base import CustomModel
 from .resource import Resource
-from .types import ResolvableSecurityGroupEgressProp, ResolvableSecurityGroupIngressProp
 
 
 class SecurityGroupProperties(CustomModel):
     GroupDescription: ResolvableStr
     GroupName: Optional[ResolvableStr]
-    SecurityGroupEgress: Optional[Union[ResolvableSecurityGroupEgressProp, List[ResolvableSecurityGroupEgressProp]]]
-    SecurityGroupIngress: Optional[Union[ResolvableSecurityGroupIngressProp, List[ResolvableSecurityGroupIngressProp]]]
+    SecurityGroupEgress: Optional[Resolvable[Union[SecurityGroupEgressProp, List[Resolvable[SecurityGroupEgressProp]]]]]
+    SecurityGroupIngress: Optional[
+        Resolvable[Union[SecurityGroupIngressProp, List[Resolvable[SecurityGroupIngressProp]]]]
+    ]
     Tags: Optional[List]
     VpcId: Optional[ResolvableStr]
 

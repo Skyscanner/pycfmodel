@@ -14,12 +14,6 @@ specific language governing permissions and limitations under the License.
 """
 from typing import Union
 
-from ..types import Resolvable
-from .properties.policy import Policy
-from .properties.policy_document import PolicyDocument
-from .properties.security_group_egress_prop import SecurityGroupEgressProp
-from .properties.security_group_ingress_prop import SecurityGroupIngressProp
-from .properties.statement import Statement
 from .iam_group import IAMGroup
 from .iam_managed_policy import IAMManagedPolicy
 from .iam_policy import IAMPolicy
@@ -33,13 +27,6 @@ from .security_group_ingress import SecurityGroupIngress
 from .sns_topic_policy import SNSTopicPolicy
 from .sqs_queue_policy import SQSQueuePolicy
 
-
-ResolvablePolicy = Resolvable[Policy]
-ResolvablePolicyDocument = Resolvable[PolicyDocument]
-ResolvableSecurityGroupEgressProp = Resolvable[SecurityGroupEgressProp]
-ResolvableSecurityGroupIngressProp = Resolvable[SecurityGroupIngressProp]
-ResolvableStatement = Resolvable[Statement]
-ResolvableIAMPolicy = Resolvable[IAMPolicy]
 
 ResourceModels = Union[
     IAMGroup,

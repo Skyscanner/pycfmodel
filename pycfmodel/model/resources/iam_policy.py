@@ -14,15 +14,15 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, Optional
 
+from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from ..base import CustomModel
-from ..types import ResolvableStr, ResolvableStrOrList
+from ..types import ResolvableStr, ResolvableStrOrList, Resolvable
 from .resource import Resource
-from .types import ResolvablePolicyDocument
 
 
 class IAMPolicyProperties(CustomModel):
     Groups: Optional[ResolvableStrOrList] = None
-    PolicyDocument: ResolvablePolicyDocument
+    PolicyDocument: Resolvable[PolicyDocument]
     PolicyName: ResolvableStr
     Roles: Optional[ResolvableStrOrList] = None
     Users: Optional[ResolvableStrOrList] = None
