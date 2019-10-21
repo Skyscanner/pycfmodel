@@ -17,7 +17,7 @@ from typing import ClassVar, List, Optional
 from ..base import CustomModel
 from ..types import ResolvableStr
 from .resource import Resource
-from .iam_policy import ResolvableIAMPolicy
+from .types import ResolvableIAMPolicy
 
 
 class IAMGroupProperties(CustomModel):

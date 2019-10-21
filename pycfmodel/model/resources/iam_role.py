@@ -17,8 +17,7 @@ from typing import ClassVar, List, Optional
 from ..types import ResolvableStr, ResolvableIntOrStr
 from ..base import CustomModel
 from .resource import Resource
-from .properties.policy import ResolvablePolicy
-from .properties.policy_document import ResolvablePolicyDocument
+from .types import ResolvablePolicy, ResolvablePolicyDocument
 
 
 class IAMRoleProperties(CustomModel):

@@ -18,7 +18,7 @@ from ..parameter import Parameter
 from ..types import ResolvableStr
 from ..base import CustomModel
 from .resource import Resource
-from .properties.policy import ResolvablePolicy
+from .types import ResolvablePolicy
 
 
 class IAMUserProperties(CustomModel):

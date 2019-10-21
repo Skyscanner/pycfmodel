@@ -12,8 +12,13 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import Union
+from typing import Union, Dict
 
+from .properties.policy import Policy
+from .properties.policy_document import PolicyDocument
+from .properties.security_group_egress_prop import SecurityGroupEgressProp
+from .properties.security_group_ingress_prop import SecurityGroupIngressProp
+from .properties.statement import Statement
 from .iam_group import IAMGroup
 from .iam_managed_policy import IAMManagedPolicy
 from .iam_policy import IAMPolicy
@@ -26,6 +31,14 @@ from .security_group_egress import SecurityGroupEgress
 from .security_group_ingress import SecurityGroupIngress
 from .sns_topic_policy import SNSTopicPolicy
 from .sqs_queue_policy import SQSQueuePolicy
+
+
+ResolvablePolicy = Union[Policy, Dict]
+ResolvablePolicyDocument = Union[PolicyDocument, Dict]
+ResolvableSecurityGroupEgressProp = Union[SecurityGroupEgressProp, Dict]
+ResolvableSecurityGroupIngressProp = Union[SecurityGroupIngressProp, Dict]
+ResolvableStatement = Union[Statement, Dict]
+ResolvableIAMPolicy = Union[IAMPolicy, Dict]
 
 ResourceModels = Union[
     IAMGroup,

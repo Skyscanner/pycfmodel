@@ -17,8 +17,7 @@ from typing import ClassVar, Optional, List, Union
 from ..types import ResolvableStr
 from ..base import CustomModel
 from .resource import Resource
-from .properties.security_group_egress_prop import ResolvableSecurityGroupEgressProp
-from .properties.security_group_ingress_prop import ResolvableSecurityGroupIngressProp
+from .types import ResolvableSecurityGroupEgressProp, ResolvableSecurityGroupIngressProp
 
 
 class SecurityGroupProperties(CustomModel):

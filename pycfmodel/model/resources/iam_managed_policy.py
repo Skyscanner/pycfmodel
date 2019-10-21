@@ -16,7 +16,7 @@ from typing import ClassVar, Optional, List
 
 from ..base import CustomModel
 from ..types import ResolvableStr
-from .properties.policy_document import ResolvablePolicyDocument
+from .types import ResolvablePolicyDocument
 from .resource import Resource
 
 

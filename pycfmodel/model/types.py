@@ -13,7 +13,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 from datetime import date
-from typing import Union, Dict, List
+from typing import Union, Dict, List, TypeVar
 
 ResolvableStr = Union[str, Dict]
 ResolvableStrOrList = Union[str, List, Dict]
@@ -21,3 +21,6 @@ ResolvableInt = Union[int, Dict]
 ResolvableIntOrStr = Union[int, str, Dict]
 ResolvableDate = Union[date, Dict]
 ResolvableBool = Union[bool, Dict]
+
+T = TypeVar('T')
+Resolvable = Union[T, Dict[ResolvableStr, 'Resolvable[T]']]

@@ -93,6 +93,3 @@ class Statement(Property):
             for principal in self.get_principal_list()
             if isinstance(principal, str) and principal not in whitelist
         ]
-
-
-ResolvableStatement = Union[Statement, Dict]

@@ -17,7 +17,7 @@ from typing import ClassVar, List
 from ..types import ResolvableStr
 from ..base import CustomModel
 from .resource import Resource
-from .properties.policy_document import ResolvablePolicyDocument
+from .types import ResolvablePolicyDocument
 
 
 class SQSQueuePolicyProperties(CustomModel):

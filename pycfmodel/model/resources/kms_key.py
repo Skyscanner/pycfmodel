@@ -17,7 +17,7 @@ from typing import ClassVar, List, Optional
 from ..base import CustomModel
 from ..types import ResolvableStr, ResolvableInt, ResolvableBool
 from .resource import Resource
-from .properties.policy import ResolvablePolicy
+from .types import ResolvablePolicy
 
 
 class KMSKeyProperties(CustomModel):

@@ -12,7 +12,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import Optional, Union, Dict
+from typing import Optional
 
 from ...types import ResolvableStr, ResolvableInt, ResolvableIntOrStr
 from .property import Property
@@ -39,6 +39,3 @@ class SecurityGroupIngressProp(Property):
         if not self.CidrIpv6 or not isinstance(self.CidrIpv6, str):
             return False
         return self.CidrIpv6.endswith("/0")
-
-
-ResolvableSecurityGroupIngressProp = Union[SecurityGroupIngressProp, Dict]

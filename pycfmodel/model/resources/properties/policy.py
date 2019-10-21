@@ -12,16 +12,11 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import Dict, Union
-
 from ...types import ResolvableStr
-from .policy_document import ResolvablePolicyDocument
+from ..types import ResolvablePolicyDocument
 from .property import Property
 
 
 class Policy(Property):
     PolicyName: ResolvableStr
     PolicyDocument: ResolvablePolicyDocument
-
-
-ResolvablePolicy = Union[Policy, Dict]

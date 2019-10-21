@@ -17,7 +17,7 @@ from typing import ClassVar
 from ..types import ResolvableStr
 from ..base import CustomModel
 from .resource import Resource
-from .properties.policy_document import ResolvablePolicyDocument
+from .types import ResolvablePolicyDocument
 
 
 class S3BucketPolicyProperties(CustomModel):
