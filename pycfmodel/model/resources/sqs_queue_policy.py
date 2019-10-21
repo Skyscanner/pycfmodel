@@ -16,12 +16,12 @@ from typing import ClassVar, List
 
 from ..types import ResolvableStr
 from ..base import CustomModel
-from .properties.policy_document import PolicyDocument
 from .resource import Resource
+from .properties.policy_document import ResolvablePolicyDocument
 
 
 class SQSQueuePolicyProperties(CustomModel):
-    PolicyDocument: PolicyDocument
+    PolicyDocument: ResolvablePolicyDocument
     Queues: List[ResolvableStr]
 
 

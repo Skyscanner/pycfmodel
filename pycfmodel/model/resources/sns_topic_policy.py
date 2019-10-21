@@ -17,11 +17,11 @@ from typing import ClassVar, List
 from ..types import ResolvableStr
 from ..base import CustomModel
 from .resource import Resource
-from .properties.policy_document import PolicyDocument
+from .properties.policy_document import ResolvablePolicyDocument
 
 
 class SNSTopicPolicyProperties(CustomModel):
-    PolicyDocument: PolicyDocument
+    PolicyDocument: ResolvablePolicyDocument
     Topics: List[ResolvableStr]
 
 

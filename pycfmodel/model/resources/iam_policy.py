@@ -12,17 +12,17 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import ClassVar, Optional
+from typing import ClassVar, Optional, Dict, Union
 
 from ..base import CustomModel
 from ..types import ResolvableStr, ResolvableStrOrList
 from .resource import Resource
-from .properties.policy_document import PolicyDocument
+from .properties.policy_document import ResolvablePolicyDocument
 
 
 class IAMPolicyProperties(CustomModel):
     Groups: Optional[ResolvableStrOrList] = None
-    PolicyDocument: PolicyDocument
+    PolicyDocument: ResolvablePolicyDocument
     PolicyName: ResolvableStr
     Roles: Optional[ResolvableStrOrList] = None
     Users: Optional[ResolvableStrOrList] = None
@@ -32,3 +32,6 @@ class IAMPolicy(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::Policy"
     Type: str = TYPE_VALUE
     Properties: IAMPolicyProperties
+
+
+ResolvableIAMPolicy = Union[IAMPolicy, Dict]

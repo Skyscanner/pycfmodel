@@ -16,15 +16,15 @@ from typing import ClassVar, List, Optional
 
 from ..base import CustomModel
 from ..types import ResolvableStr, ResolvableInt, ResolvableBool
-from .properties.policy import Policy
 from .resource import Resource
+from .properties.policy import ResolvablePolicy
 
 
 class KMSKeyProperties(CustomModel):
     Description: Optional[ResolvableStr]
     EnableKeyRotation: Optional[ResolvableBool]
     Enabled: Optional[ResolvableBool]
-    KeyPolicy: Policy
+    KeyPolicy: ResolvablePolicy
     KeyUsage: Optional[ResolvableStr]
     PendingWindowInDays: Optional[ResolvableInt]
     Tags: Optional[List[ResolvableStr]]

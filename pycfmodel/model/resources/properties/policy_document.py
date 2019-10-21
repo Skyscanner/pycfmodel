@@ -13,13 +13,13 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import re
-from typing import List, Pattern, Union, Optional
+from typing import List, Pattern, Union, Optional, Dict
 
 from pydantic import Extra
 
 from ...types import ResolvableDate
 from .property import Property
-from .statement import Statement
+from .statement import Statement, ResolvableStatement
 
 _IAM_ACTIONS = [
     "IAM:AddClientIDToOpenIDConnectProvider",
@@ -156,7 +156,7 @@ class PolicyDocument(Property):
     class Config(Property.Config):
         extra = Extra.allow
 
-    Statement: Union[Statement, List[Statement]]
+    Statement: Union[ResolvableStatement, List[ResolvableStatement]]
     Version: Optional[ResolvableDate]
 
     def _statement_as_list(self) -> List[Statement]:
@@ -201,3 +201,6 @@ class PolicyDocument(Property):
             return list(set(_IAM_ACTIONS).difference(actions))
 
         return list(actions)
+
+
+ResolvablePolicyDocument = Union[PolicyDocument, Dict]

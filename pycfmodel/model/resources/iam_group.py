@@ -16,15 +16,15 @@ from typing import ClassVar, List, Optional
 
 from ..base import CustomModel
 from ..types import ResolvableStr
-from .iam_policy import IAMPolicy
 from .resource import Resource
+from .iam_policy import ResolvableIAMPolicy
 
 
 class IAMGroupProperties(CustomModel):
     GroupName: Optional[ResolvableStr] = None
     ManagedPolicyArns: Optional[List[ResolvableStr]] = None
     Path: Optional[ResolvableStr] = None
-    Policies: Optional[List[IAMPolicy]] = None
+    Policies: Optional[List[ResolvableIAMPolicy]] = None
 
 
 class IAMGroup(Resource):

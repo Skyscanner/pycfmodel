@@ -17,17 +17,17 @@ from typing import ClassVar, List, Optional
 from ..types import ResolvableStr, ResolvableIntOrStr
 from ..base import CustomModel
 from .resource import Resource
-from .properties.policy_document import PolicyDocument
-from .properties.policy import Policy
+from .properties.policy import ResolvablePolicy
+from .properties.policy_document import ResolvablePolicyDocument
 
 
 class IAMRoleProperties(CustomModel):
-    AssumeRolePolicyDocument: PolicyDocument
+    AssumeRolePolicyDocument: ResolvablePolicyDocument
     ManagedPolicyArns: Optional[List[ResolvableStr]] = None
     MaxSessionDuration: Optional[ResolvableIntOrStr] = None
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
-    Policies: Optional[List[Policy]] = None
+    Policies: Optional[List[ResolvablePolicy]] = None
     RoleName: Optional[ResolvableStr] = None
 
 

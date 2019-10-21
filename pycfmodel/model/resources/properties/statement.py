@@ -28,7 +28,6 @@ PrincipalTypes = Union[ResolvableStr, List[ResolvableStr], Dict[str, Union[Resol
 class Statement(Property):
     Sid: Optional[ResolvableStr] = None
     Effect: Optional[ResolvableStr] = None
-    Condition: Optional[ResolvableStr] = None
     Principal: Optional[PrincipalTypes] = None
     NotPrincipal: Optional[PrincipalTypes] = None
     Action: Optional[ResolvableStrOrList] = None
@@ -94,3 +93,6 @@ class Statement(Property):
             for principal in self.get_principal_list()
             if isinstance(principal, str) and principal not in whitelist
         ]
+
+
+ResolvableStatement = Union[Statement, Dict]

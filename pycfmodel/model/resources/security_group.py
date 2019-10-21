@@ -16,17 +16,17 @@ from typing import ClassVar, Optional, List, Union
 
 from ..types import ResolvableStr
 from ..base import CustomModel
-from .properties.security_group_egress_prop import SecurityGroupEgressProp
-from .properties.security_group_ingress_prop import SecurityGroupIngressProp
 from .resource import Resource
+from .properties.security_group_egress_prop import ResolvableSecurityGroupEgressProp
+from .properties.security_group_ingress_prop import ResolvableSecurityGroupIngressProp
 
 
 class SecurityGroupProperties(CustomModel):
     GroupDescription: ResolvableStr
     GroupName: Optional[ResolvableStr]
-    SecurityGroupEgress: Optional[Union[SecurityGroupEgressProp, List[SecurityGroupEgressProp]]]
-    SecurityGroupIngress: Optional[Union[SecurityGroupIngressProp, List[SecurityGroupIngressProp]]]
-    Tags: Optional[List[ResolvableStr]]
+    SecurityGroupEgress: Optional[Union[ResolvableSecurityGroupEgressProp, List[ResolvableSecurityGroupEgressProp]]]
+    SecurityGroupIngress: Optional[Union[ResolvableSecurityGroupIngressProp, List[ResolvableSecurityGroupIngressProp]]]
+    Tags: Optional[List]
     VpcId: Optional[ResolvableStr]
 
 

@@ -16,8 +16,8 @@ from typing import ClassVar, Optional, List
 
 from ..base import CustomModel
 from ..types import ResolvableStr
+from .properties.policy_document import ResolvablePolicyDocument
 from .resource import Resource
-from .properties.policy_document import PolicyDocument
 
 
 class IAMManagedPolicyProperties(CustomModel):
@@ -25,7 +25,7 @@ class IAMManagedPolicyProperties(CustomModel):
     Groups: Optional[List[ResolvableStr]] = None
     ManagedPolicyName: Optional[ResolvableStr] = None
     Path: Optional[ResolvableStr] = None
-    PolicyDocument: PolicyDocument
+    PolicyDocument: ResolvablePolicyDocument
     Roles: Optional[List[ResolvableStr]] = None
     Users: Optional[List[ResolvableStr]] = None
 

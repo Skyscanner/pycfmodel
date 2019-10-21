@@ -18,7 +18,7 @@ from ..parameter import Parameter
 from ..types import ResolvableStr
 from ..base import CustomModel
 from .resource import Resource
-from .properties.policy import Policy
+from .properties.policy import ResolvablePolicy
 
 
 class IAMUserProperties(CustomModel):
@@ -27,7 +27,7 @@ class IAMUserProperties(CustomModel):
     ManagedPolicyArns: Optional[List[ResolvableStr]] = None
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
-    Policies: Optional[List[Policy]] = None
+    Policies: Optional[List[ResolvablePolicy]] = None
     UserName: Optional[ResolvableStr] = None
 
 

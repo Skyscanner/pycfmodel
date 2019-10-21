@@ -16,13 +16,13 @@ from typing import ClassVar
 
 from ..types import ResolvableStr
 from ..base import CustomModel
-from .properties.policy_document import PolicyDocument
 from .resource import Resource
+from .properties.policy_document import ResolvablePolicyDocument
 
 
 class S3BucketPolicyProperties(CustomModel):
     Bucket: ResolvableStr
-    PolicyDocument: PolicyDocument
+    PolicyDocument: ResolvablePolicyDocument
 
 
 class S3BucketPolicy(Resource):

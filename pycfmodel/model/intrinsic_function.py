@@ -30,7 +30,12 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
         return function
 
     elif isinstance(function, list):
-        return [resolve(entry, params, mappings, conditions) for entry in function]
+        result = []
+        for entry in function:
+            resolved_value = resolve(entry, params, mappings, conditions)
+            if not is_none_string(resolved_value):
+                result.append(resolved_value)
+        return result
 
     elif isinstance(function, dict):
         if is_resolvable_dict(function):
@@ -38,7 +43,12 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
             function_resolver = FUNCTION_MAPPINGS[function_name]
             return function_resolver(function[function_name], params, mappings, conditions)
 
-        return {k: resolve(v, params, mappings, conditions) for k, v in function.items()}
+        result = {}
+        for k, v in function.items():
+            resolved_value = resolve(v, params, mappings, conditions)
+            if not is_none_string(resolved_value):
+                result[k] = resolved_value
+        return result
 
     raise ValueError(f"Not supported type: {type(function)}")
 
@@ -113,8 +123,6 @@ def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict], condition
     else:
         return resolve(false_section, params, mappings, conditions)
 
-    return [true_section, false_section]
-
 
 def resolve_and(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
     part_1, part_2 = function_body
@@ -158,6 +166,12 @@ def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict], co
 
 def is_resolvable_dict(value: Any) -> bool:
     return isinstance(value, dict) and len(value) == 1 and next(iter(value)) in FUNCTION_MAPPINGS
+
+
+def is_none_string(value: Any) -> bool:
+    return isinstance(value, str) and (
+        "UNDEFINED_PARAM_" in value or "UNDEFINED_MAPPING_" in value or "NOVALUE" in value
+    )
 
 
 FUNCTION_MAPPINGS = {
