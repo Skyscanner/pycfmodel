@@ -22,5 +22,5 @@ ResolvableIntOrStr = Union[int, str, Dict]
 ResolvableDate = Union[date, Dict]
 ResolvableBool = Union[bool, Dict]
 
-T = TypeVar('T')
-Resolvable = Union[T, Dict[ResolvableStr, 'Resolvable[T]']]
+T = TypeVar("T")
+Resolvable = Union[T, Dict[ResolvableStr, "Resolvable[T]"]]
