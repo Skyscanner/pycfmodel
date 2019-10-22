@@ -32,7 +32,7 @@ def security_group():
     )
 
 
-def test_main(security_group):
+def test_security_group(security_group):
     assert security_group.Properties.GroupDescription == "some_group_desc"
     assert not security_group.Properties.SecurityGroupIngress[0].ipv4_slash_zero()
     assert not security_group.Properties.SecurityGroupEgress[0].ipv4_slash_zero()

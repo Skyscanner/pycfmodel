@@ -18,32 +18,26 @@ import pytest
 from pycfmodel.model.resources.properties.statement import Statement
 
 
-@pytest.fixture()
 def statement_1():
     return Statement(**{"Effect": "Allow", "Action": ["action1"], "NotAction": "action2", "Resource": ["arn"]})
 
 
-@pytest.fixture()
 def statement_2():
     return Statement(**{"Effect": "Allow", "Action": "action1", "NotAction": ["action2"], "Resource": ["arn"]})
 
 
-@pytest.fixture()
 def statement_3():
     return Statement(**{"Effect": "Allow", "Action": "action1", "Resource": ["arn1"], "NotResource": "arn2"})
 
 
-@pytest.fixture()
 def statement_4():
     return Statement(**{"Effect": "Allow", "Action": "action2", "Resource": "arn1", "NotResource": ["arn2"]})
 
 
-@pytest.fixture()
 def statement_principal_1():
     return Statement(**{"Principal": {"AWS": "arn:aws:iam::123456789012:root"}})
 
 
-@pytest.fixture()
 def statement_principal_2():
     return Statement(
         **{
@@ -54,29 +48,24 @@ def statement_principal_2():
     )
 
 
-@pytest.fixture()
 def statement_principal_3():
     return Statement(**{"Principal": {"Federated": "cognito-identity.amazonaws.com"}})
 
 
-@pytest.fixture()
 def statement_principal_4():
     return Statement(**{"Principal": "arn:aws:iam::123456789012:root"})
 
 
-@pytest.fixture()
 def statement_principal_5():
     return Statement(
         **{"Principal": ["arn:aws:iam::AWS-account-ID:user/user-name-1", "arn:aws:iam::AWS-account-ID:user/UserName2"]}
     )
 
 
-@pytest.fixture()
 def statement_not_principal_1():
     return Statement(**{"NotPrincipal": {"AWS": "arn:aws:iam::123456789012:root"}})
 
 
-@pytest.fixture()
 def statement_not_principal_2():
     return Statement(
         **{
@@ -87,17 +76,14 @@ def statement_not_principal_2():
     )
 
 
-@pytest.fixture()
 def statement_not_principal_3():
     return Statement(**{"NotPrincipal": {"Federated": "cognito-identity.amazonaws.com"}})
 
 
-@pytest.fixture()
 def statement_not_principal_4():
     return Statement(**{"NotPrincipal": "arn:aws:iam::123456789012:root"})
 
 
-@pytest.fixture()
 def statement_not_principal_5():
     return Statement(
         **{

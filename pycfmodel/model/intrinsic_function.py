@@ -16,9 +16,12 @@ import logging
 
 from base64 import b64encode
 from datetime import date
-from typing import Dict, List, Union, Any
+from typing import Dict, List, Union
+
 
 from pycfmodel.constants import AWS_NOVALUE
+from pycfmodel.model.base import FunctionDict
+from pycfmodel.utils import is_resolvable_dict
 from .regexs import CONTAINS_CF_PARAM
 
 logger = logging.getLogger(__file__)
@@ -30,7 +33,7 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
     if function is None or isinstance(function, (str, int, bool, float, date)):
         return function
 
-    elif isinstance(function, list):
+    if isinstance(function, list):
         result = []
         for entry in function:
             resolved_value = resolve(entry, params, mappings, conditions)
@@ -38,7 +41,10 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
                 result.append(resolved_value)
         return result
 
-    elif isinstance(function, dict):
+    if isinstance(function, FunctionDict):
+        function = function.dict()
+
+    if isinstance(function, dict):
         if is_resolvable_dict(function):
             function_name = next(iter(function))
             function_resolver = FUNCTION_MAPPINGS[function_name]
@@ -165,25 +171,21 @@ def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict], co
     return conditions.get(function_body, False)
 
 
-def is_resolvable_dict(value: Any) -> bool:
-    return isinstance(value, dict) and len(value) == 1 and next(iter(value)) in FUNCTION_MAPPINGS
-
-
 FUNCTION_MAPPINGS = {
-    "Ref": resolve_ref,
-    "Fn::ImportValue": resolve_ref,
-    "Fn::Join": resolve_join,
-    "Fn::FindInMap": resolve_find_in_map,
-    "Fn::Sub": resolve_sub,
-    "Fn::Select": resolve_select,
-    "Fn::Split": resolve_split,
-    "Fn::If": resolve_if,
+    "Condition": resolve_condition,
     "Fn::And": resolve_and,
-    "Fn::Or": resolve_or,
-    "Fn::Not": resolve_not,
-    "Fn::Equals": resolve_equals,
     "Fn::Base64": resolve_base64,
+    "Fn::Equals": resolve_equals,
+    "Fn::FindInMap": resolve_find_in_map,
     "Fn::GetAtt": resolve_get_attr,
     "Fn::GetAZs": resolve_get_azs,
-    "Condition": resolve_condition,
+    "Fn::If": resolve_if,
+    "Fn::ImportValue": resolve_ref,
+    "Fn::Join": resolve_join,
+    "Fn::Not": resolve_not,
+    "Fn::Or": resolve_or,
+    "Fn::Select": resolve_select,
+    "Fn::Split": resolve_split,
+    "Fn::Sub": resolve_sub,
+    "Ref": resolve_ref,
 }

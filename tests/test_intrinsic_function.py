@@ -12,6 +12,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+
 import pytest
 
 from pycfmodel import parse
@@ -349,7 +350,9 @@ def test_resolve_scenario_2():
                                         "Effect": "Allow",
                                         "Resource": [
                                             {
-                                                "Fn::Sub": "arn:aws:lambda:*:${AWS::AccountId}:function:${LambdaFunctionName}"
+                                                "Fn::Sub": (
+                                                    "arn:aws:lambda:*:${AWS::AccountId}:function:${LambdaFunctionName}"
+                                                )
                                             }
                                         ],
                                     }
@@ -391,9 +394,7 @@ def test_resolve_scenario_2():
             }
         },
     }
-
     model = parse(template).resolve(extra_params={"AWS::AccountId": "123", "LambdaFunctionName": "test-lambda"})
-
     assert (
         model.Resources["lambdaRole"].Properties.Policies[0].PolicyDocument.Statement[0].Resource[0]
         == "arn:aws:lambda:*:123:function:test-lambda"

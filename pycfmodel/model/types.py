@@ -13,14 +13,16 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 from datetime import date
-from typing import Union, Dict, List, TypeVar
+from typing import Union, List, TypeVar
 
-ResolvableStr = Union[str, Dict]
-ResolvableStrOrList = Union[str, List, Dict]
-ResolvableInt = Union[int, Dict]
-ResolvableIntOrStr = Union[int, str, Dict]
-ResolvableDate = Union[date, Dict]
-ResolvableBool = Union[bool, Dict]
+from pycfmodel.model.base import FunctionDict
 
 T = TypeVar("T")
-Resolvable = Union[T, Dict]
+Resolvable = Union[T, FunctionDict]
+
+ResolvableStr = Resolvable[str]
+ResolvableInt = Resolvable[int]
+ResolvableDate = Resolvable[date]
+ResolvableBool = Resolvable[bool]
+ResolvableStrOrList = Resolvable[Union[str, List]]
+ResolvableIntOrStr = Resolvable[Union[int, str]]

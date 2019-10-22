@@ -39,7 +39,7 @@ def sqs_queue_policy():
     )
 
 
-def test_main(sqs_queue_policy):
+def test_sqs_queue(sqs_queue_policy):
     assert len(sqs_queue_policy.Properties.Queues) == 1
     assert sqs_queue_policy.Properties.PolicyDocument.Statement[0].Effect == "Allow"
     assert sqs_queue_policy.Properties.PolicyDocument.Statement[0].NotAction[0] == "sqs:Break*"
