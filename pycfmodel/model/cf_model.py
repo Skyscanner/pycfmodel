@@ -15,6 +15,7 @@ specific language governing permissions and limitations under the License.
 from datetime import date
 from typing import Dict, Union, ClassVar, Optional, List, Any
 
+from pycfmodel.constants import AWS_NOVALUE
 from .resources.generic_resource import GenericResource
 from .resources.types import ResourceModels
 from .base import CustomModel
@@ -36,7 +37,7 @@ class CFModel(CustomModel):
         # default pseudo parameters
         "AWS::AccountId": "123456789012",
         "AWS::NotificationARNs": [],
-        "AWS::NoValue": "NOVALUE",
+        "AWS::NoValue": AWS_NOVALUE,
         "AWS::Partition": "aws",
         "AWS::Region": "eu-west-1",
         "AWS::StackId": "",

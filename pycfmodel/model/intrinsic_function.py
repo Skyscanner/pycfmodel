@@ -18,6 +18,7 @@ from base64 import b64encode
 from datetime import date
 from typing import Dict, List, Union, Any
 
+from pycfmodel.constants import AWS_NOVALUE
 from .regexs import CONTAINS_CF_PARAM
 
 logger = logging.getLogger(__file__)
@@ -33,7 +34,7 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
         result = []
         for entry in function:
             resolved_value = resolve(entry, params, mappings, conditions)
-            if not is_none_string(resolved_value):
+            if resolved_value != AWS_NOVALUE:
                 result.append(resolved_value)
         return result
 
@@ -46,7 +47,7 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
         result = {}
         for k, v in function.items():
             resolved_value = resolve(v, params, mappings, conditions)
-            if not is_none_string(resolved_value):
+            if resolved_value != AWS_NOVALUE:
                 result[k] = resolved_value
         return result
 
@@ -166,12 +167,6 @@ def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict], co
 
 def is_resolvable_dict(value: Any) -> bool:
     return isinstance(value, dict) and len(value) == 1 and next(iter(value)) in FUNCTION_MAPPINGS
-
-
-def is_none_string(value: Any) -> bool:
-    return isinstance(value, str) and (
-        "UNDEFINED_PARAM_" in value or "UNDEFINED_MAPPING_" in value or "NOVALUE" in value
-    )
 
 
 FUNCTION_MAPPINGS = {
