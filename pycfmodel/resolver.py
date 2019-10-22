@@ -19,10 +19,9 @@ from datetime import date
 from typing import Dict, List, Union
 
 
-from pycfmodel.constants import AWS_NOVALUE
+from pycfmodel.constants import AWS_NOVALUE, CONTAINS_CF_PARAM
 from pycfmodel.model.base import FunctionDict
 from pycfmodel.utils import is_resolvable_dict
-from .regexs import CONTAINS_CF_PARAM
 
 logger = logging.getLogger(__file__)
 

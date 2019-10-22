@@ -16,10 +16,10 @@ from datetime import date
 from typing import Dict, Union, ClassVar, Optional, List, Any
 
 from pycfmodel.constants import AWS_NOVALUE
+from pycfmodel.resolver import resolve
 from .resources.generic_resource import GenericResource
 from .resources.types import ResourceModels
 from .base import CustomModel
-from .intrinsic_function import resolve
 from .parameter import Parameter
 
 

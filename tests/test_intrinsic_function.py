@@ -16,7 +16,7 @@ specific language governing permissions and limitations under the License.
 import pytest
 
 from pycfmodel import parse
-from pycfmodel.model.intrinsic_function import resolve
+from pycfmodel.resolver import resolve
 
 
 @pytest.mark.parametrize(

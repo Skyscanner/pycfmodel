@@ -17,7 +17,7 @@ from collections import Counter
 
 import pytest
 
-from pycfmodel.model.regexs import CONTAINS_STAR
+from pycfmodel.constants import CONTAINS_STAR
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 
 

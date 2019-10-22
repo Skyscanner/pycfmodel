@@ -14,7 +14,7 @@ specific language governing permissions and limitations under the License.
 """
 import pytest
 
-from pycfmodel.model.regexs import CONTAINS_STAR, CONTAINS_CF_PARAM
+from pycfmodel.constants import CONTAINS_STAR, CONTAINS_CF_PARAM
 
 
 @pytest.mark.parametrize(
