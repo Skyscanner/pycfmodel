@@ -15,7 +15,7 @@ specific language governing permissions and limitations under the License.
 from datetime import date
 from typing import Union, List, TypeVar
 
-from pycfmodel.model.base import FunctionDict
+from .base import FunctionDict, ConditionDict
 
 T = TypeVar("T")
 Resolvable = Union[T, FunctionDict]
@@ -26,3 +26,5 @@ ResolvableDate = Resolvable[date]
 ResolvableBool = Resolvable[bool]
 ResolvableStrOrList = Resolvable[Union[str, List]]
 ResolvableIntOrStr = Resolvable[Union[int, str]]
+
+ResolvableCondition = Union[ConditionDict, ResolvableStr]

@@ -14,9 +14,9 @@ specific language governing permissions and limitations under the License.
 """
 from typing import Optional
 
-from ...types import ResolvableStr
+from ...types import ResolvableCondition
 from ...base import CustomModel
 
 
 class Property(CustomModel):
-    Condition: Optional[ResolvableStr] = None
+    Condition: Optional[ResolvableCondition] = None

@@ -14,10 +14,10 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, List, Optional, Dict
 
-from pycfmodel.model.resources.properties.policy import Policy
 from ..parameter import Parameter
 from ..types import ResolvableStr, Resolvable
 from ..base import CustomModel
+from .properties.policy import Policy
 from .resource import Resource
 
 

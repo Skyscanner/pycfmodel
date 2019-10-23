@@ -14,10 +14,10 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, List, Optional
 
-from pycfmodel.model.resources.iam_policy import IAMPolicy
 from ..base import CustomModel
 from ..types import ResolvableStr, Resolvable
 from .resource import Resource
+from .iam_policy import IAMPolicy
 
 
 class IAMGroupProperties(CustomModel):

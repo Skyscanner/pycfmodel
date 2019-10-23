@@ -15,8 +15,8 @@ specific language governing permissions and limitations under the License.
 from datetime import date
 from typing import Dict, Union, ClassVar, Optional, List, Any
 
-from pycfmodel.constants import AWS_NOVALUE
-from pycfmodel.resolver import resolve
+from ..resolver import resolve
+from ..constants import AWS_NOVALUE
 from .resources.generic_resource import GenericResource
 from .resources.types import ResourceModels
 from .base import CustomModel
@@ -47,15 +47,13 @@ class CFModel(CustomModel):
 
     def resolve(self, extra_params=None) -> "CFModel":
         extra_params = {} if extra_params is None else extra_params
-        extended_parameters = {
-            **self.PSEUDO_PARAMETERS,
-            **{
-                # default parameters
-                key: parameter.get_ref_value()
-                for key, parameter in self.Parameters.items()
-            },
-            **extra_params,
-        }
+        # default parameters
+        params = {}
+        for key, parameter in self.Parameters.items():
+            ref_value = parameter.get_ref_value()
+            if ref_value is not None:
+                params[key] = ref_value
+        extended_parameters = {**self.PSEUDO_PARAMETERS, **params, **extra_params}
         dict_value = self.dict()
 
         if self.Conditions:

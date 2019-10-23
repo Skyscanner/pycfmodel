@@ -16,7 +16,7 @@ import logging
 
 from typing import List, Pattern, Optional, Union, Dict
 
-from pycfmodel.utils import is_resolvable_dict
+from ....utils import is_resolvable_dict
 from ...types import ResolvableStr, ResolvableStrOrList
 from .property import Property
 

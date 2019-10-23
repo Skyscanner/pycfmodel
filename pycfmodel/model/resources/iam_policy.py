@@ -14,9 +14,9 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, Optional
 
-from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from ..base import CustomModel
 from ..types import ResolvableStr, ResolvableStrOrList, Resolvable
+from .properties.policy_document import PolicyDocument
 from .resource import Resource
 
 

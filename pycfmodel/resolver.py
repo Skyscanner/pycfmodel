@@ -18,10 +18,9 @@ from base64 import b64encode
 from datetime import date
 from typing import Dict, List, Union
 
+from .constants import AWS_NOVALUE, CONTAINS_CF_PARAM
+from .utils import is_resolvable_dict
 
-from pycfmodel.constants import AWS_NOVALUE, CONTAINS_CF_PARAM
-from pycfmodel.model.base import FunctionDict
-from pycfmodel.utils import is_resolvable_dict
 
 logger = logging.getLogger(__file__)
 
@@ -39,9 +38,6 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
             if resolved_value != AWS_NOVALUE:
                 result.append(resolved_value)
         return result
-
-    if isinstance(function, FunctionDict):
-        function = function.dict()
 
     if isinstance(function, dict):
         if is_resolvable_dict(function):
@@ -167,6 +163,7 @@ def resolve_get_azs(function_body, params: Dict, mappings: Dict[str, Dict], cond
 
 
 def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
+    # TODO: Implement resolve conditions inside resourcesgit add .
     return conditions.get(function_body, False)
 
 

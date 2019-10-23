@@ -39,8 +39,6 @@ class Parameter(CustomModel):
             return self.NO_ECHO_WITH_DEFAULT
         elif self.NoEcho:
             return self.NO_ECHO_NO_DEFAULT
-        elif self.Default is None:
-            return None
         elif self.Type == "Number":
             return str(self.Default)
         elif self.Type in ["List<Number>", "CommaDelimitedList"]:

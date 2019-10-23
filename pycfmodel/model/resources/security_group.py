@@ -14,10 +14,10 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, Optional, List, Union
 
-from pycfmodel.model.resources.properties.security_group_egress_prop import SecurityGroupEgressProp
-from pycfmodel.model.resources.properties.security_group_ingress_prop import SecurityGroupIngressProp
 from ..types import ResolvableStr, Resolvable
 from ..base import CustomModel
+from .properties.security_group_egress_prop import SecurityGroupEgressProp
+from .properties.security_group_ingress_prop import SecurityGroupIngressProp
 from .resource import Resource
 
 
