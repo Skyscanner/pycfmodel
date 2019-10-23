@@ -22,15 +22,15 @@ from .properties.policy_document import PolicyDocument
 
 class IAMManagedPolicyProperties(CustomModel):
     Description: Optional[ResolvableStr] = None
-    Groups: Optional[List[ResolvableStr]] = None
+    Groups: Optional[Resolvable[List[ResolvableStr]]] = None
     ManagedPolicyName: Optional[ResolvableStr] = None
     Path: Optional[ResolvableStr] = None
     PolicyDocument: Resolvable[PolicyDocument]
-    Roles: Optional[List[ResolvableStr]] = None
-    Users: Optional[List[ResolvableStr]] = None
+    Roles: Optional[Resolvable[List[ResolvableStr]]] = None
+    Users: Optional[Resolvable[List[ResolvableStr]]] = None
 
 
 class IAMManagedPolicy(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::ManagedPolicy"
     Type: str = TYPE_VALUE
-    Properties: IAMManagedPolicyProperties
+    Properties: Resolvable[IAMManagedPolicyProperties]

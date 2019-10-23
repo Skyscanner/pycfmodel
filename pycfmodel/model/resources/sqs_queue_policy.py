@@ -22,10 +22,10 @@ from .properties.policy_document import PolicyDocument
 
 class SQSQueuePolicyProperties(CustomModel):
     PolicyDocument: Resolvable[PolicyDocument]
-    Queues: List[ResolvableStr]
+    Queues: Resolvable[List[ResolvableStr]]
 
 
 class SQSQueuePolicy(Resource):
     TYPE_VALUE: ClassVar = "AWS::SQS::QueuePolicy"
     Type: str = TYPE_VALUE
-    Properties: SQSQueuePolicyProperties
+    Properties: Resolvable[SQSQueuePolicyProperties]

@@ -23,7 +23,7 @@ from .properties.policy_document import PolicyDocument
 
 class IAMRoleProperties(CustomModel):
     AssumeRolePolicyDocument: Resolvable[PolicyDocument]
-    ManagedPolicyArns: Optional[List[ResolvableStr]] = None
+    ManagedPolicyArns: Optional[Resolvable[List[ResolvableStr]]] = None
     MaxSessionDuration: Optional[ResolvableIntOrStr] = None
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
@@ -34,4 +34,4 @@ class IAMRoleProperties(CustomModel):
 class IAMRole(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::Role"
     Type: str = TYPE_VALUE
-    Properties: IAMRoleProperties
+    Properties: Resolvable[IAMRoleProperties]

@@ -30,4 +30,4 @@ class IAMGroupProperties(CustomModel):
 class IAMGroup(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::Group"
     Type: str = TYPE_VALUE
-    Properties: IAMGroupProperties
+    Properties: Resolvable[IAMGroupProperties]

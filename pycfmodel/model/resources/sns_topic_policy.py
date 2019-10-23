@@ -28,4 +28,4 @@ class SNSTopicPolicyProperties(CustomModel):
 class SNSTopicPolicy(Resource):
     TYPE_VALUE: ClassVar = "AWS::SNS::TopicPolicy"
     Type: str = TYPE_VALUE
-    Properties: SNSTopicPolicyProperties
+    Properties: Resolvable[SNSTopicPolicyProperties]

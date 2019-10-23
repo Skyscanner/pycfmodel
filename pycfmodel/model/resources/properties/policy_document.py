@@ -156,7 +156,7 @@ class PolicyDocument(Property):
     class Config(Property.Config):
         extra = Extra.allow
 
-    Statement: Resolvable[Union[Resolvable[Statement], List[Resolvable[Statement]]]]
+    Statement: Resolvable[Union[Statement, List[Resolvable[Statement]]]
     Version: Optional[ResolvableDate]
 
     def _statement_as_list(self) -> List[Statement]:

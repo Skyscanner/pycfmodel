@@ -31,4 +31,4 @@ class IAMPolicyProperties(CustomModel):
 class IAMPolicy(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::Policy"
     Type: str = TYPE_VALUE
-    Properties: IAMPolicyProperties
+    Properties: Resolvable[IAMPolicyProperties]
