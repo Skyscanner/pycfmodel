@@ -20,30 +20,30 @@ from pycfmodel.resolver import resolve
 
 
 @pytest.mark.parametrize(
-    "input, expected_output", [({"Ref": "abc"}, "ABC"), ({"Ref": "potato"}, "UNDEFINED_PARAM_potato")]
+    "function, expected_output", [({"Ref": "abc"}, "ABC"), ({"Ref": "potato"}, "UNDEFINED_PARAM_potato")]
 )
-def test_ref(input, expected_output):
+def test_ref(function, expected_output):
     parameters = {"abc": "ABC"}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output",
+    "function, expected_output",
     [({"Fn::ImportValue": "abc"}, "ABC"), ({"Fn::ImportValue": "potato"}, "UNDEFINED_PARAM_potato")],
 )
-def test_import_value(input, expected_output):
+def test_import_value(function, expected_output):
     parameters = {"abc": "ABC"}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output",
+    "function, expected_output",
     [
         ({"Fn::Join": ["", []]}, ""),
         ({"Fn::Join": ["", ["aws"]]}, "aws"),
@@ -53,32 +53,32 @@ def test_import_value(input, expected_output):
         ),
     ],
 )
-def test_join(input, expected_output):
+def test_join(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output",
+    "function, expected_output",
     [
         ({"Fn::FindInMap": ["RegionMap", "eu-west-1", "HVM64"]}, "UNDEFINED_MAPPING_RegionMap_eu-west-1_HVM64"),
         ({"Fn::FindInMap": ["RegionMap", "us-east-1", "HVM128"]}, "UNDEFINED_MAPPING_RegionMap_us-east-1_HVM128"),
         ({"Fn::FindInMap": ["RegionMap", "us-east-1", "HVM64"]}, "ami-0ff8a91507f77f867"),
     ],
 )
-def test_find_in_map(input, expected_output):
+def test_find_in_map(function, expected_output):
     parameters = {}
     mappings = {"RegionMap": {"us-east-1": {"HVM64": "ami-0ff8a91507f77f867"}}}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output",
+    "function, expected_output",
     [
         ({"Fn::Sub": "www.skyscanner.net"}, "www.skyscanner.net"),
         ({"Fn::Sub": ["www.${Domain}", {"Domain": "skyscanner.net"}]}, "www.skyscanner.net"),
@@ -86,59 +86,59 @@ def test_find_in_map(input, expected_output):
         ({"Fn::Sub": ["--${abc}-${def}--", {"def": "DEF"}]}, "--ABC-DEF--"),
     ],
 )
-def test_sub(input, expected_output):
+def test_sub(function, expected_output):
     parameters = {"abc": "ABC"}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output",
+    "function, expected_output",
     [
         ({"Fn::Select": ["0", ["apples", "grapes", "oranges", "mangoes"]]}, "apples"),
         ({"Fn::Select": ["1", ["apples", "grapes", "oranges", "mangoes"]]}, "grapes"),
         ({"Fn::Select": ["2", ["apples", "grapes", "oranges", "mangoes"]]}, "oranges"),
     ],
 )
-def test_select(input, expected_output):
+def test_select(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output",
+    "function, expected_output",
     [
         ({"Fn::Split": ["|", "a|b"]}, ["a", "b"]),
         ({"Fn::Split": ["|", "a|b|c|"]}, ["a", "b", "c", ""]),
         ({"Fn::Split": ["|", "|"]}, ["", ""]),
     ],
 )
-def test_split(input, expected_output):
+def test_split(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output", [({"Fn::If": ["A", "a", "b"]}, "a"), ({"Fn::If": ["B", "a", "b"]}, "b")]
+    "function, expected_output", [({"Fn::If": ["A", "a", "b"]}, "a"), ({"Fn::If": ["B", "a", "b"]}, "b")]
 )
-def test_if(input, expected_output):
+def test_if(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {"A": True, "B": False}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output",
+    "function, expected_output",
     [
         ({"Fn::And": [True, True]}, True),
         ({"Fn::And": [False, True]}, False),
@@ -146,16 +146,16 @@ def test_if(input, expected_output):
         ({"Fn::And": [False, False]}, False),
     ],
 )
-def test_and(input, expected_output):
+def test_and(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output",
+    "function, expected_output",
     [
         ({"Fn::Or": [True, True]}, True),
         ({"Fn::Or": [False, True]}, True),
@@ -163,114 +163,116 @@ def test_and(input, expected_output):
         ({"Fn::Or": [False, False]}, False),
     ],
 )
-def test_or(input, expected_output):
+def test_or(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
-@pytest.mark.parametrize("input, expected_output", [({"Fn::Not": [True]}, False), ({"Fn::Not": [False]}, True)])
-def test_not(input, expected_output):
+@pytest.mark.parametrize("function, expected_output", [({"Fn::Not": [True]}, False), ({"Fn::Not": [False]}, True)])
+def test_not(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output", [({"Fn::Equals": ["a", "a"]}, True), ({"Fn::Equals": ["a", "b"]}, False)]
+    "function, expected_output", [({"Fn::Equals": ["a", "a"]}, True), ({"Fn::Equals": ["a", "b"]}, False)]
 )
-def test_equals(input, expected_output):
+def test_equals(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
-@pytest.mark.parametrize("input, expected_output", [({"Fn::Base64": "holap :)"}, "aG9sYXAgOik=")])
-def test_base64(input, expected_output):
+@pytest.mark.parametrize("function, expected_output", [({"Fn::Base64": "holap :)"}, "aG9sYXAgOik=")])
+def test_base64(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 @pytest.mark.parametrize(
-    "input, expected_output", [({"Fn::GetAtt": ["logicalNameOfResource", "attributeName"]}, "GETATT")]
+    "function, expected_output", [({"Fn::GetAtt": ["logicalNameOfResource", "attributeName"]}, "GETATT")]
 )
-def test_get_attr(input, expected_output):
+def test_get_attr(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
-@pytest.mark.parametrize("input, expected_output", [({"Fn::GetAZs": ""}, "GETAZS")])
-def test_get_azs(input, expected_output):
+@pytest.mark.parametrize("function, expected_output", [({"Fn::GetAZs": ""}, "GETAZS")])
+def test_get_azs(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
-@pytest.mark.parametrize("input, expected_output", [({"Condition": "SomeOtherCondition"}, True)])
-def test_condition(input, expected_output):
+@pytest.mark.parametrize("function, expected_output", [({"Condition": "SomeOtherCondition"}, True)])
+def test_condition(function, expected_output):
     parameters = {}
     mappings = {}
     conditions = {"SomeOtherCondition": True}
 
-    assert resolve(input, parameters, mappings, conditions) == expected_output
+    assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
 def test_select_and_ref():
     parameters = {"DbSubnetIpBlocks": ["10.0.48.0/24", "10.0.112.0/24", "10.0.176.0/24"]}
     mappings = {}
     conditions = {}
-    input = {"Fn::Select": ["0", {"Ref": "DbSubnetIpBlocks"}]}
+    function = {"Fn::Select": ["0", {"Ref": "DbSubnetIpBlocks"}]}
 
-    assert resolve(input, parameters, mappings, conditions) == "10.0.48.0/24"
+    assert resolve(function, parameters, mappings, conditions) == "10.0.48.0/24"
 
 
 def test_join_and_ref():
     parameters = {"Partition": "patata", "AWS::AccountId": "1234567890"}
     mappings = {}
     conditions = {}
-    input = {"Fn::Join": ["", ["arn:", {"Ref": "Partition"}, ":s3:::elasticbeanstalk-*-", {"Ref": "AWS::AccountId"}]]}
-    assert resolve(input, parameters, mappings, conditions) == "arn:patata:s3:::elasticbeanstalk-*-1234567890"
+    function = {
+        "Fn::Join": ["", ["arn:", {"Ref": "Partition"}, ":s3:::elasticbeanstalk-*-", {"Ref": "AWS::AccountId"}]]
+    }
+    assert resolve(function, parameters, mappings, conditions) == "arn:patata:s3:::elasticbeanstalk-*-1234567890"
 
 
 def test_sub_and_ref():
     parameters = {"RootDomainName": "skyscanner.net"}
     mappings = {}
     conditions = {}
-    input = {"Fn::Sub": ["www.${Domain}", {"Domain": {"Ref": "RootDomainName"}}]}
+    function = {"Fn::Sub": ["www.${Domain}", {"Domain": {"Ref": "RootDomainName"}}]}
 
-    assert resolve(input, parameters, mappings, conditions) == "www.skyscanner.net"
+    assert resolve(function, parameters, mappings, conditions) == "www.skyscanner.net"
 
 
 def test_select_and_split():
     parameters = {"AccountSubnetIDs": "id1,id2,id3"}
     mappings = {}
     conditions = {}
-    input = {"Fn::Select": ["2", {"Fn::Split": [",", {"Ref": "AccountSubnetIDs"}]}]}
+    function = {"Fn::Select": ["2", {"Fn::Split": [",", {"Ref": "AccountSubnetIDs"}]}]}
 
-    assert resolve(input, parameters, mappings, conditions) == "id3"
+    assert resolve(function, parameters, mappings, conditions) == "id3"
 
 
 def test_find_in_map_and_ref():
     parameters = {"AWS::Region": "us-east-1"}
     mappings = {"RegionMap": {"us-east-1": {"HVM64": "ami-0ff8a91507f77f867"}}}
     conditions = {}
-    input = {"Fn::FindInMap": ["RegionMap", {"Ref": "AWS::Region"}, "HVM64"]}
+    function = {"Fn::FindInMap": ["RegionMap", {"Ref": "AWS::Region"}, "HVM64"]}
 
-    assert resolve(input, parameters, mappings, conditions) == "ami-0ff8a91507f77f867"
+    assert resolve(function, parameters, mappings, conditions) == "ami-0ff8a91507f77f867"
 
 
 def test_resolve_scenario_1():
