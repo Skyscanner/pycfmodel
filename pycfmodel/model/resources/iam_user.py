@@ -22,19 +22,19 @@ from .resource import Resource
 
 
 class IAMUserProperties(CustomModel):
-    Groups: Optional[Resovable[List[ResolvableStr]]] = None
+    Groups: Optional[Resolvable[List[ResolvableStr]]] = None
     LoginProfile: Optional[Dict] = None
-    ManagedPolicyArns: Optional[Resovable[List[ResolvableStr]]] = None
+    ManagedPolicyArns: Optional[Resolvable[List[ResolvableStr]]] = None
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
-    Policies: Optional[Resovable[List[Resolvable[Policy]]]] = None
+    Policies: Optional[Resolvable[List[Resolvable[Policy]]]] = None
     UserName: Optional[ResolvableStr] = None
 
 
 class IAMUser(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::User"
     Type: str = TYPE_VALUE
-    Properties: Optional[Resovable[IAMUserProperties]]
+    Properties: Optional[Resolvable[IAMUserProperties]]
 
     def has_hardcoded_credentials(self) -> bool:
         if self.Properties:

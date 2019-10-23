@@ -18,6 +18,7 @@ from typing import Dict, Union, ClassVar, Optional, List, Any
 from ..resolver import resolve
 from ..constants import AWS_NOVALUE
 from .resources.generic_resource import GenericResource
+from .types import Resolvable
 from .resources.types import ResourceModels
 from .base import CustomModel
 from .parameter import Parameter
