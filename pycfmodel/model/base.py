@@ -21,8 +21,8 @@ class CustomModel(BaseModel):
     class Config(BaseModel.Config):
         extra = Extra.forbid
 
-    def dict(self, *args, skip_defaults=True, **kwargs):
-        return super().dict(*args, **kwargs, skip_defaults=skip_defaults)
+    def dict(self, *args, exclude_unset=True, **kwargs):
+        return super().dict(*args, **kwargs, exclude_unset=exclude_unset)
 
 
 class FunctionDict(BaseModel):
