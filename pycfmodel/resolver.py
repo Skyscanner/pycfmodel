@@ -55,7 +55,7 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
     raise ValueError(f"Not supported type: {type(function)}")
 
 
-def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]):
+def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
     resolved_ref = resolve(function_body, params, mappings, conditions)
     if resolved_ref in params:
         return params[resolved_ref]

@@ -22,7 +22,9 @@ def is_resolvable_dict(value: Any) -> bool:
 
 
 def is_conditional_dict(value: Any) -> bool:
-    if isinstance(value, dict) and len(value) == 1:
-        function = next(iter(value))
-        return any(func in function for func in CONDITION_FUNCTIONS)
+    if isinstance(value, dict):
+        for func in value.keys():
+            if not any(f in func for f in CONDITION_FUNCTIONS):
+                return False
+        return True
     return False

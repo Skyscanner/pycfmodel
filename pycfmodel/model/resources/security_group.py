@@ -12,7 +12,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import ClassVar, Optional, List, Union
+from typing import ClassVar, Optional, List, Union, Dict
 
 from ..types import ResolvableStr, Resolvable
 from ..base import CustomModel
@@ -28,7 +28,7 @@ class SecurityGroupProperties(CustomModel):
     SecurityGroupIngress: Optional[
         Resolvable[Union[SecurityGroupIngressProp, List[Resolvable[SecurityGroupIngressProp]]]]
     ]
-    Tags: Optional[List]
+    Tags: Optional[Resolvable[List[Dict]]]
     VpcId: Optional[ResolvableStr]
 
 
