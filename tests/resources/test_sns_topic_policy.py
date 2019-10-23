@@ -40,6 +40,6 @@ def sns_topic_policy():
     )
 
 
-def test_main(sns_topic_policy):
+def test_sns_topic_policy(sns_topic_policy):
     assert len(sns_topic_policy.Properties.Topics) == 1
     assert sns_topic_policy.Properties.PolicyDocument.Statement.Effect == "Allow"

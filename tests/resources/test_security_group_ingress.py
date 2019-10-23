@@ -49,7 +49,7 @@ def security_group_ingress_2():
     )
 
 
-def test_main(security_group_ingress_1):
+def test_security_group_ingress(security_group_ingress_1):
     assert security_group_ingress_1.Properties.GroupId == "sg-12341234"
     assert isinstance(security_group_ingress_1.Properties.FromPort, int)
 
