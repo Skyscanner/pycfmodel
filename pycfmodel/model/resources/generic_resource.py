@@ -15,7 +15,7 @@ specific language governing permissions and limitations under the License.
 import logging
 from typing import ClassVar
 
-from pydantic import BaseModel, Extra, validator
+from pydantic import Extra, validator
 
 from .types import ResourceModels
 from .resource import Resource
