@@ -22,9 +22,9 @@ from .iam_policy import IAMPolicy
 
 class IAMGroupProperties(CustomModel):
     GroupName: Optional[ResolvableStr] = None
-    ManagedPolicyArns: Optional[List[ResolvableStr]] = None
+    ManagedPolicyArns: Optional[Resolvable[List[ResolvableStr]]] = None
     Path: Optional[ResolvableStr] = None
-    Policies: Optional[List[Resolvable[IAMPolicy]]] = None
+    Policies: Optional[Resolvable[List[IAMPolicy]]] = None
 
 
 class IAMGroup(Resource):

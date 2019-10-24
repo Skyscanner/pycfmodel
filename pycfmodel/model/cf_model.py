@@ -26,14 +26,15 @@ from .parameter import Parameter
 
 class CFModel(CustomModel):
     AWSTemplateFormatVersion: Optional[date]
-    Description: Optional[str] = None
-    Metadata: Optional[Dict[str, Dict]] = None
-    Mappings: Optional[Dict[str, Dict[str, Dict[str, Any]]]] = {}
     Conditions: Optional[Dict] = {}
-    Transform: Optional[List]
+    Description: Optional[str] = None
+    Mappings: Optional[Dict[str, Dict[str, Dict[str, Any]]]] = {}
+    Metadata: Optional[Dict[str, Dict]] = None
     Outputs: Optional[Dict[str, Dict[str, Union[str, Dict]]]] = {}
-    Resources: Dict[str, Resolvable[Union[ResourceModels, GenericResource]]] = {}
     Parameters: Optional[Dict[str, Parameter]] = {}
+    Resources: Dict[str, Resolvable[Union[ResourceModels, GenericResource]]] = {}
+    Transform: Optional[List]
+
     PSEUDO_PARAMETERS: ClassVar[Dict[str, str]] = {
         # default pseudo parameters
         "AWS::AccountId": "123456789012",
