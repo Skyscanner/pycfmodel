@@ -1,5 +1,7 @@
 # pycfmodel
+
 [![Build Status](https://travis-ci.org/Skyscanner/pycfmodel.svg?branch=master)](https://travis-ci.org/Skyscanner/pycfmodel)
+
 *A python model for Cloud Formation scripts.*
 
 **pycfmodel** makes it easier to work with CloudFormation scripts in Python by
@@ -9,70 +11,88 @@ inspecting CloudFormation scripts.
 
 `pip install pycfmodel`
 
-## Currently Supported Models
-* parameters
-* resources
+## Currently Supported
+* AWSTemplateFormatVersion
+* Conditions
+* Description
+* Mappings
+* Metadata
+* Outputs
+* Parameters
+* Resources:
+    * Properties:
+        * Policy
+        * Policy Document
+        * Principal
+        * Security Group Egress Prop
+        * Security Group Ingress Prop
+        * Statement
     * Generic Resource
-    * IAM User
     * IAM Group
     * IAM Managed Policy
+    * IAM Policy
     * IAM Role
+    * IAM User
+    * KMS Key
     * S3 Bucket Policy
+    * Security Group
     * Security Group Egress
     * Security Group Ingress
-    * Security Group
     * SNS Topic Policy
     * SQS Queue Policy
-* properties
-    * Policy Document
-    * Policy
-    * Principal
-    * Security Group Egress Property
-    * Security Group Ingress Property
-    * Statement
+* Transform
 
 ## Example
 ```python
-import pycfmodel
+from pycfmodel import parse
 
 template = {
-  "Resources": {
-    "S3Bucket" : {
-      "Type" : "AWS::S3::Bucket",
-      "Properties" : {
-        "BucketName" : "fakebucketfakebucket"
-      }
-    },
-
-    "S3BucketPolicyWithNotAction": {
-      "Type": "AWS::S3::BucketPolicy",
-      "Properties": {
-        "Bucket": {
-          "Ref": "S3Bucket"
-        },
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "s3:*"
-              ],
-              "Effect": "Allow",
-              "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
-              "Principal": {
-                "AWS": "*"
-              }
-            }
-          ]
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {"StarParameter": {"Type": "String", "Default": "*", "Description": "Star Param"}},
+    "Resources": {
+        "rootRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {"AWS": {"Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"}},
+                            "Action": ["sts:AssumeRole"],
+                        }
+                    ],
+                },
+                "Path": "/",
+                "Policies": [
+                    {
+                        "PolicyName": "root",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": {"Ref": "StarParameter"},
+                                    "Resource": {"Ref": "StarParameter"},
+                                }
+                            ],
+                        },
+                    }
+                ],
+            },
         }
-      }
-    }
-  }
+    },
 }
 
-parsed_cf = pycfmodel.parse(template)
-for resource in parsed_cf.resources.get("AWS::S3::BucketPolicy", []):
-    if resource.policy_document.wildcard_allowed_actions(pattern=r"^(\w*:){0,1}\*$"):
-        print(resource.logical_id)
+model = parse(template).resolve(extra_params={"AWS::AccountId": "123"})
+rootRole = model.Resources["rootRole"]
+policy = rootRole.Properties.Policies[0]
+statement = policy.PolicyDocument.Statement[0]
+
+assert statement.Action == "*"
+assert statement.Resource == "*"
+assert rootRole.Properties.AssumeRolePolicyDocument.Statement[0].Principal == {"AWS": "arn:aws:iam::123:root"}
+
 ```
 ## Local Development Commands
 ```
