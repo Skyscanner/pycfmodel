@@ -17,4 +17,4 @@ jobs:
         password:
           secure: "VgVm9Zl+0ebPWcLs/hDNRK09jcp7IJ7p/ZnP4piQ2c8jwI7IcC9JXT/g4Wt84yBBEwbAmAk5hVGo3D2z5dqBaRoVeQT7+D4owSD3BhI/FLxAKUtrW3TwKqejR8OvTjJtWAsgRIYm2wMpsb0chhaBGKVNcgnvb/sheL8k2uuUVkr1V7kIyzWM/3p4ac8y3nh+bTTwzVQ0F5QKI/0xNk8RnmjEQ5u5aerfOhnp816U1lvYF/BaV5B34J3ghYYfWGyYHCwa6caFY8WrYAMzxEJGGy57Sv0OkURDKCz24jwNihorCm9VfmYTIiK1p8CKq5bTS1uVj4bbJaZVurMwOSnNw05heMiFZqVlvilBDNee6qtWZToLObJZdUl9HL+YawyoNpBnn788fydhVAFBy6JQHffP5iyjBSjqwECOzUSSgtkjNsZrMy15B7YVFMATETlT2yzUivc/J/Ivx6AjHeiMqHPdscDUmQagB39tcHe4sKpKOA4ry4b7DU/MnIT9sPruY4+p3bkYAhD2i01kqdBI564Y8KN5IfwQO8Cu1GS1Nc4t7eM14cYSbVzloP89zUY3PgW/1OQZkcUoBpy3w8uRiwcR30NLprNx8Pn/htg4p+hAB8PGMlxAbiJjsvrw0GTW1DLZ2GQK5J/mHUqRFdqz82sEw46Abpfnm1xg4M+2PK8="
         on:
-          branch: pypi
+          tags: true
