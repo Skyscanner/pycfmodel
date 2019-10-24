@@ -31,7 +31,7 @@ class GenericResource(Resource):
     ALLOW_EXISTING_TYPES: ClassVar[bool] = True
     Type: str
 
-    class Config(BaseModel.Config):
+    class Config(Resource.Config):
         extra = Extra.allow
 
     @validator("Type", pre=True)
