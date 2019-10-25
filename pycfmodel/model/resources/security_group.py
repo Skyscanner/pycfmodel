@@ -23,13 +23,15 @@ from .resource import Resource
 
 class SecurityGroupProperties(CustomModel):
     GroupDescription: ResolvableStr
-    GroupName: Optional[ResolvableStr]
-    SecurityGroupEgress: Optional[Resolvable[Union[SecurityGroupEgressProp, List[Resolvable[SecurityGroupEgressProp]]]]]
+    GroupName: Optional[ResolvableStr] = None
+    SecurityGroupEgress: Optional[
+        Resolvable[Union[SecurityGroupEgressProp, List[Resolvable[SecurityGroupEgressProp]]]]
+    ] = None
     SecurityGroupIngress: Optional[
         Resolvable[Union[SecurityGroupIngressProp, List[Resolvable[SecurityGroupIngressProp]]]]
-    ]
-    Tags: Optional[Resolvable[List[Dict]]]
-    VpcId: Optional[ResolvableStr]
+    ] = None
+    Tags: Optional[Resolvable[List[Dict]]] = None
+    VpcId: Optional[ResolvableStr] = None
 
 
 class SecurityGroup(Resource):

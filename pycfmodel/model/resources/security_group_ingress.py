@@ -20,18 +20,18 @@ from .resource import Resource
 
 
 class SecurityGroupIngressProperties(CustomModel):
-    CidrIp: Optional[ResolvableStr]
-    CidrIpv6: Optional[ResolvableStr]
-    Description: Optional[ResolvableStr]
-    FromPort: Optional[ResolvableInt]
-    GroupId: Optional[ResolvableStr]
-    GroupName: Optional[ResolvableStr]
+    CidrIp: Optional[ResolvableStr] = None
+    CidrIpv6: Optional[ResolvableStr] = None
+    Description: Optional[ResolvableStr] = None
+    FromPort: Optional[ResolvableInt] = None
+    GroupId: Optional[ResolvableStr] = None
+    GroupName: Optional[ResolvableStr] = None
     IpProtocol: ResolvableIntOrStr
-    SourcePrefixListId: Optional[ResolvableStr]
-    SourceSecurityGroupId: Optional[ResolvableStr]
-    SourceSecurityGroupName: Optional[ResolvableStr]
-    SourceSecurityGroupOwnerId: Optional[ResolvableStr]
-    ToPort: Optional[ResolvableInt]
+    SourcePrefixListId: Optional[ResolvableStr] = None
+    SourceSecurityGroupId: Optional[ResolvableStr] = None
+    SourceSecurityGroupName: Optional[ResolvableStr] = None
+    SourceSecurityGroupOwnerId: Optional[ResolvableStr] = None
+    ToPort: Optional[ResolvableInt] = None
 
 
 class SecurityGroupIngress(Resource):

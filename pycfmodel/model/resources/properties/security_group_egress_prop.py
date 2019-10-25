@@ -19,14 +19,14 @@ from .property import Property
 
 
 class SecurityGroupEgressProp(Property):
-    CidrIp: Optional[ResolvableStr]
-    CidrIpv6: Optional[ResolvableStr]
-    Description: Optional[ResolvableStr]
-    DestinationPrefixListId: Optional[ResolvableStr]
-    DestinationSecurityGroupId: Optional[ResolvableStr]
-    FromPort: Optional[ResolvableInt]
+    CidrIp: Optional[ResolvableStr] = None
+    CidrIpv6: Optional[ResolvableStr] = None
+    Description: Optional[ResolvableStr] = None
+    DestinationPrefixListId: Optional[ResolvableStr] = None
+    DestinationSecurityGroupId: Optional[ResolvableStr] = None
+    FromPort: Optional[ResolvableInt] = None
     IpProtocol: ResolvableIntOrStr
-    ToPort: Optional[ResolvableInt]
+    ToPort: Optional[ResolvableInt] = None
 
     def ipv4_slash_zero(self) -> bool:
         if not self.CidrIp or not isinstance(self.CidrIp, str):

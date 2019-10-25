@@ -21,13 +21,13 @@ from .resource import Resource
 
 
 class KMSKeyProperties(CustomModel):
-    Description: Optional[ResolvableStr]
-    EnableKeyRotation: Optional[ResolvableBool]
-    Enabled: Optional[ResolvableBool]
+    Description: Optional[ResolvableStr] = None
+    EnableKeyRotation: Optional[ResolvableBool] = None
+    Enabled: Optional[ResolvableBool] = None
     KeyPolicy: Resolvable[PolicyDocument]
-    KeyUsage: Optional[ResolvableStr]
-    PendingWindowInDays: Optional[ResolvableInt]
-    Tags: Optional[Resolvable[List[Dict]]]
+    KeyUsage: Optional[ResolvableStr] = None
+    PendingWindowInDays: Optional[ResolvableInt] = None
+    Tags: Optional[Resolvable[List[Dict]]] = None
 
 
 class KMSKey(Resource):

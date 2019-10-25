@@ -20,15 +20,15 @@ from .resource import Resource
 
 
 class SecurityGroupEgressProperties(CustomModel):
-    CidrIp: Optional[ResolvableStr]
-    CidrIpv6: Optional[ResolvableStr]
-    Description: Optional[ResolvableStr]
-    DestinationPrefixListId: Optional[ResolvableStr]
-    DestinationSecurityGroupId: Optional[ResolvableStr]
-    FromPort: Optional[ResolvableInt]
-    GroupId: Optional[ResolvableStr]
+    CidrIp: Optional[ResolvableStr] = None
+    CidrIpv6: Optional[ResolvableStr] = None
+    Description: Optional[ResolvableStr] = None
+    DestinationPrefixListId: Optional[ResolvableStr] = None
+    DestinationSecurityGroupId: Optional[ResolvableStr] = None
+    FromPort: Optional[ResolvableInt] = None
+    GroupId: Optional[ResolvableStr] = None
     IpProtocol: ResolvableIntOrStr
-    ToPort: Optional[ResolvableInt]
+    ToPort: Optional[ResolvableInt] = None
 
 
 class SecurityGroupEgress(Resource):

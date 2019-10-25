@@ -157,7 +157,7 @@ class PolicyDocument(Property):
         extra = Extra.allow
 
     Statement: Resolvable[Union[Statement, List[Resolvable[Statement]]]]
-    Version: Optional[ResolvableDate]
+    Version: Optional[ResolvableDate] = None
 
     def _statement_as_list(self) -> List[Statement]:
         if isinstance(self.Statement, Statement):
