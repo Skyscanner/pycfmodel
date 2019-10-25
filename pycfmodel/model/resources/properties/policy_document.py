@@ -198,6 +198,6 @@ class PolicyDocument(Property):
                         actions.add(iam)
 
         if difference:
-            return list(set(_IAM_ACTIONS).difference(actions))
+            return sorted(set(_IAM_ACTIONS).difference(actions))
 
-        return list(actions)
+        return sorted(actions)
