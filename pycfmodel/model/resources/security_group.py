@@ -35,4 +35,4 @@ class SecurityGroupProperties(CustomModel):
 class SecurityGroup(Resource):
     TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroup"
     Type: str = TYPE_VALUE
-    Properties: SecurityGroupProperties
+    Properties: Resolvable[SecurityGroupProperties]

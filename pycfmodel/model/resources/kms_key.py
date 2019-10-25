@@ -33,4 +33,4 @@ class KMSKeyProperties(CustomModel):
 class KMSKey(Resource):
     TYPE_VALUE: ClassVar = "AWS::KMS::Key"
     Type: str = TYPE_VALUE
-    Properties: KMSKeyProperties
+    Properties: Resolvable[KMSKeyProperties]

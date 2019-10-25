@@ -28,4 +28,4 @@ class S3BucketPolicyProperties(CustomModel):
 class S3BucketPolicy(Resource):
     TYPE_VALUE: ClassVar = "AWS::S3::BucketPolicy"
     Type: str = TYPE_VALUE
-    Properties: S3BucketPolicyProperties
+    Properties: Resolvable[S3BucketPolicyProperties]
