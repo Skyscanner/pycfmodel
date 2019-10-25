@@ -152,18 +152,17 @@ def test_get_principal_list(statement, expected_output):
     assert statement.get_principal_list() == expected_output
 
 
-#
-# @pytest.mark.parametrize(
-#     "statement, pattern, expected_output",
-#     [
-#         (statement_1(), re.compile(r"^$"), ["arn"]),
-#         (statement_2(), re.compile(r"^$"), ["arn"]),
-#         (statement_3(), re.compile(r"^$"), ["arn1", "arn2"]),
-#         (statement_4(), re.compile(r"^$"), ["arn1", "arn2"]),
-#     ],
-# )
-# def test_actions_with(statement, pattern, expected_output):
-#     assert statement.actions_with(pattern) == expected_output
+@pytest.mark.parametrize(
+    "statement, pattern, expected_output",
+    [
+        (statement_1(), re.compile(r"action.*"), ["action1", "action2"]),
+        (statement_2(), re.compile(r"action.*"), ["action1", "action2"]),
+        (statement_3(), re.compile(r"action2"), []),
+        (statement_4(), re.compile(r"a.*2"), ["action2"]),
+    ],
+)
+def test_actions_with(statement, pattern, expected_output):
+    assert statement.actions_with(pattern) == expected_output
 
 
 @pytest.mark.parametrize(
