@@ -12,16 +12,11 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import Optional
+
+from ...types import ResolvableCondition
+from ...base import CustomModel
 
 
-import pycfmodel
-
-template = {}
-
-
-def main():
-    pycfmodel.parse(template)
-
-
-if __name__ == "__main__":
-    main()
+class Property(CustomModel):
+    Condition: Optional[ResolvableCondition] = None

@@ -12,61 +12,84 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import logging
 
-import re
-from typing import List
+from typing import List, Pattern, Optional, Union, Dict
 
-from .principal import Principal
+from ....utils import is_resolvable_dict
+from ...types import ResolvableStr, ResolvableStrOrList
+from .property import Property
+
+logger = logging.getLogger(__file__)
+
+PrincipalTypes = Union[ResolvableStr, List[ResolvableStr], Dict[str, Union[ResolvableStr, List[ResolvableStr]]]]
 
 
-class Statement:
-    def __init__(self, statement):
-        self.action = statement.get("Action", [])
-        self.resource = statement.get("Resource", [])
-        self.principal = Principal.generate_principals(statement.get("Principal"))
-        self.effect = statement.get("Effect")
-        self.condition = statement.get("Condition", {})
-        self.not_action = statement.get("NotAction", {})
-        self.not_principal = statement.get("NotPrincipal", {})
-        if not isinstance(self.action, list):
-            self.action = [self.action]
-        if not isinstance(self.resource, list):
-            self.resource = [self.resource]
+class Statement(Property):
+    Sid: Optional[ResolvableStr] = None
+    Effect: Optional[ResolvableStr] = None
+    Principal: Optional[PrincipalTypes] = None
+    NotPrincipal: Optional[PrincipalTypes] = None
+    Action: Optional[ResolvableStrOrList] = None
+    NotAction: Optional[ResolvableStrOrList] = None
+    Resource: Optional[ResolvableStrOrList] = None
+    NotResource: Optional[ResolvableStrOrList] = None
 
-    def wildcard_actions(self, pattern=None) -> List[str]:
-        if not self.action:
-            return []
+    def get_action_list(self) -> List[ResolvableStr]:
+        action_list = []
+        for actions in [self.Action, self.NotAction]:
+            if isinstance(actions, List):
+                action_list.extend(actions)
+            elif isinstance(actions, (str, dict)):
+                action_list.append(actions)
+        return action_list
 
-        if pattern:
-            return [a for a in self.action if re.match(pattern, a)]
+    def get_resource_list(self) -> List[ResolvableStr]:
+        resource_list = []
+        for resources in [self.Resource, self.NotResource]:
+            if isinstance(resources, List):
+                resource_list.extend(resources)
+            elif isinstance(resources, (str, dict)):
+                resource_list.append(resources)
+        return resource_list
 
-        return [a for a in self.action if "*" in str(a)]
+    def get_principal_list(self) -> List[ResolvableStr]:
+        principal_list = []
+        for principals in [self.Principal, self.NotPrincipal]:
+            if isinstance(principals, list):
+                principal_list.extend(principals)
+            elif isinstance(principals, str):
+                principal_list.append(principals)
+            elif is_resolvable_dict(principals):
+                principal_list.append(principals)
+            elif isinstance(principals, dict):
+                for value in principals.values():
+                    if isinstance(value, (str, Dict)):
+                        principal_list.append(value)
+                    elif isinstance(value, List):
+                        principal_list.extend(value)
+            elif principals is not None:
+                raise ValueError(f"Not supported type: {type(principals)}")
+        return principal_list
 
-    def wildcard_principals(self, pattern: str) -> List[Principal]:
-        if not self.principal:
-            return []
+    def actions_with(self, pattern: Pattern) -> List[str]:
+        return [action for action in self.get_action_list() if isinstance(action, str) and pattern.match(action)]
 
-        wildcard_principals = []
-        for principal in self.principal:
-            if principal.has_wildcard_principals(pattern):
-                wildcard_principals.append(principal)
+    def principals_with(self, pattern: Pattern) -> List[str]:
+        return [
+            principal
+            for principal in self.get_principal_list()
+            if isinstance(principal, str) and pattern.match(principal)
+        ]
 
-        return wildcard_principals
+    def resources_with(self, pattern: Pattern) -> List[str]:
+        return [
+            resource for resource in self.get_resource_list() if isinstance(resource, str) and pattern.match(resource)
+        ]
 
-    def non_whitelisted_principals(self, whitelist: List[str]) -> List[Principal]:
-        if not self.principal or self.condition:
-            return []
-
-        nonwhitelisted_principals = []
-        for principal in self.principal:
-            if principal.has_nonwhitelisted_principals(whitelist):
-                nonwhitelisted_principals.append(principal)
-
-        return nonwhitelisted_principals
-
-    def get_action_list(self) -> List[str]:
-        if isinstance(self.action, str):
-            return [self.action]
-        elif isinstance(self.action, list):
-            return self.action
-        return []
+    def non_whitelisted_principals(self, whitelist: List[str]) -> List[str]:
+        return [
+            principal
+            for principal in self.get_principal_list()
+            if isinstance(principal, str) and principal not in whitelist
+        ]

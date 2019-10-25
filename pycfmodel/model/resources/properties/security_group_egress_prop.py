@@ -12,35 +12,28 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import Optional
+
+from ...types import ResolvableStr, ResolvableInt, ResolvableIntOrStr
+from .property import Property
 
 
-class SecurityGroupEgressProp:
-    def __init__(self, egress):
-        """
-        "CidrIp" : String,
-        "CidrIpv6" : String,
-        "Description" : String,
-        "DestinationPrefixListId" : String,
-        "DestinationSecurityGroupId" : String,
-        "FromPort" : Integer,
-        "IpProtocol" : String,
-        "ToPort" : Integer
-        """
-        self.cidr_ip = egress.get("cidr_ip")
-        self.cidr_ipv6 = egress.get("cidr_ipv6")
-        self.description = egress.get("description")
-        self.destination_prefix_list_id = egress.get("destination_prefix_list_id")
-        self.destination_security_group_id = egress.get("destination_security_group_id")
-        self.from_port = egress.get("from_port")
-        self.ip_protocol = egress.get("ip_protocol")
-        self.to_port = egress.get("to_port")
+class SecurityGroupEgressProp(Property):
+    CidrIp: Optional[ResolvableStr] = None
+    CidrIpv6: Optional[ResolvableStr] = None
+    Description: Optional[ResolvableStr] = None
+    DestinationPrefixListId: Optional[ResolvableStr] = None
+    DestinationSecurityGroupId: Optional[ResolvableStr] = None
+    FromPort: Optional[ResolvableInt] = None
+    IpProtocol: ResolvableIntOrStr
+    ToPort: Optional[ResolvableInt] = None
 
-    def ipv4_slash_zero(self):
-        if not self.cidr_ip or not isinstance(self.cidr_ip, str):
+    def ipv4_slash_zero(self) -> bool:
+        if not self.CidrIp or not isinstance(self.CidrIp, str):
             return False
-        return self.cidr_ip.endswith("/0")
+        return self.CidrIp.endswith("/0")
 
-    def ipv6_slash_zero(self):
-        if not self.cidr_ipv6 or not isinstance(self.cidr_ipv6, str):
+    def ipv6_slash_zero(self) -> bool:
+        if not self.CidrIpv6 or not isinstance(self.CidrIpv6, str):
             return False
-        return self.cidr_ipv6.endswith("/0")
+        return self.CidrIpv6.endswith("/0")

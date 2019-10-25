@@ -12,30 +12,25 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from .resource import Resource
+from typing import ClassVar, List, Optional, Dict
+
+from ..base import CustomModel
+from ..types import ResolvableStr, ResolvableInt, ResolvableBool, Resolvable
 from .properties.policy_document import PolicyDocument
+from .resource import Resource
+
+
+class KMSKeyProperties(CustomModel):
+    Description: Optional[ResolvableStr] = None
+    EnableKeyRotation: Optional[ResolvableBool] = None
+    Enabled: Optional[ResolvableBool] = None
+    KeyPolicy: Resolvable[PolicyDocument]
+    KeyUsage: Optional[ResolvableStr] = None
+    PendingWindowInDays: Optional[ResolvableInt] = None
+    Tags: Optional[Resolvable[List[Dict]]] = None
 
 
 class KMSKey(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "Description" : String,
-        "Enabled" : Boolean,
-        "EnableKeyRotation" : Boolean,
-        "KeyPolicy" : JSON object,
-        "KeyUsage" : String,
-        "PendingWindowInDays" : Integer,
-        "Tags" : [ Resource Tag, ... ]
-        """
-        super().__init__(logical_id, value)
-
-        self.description = None
-        self.enabled = False
-        self.enable_key_rotation = False
-        self.key_usage = None
-        self.pending_window_in_days = None
-        self.tags = []
-
-        self.key_policy = PolicyDocument(value.get("Properties", {}).get("KeyPolicy"))
-
-        self.set_generic_keys(value.get("Properties", {}), ["KeyPolicy"])
+    TYPE_VALUE: ClassVar = "AWS::KMS::Key"
+    Type: str = TYPE_VALUE
+    Properties: Resolvable[KMSKeyProperties]

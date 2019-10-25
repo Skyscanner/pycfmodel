@@ -12,14 +12,15 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-
+import pytest
 
 from pycfmodel.model.resources.iam_role import IAMRole
 
-cf_script = {
-    "AWSTemplateFormatVersion": "2010-09-09",
-    "Resources": {
-        "RootRole": {
+
+@pytest.fixture()
+def iam_role():
+    return IAMRole(
+        **{
             "Type": "AWS::IAM::Role",
             "Properties": {
                 "AssumeRolePolicyDocument": {
@@ -42,15 +43,10 @@ cf_script = {
                 ],
             },
         }
-    },
-}
+    )
 
 
-iam_role = IAMRole("RootRole", cf_script["Resources"]["RootRole"])
-
-
-def test_policies():
-    assert len(iam_role.policies) == 1
-    policy = iam_role.policies[0]
-
-    assert policy.policy_name == "root"
+def test_policies(iam_role):
+    policies = iam_role.Properties.Policies
+    assert len(policies) == 1
+    assert policies[0].PolicyName == "root"

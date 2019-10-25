@@ -12,29 +12,25 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import ClassVar, Optional, List
+
+from ..base import CustomModel
+from ..types import ResolvableStr, Resolvable
 from .resource import Resource
 from .properties.policy_document import PolicyDocument
 
 
+class IAMManagedPolicyProperties(CustomModel):
+    Description: Optional[ResolvableStr] = None
+    Groups: Optional[Resolvable[List[ResolvableStr]]] = None
+    ManagedPolicyName: Optional[ResolvableStr] = None
+    Path: Optional[ResolvableStr] = None
+    PolicyDocument: Resolvable[PolicyDocument]
+    Roles: Optional[Resolvable[List[ResolvableStr]]] = None
+    Users: Optional[Resolvable[List[ResolvableStr]]] = None
+
+
 class IAMManagedPolicy(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "Description" : String,
-        "Groups" : [ String, ... ],
-        "Path" : String,
-        "PolicyDocument" : JSON object,
-        "Roles" : [ String, ... ],
-        "Users" : [ String, ... ],
-        "ManagedPolicyName" : String
-        """
-        super().__init__(logical_id, value)
-
-        self.description = None
-        self.groups = []
-        self.path = None
-        self.roles = []
-        self.users = []
-        self.managed_policy_name = None
-
-        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
-        self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])
+    TYPE_VALUE: ClassVar = "AWS::IAM::ManagedPolicy"
+    Type: str = TYPE_VALUE
+    Properties: Resolvable[IAMManagedPolicyProperties]

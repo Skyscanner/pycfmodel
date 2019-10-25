@@ -12,42 +12,36 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import ClassVar, Optional
+
+from ..types import ResolvableStr, ResolvableInt, ResolvableIntOrStr
+from ..base import CustomModel
 from .resource import Resource
 
 
+class SecurityGroupEgressProperties(CustomModel):
+    CidrIp: Optional[ResolvableStr] = None
+    CidrIpv6: Optional[ResolvableStr] = None
+    Description: Optional[ResolvableStr] = None
+    DestinationPrefixListId: Optional[ResolvableStr] = None
+    DestinationSecurityGroupId: Optional[ResolvableStr] = None
+    FromPort: Optional[ResolvableInt] = None
+    GroupId: Optional[ResolvableStr] = None
+    IpProtocol: ResolvableIntOrStr
+    ToPort: Optional[ResolvableInt] = None
+
+
 class SecurityGroupEgress(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "CidrIp" : String,
-        "CidrIpv6" : String,
-        "Description" : String,
-        "DestinationPrefixListId" : String,
-        "DestinationSecurityGroupId" : String,
-        "FromPort" : Integer,
-        "GroupId" : String,
-        "IpProtocol" : String,
-        "ToPort" : Integer
-        """
-        super().__init__(logical_id, value)
-
-        self.cidr_ip = None
-        self.cidr_ipv6 = None
-        self.description = None
-        self.destination_prefix_list_id = None
-        self.destination_security_group_id = None
-        self.from_port = None
-        self.group_id = None
-        self.ip_protocol = None
-        self.to_port = None
-
-        self.set_generic_keys(value.get("Properties", {}), [])
+    TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroupEgress"
+    Type: str = TYPE_VALUE
+    Properties: SecurityGroupEgressProperties
 
     def ipv4_slash_zero(self) -> bool:
-        if not self.cidr_ip or not isinstance(self.cidr_ip, str):
+        if not self.Properties.CidrIp or not isinstance(self.Properties.CidrIp, str):
             return False
-        return self.cidr_ip.endswith("/0")
+        return self.Properties.CidrIp.endswith("/0")
 
     def ipv6_slash_zero(self) -> bool:
-        if not self.cidr_ipv6 or not isinstance(self.cidr_ipv6, str):
+        if not self.Properties.CidrIpv6 or not isinstance(self.Properties.CidrIpv6, str):
             return False
-        return self.cidr_ipv6.endswith("/0")
+        return self.Properties.CidrIpv6.endswith("/0")

@@ -12,20 +12,20 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import ClassVar, List
+
+from ..types import ResolvableStr, Resolvable
+from ..base import CustomModel
 from .resource import Resource
 from .properties.policy_document import PolicyDocument
 
 
+class SQSQueuePolicyProperties(CustomModel):
+    PolicyDocument: Resolvable[PolicyDocument]
+    Queues: Resolvable[List[ResolvableStr]]
+
+
 class SQSQueuePolicy(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "PolicyDocument" : JSON,
-        "Queues" : [ String, ... ]
-        """
-        super().__init__(logical_id, value)
-
-        self.queues = []
-
-        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
-
-        self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])
+    TYPE_VALUE: ClassVar = "AWS::SQS::QueuePolicy"
+    Type: str = TYPE_VALUE
+    Properties: Resolvable[SQSQueuePolicyProperties]

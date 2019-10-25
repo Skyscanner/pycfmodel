@@ -12,8 +12,13 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import List
+import re
+from typing import List, Pattern, Union, Optional
 
+from pydantic import Extra
+
+from ...types import ResolvableDate, Resolvable
+from .property import Property
 from .statement import Statement
 
 _IAM_ACTIONS = [
@@ -147,108 +152,52 @@ _IAM_ACTIONS = [
 ]
 
 
-class PolicyDocument:
-    def __init__(self, document):
-        self.statements = []
-        if not document:
-            return
-        statement = document.get("Statement")
-        if isinstance(statement, dict):
-            self.statements = [Statement(statement)]
-        elif isinstance(statement, list):
-            self.statements = [Statement(s) for s in document.get("Statement")]
-        else:
-            # TODO: raise
-            pass
+class PolicyDocument(Property):
+    class Config(Property.Config):
+        extra = Extra.allow
 
-    def star_resource_statements(self) -> List[Statement]:
-        """
-        Find statements with a resources that is a * or has a * in it.
-        """
+    Statement: Resolvable[Union[Statement, List[Resolvable[Statement]]]]
+    Version: Optional[ResolvableDate] = None
 
-        star_resources = []
-        for statement in self.statements:
-            if not statement.resource:
-                continue
-            if statement.resource == "*" or (isinstance(statement.resource, list) and "*" in statement.resource):
-                star_resources.append(statement)
-        return star_resources
+    def _statement_as_list(self) -> List[Statement]:
+        if isinstance(self.Statement, Statement):
+            return [self.Statement]
+        return self.Statement
 
-    def wildcard_allowed_actions(self, pattern=None) -> List[Statement]:
-        """
-        Find statements which allow wildcard actions.
+    def statements_with(self, pattern: Pattern) -> List[Statement]:
+        return [statement for statement in self._statement_as_list() if statement.resources_with(pattern)]
 
-        A pattern can be specified for the wildcard action
-        """
+    def allowed_actions_with(self, pattern: Pattern) -> List[Statement]:
+        return [
+            statement
+            for statement in self._statement_as_list()
+            if statement.actions_with(pattern) and statement.Effect == "Allow"
+        ]
 
-        wildcard_allowed = []
+    def allowed_principals_with(self, pattern: Pattern) -> List[Statement]:
+        for statement in self._statement_as_list():
+            if statement.Effect == "Allow":
+                yield from statement.principals_with(pattern)
 
-        for statement in self.statements:
-            if statement.wildcard_actions(pattern) and statement.effect == "Allow":
-                wildcard_allowed.append(statement)
-
-        return wildcard_allowed
-
-    def wildcard_allowed_principals(self, pattern=None) -> List[Statement]:
-        """
-        Find statements which allow wildcard principals.
-
-        A pattern can be specified for the wildcard principal
-        """
-
-        wildcard_allowed = []
-
-        for statement in self.statements:
-            if statement.wildcard_principals(pattern) and statement.effect == "Allow":
-                wildcard_allowed.append(statement)
-
-        return wildcard_allowed
-
-    def nonwhitelisted_allowed_principals(self, whitelist=None) -> List[Statement]:
+    def non_whitelisted_allowed_principals(self, whitelist: List[str]) -> List[Statement]:
         """Find non whitelisted allowed principals."""
-
-        if not whitelist:
-            return []
-
-        nonwhitelisted = []
-        for statement in self.statements:
-            if statement.non_whitelisted_principals(whitelist) and statement.effect == "Allow":
-                nonwhitelisted.append(statement)
-
-        return nonwhitelisted
-
-    def allows_not_principal(self) -> List[Statement]:
-        """Find allowed not-principals."""
-        not_principals = []
-        for statement in self.statements:
-            if statement.not_principal and statement.effect == "Allow":
-                not_principals.append(statement)
-
-        return not_principals
+        for statement in self._statement_as_list():
+            if statement.Effect == "Allow":
+                yield from statement.non_whitelisted_principals(whitelist)
 
     def get_iam_actions(self, difference=False) -> List[str]:
-        actions = []
-        for statement in self.statements:
-            action_list = statement.action
-            if not action_list:
-                continue
-
-            for action in action_list:
+        actions = set()
+        for statement in self._statement_as_list():
+            for action in statement.get_action_list():
                 if not isinstance(action, str):
-                    # TODO: handle dicts
                     continue
-                wildcard = action.find("*")
 
-                if wildcard > 0:
-                    actions = [iam for iam in _IAM_ACTIONS if action[:wildcard].lower() in iam.lower()]
-                elif wildcard == 0:
-                    actions = _IAM_ACTIONS
-                elif action.lower() in [iam.lower() for iam in _IAM_ACTIONS]:
-                    actions.append(action)
+                pattern = re.compile(f"^{action}$".replace("*", ".*"), re.IGNORECASE)
+                for iam in _IAM_ACTIONS:
+                    if pattern.match(iam):
+                        actions.add(iam)
 
-                if difference:
-                    return list(
-                        set([iam.lower() for iam in _IAM_ACTIONS]).difference(set([act.lower() for act in actions]))
-                    )
+        if difference:
+            return sorted(set(_IAM_ACTIONS).difference(actions))
 
-        return actions
+        return sorted(actions)

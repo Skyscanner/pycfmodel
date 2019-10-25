@@ -12,16 +12,11 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import Dict
-
+from ...types import ResolvableStr, Resolvable
+from .property import Property
 from .policy_document import PolicyDocument
 
 
-class Policy:
-    def __init__(self, value: Dict):
-        """
-        "PolicyDocument" : JSON object,
-        "PolicyName" : String,
-        """
-        self.policy_name = value.get("PolicyName")
-        self.policy_document = PolicyDocument(value.get("PolicyDocument"))
+class Policy(Property):
+    PolicyName: ResolvableStr
+    PolicyDocument: Resolvable[PolicyDocument]

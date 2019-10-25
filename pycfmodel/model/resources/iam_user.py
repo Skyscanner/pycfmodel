@@ -12,25 +12,35 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from typing import ClassVar, List, Optional, Dict
+
+from ..parameter import Parameter
+from ..types import ResolvableStr, Resolvable
+from ..base import CustomModel
+from .properties.policy import Policy
 from .resource import Resource
 
 
+class IAMUserProperties(CustomModel):
+    Groups: Optional[Resolvable[List[ResolvableStr]]] = None
+    LoginProfile: Optional[Dict] = None
+    ManagedPolicyArns: Optional[Resolvable[List[ResolvableStr]]] = None
+    Path: Optional[ResolvableStr] = None
+    PermissionsBoundary: Optional[ResolvableStr] = None
+    Policies: Optional[Resolvable[List[Resolvable[Policy]]]] = None
+    UserName: Optional[ResolvableStr] = None
+
+
 class IAMUser(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "UserName": String,
-        "ManagedPolicyArns": [ String, ... ],
-        "Path": String,
-        "Policies": [ Policies, ... ]
-        """
-        super().__init__(logical_id, value)
+    TYPE_VALUE: ClassVar = "AWS::IAM::User"
+    Type: str = TYPE_VALUE
+    Properties: Optional[Resolvable[IAMUserProperties]]
 
-        self.user_name = None
-        self.path = None
+    def has_hardcoded_credentials(self) -> bool:
+        if self.Properties:
+            login_profile = self.Properties.LoginProfile
+            if login_profile and login_profile.get("Password"):
+                if login_profile["Password"] != Parameter.NO_ECHO_NO_DEFAULT:
+                    return True
 
-        self.policies = self.get_policies(value.get("Properties", {}).get("Policies", []))
-        self.managed_policy_arns = self.get_managed_policy_arns(
-            value.get("Properties", {}).get("ManagedPolicyArns", [])
-        )
-        self.set_generic_keys(value.get("Properties", {}), ["Policies", "ManagedPolicyArns"])
-        self.properties = value.get("Properties", {})
+        return super().has_hardcoded_credentials()

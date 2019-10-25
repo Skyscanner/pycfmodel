@@ -12,45 +12,29 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from .resource import Resource
-from .properties.security_group_ingress_prop import SecurityGroupIngressProp
+from typing import ClassVar, Optional, List, Union, Dict
+
+from ..types import ResolvableStr, Resolvable
+from ..base import CustomModel
 from .properties.security_group_egress_prop import SecurityGroupEgressProp
+from .properties.security_group_ingress_prop import SecurityGroupIngressProp
+from .resource import Resource
+
+
+class SecurityGroupProperties(CustomModel):
+    GroupDescription: ResolvableStr
+    GroupName: Optional[ResolvableStr] = None
+    SecurityGroupEgress: Optional[
+        Resolvable[Union[SecurityGroupEgressProp, List[Resolvable[SecurityGroupEgressProp]]]]
+    ] = None
+    SecurityGroupIngress: Optional[
+        Resolvable[Union[SecurityGroupIngressProp, List[Resolvable[SecurityGroupIngressProp]]]]
+    ] = None
+    Tags: Optional[Resolvable[List[Dict]]] = None
+    VpcId: Optional[ResolvableStr] = None
 
 
 class SecurityGroup(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "GroupName" : String,
-        "GroupDescription" : String,
-        "SecurityGroupEgress" : [ Security Group Rule, ... ],
-        "SecurityGroupIngress" : [ Security Group Rule, ... ],
-        "Tags" :  [ Resource Tag, ... ],
-        "VpcId" : String
-        """
-        super().__init__(logical_id, value)
-
-        self.group_name = None
-        self.security_group_egress = []
-        self.security_group_ingress = []
-        self.tags = []
-        self.vpc_id = None
-
-        self._set_security_group_ingress(value.get("Properties", {}).get("SecurityGroupIngress"))
-        self._set_security_group_egress(value.get("Properties", {}).get("SecurityGroupEgress"))
-        self.set_generic_keys(value.get("Properties", {}), ["SecurityGroupIngress", "SecurityGroupEgress"])
-
-    def _set_security_group_ingress(self, sgi):
-        if isinstance(sgi, list):
-            self.security_group_ingress = [SecurityGroupIngressProp(s) for s in sgi]
-        elif isinstance(sgi, dict):
-            self.security_group_ingress = [SecurityGroupIngressProp(sgi)]
-
-        # TODO: handle refs etc.
-
-    def _set_security_group_egress(self, sge):
-        if isinstance(sge, list):
-            self.security_group_egress = [SecurityGroupEgressProp(s) for s in sge]
-        elif isinstance(sge, dict):
-            self.security_group_egress = [SecurityGroupEgressProp(sge)]
-
-        # TODO: handle refs etc.
+    TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroup"
+    Type: str = TYPE_VALUE
+    Properties: Resolvable[SecurityGroupProperties]

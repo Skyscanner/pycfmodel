@@ -12,25 +12,23 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from .resource import Resource
+from typing import ClassVar, Optional
+
+from ..base import CustomModel
+from ..types import ResolvableStr, ResolvableStrOrList, Resolvable
 from .properties.policy_document import PolicyDocument
+from .resource import Resource
+
+
+class IAMPolicyProperties(CustomModel):
+    Groups: Optional[ResolvableStrOrList] = None
+    PolicyDocument: Resolvable[PolicyDocument]
+    PolicyName: ResolvableStr
+    Roles: Optional[ResolvableStrOrList] = None
+    Users: Optional[ResolvableStrOrList] = None
 
 
 class IAMPolicy(Resource):
-    def __init__(self, logical_id, value):
-        """
-        "Groups" : [ String, ... ],
-        "PolicyDocument" : JSON object,
-        "PolicyName" : String,
-        "Roles" : [ String, ... ],
-        "Users" : [ String, ... ]
-        """
-        super().__init__(logical_id, value)
-
-        self.groups = []
-        self.policy_name = None
-        self.roles = []
-        self.users = []
-
-        self.policy_document = PolicyDocument(value.get("Properties", {}).get("PolicyDocument"))
-        self.set_generic_keys(value.get("Properties", {}), ["PolicyDocument"])
+    TYPE_VALUE: ClassVar = "AWS::IAM::Policy"
+    Type: str = TYPE_VALUE
+    Properties: Resolvable[IAMPolicyProperties]

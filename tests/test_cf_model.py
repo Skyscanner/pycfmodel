@@ -12,28 +12,31 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import pytest
+
+from pycfmodel.model.cf_model import CFModel
 
 
-import pycfmodel
+@pytest.fixture()
+def model():
+    return CFModel(
+        **{
+            "AWSTemplateFormatVersion": "2012-12-12",
+            "Description": "JSON string",
+            "Metadata": {},
+            "Parameters": {},
+            "Mappings": {},
+            "Conditions": {},
+            "Transform": [],
+            "Resources": {"Logical ID": {"Type": "Resource type", "Properties": {"foo": "bar"}}},
+            "Outputs": {},
+        }
+    )
 
-basic_template = {
-    "AWSTemplateFormatVersion": "version date",
-    "Description": "JSON string",
-    "Metadata": {},
-    "Parameters": {},
-    "Mappings": {},
-    "Conditions": {},
-    "Transform": {},
-    "Resources": {"Logical ID": {"Type": "Resource type", "Properties": {"foo": "bar"}}},
-    "Outputs": {},
-}
 
-
-def test_basic_json():
-    model = pycfmodel.parse(basic_template)
-
+def test_basic_json(model):
     assert type(model).__name__ == "CFModel"
-    assert len(model.resources) == 1
+    assert len(model.Resources) == 1
 
 
 def test_basic_yaml():

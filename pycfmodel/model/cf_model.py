@@ -12,33 +12,63 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from collections import defaultdict
-from typing import Dict
+from datetime import date
+from typing import Dict, Union, ClassVar, Optional, List, Any
 
-from .resource_factory import create_resource
+from ..resolver import resolve
+from ..constants import AWS_NOVALUE
+from .resources.generic_resource import GenericResource
+from .types import Resolvable
+from .resources.types import ResourceModels
+from .base import CustomModel
 from .parameter import Parameter
 
 
-class CFModel:
-    def __init__(self, cf_script: Dict):
-        self.aws_template_format_version = cf_script.get("AWSTemplateFormatVersion")
-        self.description = cf_script.get("Description")
-        self.metadata = cf_script.get("Metadata")
+class CFModel(CustomModel):
+    AWSTemplateFormatVersion: Optional[date]
+    Conditions: Optional[Dict] = {}
+    Description: Optional[str] = None
+    Mappings: Optional[Dict[str, Dict[str, Dict[str, Any]]]] = {}
+    Metadata: Optional[Dict[str, Dict]] = None
+    Outputs: Optional[Dict[str, Dict[str, Union[str, Dict]]]] = {}
+    Parameters: Optional[Dict[str, Parameter]] = {}
+    Resources: Dict[str, Resolvable[Union[ResourceModels, GenericResource]]] = {}
+    Transform: Optional[List]
 
-        self._parse_parameters(cf_script.get("Parameters", {}))
-        self.mappings = cf_script.get("Mappings")
-        self.conditions = cf_script.get("Conditions")
-        self._parse_resources(cf_script.get("Resources", {}))
-        self.outputs = cf_script.get("Outputs")
+    PSEUDO_PARAMETERS: ClassVar[Dict[str, str]] = {
+        # default pseudo parameters
+        "AWS::AccountId": "123456789012",
+        "AWS::NotificationARNs": [],
+        "AWS::NoValue": AWS_NOVALUE,
+        "AWS::Partition": "aws",
+        "AWS::Region": "eu-west-1",
+        "AWS::StackId": "",
+        "AWS::StackName": "",
+        "AWS::URLSuffix": "amazonaws.com",
+    }
 
-    def _parse_parameters(self, template_params):
-        """Parses and sets parameters in the model."""
-        self.parameters = [Parameter(param_name, param_value) for param_name, param_value in template_params.items()]
+    def resolve(self, extra_params=None) -> "CFModel":
+        extra_params = {} if extra_params is None else extra_params
+        # default parameters
+        params = {}
+        for key, parameter in self.Parameters.items():
+            ref_value = parameter.get_ref_value()
+            if ref_value is not None:
+                params[key] = ref_value
+        extended_parameters = {**self.PSEUDO_PARAMETERS, **params, **extra_params}
+        dict_value = self.dict()
 
-    def _parse_resources(self, template_resources):
-        """Parses and sets resources in the model using a factory."""
-        resources = defaultdict(list)
-        for res_id, res_value in template_resources.items():
-            r = create_resource(res_id, res_value)
-            resources[r.resource_type].append(r)
-        self.resources = dict(resources)
+        if self.Conditions:
+            conditions = dict_value.pop("Conditions")
+        else:
+            conditions = {}
+        resolved_conditions = {
+            key: resolve(value, extended_parameters, self.Mappings, {}) for key, value in conditions.items()
+        }
+
+        resources = dict_value.pop("Resources")
+        resolved_resources = {
+            key: resolve(value, extended_parameters, self.Mappings, resolved_conditions)
+            for key, value in resources.items()
+        }
+        return CFModel(**dict_value, Conditions=resolved_conditions, Resources=resolved_resources)

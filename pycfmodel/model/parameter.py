@@ -12,25 +12,36 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from typing import List
+from typing import List, Optional, Any, ClassVar
 
-import inflection
+from pydantic import PositiveInt
+
+from .base import CustomModel
 
 
-class Parameter:
-    def __init__(self, logical_id: str, properties):
-        if not isinstance(properties, dict):
-            return
-        self.logical_id = logical_id
-        self.type = properties.get("Type")
+class Parameter(CustomModel):
+    NO_ECHO_NO_DEFAULT: ClassVar[str] = "NO_ECHO_NO_DEFAULT"
+    NO_ECHO_WITH_DEFAULT: ClassVar[str] = "NO_ECHO_WITH_DEFAULT"
+    AllowedPattern: Optional[str] = None
+    AllowedValues: Optional[List] = None
+    ConstraintDescription: Optional[str] = None
+    Default: Optional[Any] = None
+    Description: Optional[str] = None
+    MaxLength: Optional[PositiveInt] = None
+    MaxValue: Optional[PositiveInt] = None
+    MinLength: Optional[int] = None
+    MinValue: Optional[int] = None
+    NoEcho: Optional[bool] = None
+    Type: str
 
-        self.set_generic_keys(properties, ["Type"])
+    def get_ref_value(self):
+        if self.NoEcho and self.Default:
+            return self.NO_ECHO_WITH_DEFAULT
+        elif self.NoEcho:
+            return self.NO_ECHO_NO_DEFAULT
+        elif self.Type == "Number":
+            return str(self.Default)
+        elif self.Type in ["List<Number>", "CommaDelimitedList"]:
+            return self.Default.split(",")
 
-    def set_generic_keys(self, properties: dict, exclude_list: List[str]):
-        """
-        Sets all the key value pairs that were not set manually in __init__.
-        """
-
-        generic_keys = set(properties.keys()) - set(exclude_list)
-        for generic_key in generic_keys:
-            self.__setattr__(inflection.underscore(generic_key), properties[generic_key])
+        return self.Default
