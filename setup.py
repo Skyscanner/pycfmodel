@@ -6,13 +6,13 @@ from setuptools import setup, find_namespace_packages
 readme = Path(__file__).parent / "README.md"
 long_description = readme.read_text()
 
-install_requires = ["pydantic==1.0"]
+install_requires = ["pydantic~=1.0"]
 
 dev_requires = ["black==19.3b0", "pytest==3.6.0", "flake8>=3.3.0", "pytest-cov>=2.5.1", "pip-tools==2.0.2"]
 
 setup(
     name="pycfmodel",
-    version="0.5.0",
+    version="0.5.1",
     description="A python model for CloudFormation scripts",
     author="Skyscanner Product Security",
     author_email="security@skyscanner.net",

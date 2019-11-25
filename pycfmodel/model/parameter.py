@@ -22,6 +22,7 @@ from .base import CustomModel
 class Parameter(CustomModel):
     NO_ECHO_NO_DEFAULT: ClassVar[str] = "NO_ECHO_NO_DEFAULT"
     NO_ECHO_WITH_DEFAULT: ClassVar[str] = "NO_ECHO_WITH_DEFAULT"
+    NO_ECHO_WITH_VALUE: ClassVar[str] = "NO_ECHO_WITH_VALUE"
     AllowedPattern: Optional[str] = None
     AllowedValues: Optional[List] = None
     ConstraintDescription: Optional[str] = None
@@ -34,14 +35,17 @@ class Parameter(CustomModel):
     NoEcho: Optional[bool] = None
     Type: str
 
-    def get_ref_value(self):
-        if self.NoEcho and self.Default:
-            return self.NO_ECHO_WITH_DEFAULT
-        elif self.NoEcho:
-            return self.NO_ECHO_NO_DEFAULT
-        elif self.Type == "Number":
-            return str(self.Default)
-        elif self.Type in ["List<Number>", "CommaDelimitedList"]:
-            return self.Default.split(",")
+    def get_ref_value(self, provided_value=None) -> Optional[str]:
+        value = provided_value if provided_value is not None else self.Default
+        if self.NoEcho:
+            if provided_value is not None:
+                return self.NO_ECHO_WITH_VALUE
+            elif self.Default:
+                return self.NO_ECHO_WITH_DEFAULT
+            else:
+                return self.NO_ECHO_NO_DEFAULT
 
-        return self.Default
+        elif self.Type in ["List<Number>", "CommaDelimitedList"]:
+            return value.split(",")
+
+        return value if value is None else str(value)

@@ -52,9 +52,11 @@ class CFModel(CustomModel):
         # default parameters
         params = {}
         for key, parameter in self.Parameters.items():
-            ref_value = parameter.get_ref_value()
+            passed_value = extra_params.pop(key, None)
+            ref_value = parameter.get_ref_value(passed_value)
             if ref_value is not None:
                 params[key] = ref_value
+
         extended_parameters = {**self.PSEUDO_PARAMETERS, **params, **extra_params}
         dict_value = self.dict()
 
@@ -72,3 +74,4 @@ class CFModel(CustomModel):
             for key, value in resources.items()
         }
         return CFModel(**dict_value, Conditions=resolved_conditions, Resources=resolved_resources)
+
