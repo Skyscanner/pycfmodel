@@ -18,6 +18,8 @@ from base64 import b64encode
 from datetime import date
 from typing import Dict, List, Union
 
+from pydantic import BaseModel
+
 from .constants import AWS_NOVALUE, CONTAINS_CF_PARAM
 from .utils import is_resolvable_dict
 
@@ -27,9 +29,20 @@ logger = logging.getLogger(__file__)
 ValidResolvers = Union[str, int, bool, float, List, Dict, date]
 
 
+def _extended_bool(value) -> bool:
+    return _BooleanModel(bool_value=value).bool_value
+
+
+class _BooleanModel(BaseModel):
+    bool_value: bool
+
+
 def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]):
-    if function is None or isinstance(function, (str, int, bool, float, date)):
+    if function is None or isinstance(function, str):
         return function
+
+    if isinstance(function, (int, float, date, bool)):
+        return str(function)
 
     if isinstance(function, list):
         result = []
@@ -120,7 +133,9 @@ def resolve_split(function_body, params: Dict, mappings: Dict[str, Dict], condit
 
 def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
     condition, true_section, false_section = function_body
-    if resolve({"Condition": condition}, params, mappings, conditions):
+    resolved_funct = resolve({"Condition": condition}, params, mappings, conditions)
+    resolved_funct = _extended_bool(resolved_funct)
+    if resolved_funct:
         return resolve(true_section, params, mappings, conditions)
     else:
         return resolve(false_section, params, mappings, conditions)
@@ -128,16 +143,20 @@ def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict], condition
 
 def resolve_and(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
     part_1, part_2 = function_body
-    return resolve(part_1, params, mappings, conditions) and resolve(part_2, params, mappings, conditions)
+    resolve_1 = resolve(part_1, params, mappings, conditions)
+    resolve_2 = resolve(part_2, params, mappings, conditions)
+    return _extended_bool(resolve_1) and _extended_bool(resolve_2)
 
 
 def resolve_or(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
     part_1, part_2 = function_body
-    return resolve(part_1, params, mappings, conditions) or resolve(part_2, params, mappings, conditions)
+    resolve_1 = resolve(part_1, params, mappings, conditions)
+    resolve_2 = resolve(part_2, params, mappings, conditions)
+    return _extended_bool(resolve_1) or _extended_bool(resolve_2)
 
 
 def resolve_not(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
-    return not resolve(function_body[0], params, mappings, conditions)
+    return not _extended_bool(resolve(function_body[0], params, mappings, conditions))
 
 
 def resolve_equals(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:

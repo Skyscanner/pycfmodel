@@ -12,6 +12,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from datetime import date
 
 import pytest
 
@@ -181,7 +182,13 @@ def test_not(function, expected_output):
 
 
 @pytest.mark.parametrize(
-    "function, expected_output", [({"Fn::Equals": ["a", "a"]}, True), ({"Fn::Equals": ["a", "b"]}, False)]
+    "function, expected_output", [
+        ({"Fn::Equals": ["a", "a"]}, True),
+        ({"Fn::Equals": ["a", "b"]}, False),
+        ({"Fn::Equals": ["1123456789", 1123456789]}, True),
+        ({"Fn::Equals": ["2019-12-10", date(2019, 12, 10)]}, True),
+        ({"Fn::Equals": ["0.3", 0.3]}, True),
+    ]
 )
 def test_equals(function, expected_output):
     parameters = {}
