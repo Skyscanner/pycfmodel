@@ -65,13 +65,13 @@ class CFModel(CustomModel):
         else:
             conditions = {}
         resolved_conditions = {
-            key: _extended_bool(resolve(value, extended_parameters, self.Mappings, {})) for key, value in conditions.items()
+            key: _extended_bool(resolve(value, extended_parameters, self.Mappings, {}))
+            for key, value in conditions.items()
         }
 
-         resources = dict_value.pop("Resources")
+        resources = dict_value.pop("Resources")
         resolved_resources = {
             key: resolve(value, extended_parameters, self.Mappings, resolved_conditions)
             for key, value in resources.items()
         }
         return CFModel(**dict_value, Conditions=resolved_conditions, Resources=resolved_resources)
-

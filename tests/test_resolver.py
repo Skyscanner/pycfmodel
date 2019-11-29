@@ -182,13 +182,14 @@ def test_not(function, expected_output):
 
 
 @pytest.mark.parametrize(
-    "function, expected_output", [
+    "function, expected_output",
+    [
         ({"Fn::Equals": ["a", "a"]}, True),
         ({"Fn::Equals": ["a", "b"]}, False),
         ({"Fn::Equals": ["1123456789", 1123456789]}, True),
         ({"Fn::Equals": ["2019-12-10", date(2019, 12, 10)]}, True),
         ({"Fn::Equals": ["0.3", 0.3]}, True),
-    ]
+    ],
 )
 def test_equals(function, expected_output):
     parameters = {}
