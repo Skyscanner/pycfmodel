@@ -56,7 +56,8 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
         if is_resolvable_dict(function):
             function_name = next(iter(function))
             function_resolver = FUNCTION_MAPPINGS[function_name]
-            return function_resolver(function[function_name], params, mappings, conditions)
+            resolved_value = function_resolver(function[function_name], params, mappings, conditions)
+            return resolved_value if resolved_value is None or isinstance(resolved_value, str) else str(resolved_value)
 
         result = {}
         for k, v in function.items():

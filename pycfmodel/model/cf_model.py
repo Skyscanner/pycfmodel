@@ -15,7 +15,7 @@ specific language governing permissions and limitations under the License.
 from datetime import date
 from typing import Dict, Union, ClassVar, Optional, List, Any
 
-from ..resolver import resolve
+from ..resolver import resolve, _extended_bool
 from ..constants import AWS_NOVALUE
 from .resources.generic_resource import GenericResource
 from .types import Resolvable
@@ -65,10 +65,10 @@ class CFModel(CustomModel):
         else:
             conditions = {}
         resolved_conditions = {
-            key: resolve(value, extended_parameters, self.Mappings, {}) for key, value in conditions.items()
+            key: _extended_bool(resolve(value, extended_parameters, self.Mappings, {})) for key, value in conditions.items()
         }
 
-        resources = dict_value.pop("Resources")
+         resources = dict_value.pop("Resources")
         resolved_resources = {
             key: resolve(value, extended_parameters, self.Mappings, resolved_conditions)
             for key, value in resources.items()
