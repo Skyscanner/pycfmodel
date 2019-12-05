@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.6.1 - [2019-12-05]
+### Fixes
+- Fix Cloudformation conditions which could make to not evaluate them as bool. 
+
+
 ## 0.6.0 - [2019-11-25]
 ### Improvements
 - Improve equal function
