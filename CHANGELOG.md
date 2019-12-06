@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.6.1 - [2019-12-05]
 ### Fixes
-- Fix Cloudformation conditions which could make to not evaluate them as bool. 
+- Fix CloudFormation conditions which were logically boolean to now successfully be evaluated as boolean.
 
 
 ## 0.6.0 - [2019-11-25]
