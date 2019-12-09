@@ -13,6 +13,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 from datetime import date
+from typing import Dict
 
 import pytest
 
@@ -182,13 +183,14 @@ def test_not(function, expected_output):
 
 
 @pytest.mark.parametrize(
-    "function, expected_output", [
+    "function, expected_output",
+    [
         ({"Fn::Equals": ["a", "a"]}, True),
         ({"Fn::Equals": ["a", "b"]}, False),
         ({"Fn::Equals": ["1123456789", 1123456789]}, True),
         ({"Fn::Equals": ["2019-12-10", date(2019, 12, 10)]}, True),
         ({"Fn::Equals": ["0.3", 0.3]}, True),
-    ]
+    ],
 )
 def test_equals(function, expected_output):
     parameters = {}
@@ -280,6 +282,24 @@ def test_find_in_map_and_ref():
     function = {"Fn::FindInMap": ["RegionMap", {"Ref": "AWS::Region"}, "HVM64"]}
 
     assert resolve(function, parameters, mappings, conditions) == "ami-0ff8a91507f77f867"
+
+
+def test_template_conditions():
+    template = {
+        "Conditions": {
+            "Bool": True,
+            "BoolStr": "True",
+            "IsEqualNum": {"Fn::Equals": [123456, 123456]},
+            "IsEqualStr": {"Fn::Equals": ["a", "a"]},
+            "IsEqualStr": {"Fn::Equals": [True, True]},
+            "IsEqualRef": {"Fn::Equals": [{"Ref": "AWS::AccountId"}, "123"]},
+            "Not": {"Fn::Not": [False]},
+        },
+        "Resources": {},
+    }
+    model = parse(template).resolve(extra_params={"AWS::AccountId": "123"})
+    assert isinstance(model.Conditions, Dict)
+    assert all(isinstance(cv, bool) for cv in model.Conditions.values())
 
 
 def test_resolve_scenario_1():

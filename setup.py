@@ -12,7 +12,7 @@ dev_requires = ["black==19.3b0", "pytest==3.6.0", "flake8>=3.3.0", "pytest-cov>=
 
 setup(
     name="pycfmodel",
-    version="0.6.0",
+    version="0.6.1",
     description="A python model for CloudFormation scripts",
     author="Skyscanner Product Security",
     author_email="security@skyscanner.net",
