@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.6.3 - [20XX-XX-XX]
+### Fixes
+- Fix types in `allowed_principals_with`, `non_whitelisted_allowed_principals` and `PSEUDO_PARAMETERS`.
+
+
 ## 0.6.1 - [2019-12-09]
 ### Fixes
 - Fix CloudFormation conditions which were logically boolean to now successfully be evaluated as boolean.
