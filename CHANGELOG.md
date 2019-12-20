@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.6.2 - [2019-12-20]
+### Improvements
+- Added the `resources_filtered_by_type` function in `CFModel` class
+
+
 ## 0.6.1 - [2019-12-09]
 ### Fixes
 - Fix CloudFormation conditions which were logically boolean to now successfully be evaluated as boolean.
