@@ -40,10 +40,6 @@ def test_basic_json(model):
     assert len(model.Resources) == 1
 
 
-def test_basic_yaml():
-    pass
-
-
 def test_resources_filtered_by_type():
     generic_resource = {"Logical ID": {"Type": "Resource type", "Properties": {"foo": "bar"}}}
     user = {"User": IAMUser()}
