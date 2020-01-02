@@ -13,8 +13,9 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 from datetime import date
-from typing import Dict, Union, ClassVar, Optional, List, Any
+from typing import Dict, Union, ClassVar, Optional, List, Any, Collection, Type
 
+from .resources.resource import Resource
 from ..resolver import resolve, _extended_bool
 from ..constants import AWS_NOVALUE
 from .resources.generic_resource import GenericResource
@@ -75,3 +76,13 @@ class CFModel(CustomModel):
             for key, value in resources.items()
         }
         return CFModel(**dict_value, Conditions=resolved_conditions, Resources=resolved_resources)
+
+    def resources_filtered_by_type(
+        self, allowed_types: Collection[Union[str, Type[Resource]]]
+    ) -> Dict[str, Dict[str, Resource]]:
+        result = {}
+        allowed_resource_classes = tuple(x for x in allowed_types if isinstance(x, type))
+        for resource_name, resource in self.Resources.items():
+            if isinstance(resource, allowed_resource_classes) or resource.Type in allowed_types:
+                result[resource_name] = resource
+        return result

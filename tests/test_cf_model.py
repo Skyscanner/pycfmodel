@@ -15,6 +15,7 @@ specific language governing permissions and limitations under the License.
 import pytest
 
 from pycfmodel.model.cf_model import CFModel
+from pycfmodel.model.resources.iam_user import IAMUser
 
 
 @pytest.fixture()
@@ -39,5 +40,11 @@ def test_basic_json(model):
     assert len(model.Resources) == 1
 
 
-def test_basic_yaml():
-    pass
+def test_resources_filtered_by_type():
+    generic_resource = {"Logical ID": {"Type": "Resource type", "Properties": {"foo": "bar"}}}
+    user = {"User": IAMUser()}
+
+    model = CFModel(Resources={**generic_resource, **user})
+    assert model.resources_filtered_by_type(("Resource type",)) == generic_resource
+    assert model.resources_filtered_by_type(("Resource type", IAMUser)) == {**generic_resource, **user}
+    assert model.resources_filtered_by_type((IAMUser,)) == user
