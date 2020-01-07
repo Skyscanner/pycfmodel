@@ -1,10 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-
-## 0.6.2 - [20XX-XX-XX]
+## 0.6.3 - [2020-XX-XX]
 ### Fixes
 - Fix types in `allowed_principals_with`, `non_whitelisted_allowed_principals` and `PSEUDO_PARAMETERS`.
+
+
+## 0.6.2 - [2019-12-20]
+### Improvements
+- Added the `resources_filtered_by_type` function in `CFModel` class
 
 
 ## 0.6.1 - [2019-12-09]

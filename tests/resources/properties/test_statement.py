@@ -174,7 +174,6 @@ def test_actions_with(statement, pattern, expected_output):
     ],
 )
 def test_principals_with(statement, pattern, expected_output):
-    print(statement.principals_with(pattern))
     assert statement.principals_with(pattern) == expected_output
 
 
