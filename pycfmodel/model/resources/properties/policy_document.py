@@ -13,7 +13,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import re
-from typing import List, Pattern, Union, Optional, Iterator
+from typing import List, Pattern, Union, Optional
 
 from pydantic import Extra
 
@@ -174,16 +174,20 @@ class PolicyDocument(Property):
             if statement.actions_with(pattern) and statement.Effect == "Allow"
         ]
 
-    def allowed_principals_with(self, pattern: Pattern) -> Iterator[Statement]:
+    def allowed_principals_with(self, pattern: Pattern) -> List[str]:
+        principals = set()
         for statement in self._statement_as_list():
             if statement.Effect == "Allow":
-                yield from statement.principals_with(pattern)
+                principals.update(statement.principals_with(pattern))
+        return list(principals)
 
-    def non_whitelisted_allowed_principals(self, whitelist: List[str]) -> Iterator[Statement]:
+    def non_whitelisted_allowed_principals(self, whitelist: List[str]) -> List[str]:
         """Find non whitelisted allowed principals."""
+        principals = set()
         for statement in self._statement_as_list():
             if statement.Effect == "Allow":
-                yield from statement.non_whitelisted_principals(whitelist)
+                principals.update(statement.non_whitelisted_principals(whitelist))
+        return list(principals)
 
     def get_iam_actions(self, difference=False) -> List[str]:
         actions = set()
