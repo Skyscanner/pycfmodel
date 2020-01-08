@@ -117,6 +117,18 @@ def test_not_principal(policy_document_not_principal):
     assert len(policy_document_not_principal.allowed_actions_with(CONTAINS_STAR)) == 1
 
 
+def test_allowed_principals_with(policy_document_multi_statement):
+    assert policy_document_multi_statement.allowed_principals_with(re.compile(r".*root")) == [
+        "arn:aws:iam::324320755747:root"
+    ]
+
+
+def test_non_whitelisted_allowed_principals(policy_document_multi_statement):
+    assert policy_document_multi_statement.non_whitelisted_allowed_principals(["arn:aws:iam::324320755747:root"]) == [
+        "ec2.amazonaws.com"
+    ]
+
+
 def test_get_iam_actions(policy_document_not_principal):
     correct_list = [
         "IAM:DeleteAccountPasswordPolicy",

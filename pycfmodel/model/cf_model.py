@@ -36,7 +36,7 @@ class CFModel(CustomModel):
     Resources: Dict[str, Resolvable[Union[ResourceModels, GenericResource]]] = {}
     Transform: Optional[List]
 
-    PSEUDO_PARAMETERS: ClassVar[Dict[str, str]] = {
+    PSEUDO_PARAMETERS: ClassVar[Dict[str, Union[str, List[str]]]] = {
         # default pseudo parameters
         "AWS::AccountId": "123456789012",
         "AWS::NotificationARNs": [],
