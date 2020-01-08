@@ -1,8 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 0.6.3 - [2020-XX-XX]
+## 0.6.3 - [2020-01-08]
 ### Added
+- Added support for `Rules` section in template
 - Added tests for `allowed_principals_with` and `non_whitelisted_allowed_principals`
 ### Fixes
 - Fix types in `allowed_principals_with`, `non_whitelisted_allowed_principals` and `PSEUDO_PARAMETERS`.
