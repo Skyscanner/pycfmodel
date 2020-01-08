@@ -30,6 +30,7 @@ def model():
             "Conditions": {},
             "Transform": [],
             "Resources": {"Logical ID": {"Type": "Resource type", "Properties": {"foo": "bar"}}},
+            "Rules": {},
             "Outputs": {},
         }
     )
