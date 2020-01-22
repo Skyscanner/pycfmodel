@@ -5,7 +5,6 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/Skyscanner/pycfmodel.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Skyscanner/pycfmodel/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/Skyscanner/pycfmodel.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Skyscanner/pycfmodel/context:python)
 
-
 *A python model for Cloud Formation scripts.*
 
 **pycfmodel** makes it easier to work with CloudFormation scripts in Python by
