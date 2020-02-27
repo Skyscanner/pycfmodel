@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.6.4 - [2020-02-27]
+### Fixes
+- Allow multiple operands in `or` and `and` functions. 
+
+
 ## 0.6.3 - [2020-01-08]
 ### Added
 - Added support for `Rules` section in template

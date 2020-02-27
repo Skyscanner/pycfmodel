@@ -142,17 +142,11 @@ def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict], condition
 
 
 def resolve_and(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
-    part_1, part_2 = function_body
-    resolve_1 = resolve(part_1, params, mappings, conditions)
-    resolve_2 = resolve(part_2, params, mappings, conditions)
-    return _extended_bool(resolve_1) and _extended_bool(resolve_2)
+    return all(_extended_bool(resolve(part, params, mappings, conditions)) for part in function_body)
 
 
 def resolve_or(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
-    part_1, part_2 = function_body
-    resolve_1 = resolve(part_1, params, mappings, conditions)
-    resolve_2 = resolve(part_2, params, mappings, conditions)
-    return _extended_bool(resolve_1) or _extended_bool(resolve_2)
+    return any(_extended_bool(resolve(part, params, mappings, conditions)) for part in function_body)
 
 
 def resolve_not(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
