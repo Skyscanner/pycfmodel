@@ -146,6 +146,12 @@ def test_if(function, expected_output):
         ({"Fn::And": [False, True]}, False),
         ({"Fn::And": [True, False]}, False),
         ({"Fn::And": [False, False]}, False),
+        ({"Fn::And": [True, True, True]}, True),
+        ({"Fn::And": [False, True, False]}, False),
+        ({"Fn::And": [False, False, False]}, False),
+        ({"Fn::And": [True, True, True, True]}, True),
+        ({"Fn::And": [False, True, False, True]}, False),
+        ({"Fn::And": [False, False, False, False]}, False),
     ],
 )
 def test_and(function, expected_output):
@@ -163,6 +169,12 @@ def test_and(function, expected_output):
         ({"Fn::Or": [False, True]}, True),
         ({"Fn::Or": [True, False]}, True),
         ({"Fn::Or": [False, False]}, False),
+        ({"Fn::Or": [True, True, True]}, True),
+        ({"Fn::Or": [False, True, False]}, True),
+        ({"Fn::Or": [False, False, False]}, False),
+        ({"Fn::Or": [True, True, True, True]}, True),
+        ({"Fn::Or": [False, True, False, True]}, True),
+        ({"Fn::Or": [False, False, False, False]}, False),
     ],
 )
 def test_or(function, expected_output):
