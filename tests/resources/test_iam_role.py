@@ -14,6 +14,7 @@ specific language governing permissions and limitations under the License.
 """
 import pytest
 
+from pycfmodel.model.resources.iam_managed_policy import IAMManagedPolicy
 from pycfmodel.model.resources.iam_role import IAMRole
 
 
@@ -41,6 +42,7 @@ def iam_role():
                         },
                     }
                 ],
+                "ManagedPolicyArns": ["arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"],
             },
         }
     )
@@ -50,3 +52,7 @@ def test_policies(iam_role):
     policies = iam_role.Properties.Policies
     assert len(policies) == 1
     assert policies[0].PolicyName == "root"
+    assert (
+        iam_role.Properties.ManagedPolicies[0].Arn
+        == "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
+    )

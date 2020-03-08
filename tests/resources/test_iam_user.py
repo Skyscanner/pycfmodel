@@ -41,6 +41,7 @@ def iam_user():
                         },
                     }
                 ],
+                "ManagedPolicyArns": ["arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"],
             },
         }
     )
@@ -49,6 +50,7 @@ def iam_user():
 def test_policies(iam_user):
     assert len(iam_user.Properties.Policies) == 1
     assert iam_user.Properties.Policies[0].PolicyName == "BadPolicy"
+    assert iam_user.Properties.ManagedPolicies[0].Arn == "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
 
 
 def test_credential_check(iam_user):
