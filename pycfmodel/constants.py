@@ -13,6 +13,9 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import re
+from pathlib import Path
+
+AWS_IAM_MANAGED_POLICIES_PATH = Path(__file__).parent / "aws_iam_managed_policies"
 
 AWS_NOVALUE = "AWS::NoValue"
 
@@ -69,3 +72,14 @@ CONDITION_FUNCTIONS = {
 
 CONTAINS_STAR = re.compile(r"^.*[*].*$")
 CONTAINS_CF_PARAM = re.compile(r"(\$\{[\w\:]+\})")
+
+"""
+Check for aws managed iam arns
+It has a capturing group for resource id
+Valid:
+- arn:aws:iam::aws:policy/aws-service-role/AWSAppMeshPreviewServiceRolePolicy
+Invalid:
+- arn:aws:s3:::my_corporate_bucket
+- potato
+"""
+REGEX_AWS_MANAGED_ARN = re.compile(r"^arn:aws:iam::aws:policy/(.*)$")
