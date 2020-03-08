@@ -24,6 +24,7 @@ from ..parameter import Parameter
 class Resource(CustomModel):
     TYPE_VALUE: ClassVar[str]
     Type: str
+    Arn: Optional[str] = None
     Condition: Optional[ResolvableCondition] = None
     CreatePolicy: Optional[Dict] = None
     DeletionPolicy: Optional[ResolvableStr] = None
