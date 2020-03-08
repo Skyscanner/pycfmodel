@@ -18,6 +18,11 @@ from ..base import CustomModel
 from ..types import ResolvableStr, Resolvable
 from .resource import Resource
 from .properties.policy_document import PolicyDocument
+from ...constants import REGEX_AWS_MANAGED_ARN, AWS_IAM_MANAGED_POLICIES_PATH
+
+
+class IAMManagedPolicyNotFoundException(Exception):
+    pass
 
 
 class IAMManagedPolicyProperties(CustomModel):
@@ -34,3 +39,16 @@ class IAMManagedPolicy(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::ManagedPolicy"
     Type: str = TYPE_VALUE
     Properties: Resolvable[IAMManagedPolicyProperties]
+
+    @property
+    def is_aws_managed(self) -> bool:
+        return bool(REGEX_AWS_MANAGED_ARN.match(self.Arn))
+
+    @classmethod
+    def from_arn(self, arn: str) -> "IAMManagedPolicy":
+        aws_managed_match = REGEX_AWS_MANAGED_ARN.match(arn)
+        if aws_managed_match:
+            managed_policy_json = AWS_IAM_MANAGED_POLICIES_PATH / f"{aws_managed_match.group(1)}.json"
+            if managed_policy_json.exists():
+                return IAMManagedPolicy.parse_file(managed_policy_json)
+        raise IAMManagedPolicyNotFoundException
