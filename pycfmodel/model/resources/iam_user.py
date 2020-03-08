@@ -14,11 +14,13 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, List, Optional, Dict
 
+from .iam_managed_policy import IAMManagedPolicy
 from ..parameter import Parameter
 from ..types import ResolvableStr, Resolvable
 from ..base import CustomModel
 from .properties.policy import Policy
 from .resource import Resource
+from ...constants import REGEX_AWS_MANAGED_ARN
 
 
 class IAMUserProperties(CustomModel):
@@ -29,6 +31,14 @@ class IAMUserProperties(CustomModel):
     PermissionsBoundary: Optional[ResolvableStr] = None
     Policies: Optional[Resolvable[List[Resolvable[Policy]]]] = None
     UserName: Optional[ResolvableStr] = None
+
+    @property
+    def ManagedPolicies(self) -> List[IAMManagedPolicy]:
+        return [
+            IAMManagedPolicy.from_arn(managed_policy_arn)
+            for managed_policy_arn in self.ManagedPolicyArns
+            if REGEX_AWS_MANAGED_ARN.match(managed_policy_arn)
+        ]
 
 
 class IAMUser(Resource):
