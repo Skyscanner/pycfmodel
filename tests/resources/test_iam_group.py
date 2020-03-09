@@ -15,8 +15,6 @@ specific language governing permissions and limitations under the License.
 import pytest
 
 from pycfmodel.model.resources.iam_group import IAMGroup
-from pycfmodel.model.resources.iam_managed_policy import IAMManagedPolicy, IAMManagedPolicyNotFoundException
-from pycfmodel.model.resources.iam_role import IAMRole
 
 
 @pytest.fixture()
@@ -34,7 +32,6 @@ def iam_group():
     )
 
 
-@pytest.mark.xfail(raises=IAMManagedPolicyNotFoundException)
 def test_policies(iam_group: IAMGroup):
     assert iam_group.Properties.ManagedPolicies[0].Arn == "arn:aws:iam::aws:policy/AmazonRoute53FullAccess"
     assert iam_group.Properties.ManagedPolicies[1].Arn == "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"

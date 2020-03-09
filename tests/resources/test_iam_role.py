@@ -14,7 +14,6 @@ specific language governing permissions and limitations under the License.
 """
 import pytest
 
-from pycfmodel.model.resources.iam_managed_policy import IAMManagedPolicy, IAMManagedPolicyNotFoundException
 from pycfmodel.model.resources.iam_role import IAMRole
 
 
@@ -48,7 +47,6 @@ def iam_role():
     )
 
 
-@pytest.mark.xfail(raises=IAMManagedPolicyNotFoundException)
 def test_policies(iam_role):
     policies = iam_role.Properties.Policies
     assert len(policies) == 1
