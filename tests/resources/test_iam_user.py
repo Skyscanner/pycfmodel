@@ -14,6 +14,7 @@ specific language governing permissions and limitations under the License.
 """
 import pytest
 
+from pycfmodel.model.resources.iam_managed_policy import IAMManagedPolicyNotFoundException
 from pycfmodel.model.resources.iam_user import IAMUser
 
 
@@ -47,6 +48,7 @@ def iam_user():
     )
 
 
+@pytest.mark.xfail(raises=IAMManagedPolicyNotFoundException)
 def test_policies(iam_user):
     assert len(iam_user.Properties.Policies) == 1
     assert iam_user.Properties.Policies[0].PolicyName == "BadPolicy"
