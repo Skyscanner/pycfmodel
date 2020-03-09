@@ -39,7 +39,7 @@ for response in client.get_paginator("list_policies").paginate(Scope="AWS"):
                     "Arn": policy["Arn"],
                     "Properties": {
                         "ManagedPolicyName": policy["PolicyName"],
-                        "Path": policy_version_response["PolicyVersion"]["Path"],
+                        "Path": policy_version_response["PolicyVersion"].get("Path"),
                         "PolicyDocument": policy_version_response["PolicyVersion"]["Document"],
                     },
                 }
