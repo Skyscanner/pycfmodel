@@ -1,0 +1,1 @@
+recursive-include pycfmodel/aws_iam_managed_policies *.json

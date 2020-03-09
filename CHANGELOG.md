@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.7.0 - [2020-03-09]
+### Added
+- AWS Managed Policies in IAM resources specified via `ManagedPolicyArns` can be accessed using `ManagedPolicies`.
+
+
 ## 0.6.4 - [2020-02-27]
 ### Fixes
 - Allow multiple operands in `or` and `and` functions. 
