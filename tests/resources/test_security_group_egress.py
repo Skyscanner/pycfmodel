@@ -18,47 +18,61 @@ from pycfmodel.model.resources.security_group_egress import SecurityGroupEgress
 
 
 @pytest.fixture()
-def security_group_egress_1():
+def security_group_egress_ipv4():
     return SecurityGroupEgress(
         **{
             "Type": "AWS::EC2::SecurityGroupEgress",
-            "Properties": {
-                "GroupId": "sg-12341234",
-                "CidrIp": "1.1.1.1/0",
-                "FromPort": 41,
-                "ToPort": 45,
-                "IpProtocol": "tcp",
-            },
+            "Properties": {"GroupId": "sg-12341234", "CidrIp": "", "FromPort": 41, "ToPort": 45, "IpProtocol": "tcp"},
         }
     )
 
 
 @pytest.fixture()
-def security_group_egress_2():
+def security_group_egress_ipv6():
     return SecurityGroupEgress(
         **{
             "Type": "AWS::EC2::SecurityGroupEgress",
-            "Properties": {
-                "GroupId": "sg-12341234",
-                "CidrIpv6": "1.1.1.1/0",
-                "FromPort": 41,
-                "ToPort": 45,
-                "IpProtocol": "tcp",
-            },
+            "Properties": {"GroupId": "sg-12341234", "CidrIpv6": "", "FromPort": 41, "ToPort": 45, "IpProtocol": "tcp"},
         }
     )
 
 
-def test_security_group_egress(security_group_egress_1):
-    assert security_group_egress_1.Properties.GroupId == "sg-12341234"
-    assert isinstance(security_group_egress_1.Properties.FromPort, int)
+def test_security_group_egress(security_group_egress_ipv4):
+    assert security_group_egress_ipv4.Properties.GroupId == "sg-12341234"
+    assert isinstance(security_group_egress_ipv4.Properties.FromPort, int)
 
 
-def test_slash_zero4(security_group_egress_1, security_group_egress_2):
-    assert security_group_egress_1.ipv4_slash_zero()
-    assert not security_group_egress_2.ipv4_slash_zero()
+@pytest.mark.parametrize("ipv4, expected", [("1.1.1.1/0", True), (None, False), (1, False), ("172.16.0.0/12", False)])
+def test_slash_zero4(ipv4, expected, security_group_egress_ipv4):
+    security_group_egress_ipv4.Properties.CidrIp = ipv4
+    assert security_group_egress_ipv4.ipv4_slash_zero() == expected
 
 
-def test_slash_zero6(security_group_egress_1, security_group_egress_2):
-    assert not security_group_egress_1.ipv6_slash_zero()
-    assert security_group_egress_2.ipv6_slash_zero()
+@pytest.mark.parametrize("ipv6, expected", [("1.1.1.1/0", True), (None, False), (1, False), ("172.16.0.0/12", False)])
+def test_slash_zero6(ipv6, expected, security_group_egress_ipv6):
+    security_group_egress_ipv6.Properties.CidrIpv6 = ipv6
+    assert security_group_egress_ipv6.ipv6_slash_zero() == expected
+
+
+@pytest.mark.parametrize(
+    "ipv4, expected", [("1.1.1.1/0", False), ("10.0.0.0/8", True), (None, False), (1, False), ("172.0.0.0/8", False)]
+)
+def test_ipv4_private_addr(ipv4, expected, security_group_egress_ipv4):
+    security_group_egress_ipv4.Properties.CidrIp = ipv4
+    assert security_group_egress_ipv4.ipv4_private_addr() == expected
+
+
+@pytest.mark.parametrize(
+    "ipv6, expected",
+    [
+        ("1.1.1.1/0", False),
+        ("fc00::/7", True),
+        ("FD00::/8", True),
+        (None, False),
+        (1, False),
+        ("2001:0db8:85a3:0000:0000:8a2e:0370:7334", False),
+    ],
+)
+def test_ipv6_private_addr(ipv6, expected, security_group_egress_ipv6):
+    security_group_egress_ipv6.Properties.CidrIpv6 = ipv6
+    assert security_group_egress_ipv6.ipv6_private_addr() == expected

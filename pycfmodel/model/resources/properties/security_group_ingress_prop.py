@@ -39,3 +39,16 @@ class SecurityGroupIngressProp(Property):
         if not self.CidrIpv6 or not isinstance(self.CidrIpv6, str):
             return False
         return self.CidrIpv6.endswith("/0")
+
+    def ipv4_private_addr(self) -> bool:
+        # follows https://tools.ietf.org/html/rfc1918
+        if not self.CidrIp or not isinstance(self.CidrIp, str):
+            return False
+        private_blocks = set({"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"})
+        return self.CidrIp in private_blocks
+
+    def ipv6_private_addr(self) -> bool:
+        # follows https://tools.ietf.org/html/rfc4193
+        if not self.CidrIpv6 or not isinstance(self.CidrIpv6, str):
+            return False
+        return self.CidrIpv6.lower().startswith("fc") or self.CidrIpv6.lower().startswith("fd")
