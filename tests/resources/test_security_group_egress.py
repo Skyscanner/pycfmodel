@@ -22,7 +22,13 @@ def security_group_egress_ipv4_1():
     return SecurityGroupEgress(
         **{
             "Type": "AWS::EC2::SecurityGroupEgress",
-            "Properties": {"GroupId": "sg-1", "CidrIp": "0.0.0.0/0", "FromPort": 41, "ToPort": 45, "IpProtocol": "tcp"},
+            "Properties": {
+                "GroupId": "sg-12341234",
+                "CidrIp": "0.0.0.0/0",
+                "FromPort": 41,
+                "ToPort": 45,
+                "IpProtocol": "tcp",
+            },
         }
     )
 
@@ -32,18 +38,24 @@ def security_group_egress_ipv4_2():
     return SecurityGroupEgress(
         **{
             "Type": "AWS::EC2::SecurityGroupEgress",
-            "Properties": {"GroupId": "sg-2", "CidrIp": "172.0.0.0", "FromPort": 41, "ToPort": 45, "IpProtocol": "tcp"},
+            "Properties": {
+                "GroupId": "sg-2345",
+                "CidrIp": "172.0.0.0",
+                "FromPort": 41,
+                "ToPort": 45,
+                "IpProtocol": "tcp",
+            },
         }
     )
 
 
 @pytest.fixture()
-def security_group_egress_ipv6_1():
+def security_group_egress_ipv6():
     return SecurityGroupEgress(
         **{
             "Type": "AWS::EC2::SecurityGroupEgress",
             "Properties": {
-                "GroupId": "sg-1",
+                "GroupId": "sg-12341234",
                 "CidrIpv6": "fc00::/7",
                 "FromPort": 41,
                 "ToPort": 45,
@@ -54,7 +66,7 @@ def security_group_egress_ipv6_1():
 
 
 def test_security_group_egress(security_group_egress_ipv4_1):
-    assert security_group_egress_ipv4_1.Properties.GroupId == "sg-1"
+    assert security_group_egress_ipv4_1.Properties.GroupId == "sg-12341234"
     assert isinstance(security_group_egress_ipv4_1.Properties.FromPort, int)
 
 
@@ -66,5 +78,5 @@ def test_not_slash_zero4(security_group_egress_ipv4_2):
     assert security_group_egress_ipv4_2.ipv4_slash_zero() == False
 
 
-def test_not_slash_zero6(security_group_egress_ipv6_1):
-    assert security_group_egress_ipv6_1.ipv6_slash_zero() == False
+def test_not_slash_zero6(security_group_egress_ipv6):
+    assert security_group_egress_ipv6.ipv6_slash_zero() == False
