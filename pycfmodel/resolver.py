@@ -16,6 +16,7 @@ import logging
 
 from base64 import b64encode
 from datetime import date
+from ipaddress import IPv4Network, IPv6Network
 from typing import Dict, List, Union
 
 from pydantic import BaseModel
@@ -41,7 +42,7 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
     if function is None or isinstance(function, str):
         return function
 
-    if isinstance(function, (int, float, date, bool)):
+    if isinstance(function, (int, float, date, bool, IPv4Network, IPv6Network)):
         return str(function)
 
     if isinstance(function, list):
@@ -176,7 +177,7 @@ def resolve_get_azs(function_body, params: Dict, mappings: Dict[str, Dict], cond
 
 
 def resolve_condition(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
-    # TODO: Implement resolve conditions inside resourcesgit add .
+    # TODO: Implement resolve conditions inside resources
     return conditions.get(function_body, False)
 
 
