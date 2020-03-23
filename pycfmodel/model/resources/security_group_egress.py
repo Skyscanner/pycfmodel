@@ -12,8 +12,10 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+from ipaddress import IPv4Address, IPv6Address
 from typing import ClassVar, Optional
 
+from ...constants import IPV4_MASK_VALUE, IPV6_MASK_VALUE
 from ..types import ResolvableStr, ResolvableInt, ResolvableIntOrStr, ResolvableIPv4Network, ResolvableIPv6Network
 from ..base import CustomModel
 from .resource import Resource
@@ -39,9 +41,9 @@ class SecurityGroupEgress(Resource):
     def ipv4_slash_zero(self) -> bool:
         if not self.Properties.CidrIp:
             return False
-        return str(self.Properties.CidrIp).endswith("/0")
+        return self.Properties.CidrIp.hostmask == IPv4Address(IPV4_MASK_VALUE)
 
     def ipv6_slash_zero(self) -> bool:
         if not self.Properties.CidrIpv6:
             return False
-        return str(self.Properties.CidrIpv6).endswith("/0")
+        return self.Properties.CidrIpv6.hostmask == IPv6Address(IPV6_MASK_VALUE)
