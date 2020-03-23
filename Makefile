@@ -7,10 +7,10 @@ install-dev: install
 	pip install -e ".[dev]"
 
 format:
-	black --exclude venv/ .
+	black .
 
 lint:
-	black --check --exclude venv/ .
+	black --check .
 	flake8 pycfmodel/ # tests/
 
 component:
