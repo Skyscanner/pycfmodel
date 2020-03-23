@@ -19,6 +19,9 @@ from ..base import CustomModel
 from .resource import Resource
 
 
+import ipaddress
+
+
 class SecurityGroupIngressProperties(CustomModel):
     CidrIp: Optional[ResolvableStr] = None
     CidrIpv6: Optional[ResolvableStr] = None
@@ -50,14 +53,25 @@ class SecurityGroupIngress(Resource):
         return self.Properties.CidrIpv6.endswith("/0")
 
     def ipv4_private_addr(self) -> bool:
-        # follows https://tools.ietf.org/html/rfc1918
         if not self.Properties.CidrIp or not isinstance(self.Properties.CidrIp, str):
             return False
-        private_blocks = set({"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"})
-        return self.Properties.CidrIp in private_blocks
+
+        try:
+            return ipaddress.IPv4Network(self.Properties.CidrIp).is_private
+        except ValueError:
+            try:
+                return ipaddress.IPv4Address(self.Properties.CidrIp).is_private
+            except ValueError:
+                return False
 
     def ipv6_private_addr(self) -> bool:
-        # follows https://tools.ietf.org/html/rfc4193
         if not self.Properties.CidrIpv6 or not isinstance(self.Properties.CidrIpv6, str):
             return False
-        return self.Properties.CidrIpv6.lower().startswith("fc") or self.Properties.CidrIpv6.lower().startswith("fd")
+
+        try:
+            return ipaddress.IPv6Network(self.Properties.CidrIpv6).is_private
+        except ValueError:
+            try:
+                return ipaddress.IPv6Address(self.Properties.CidrIpv6).is_private
+            except ValueError:
+                return False

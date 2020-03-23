@@ -70,7 +70,7 @@ def test_ipv4_private_addr(ipv4, expected, security_group_egress_ipv4):
         ("FD00::/8", True),
         (None, False),
         (1, False),
-        ("2001:0db8:85a3:0000:0000:8a2e:0370:7334", False),
+        ("0001:0db8:85a3:0000:0000:8a2e:0370:7334", False),
     ],
 )
 def test_ipv6_private_addr(ipv6, expected, security_group_egress_ipv6):
