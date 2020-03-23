@@ -14,16 +14,14 @@ specific language governing permissions and limitations under the License.
 """
 from typing import ClassVar, Optional
 
-from ..types import ResolvableStr, ResolvableInt, ResolvableIntOrStr
+from ..types import ResolvableStr, ResolvableInt, ResolvableIntOrStr, ResolvableIPv4Network, ResolvableIPv6Network
 from ..base import CustomModel
 from .resource import Resource
 
-import ipaddress
-
 
 class SecurityGroupEgressProperties(CustomModel):
-    CidrIp: Optional[ResolvableStr] = None
-    CidrIpv6: Optional[ResolvableStr] = None
+    CidrIp: Optional[ResolvableIPv4Network] = None
+    CidrIpv6: Optional[ResolvableIPv6Network] = None
     Description: Optional[ResolvableStr] = None
     DestinationPrefixListId: Optional[ResolvableStr] = None
     DestinationSecurityGroupId: Optional[ResolvableStr] = None
@@ -39,35 +37,11 @@ class SecurityGroupEgress(Resource):
     Properties: SecurityGroupEgressProperties
 
     def ipv4_slash_zero(self) -> bool:
-        if not self.Properties.CidrIp or not isinstance(self.Properties.CidrIp, str):
+        if not self.Properties.CidrIp:
             return False
-        return self.Properties.CidrIp.endswith("/0")
+        return str(self.Properties.CidrIp).endswith("/0")
 
     def ipv6_slash_zero(self) -> bool:
-        if not self.Properties.CidrIpv6 or not isinstance(self.Properties.CidrIpv6, str):
+        if not self.Properties.CidrIpv6:
             return False
-        return self.Properties.CidrIpv6.endswith("/0")
-
-    def ipv4_private_addr(self) -> bool:
-        if not self.Properties.CidrIp or not isinstance(self.Properties.CidrIp, str):
-            return False
-
-        try:
-            return ipaddress.IPv4Network(self.Properties.CidrIp).is_private
-        except ValueError:
-            try:
-                return ipaddress.IPv4Address(self.Properties.CidrIp).is_private
-            except ValueError:
-                return False
-
-    def ipv6_private_addr(self) -> bool:
-        if not self.Properties.CidrIpv6 or not isinstance(self.Properties.CidrIpv6, str):
-            return False
-
-        try:
-            return ipaddress.IPv6Network(self.Properties.CidrIpv6).is_private
-        except ValueError:
-            try:
-                return ipaddress.IPv6Address(self.Properties.CidrIpv6).is_private
-            except ValueError:
-                return False
+        return str(self.Properties.CidrIpv6).endswith("/0")
