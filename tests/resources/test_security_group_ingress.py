@@ -24,7 +24,7 @@ def security_group_ingress_ipv4_1():
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Properties": {
                 "GroupId": "sg-12341234",
-                "CidrIp": "0.0.0.0/0",
+                "CidrIp": "1.1.1.1/0",
                 "FromPort": 46,
                 "ToPort": 46,
                 "IpProtocol": "tcp",

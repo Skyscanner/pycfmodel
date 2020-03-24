@@ -12,8 +12,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from ipaddress import IPv4Address, IPv6Address
+from ipaddress import IPv4Address, IPv6Address, IPv4Network, IPv6Network
 from typing import ClassVar, Optional
+from pydantic import validator
 
 from ...constants import IPV4_MASK_VALUE, IPV6_MASK_VALUE
 from ..types import ResolvableStr, ResolvableInt, ResolvableIntOrStr, ResolvableIPv4Network, ResolvableIPv6Network
@@ -31,6 +32,14 @@ class SecurityGroupEgressProperties(CustomModel):
     GroupId: Optional[ResolvableStr] = None
     IpProtocol: ResolvableIntOrStr
     ToPort: Optional[ResolvableInt] = None
+
+    @validator("CidrIp", pre=True)
+    def set_CidrIp(cls, v):
+        return IPv4Network(v, strict=False)
+
+    @validator("CidrIpv6", pre=True)
+    def set_CidrIpv6(cls, v):
+        return IPv6Network(v, strict=False)
 
 
 class SecurityGroupEgress(Resource):
