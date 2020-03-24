@@ -70,5 +70,5 @@ CONDITION_FUNCTIONS = {
 CONTAINS_STAR = re.compile(r"^.*[*].*$")
 CONTAINS_CF_PARAM = re.compile(r"(\$\{[\w\:]+\})")
 
-IPV4_MASK_VALUE = "255.255.255.255"
-IPV6_MASK_VALUE = "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"
+IPV4_ZERO_VALUE = "0.0.0.0/0"
+IPV6_ZERO_VALUE = "::/0"

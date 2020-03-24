@@ -12,11 +12,11 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from ipaddress import IPv4Address, IPv6Address, IPv4Network, IPv6Network
+from ipaddress import IPv4Network, IPv6Network
 from typing import ClassVar, Optional
 from pydantic import validator
 
-from ...constants import IPV4_MASK_VALUE, IPV6_MASK_VALUE
+from ...constants import IPV4_ZERO_VALUE, IPV6_ZERO_VALUE
 from ..types import ResolvableStr, ResolvableIntOrStr, ResolvableInt, ResolvableIPv4Network, ResolvableIPv6Network
 from ..base import CustomModel
 from .resource import Resource
@@ -53,9 +53,9 @@ class SecurityGroupIngress(Resource):
     def ipv4_slash_zero(self) -> bool:
         if not self.Properties.CidrIp:
             return False
-        return self.Properties.CidrIp.hostmask == IPv4Address(IPV4_MASK_VALUE)
+        return self.Properties.CidrIp == IPv4Network(IPV4_ZERO_VALUE)
 
     def ipv6_slash_zero(self) -> bool:
         if not self.Properties.CidrIpv6:
             return False
-        return self.Properties.CidrIpv6.hostmask == IPv6Address(IPV6_MASK_VALUE)
+        return self.Properties.CidrIpv6 == IPv6Network(IPV6_ZERO_VALUE)

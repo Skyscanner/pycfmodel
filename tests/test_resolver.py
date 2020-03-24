@@ -467,13 +467,12 @@ def test_resolve_scenario_3():
             }
         },
     }
-    model = parse(template).resolve(extra_params={"IPValueIngress": "10.0.0.0/8", "IPValueEgress": "127.0.0.1"})
+    model = parse(template).resolve(extra_params={"IPValueIngress": "1.1.1.1/16", "IPValueEgress": "127.0.0.1"})
     assert (
         model.Resources["InstanceSecurityGroup"].Properties.SecurityGroupIngress[0].CidrIp.with_netmask
-        == "10.0.0.0/255.0.0.0"
+        == "1.1.0.0/255.255.0.0"
     )
-    assert model.Resources["InstanceSecurityGroup"].Properties.SecurityGroupIngress[0].CidrIp.is_private
-    assert not model.Resources["InstanceSecurityGroup"].Properties.SecurityGroupIngress[0].CidrIp.is_global
+    assert not model.Resources["InstanceSecurityGroup"].Properties.SecurityGroupIngress[0].CidrIp.is_private
     assert (
         model.Resources["InstanceSecurityGroup"].Properties.SecurityGroupEgress[0].CidrIp.with_netmask
         == "127.0.0.1/255.255.255.255"
