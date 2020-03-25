@@ -13,6 +13,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 from datetime import date
+from ipaddress import IPv4Network, IPv6Network
 from typing import Union, List, TypeVar
 
 from .base import FunctionDict, ConditionDict
@@ -26,5 +27,7 @@ ResolvableDate = Resolvable[date]
 ResolvableBool = Resolvable[bool]
 ResolvableStrOrList = Resolvable[Union[str, List]]
 ResolvableIntOrStr = Resolvable[Union[int, str]]
+ResolvableIPv4Network = Resolvable[IPv4Network]
+ResolvableIPv6Network = Resolvable[IPv6Network]
 
 ResolvableCondition = Union[ConditionDict, ResolvableStr]

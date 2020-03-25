@@ -441,3 +441,39 @@ def test_resolve_scenario_2():
         == "arn:aws:lambda:*:123:function:test-lambda"
     )
     assert model.Resources["lambdaRole"].Properties.RoleName == "test-lambda-role"
+
+
+def test_resolve_scenario_3():
+    template = {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "Test resolving IP address in security group",
+        "Parameters": {
+            "IPValueIngress": {"Description": "Some IP Ingress", "Type": "String"},
+            "IPValueEgress": {"Description": "Some IP Egress", "Type": "String"},
+        },
+        "Resources": {
+            "InstanceSecurityGroup": {
+                "Type": "AWS::EC2::SecurityGroup",
+                "Properties": {
+                    "GroupDescription": "Allow http to client host",
+                    "VpcId": "VPCID",
+                    "SecurityGroupIngress": [
+                        {"IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "CidrIp": {"Ref": "IPValueIngress"}}
+                    ],
+                    "SecurityGroupEgress": [
+                        {"IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "CidrIp": {"Ref": "IPValueEgress"}}
+                    ],
+                },
+            }
+        },
+    }
+    model = parse(template).resolve(extra_params={"IPValueIngress": "1.1.1.1/16", "IPValueEgress": "127.0.0.1"})
+    assert (
+        model.Resources["InstanceSecurityGroup"].Properties.SecurityGroupIngress[0].CidrIp.with_netmask
+        == "1.1.0.0/255.255.0.0"
+    )
+    assert not model.Resources["InstanceSecurityGroup"].Properties.SecurityGroupIngress[0].CidrIp.is_private
+    assert (
+        model.Resources["InstanceSecurityGroup"].Properties.SecurityGroupEgress[0].CidrIp.with_netmask
+        == "127.0.0.1/255.255.255.255"
+    )
