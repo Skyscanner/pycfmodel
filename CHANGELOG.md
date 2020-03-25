@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.7.0 - [2020-03-25]
+### Improvements
+- `CidrIp` and `CidrIpv6` properties of Security Group ingress and egress now use type `IPv4Network` and `IPv6Network` respectively.
+- This has led to modified `ipv4_slash_zero` and `ipv6_slash_zero` functions.
+
+
 ## 0.6.4 - [2020-02-27]
 ### Fixes
 - Allow multiple operands in `or` and `and` functions. 
