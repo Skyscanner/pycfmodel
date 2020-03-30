@@ -2,9 +2,9 @@ from typing import Dict, ClassVar, Optional
 
 from pydantic import validator
 
-from ...model.types import ResolvableStrOrList, ResolvableStr, ResolvableCondition
-from ..base import CustomModel
-from ..parameter import Parameter
+from pycfmodel.model.base import CustomModel
+from pycfmodel.model.parameter import Parameter
+from pycfmodel.model.types import ResolvableCondition, ResolvableStr, ResolvableStrOrList
 
 
 class Resource(CustomModel):

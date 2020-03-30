@@ -1,14 +1,14 @@
 from datetime import date
 from typing import Dict, Union, ClassVar, Optional, List, Any, Collection, Type
 
-from .resources.resource import Resource
-from ..resolver import resolve, _extended_bool
-from ..constants import AWS_NOVALUE
-from .resources.generic_resource import GenericResource
-from .types import Resolvable
-from .resources.types import ResourceModels
-from .base import CustomModel
-from .parameter import Parameter
+from pycfmodel.constants import AWS_NOVALUE
+from pycfmodel.model.base import CustomModel
+from pycfmodel.model.parameter import Parameter
+from pycfmodel.model.resources.generic_resource import GenericResource
+from pycfmodel.model.resources.resource import Resource
+from pycfmodel.model.resources.types import ResourceModels
+from pycfmodel.model.types import Resolvable
+from pycfmodel.resolver import _extended_bool, resolve
 
 
 class CFModel(CustomModel):

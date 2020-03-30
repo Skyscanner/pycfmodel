@@ -2,9 +2,9 @@ import logging
 
 from typing import List, Pattern, Optional, Union, Dict
 
-from ....utils import is_resolvable_dict
-from ...types import ResolvableStr, ResolvableStrOrList
-from .property import Property
+from pycfmodel.model.resources.properties.property import Property
+from pycfmodel.model.types import ResolvableStr, ResolvableStrOrList
+from pycfmodel.utils import is_resolvable_dict
 
 logger = logging.getLogger(__file__)
 

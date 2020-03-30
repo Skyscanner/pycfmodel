@@ -1,9 +1,9 @@
 from typing import ClassVar, List
 
-from ..types import ResolvableStr, Resolvable
-from ..base import CustomModel
-from .resource import Resource
-from .properties.policy_document import PolicyDocument
+from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.properties.policy_document import PolicyDocument
+from pycfmodel.model.resources.resource import Resource
+from pycfmodel.model.types import Resolvable, ResolvableStr
 
 
 class SNSTopicPolicyProperties(CustomModel):

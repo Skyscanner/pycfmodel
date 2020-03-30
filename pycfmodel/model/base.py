@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Extra, root_validator
 
-from ..utils import is_resolvable_dict, is_conditional_dict
+from pycfmodel.utils import is_resolvable_dict, is_conditional_dict
 
 
 class CustomModel(BaseModel):

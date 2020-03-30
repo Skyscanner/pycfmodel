@@ -3,9 +3,9 @@ from typing import List, Pattern, Union, Optional
 
 from pydantic import Extra
 
-from ...types import ResolvableDate, Resolvable
-from .property import Property
-from .statement import Statement
+from pycfmodel.model.resources.properties.property import Property
+from pycfmodel.model.resources.properties.statement import Statement
+from pycfmodel.model.types import Resolvable, ResolvableDate
 
 _IAM_ACTIONS = [
     "IAM:AddClientIDToOpenIDConnectProvider",

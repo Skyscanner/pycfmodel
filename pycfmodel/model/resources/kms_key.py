@@ -1,9 +1,9 @@
 from typing import ClassVar, List, Optional, Dict
 
-from ..base import CustomModel
-from ..types import ResolvableStr, ResolvableInt, ResolvableBool, Resolvable
-from .properties.policy_document import PolicyDocument
-from .resource import Resource
+from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.properties.policy_document import PolicyDocument
+from pycfmodel.model.resources.resource import Resource
+from pycfmodel.model.types import ResolvableStr, ResolvableBool, Resolvable, ResolvableInt
 
 
 class KMSKeyProperties(CustomModel):

@@ -1,6 +1,6 @@
 from typing import Any
 
-from .constants import IMPLEMENTED_FUNCTIONS, CONDITION_FUNCTIONS
+from pycfmodel.constants import CONDITION_FUNCTIONS, IMPLEMENTED_FUNCTIONS
 
 
 def is_resolvable_dict(value: Any) -> bool:

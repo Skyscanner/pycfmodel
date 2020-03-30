@@ -1,4 +1,4 @@
-from .model.cf_model import CFModel
+from pycfmodel.model.cf_model import CFModel
 
 
 def parse(template):

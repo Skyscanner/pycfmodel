@@ -1,10 +1,10 @@
 from typing import ClassVar, Optional, List, Union, Dict
 
-from ..types import ResolvableStr, Resolvable
-from ..base import CustomModel
-from .properties.security_group_egress_prop import SecurityGroupEgressProp
-from .properties.security_group_ingress_prop import SecurityGroupIngressProp
-from .resource import Resource
+from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.properties.security_group_egress_prop import SecurityGroupEgressProp
+from pycfmodel.model.resources.properties.security_group_ingress_prop import SecurityGroupIngressProp
+from pycfmodel.model.resources.resource import Resource
+from pycfmodel.model.types import ResolvableStr, Resolvable
 
 
 class SecurityGroupProperties(CustomModel):

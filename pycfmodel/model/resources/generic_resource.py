@@ -3,8 +3,8 @@ from typing import ClassVar
 
 from pydantic import Extra, validator
 
-from .types import ResourceModels
-from .resource import Resource
+from pycfmodel.model.resources.resource import Resource
+from pycfmodel.model.resources.types import ResourceModels
 
 logger = logging.getLogger(__file__)
 

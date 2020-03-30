@@ -2,7 +2,7 @@ from datetime import date
 from ipaddress import IPv4Network, IPv6Network
 from typing import Union, List, TypeVar
 
-from .base import FunctionDict, ConditionDict
+from pycfmodel.model.base import FunctionDict, ConditionDict
 
 T = TypeVar("T")
 Resolvable = Union[T, FunctionDict]

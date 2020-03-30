@@ -1,9 +1,9 @@
 from typing import ClassVar, List, Optional
 
-from ..base import CustomModel
-from ..types import ResolvableStr, Resolvable
-from .resource import Resource
-from .iam_policy import IAMPolicy
+from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.iam_policy import IAMPolicy
+from pycfmodel.model.resources.resource import Resource
+from pycfmodel.model.types import ResolvableStr, Resolvable
 
 
 class IAMGroupProperties(CustomModel):
