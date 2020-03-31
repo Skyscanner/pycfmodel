@@ -2,7 +2,7 @@ from typing import List, Optional, Any, ClassVar
 
 from pydantic import PositiveInt
 
-from .base import CustomModel
+from pycfmodel.model.base import CustomModel
 
 
 class Parameter(CustomModel):

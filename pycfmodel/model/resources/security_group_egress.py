@@ -2,10 +2,16 @@ from ipaddress import IPv4Network, IPv6Network
 from typing import ClassVar, Optional
 from pydantic import validator
 
-from ...constants import IPV4_ZERO_VALUE, IPV6_ZERO_VALUE
-from ..types import ResolvableStr, ResolvableInt, ResolvableIntOrStr, ResolvableIPv4Network, ResolvableIPv6Network
-from ..base import CustomModel
-from .resource import Resource
+from pycfmodel.constants import IPV4_ZERO_VALUE, IPV6_ZERO_VALUE
+from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.resource import Resource
+from pycfmodel.model.types import (
+    ResolvableIPv4Network,
+    ResolvableIPv6Network,
+    ResolvableStr,
+    ResolvableInt,
+    ResolvableIntOrStr,
+)
 
 
 class SecurityGroupEgressProperties(CustomModel):

@@ -1,9 +1,9 @@
 from typing import ClassVar, Optional, List
 
-from ..base import CustomModel
-from ..types import ResolvableStr, Resolvable
-from .resource import Resource
-from .properties.policy_document import PolicyDocument
+from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.resource import Resource
+from pycfmodel.model.types import ResolvableStr, Resolvable
+from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 
 
 class IAMManagedPolicyProperties(CustomModel):

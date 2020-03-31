@@ -1,10 +1,10 @@
 from typing import ClassVar, List, Optional, Dict
 
-from ..parameter import Parameter
-from ..types import ResolvableStr, Resolvable
-from ..base import CustomModel
-from .properties.policy import Policy
-from .resource import Resource
+from pycfmodel.model.base import CustomModel
+from pycfmodel.model.parameter import Parameter
+from pycfmodel.model.resources.properties.policy import Policy
+from pycfmodel.model.resources.resource import Resource
+from pycfmodel.model.types import Resolvable, ResolvableStr
 
 
 class IAMUserProperties(CustomModel):

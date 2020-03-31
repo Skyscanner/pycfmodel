@@ -7,9 +7,8 @@ from typing import Dict, List, Union
 
 from pydantic import BaseModel
 
-from .constants import AWS_NOVALUE, CONTAINS_CF_PARAM
-from .utils import is_resolvable_dict
-
+from pycfmodel.constants import AWS_NOVALUE, CONTAINS_CF_PARAM
+from pycfmodel.utils import is_resolvable_dict
 
 logger = logging.getLogger(__file__)
 
