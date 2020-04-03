@@ -27,7 +27,7 @@ coverage:
 test: lint component
 
 freeze:
-	PIP_CONFIG_FILE=pip.conf pip-compile --no-index --output-file requirements.txt setup.py
+	CUSTOM_COMPILE_COMMAND="make freeze" PIP_CONFIG_FILE=pip.conf pip-compile --no-index --output-file requirements.txt setup.py
 
 freeze-upgrade:
 	CUSTOM_COMPILE_COMMAND="make freeze-upgrade" pip-compile --no-index --upgrade --output-file requirements.txt setup.py
