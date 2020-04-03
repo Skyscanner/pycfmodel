@@ -10,7 +10,7 @@ install_requires = ["pydantic~=1.0"]
 
 dev_requires = ["black==19.3b0", "pytest==3.6.0", "flake8>=3.3.0", "pytest-cov>=2.5.1", "pip-tools==2.0.2"]
 
-docs_requires = ["AutoMacDoc==0.3", "mkdocs-material==4.6.3", "mkdocs==1.0.4"]
+docs_requires = ["AutoMacDoc==0.3", "mkdocs-material==4.6.3", "mkdocs==1.0.4", "mkdocstrings==0.10.0"]
 
 setup(
     name="pycfmodel",
