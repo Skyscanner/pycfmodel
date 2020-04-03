@@ -15,6 +15,25 @@ from pycfmodel.model.types import (
 
 
 class SecurityGroupIngressProperties(CustomModel):
+    """
+    Properties:
+
+    - CidrIp: .
+    - CidrIpv6: .
+    - Description: .
+    - FromPort: .
+    - GroupId: .
+    - GroupName: .
+    - IpProtocol: .
+    - SourcePrefixListId: .
+    - SourceSecurityGroupId: .
+    - SourceSecurityGroupName: .
+    - SourceSecurityGroupOwnerId: .
+    - ToPort: .
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-ingress.html)
+    """
+
     CidrIp: Optional[ResolvableIPv4Network] = None
     CidrIpv6: Optional[ResolvableIPv6Network] = None
     Description: Optional[ResolvableStr] = None
@@ -38,6 +57,14 @@ class SecurityGroupIngressProperties(CustomModel):
 
 
 class SecurityGroupIngress(Resource):
+    """
+    Properties:
+
+    - Properties: A [Security Group Ingress Properties][pycfmodel.model.resources.kms_key.KMSKeyProperties] object.
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-ingress.html)
+    """
+
     TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroupIngress"
     Type: str = TYPE_VALUE
     Properties: SecurityGroupIngressProperties

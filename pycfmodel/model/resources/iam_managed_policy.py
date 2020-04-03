@@ -7,6 +7,20 @@ from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 
 
 class IAMManagedPolicyProperties(CustomModel):
+    """
+    Properties:
+
+    - Description: Description of the policy.
+    - Groups: Friendly name of the IAM groups to attach the policy to.
+    - ManagedPolicyName: Name of the policy.
+    - Path: Path to the policy.
+    - PolicyDocument: A [policy document][pycfmodel.model.resources.properties.policy_document.PolicyDocument] object.
+    - Roles: Friendly name of the IAM roles to attach the policy to.
+    - Users: Friendly name of the IAM users to attach the policy to.
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html)
+    """
+
     Description: Optional[ResolvableStr] = None
     Groups: Optional[Resolvable[List[ResolvableStr]]] = None
     ManagedPolicyName: Optional[ResolvableStr] = None
@@ -17,6 +31,14 @@ class IAMManagedPolicyProperties(CustomModel):
 
 
 class IAMManagedPolicy(Resource):
+    """
+    Properties:
+
+    - Properties: A [IAM Managed Policy properties][pycfmodel.model.resources.iam_managed_policy.IAMManagedPolicyProperties] object.
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html)
+    """
+
     TYPE_VALUE: ClassVar = "AWS::IAM::ManagedPolicy"
     Type: str = TYPE_VALUE
     Properties: Resolvable[IAMManagedPolicyProperties]

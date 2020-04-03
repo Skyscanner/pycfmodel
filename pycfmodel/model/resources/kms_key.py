@@ -7,6 +7,20 @@ from pycfmodel.model.types import ResolvableStr, ResolvableBool, Resolvable, Res
 
 
 class KMSKeyProperties(CustomModel):
+    """
+    Properties:
+
+    - Description:
+    - EnableKeyRotation:
+    - Enabled:
+    - KeyPolicy: A [policy document][pycfmodel.model.resources.properties.policy_document.PolicyDocument] object.
+    - KeyUsage:
+    - PendingWindowInDays:
+    - Tags:
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html)
+    """
+
     Description: Optional[ResolvableStr] = None
     EnableKeyRotation: Optional[ResolvableBool] = None
     Enabled: Optional[ResolvableBool] = None
@@ -17,6 +31,14 @@ class KMSKeyProperties(CustomModel):
 
 
 class KMSKey(Resource):
+    """
+    Properties:
+
+    - Properties: A [KMS Key properties][pycfmodel.model.resources.kms_key.KMSKeyProperties] object.
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html)
+    """
+
     TYPE_VALUE: ClassVar = "AWS::KMS::Key"
     Type: str = TYPE_VALUE
     Properties: Resolvable[KMSKeyProperties]

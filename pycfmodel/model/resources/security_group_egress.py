@@ -15,6 +15,22 @@ from pycfmodel.model.types import (
 
 
 class SecurityGroupEgressProperties(CustomModel):
+    """
+    Properties:
+
+    - CidrIp: .
+    - CidrIpv6: .
+    - Description: .
+    - DestinationPrefixListId: .
+    - DestinationSecurityGroupId: .
+    - FromPort: .
+    - GroupId: .
+    - IpProtocol: .
+    - ToPort: .
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html)
+    """
+
     CidrIp: Optional[ResolvableIPv4Network] = None
     CidrIpv6: Optional[ResolvableIPv6Network] = None
     Description: Optional[ResolvableStr] = None
@@ -35,6 +51,14 @@ class SecurityGroupEgressProperties(CustomModel):
 
 
 class SecurityGroupEgress(Resource):
+    """
+    Properties:
+
+    - Properties: A [Security Group Egress Properties][pycfmodel.model.resources.security_group_egress.SecurityGroupEgressProperties] object.
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html)
+    """
+
     TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroupEgress"
     Type: str = TYPE_VALUE
     Properties: SecurityGroupEgressProperties

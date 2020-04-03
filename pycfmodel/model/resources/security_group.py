@@ -8,6 +8,19 @@ from pycfmodel.model.types import ResolvableStr, Resolvable
 
 
 class SecurityGroupProperties(CustomModel):
+    """
+    Properties:
+
+    - GroupDescription:
+    - GroupName:
+    - SecurityGroupEgress:
+    - SecurityGroupIngress:
+    - Tags:
+    - VpcId:
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html)
+    """
+
     GroupDescription: ResolvableStr
     GroupName: Optional[ResolvableStr] = None
     SecurityGroupEgress: Optional[
@@ -21,6 +34,14 @@ class SecurityGroupProperties(CustomModel):
 
 
 class SecurityGroup(Resource):
+    """
+    Properties:
+
+    - Properties: A [Security Group Properties][pycfmodel.model.resources.security_group.SecurityGroupProperties] object.
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html)
+    """
+
     TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroup"
     Type: str = TYPE_VALUE
     Properties: Resolvable[SecurityGroupProperties]
