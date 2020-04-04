@@ -30,7 +30,6 @@ class Parameter(CustomModel):
     def get_ref_value(self, provided_value=None) -> Optional[str]:
         """
 
-        |
 
         Arguments:
             provided_value: An XML node, used like the root of an XML tree.

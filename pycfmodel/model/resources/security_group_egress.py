@@ -18,15 +18,15 @@ class SecurityGroupEgressProperties(CustomModel):
     """
     Properties:
 
-    - CidrIp: .
-    - CidrIpv6: .
-    - Description: .
-    - DestinationPrefixListId: .
-    - DestinationSecurityGroupId: .
-    - FromPort: .
-    - GroupId: .
-    - IpProtocol: .
-    - ToPort: .
+    - CidrIp: IPv4 address range.
+    - CidrIpv6: IPv6 address range.
+    - Description: Description for the security group rule.
+    - DestinationPrefixListId: The prefix list IDs for an AWS service.
+    - DestinationSecurityGroupId: ID of the destination VPC security group.
+    - FromPort: Start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. A value of -1 indicates all ICMP/ICMPv6 types.
+    - GroupId: ID of the security group.
+    - IpProtocol: IP protocol name.
+    - ToPort: End of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code. A value of -1 indicates all ICMP/ICMPv6 codes.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html)
     """
@@ -49,7 +49,6 @@ class SecurityGroupEgressProperties(CustomModel):
     def set_CidrIpv6(cls, v):
         return IPv6Network(v, strict=False)
 
-
 class SecurityGroupEgress(Resource):
     """
     Properties:
@@ -62,13 +61,3 @@ class SecurityGroupEgress(Resource):
     TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroupEgress"
     Type: str = TYPE_VALUE
     Properties: SecurityGroupEgressProperties
-
-    def ipv4_slash_zero(self) -> bool:
-        if not self.Properties.CidrIp:
-            return False
-        return self.Properties.CidrIp == IPv4Network(IPV4_ZERO_VALUE)
-
-    def ipv6_slash_zero(self) -> bool:
-        if not self.Properties.CidrIpv6:
-            return False
-        return self.Properties.CidrIpv6 == IPv6Network(IPV6_ZERO_VALUE)

@@ -18,18 +18,18 @@ class SecurityGroupIngressProperties(CustomModel):
     """
     Properties:
 
-    - CidrIp: .
-    - CidrIpv6: .
-    - Description: .
-    - FromPort: .
-    - GroupId: .
-    - GroupName: .
-    - IpProtocol: .
-    - SourcePrefixListId: .
-    - SourceSecurityGroupId: .
-    - SourceSecurityGroupName: .
-    - SourceSecurityGroupOwnerId: .
-    - ToPort: .
+    - CidrIp: IPv4 address range.
+    - CidrIpv6: IPv6 address range.
+    - Description: Description for the security group rule.
+    - FromPort: Start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. A value of -1 indicates all ICMP/ICMPv6 types.
+    - GroupId: ID of the security group.
+    - GroupName: Name of the security group.
+    - IpProtocol: IP protocol name.
+    - SourcePrefixListId: The prefix list IDs for an AWS service.
+    - SourceSecurityGroupId: ID of the security group.
+    - SourceSecurityGroupName: Name of the source security group.
+    - SourceSecurityGroupOwnerId: AWS account ID for the source security group.
+    - ToPort: End of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code. A value of -1 indicates all ICMP/ICMPv6 codes.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-ingress.html)
     """

@@ -10,13 +10,13 @@ class KMSKeyProperties(CustomModel):
     """
     Properties:
 
-    - Description:
-    - EnableKeyRotation:
-    - Enabled:
+    - Description: Description of the CMK.
+    - EnableKeyRotation: Enables automatic rotation of the key for the customer master key.
+    - Enabled: Specifies whether the customer master key (CMK) is enabled.
     - KeyPolicy: A [policy document][pycfmodel.model.resources.properties.policy_document.PolicyDocument] object.
-    - KeyUsage:
-    - PendingWindowInDays:
-    - Tags:
+    - KeyUsage: Determines the cryptographic operations.
+    - PendingWindowInDays: Number of days in the waiting period before AWS KMS deletes a CMK that has been removed from a CloudFormation stack.
+    - Tags: Array of key-value pairs.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html)
     """

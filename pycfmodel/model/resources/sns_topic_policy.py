@@ -11,7 +11,7 @@ class SNSTopicPolicyProperties(CustomModel):
     Properties:
 
     - PolicyDocument: A [policy document][pycfmodel.model.resources.properties.policy_document.PolicyDocument] object.
-    - Topics: .
+    - Topics: ARNs of the topics to add the policy.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html)
     """

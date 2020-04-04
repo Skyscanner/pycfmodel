@@ -17,8 +17,6 @@ nav:
     - Resources:
       - All Resources: "reference/resources.md"
       - Common Properties: "reference/properties.md"
-#      - __init__.py: "reference/handlers/__init__.md"
-#      - python.py: "reference/handlers/python.md"
   - Changelog: changelog.md
   - Contributing: contributing.md
   - Code of conduct: code_of_conduct.md

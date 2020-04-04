@@ -11,7 +11,7 @@ class SQSQueuePolicyProperties(CustomModel):
     Properties:
 
     - PolicyDocument: A [policy document][pycfmodel.model.resources.properties.policy_document.PolicyDocument] object.
-    - Queues: .
+    - Queues: URLs of the queues to add the policy.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html)
     """

@@ -10,7 +10,7 @@ class S3BucketPolicyProperties(CustomModel):
     """
     Properties:
 
-    - Bucket:
+    - Bucket: Name of the Amazon S3 bucket to which the policy applies.
     - PolicyDocument: A [policy document][pycfmodel.model.resources.properties.policy_document.PolicyDocument] object.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html)

@@ -11,12 +11,12 @@ class SecurityGroupProperties(CustomModel):
     """
     Properties:
 
-    - GroupDescription:
-    - GroupName:
-    - SecurityGroupEgress:
-    - SecurityGroupIngress:
-    - Tags:
-    - VpcId:
+    - GroupDescription: Description for the security group.
+    - GroupName: Name of the security group.
+    - SecurityGroupEgress: Outbound rules associated with the security group.
+    - SecurityGroupIngress: Inbound rules associated with the security group.
+    - Tags: Array of key-value pairs.
+    - VpcId: ID of the VPC for the security group.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html)
     """
