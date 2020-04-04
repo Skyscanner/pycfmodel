@@ -24,6 +24,7 @@ class SecurityGroupEgressProperties(SecurityGroupEgressProp):
     GroupId: Optional[ResolvableStr] = None
 
 
+
 class SecurityGroupEgress(Resource):
     """
     Properties:
