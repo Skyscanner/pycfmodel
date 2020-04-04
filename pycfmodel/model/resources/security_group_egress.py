@@ -49,7 +49,6 @@ class SecurityGroupEgressProperties(CustomModel):
     def set_CidrIpv6(cls, v):
         return IPv6Network(v, strict=False)
 
-
 class SecurityGroupEgress(Resource):
     """
     Properties:
@@ -62,13 +61,3 @@ class SecurityGroupEgress(Resource):
     TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroupEgress"
     Type: str = TYPE_VALUE
     Properties: SecurityGroupEgressProperties
-
-    def ipv4_slash_zero(self) -> bool:
-        if not self.Properties.CidrIp:
-            return False
-        return self.Properties.CidrIp == IPv4Network(IPV4_ZERO_VALUE)
-
-    def ipv6_slash_zero(self) -> bool:
-        if not self.Properties.CidrIpv6:
-            return False
-        return self.Properties.CidrIpv6 == IPv6Network(IPV6_ZERO_VALUE)
