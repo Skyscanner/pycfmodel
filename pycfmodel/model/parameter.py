@@ -7,7 +7,7 @@ from pycfmodel.model.base import CustomModel
 
 class Parameter(CustomModel):
     """
-    Cloudformation Parameter object representation
+    CloudFormation Parameter object representation
     """
 
     NO_ECHO_NO_DEFAULT: ClassVar[str] = "NO_ECHO_NO_DEFAULT"
