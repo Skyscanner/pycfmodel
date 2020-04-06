@@ -224,7 +224,7 @@ class PolicyDocument(Property):
         Find all IAM Actions which are specified in statements.
 
         Arguments:
-            difference: Behaviour changes to: Find all IAM Actions which are specified in statements.
+            difference: when True, the behaviour changes to find the difference between all IAM Actions and those specified in the statements of the policy. Default = False.
 
         Returns:
             List of matching actions.
