@@ -1,0 +1,45 @@
+site_name: pycfmodel
+site_description: "A python model for Cloud Formation scripts."
+strict: true
+site_url: https://pycfmodel.readthedocs.io
+
+theme:
+  name: 'material'
+
+repo_name: Skyscanner/pycfmodel
+repo_url: https://github.com/Skyscanner/pycfmodel
+
+nav:
+  - Home: index.md
+  - Reference:
+    - CFModel: "reference/cfmodel.md"
+    - Resources:
+      - All Resources: "reference/resources.md"
+      - Common Properties: "reference/properties.md"
+  - Changelog: changelog.md
+  - Contributing: contributing.md
+  - Code of conduct: code_of_conduct.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mkdocstrings:
+      watch:
+        - pycfmodel/
+
+extra_css:
+  - 'stylesheets/extra.css'
+
+extra:
+  social:
+    - type: 'github'
+      link: 'https://github.com/Skyscanner'
+    - type: 'twitter'
+      link: 'https://twitter.com/skyscannereng'
+    - type: 'linkedin'
+      link: 'https://www.linkedin.com/company/skyscanner/'

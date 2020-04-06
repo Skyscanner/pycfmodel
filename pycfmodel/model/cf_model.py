@@ -12,6 +12,25 @@ from pycfmodel.resolver import _extended_bool, resolve
 
 
 class CFModel(CustomModel):
+    """
+    Template that describes AWS infrastructure.
+
+    Properties:
+
+    - AWSTemplateFormatVersion
+    - Conditions: Conditions that control behaviour of the template.
+    - Description: Description for the template.
+    - Mappings: A 3 level mapping of keys and associated values.
+    - Metadata: Additional information about the template.
+    - Outputs: Output values of the template.
+    - Parameters: Parameters to the template.
+    - Resources: Stack resources and their properties.
+    - Rules
+    - Transform: For serverless applications, specifies the version of the AWS Serverless Application Model (AWS SAM) to use.
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html)
+    """
+
     AWSTemplateFormatVersion: Optional[date]
     Conditions: Optional[Dict] = {}
     Description: Optional[str] = None
@@ -36,6 +55,15 @@ class CFModel(CustomModel):
     }
 
     def resolve(self, extra_params=None) -> "CFModel":
+        """
+        Resolve all intrinsic functions on the template.
+
+        Arguments:
+            extra_params: Values of parameters passed to the Cloudformation.
+
+        Returns:
+            A new CFModel.
+        """
         extra_params = {} if extra_params is None else extra_params
         # default parameters
         params = {}
@@ -67,6 +95,15 @@ class CFModel(CustomModel):
     def resources_filtered_by_type(
         self, allowed_types: Collection[Union[str, Type[Resource]]]
     ) -> Dict[str, Dict[str, Resource]]:
+        """
+        Filtered resources based on types.
+
+        Arguments:
+            allowed_types: Collection of desired types.
+
+        Returns:
+            Dictionary where key is the logical id and value is the resource.
+        """
         result = {}
         allowed_resource_classes = tuple(x for x in allowed_types if isinstance(x, type))
         for resource_name, resource in self.Resources.items():

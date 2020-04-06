@@ -6,6 +6,10 @@ from pycfmodel.model.base import CustomModel
 
 
 class Parameter(CustomModel):
+    """
+    CloudFormation Parameter object representation
+    """
+
     NO_ECHO_NO_DEFAULT: ClassVar[str] = "NO_ECHO_NO_DEFAULT"
     NO_ECHO_WITH_DEFAULT: ClassVar[str] = "NO_ECHO_WITH_DEFAULT"
     NO_ECHO_WITH_VALUE: ClassVar[str] = "NO_ECHO_WITH_VALUE"
@@ -22,6 +26,19 @@ class Parameter(CustomModel):
     Type: str
 
     def get_ref_value(self, provided_value=None) -> Optional[str]:
+        """
+        Calculates the parameter value to be used in the template.
+
+        - If `NoEcho` property is set, it uses a constant value.
+        - If it is a list of numbers or a comma delimited list, returns the string version of each element in a list.
+        - Returns None if `provided_value` and `Default` are `None`.
+
+        Arguments:
+            provided_value: Value injected in the template
+
+        Returns:
+            The computed value.
+        """
         value = provided_value if provided_value is not None else self.Default
         if self.NoEcho:
             if provided_value is not None:

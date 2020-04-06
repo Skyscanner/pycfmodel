@@ -6,6 +6,9 @@ install:
 install-dev: install
 	pip install -e ".[dev]"
 
+install-docs:
+	pip install -e ".[dev,docs]"
+
 format:
 	black .
 
@@ -24,6 +27,9 @@ coverage:
 test: lint component
 
 freeze:
-	PIP_CONFIG_FILE=pip.conf pip-compile --no-index --output-file requirements.txt setup.py
+	CUSTOM_COMPILE_COMMAND="make freeze" PIP_CONFIG_FILE=pip.conf pip-compile --no-index --output-file requirements.txt setup.py
 
-.PHONY: install install-dev lint component coverage test freeze format
+freeze-upgrade:
+	CUSTOM_COMPILE_COMMAND="make freeze-upgrade" pip-compile --no-index --upgrade --output-file requirements.txt setup.py
+
+.PHONY: install install-dev install-docs lint component coverage test freeze freeze-upgrade format

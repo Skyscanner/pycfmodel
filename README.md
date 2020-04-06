@@ -4,6 +4,7 @@
 [![PyPI version](https://badge.fury.io/py/pycfmodel.svg)](https://badge.fury.io/py/pycfmodel)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/Skyscanner/pycfmodel.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Skyscanner/pycfmodel/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/Skyscanner/pycfmodel.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Skyscanner/pycfmodel/context:python)
+[![Documentation Status](https://readthedocs.org/projects/pycfmodel/badge/?version=latest)](https://pycfmodel.readthedocs.io/en/latest/?badge=latest)
 
 *A python model for Cloud Formation scripts.*
 

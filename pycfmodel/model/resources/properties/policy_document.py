@@ -139,6 +139,15 @@ _IAM_ACTIONS = [
 
 
 class PolicyDocument(Property):
+    """
+    Contains information about an attached policy.
+
+    Properties:
+
+    - Statement: A [statement][pycfmodel.model.resources.properties.statement.Statement] object.
+    - Version
+    """
+
     class Config(Property.Config):
         extra = Extra.allow
 
@@ -151,9 +160,27 @@ class PolicyDocument(Property):
         return self.Statement
 
     def statements_with(self, pattern: Pattern) -> List[Statement]:
+        """
+        Finds all statements which have at least one resource with the pattern.
+
+        Arguments:
+            pattern: Pattern to match.
+
+        Returns:
+            List of [statements][pycfmodel.model.resources.properties.statement.Statement].
+        """
         return [statement for statement in self._statement_as_list() if statement.resources_with(pattern)]
 
     def allowed_actions_with(self, pattern: Pattern) -> List[Statement]:
+        """
+        Finds all statements which have at least one action with the pattern.
+
+        Arguments:
+            pattern: Pattern to match.
+
+        Returns:
+            List of [statements][pycfmodel.model.resources.properties.statement.Statement].
+        """
         return [
             statement
             for statement in self._statement_as_list()
@@ -161,6 +188,15 @@ class PolicyDocument(Property):
         ]
 
     def allowed_principals_with(self, pattern: Pattern) -> List[str]:
+        """
+        Finds all allowed principals which match the pattern.
+
+        Arguments:
+            pattern: Pattern to match.
+
+        Returns:
+            List of principals.
+        """
         principals = set()
         for statement in self._statement_as_list():
             if statement.Effect == "Allow":
@@ -168,7 +204,15 @@ class PolicyDocument(Property):
         return list(principals)
 
     def non_whitelisted_allowed_principals(self, whitelist: List[str]) -> List[str]:
-        """Find non whitelisted allowed principals."""
+        """
+        Find non whitelisted allowed principals.
+
+        Arguments:
+            whitelist: List of whitelisted principals.
+
+        Returns:
+            List of principals.
+        """
         principals = set()
         for statement in self._statement_as_list():
             if statement.Effect == "Allow":
@@ -176,6 +220,15 @@ class PolicyDocument(Property):
         return list(principals)
 
     def get_iam_actions(self, difference=False) -> List[str]:
+        """
+        Find all IAM Actions which are specified in statements.
+
+        Arguments:
+            difference: when True, the behaviour changes to find the difference between all IAM Actions and those specified in the statements of the policy. Default = False.
+
+        Returns:
+            List of matching actions.
+        """
         actions = set()
         for statement in self._statement_as_list():
             for action in statement.get_action_list():
