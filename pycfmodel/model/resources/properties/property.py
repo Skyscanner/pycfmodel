@@ -10,7 +10,7 @@ class Property(CustomModel):
 
     Properties:
 
-    - Condition: Define conditions that must comply to apply the condition.
+    - Condition
     """
 
     Condition: Optional[ResolvableCondition] = None
