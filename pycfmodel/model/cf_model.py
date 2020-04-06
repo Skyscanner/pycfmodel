@@ -13,20 +13,22 @@ from pycfmodel.resolver import _extended_bool, resolve
 
 class CFModel(CustomModel):
     """
+    Template that describes AWS infrastructure.
+
     Properties:
 
-    - AWSTemplateFormatVersion: .
-    - Conditions: .
-    - Description: .
-    - Mappings: .
-    - Metadata: .
-    - Outputs: .
-    - Parameters: .
-    - Resources: .
-    - Rules: .
-    - Transform: .
+    - AWSTemplateFormatVersion
+    - Conditions: Conditions that control behaviour of the template.
+    - Description: Description for the template.
+    - Mappings: A 3 level mapping of keys and associated values.
+    - Metadata: Additional information about the template.
+    - Outputs: Output values of the template.
+    - Parameters: Parameters to the template.
+    - Resources: Stack resources and their properties.
+    - Rules
+    - Transform: For serverless applications, specifies the version of the AWS Serverless Application Model (AWS SAM) to use.
 
-    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html)
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html)
     """
 
     AWSTemplateFormatVersion: Optional[date]

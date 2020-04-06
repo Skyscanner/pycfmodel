@@ -13,7 +13,6 @@ nav:
   - Home: index.md
   - Reference:
     - CFModel: "reference/cfmodel.md"
-    - Resolver: "reference/resolver.md"
     - Resources:
       - All Resources: "reference/resources.md"
       - Common Properties: "reference/properties.md"
