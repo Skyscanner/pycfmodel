@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.7.1 - [2020-04-06]
+### Improvements
+- Refactor `SecurityGroupIngress`, `SecurityGroupEgress`, `SecurityGroupIngressProp` and `SecurityGroupEgressProp`.
+- `SecurityGroupEgress` also supports `ipv4_slash_zero` and `ipv6_slash_zero`.
+
+
 ## 0.7.0 - [2020-03-25]
 ### Improvements
 - `CidrIp` and `CidrIpv6` properties of Security Group ingress and egress now use type `IPv4Network` and `IPv6Network` respectively.

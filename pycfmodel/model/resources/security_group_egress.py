@@ -1,20 +1,10 @@
-from ipaddress import IPv4Network, IPv6Network
 from typing import ClassVar, Optional
-from pydantic import validator
-
-from pycfmodel.constants import IPV4_ZERO_VALUE, IPV6_ZERO_VALUE
-from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.properties.security_group_egress_prop import SecurityGroupEgressProp
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import (
-    ResolvableIPv4Network,
-    ResolvableIPv6Network,
-    ResolvableStr,
-    ResolvableInt,
-    ResolvableIntOrStr,
-)
+from pycfmodel.model.types import ResolvableStr
 
 
-class SecurityGroupEgressProperties(CustomModel):
+class SecurityGroupEgressProperties(SecurityGroupEgressProp):
     """
     Properties:
 
@@ -31,23 +21,8 @@ class SecurityGroupEgressProperties(CustomModel):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html)
     """
 
-    CidrIp: Optional[ResolvableIPv4Network] = None
-    CidrIpv6: Optional[ResolvableIPv6Network] = None
-    Description: Optional[ResolvableStr] = None
-    DestinationPrefixListId: Optional[ResolvableStr] = None
-    DestinationSecurityGroupId: Optional[ResolvableStr] = None
-    FromPort: Optional[ResolvableInt] = None
     GroupId: Optional[ResolvableStr] = None
-    IpProtocol: ResolvableIntOrStr
-    ToPort: Optional[ResolvableInt] = None
 
-    @validator("CidrIp", pre=True)
-    def set_CidrIp(cls, v):
-        return IPv4Network(v, strict=False)
-
-    @validator("CidrIpv6", pre=True)
-    def set_CidrIpv6(cls, v):
-        return IPv6Network(v, strict=False)
 
 
 class SecurityGroupEgress(Resource):
@@ -64,11 +39,7 @@ class SecurityGroupEgress(Resource):
     Properties: SecurityGroupEgressProperties
 
     def ipv4_slash_zero(self) -> bool:
-        if not self.Properties.CidrIp:
-            return False
-        return self.Properties.CidrIp == IPv4Network(IPV4_ZERO_VALUE)
+        return self.Properties.ipv4_slash_zero()
 
     def ipv6_slash_zero(self) -> bool:
-        if not self.Properties.CidrIpv6:
-            return False
-        return self.Properties.CidrIpv6 == IPv6Network(IPV6_ZERO_VALUE)
+        return self.Properties.ipv6_slash_zero()

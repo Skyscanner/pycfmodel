@@ -14,7 +14,7 @@ docs_requires = ["AutoMacDoc==0.3", "mkdocs-material==4.6.3", "mkdocs==1.1", "mk
 
 setup(
     name="pycfmodel",
-    version="0.7.0",
+    version="0.7.1",
     description="A python model for CloudFormation scripts",
     author="Skyscanner Product Security",
     author_email="security@skyscanner.net",
