@@ -24,23 +24,6 @@ class _BooleanModel(BaseModel):
 
 
 def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]):
-    """
-    Cast every node's text into an atomic string to prevent further processing on it.
-
-    Since we generate the final HTML with Jinja templates, we do not want other inline or tree processors
-    to keep modifying the data, so this function is used to mark the complete tree as "do not touch".
-    Reference: issue [Python-Markdown/markdown#920](https://github.com/Python-Markdown/markdown/issues/920).
-    On a side note: isn't `atomic_brute_cast` such a beautiful function name?
-
-    Arguments:
-        function: An XML node, used like the root of an XML tree.
-        params: An XML node, used like the root of an XML tree.
-        mappings: An XML node, used like the root of an XML tree.
-        conditions: An XML node, used like the root of an XML tree.
-
-    Returns:
-        The same node, recursively modified by side-effect. You can skip re-assigning the return value.
-    """
     if function is None or isinstance(function, str):
         return function
 
@@ -72,23 +55,6 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
 
 
 def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
-    """
-    Cast every node's text into an atomic string to prevent further processing on it.
-
-    Since we generate the final HTML with Jinja templates, we do not want other inline or tree processors
-    to keep modifying the data, so this function is used to mark the complete tree as "do not touch".
-    Reference: issue [Python-Markdown/markdown#920](https://github.com/Python-Markdown/markdown/issues/920).
-    On a side note: isn't `atomic_brute_cast` such a beautiful function name?
-
-    Arguments:
-        function_body: An XML node, used like the root of an XML tree.
-        params: An XML node, used like the root of an XML tree.
-        mappings: An XML node, used like the root of an XML tree.
-        conditions: An XML node, used like the root of an XML tree.
-
-    Returns:
-        The same node, recursively modified by side-effect. You can skip re-assigning the return value.
-    """
     resolved_ref = resolve(function_body, params, mappings, conditions)
     if resolved_ref in params:
         return params[resolved_ref]
