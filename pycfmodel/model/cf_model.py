@@ -96,10 +96,10 @@ class CFModel(CustomModel):
         self, allowed_types: Collection[Union[str, Type[Resource]]]
     ) -> Dict[str, Dict[str, Resource]]:
         """
-        Filtered resources base on type.
+        Filtered resources based on types.
 
         Arguments:
-            allowed_types: Collection of desired types/
+            allowed_types: Collection of desired types.
 
         Returns:
             Dictionary where key is the logical id and value is the resource.
