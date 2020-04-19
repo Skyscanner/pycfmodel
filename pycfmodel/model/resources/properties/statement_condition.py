@@ -9,7 +9,7 @@ from pydantic import BaseModel, root_validator, validator
 
 from pycfmodel.model.base import FunctionDict
 from pycfmodel.model.types import (
-    ResolvableARNOrList,
+    ResolvableArnOrList,
     ResolvableBool,
     ResolvableBoolOrList,
     ResolvableBytesOrList,
@@ -110,30 +110,30 @@ def build_root_evaluator(function: str, arguments: Union[Dict, Tuple]) -> Callab
 
 
 class StatementCondition(BaseModel):
-    ArnEquals: Optional[Dict[str, ResolvableARNOrList]]
-    ArnLike: Optional[Dict[str, ResolvableARNOrList]]
-    ArnNotEquals: Optional[Dict[str, ResolvableARNOrList]]
-    ArnNotLike: Optional[Dict[str, ResolvableARNOrList]]
-    ArnEqualsIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ArnLikeIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ArnNotEqualsIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ArnNotLikeIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ForAllValuesArnEquals: Optional[Dict[str, ResolvableARNOrList]]
-    ForAllValuesArnLike: Optional[Dict[str, ResolvableARNOrList]]
-    ForAllValuesArnNotEquals: Optional[Dict[str, ResolvableARNOrList]]
-    ForAllValuesArnNotLike: Optional[Dict[str, ResolvableARNOrList]]
-    ForAllValuesArnEqualsIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ForAllValuesArnLikeIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ForAllValuesArnNotEqualsIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ForAllValuesArnNotLikeIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ForAnyValueArnEquals: Optional[Dict[str, ResolvableARNOrList]]
-    ForAnyValueArnLike: Optional[Dict[str, ResolvableARNOrList]]
-    ForAnyValueArnNotEquals: Optional[Dict[str, ResolvableARNOrList]]
-    ForAnyValueArnNotLike: Optional[Dict[str, ResolvableARNOrList]]
-    ForAnyValueArnEqualsIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ForAnyValueArnLikeIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ForAnyValueArnNotEqualsIfExists: Optional[Dict[str, ResolvableARNOrList]]
-    ForAnyValueArnNotLikeIfExists: Optional[Dict[str, ResolvableARNOrList]]
+    ArnEquals: Optional[Dict[str, ResolvableArnOrList]]
+    ArnLike: Optional[Dict[str, ResolvableArnOrList]]
+    ArnNotEquals: Optional[Dict[str, ResolvableArnOrList]]
+    ArnNotLike: Optional[Dict[str, ResolvableArnOrList]]
+    ArnEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ArnLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ArnNotEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ArnNotLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ForAllValuesArnEquals: Optional[Dict[str, ResolvableArnOrList]]
+    ForAllValuesArnLike: Optional[Dict[str, ResolvableArnOrList]]
+    ForAllValuesArnNotEquals: Optional[Dict[str, ResolvableArnOrList]]
+    ForAllValuesArnNotLike: Optional[Dict[str, ResolvableArnOrList]]
+    ForAllValuesArnEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ForAllValuesArnLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ForAllValuesArnNotEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ForAllValuesArnNotLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ForAnyValueArnEquals: Optional[Dict[str, ResolvableArnOrList]]
+    ForAnyValueArnLike: Optional[Dict[str, ResolvableArnOrList]]
+    ForAnyValueArnNotEquals: Optional[Dict[str, ResolvableArnOrList]]
+    ForAnyValueArnNotLike: Optional[Dict[str, ResolvableArnOrList]]
+    ForAnyValueArnEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ForAnyValueArnLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ForAnyValueArnNotEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ForAnyValueArnNotLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
 
     Bool: Optional[Dict[str, ResolvableBoolOrList]]
     BoolIfExists: Optional[Dict[str, ResolvableBoolOrList]]

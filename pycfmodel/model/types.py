@@ -10,6 +10,8 @@ Resolvable = Union[T, FunctionDict]
 TOrList = Union[T, List[T]]
 
 ResolvableStr = Resolvable[str]
+ResolvableArn = ResolvableStr
+ResolvableCondition = ResolvableStr
 ResolvableInt = Resolvable[int]
 ResolvableDate = Resolvable[date]
 ResolvableDatetime = Resolvable[datetime]
@@ -17,13 +19,12 @@ ResolvableBool = Resolvable[bool]
 
 ResolvableIPv4Network = Resolvable[IPv4Network]
 ResolvableIPv6Network = Resolvable[IPv6Network]
-ResolvableCondition = ResolvableStr
 
 ResolvableIntOrStr = Resolvable[Union[int, str]]
 
 
 ResolvableStrOrList = TOrList[ResolvableStr]
-ResolvableARNOrList = ResolvableStrOrList
+ResolvableArnOrList = TOrList[ResolvableArn]
 ResolvableIntOrList = TOrList[ResolvableInt]
 ResolvableIPOrList = TOrList[Union[ResolvableIPv4Network, ResolvableIPv6Network]]
 ResolvableBoolOrList = TOrList[ResolvableBool]
