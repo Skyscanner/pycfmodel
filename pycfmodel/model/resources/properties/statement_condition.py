@@ -35,12 +35,12 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
         return lambda kwargs: kwargs[arg_a] is arg_b
 
     elif function == "IpAddress":
-        return lambda kwargs: kwargs[arg_a] in arg_b or kwargs[arg_a] == arg_b
+        return lambda kwargs: kwargs[arg_a] in arg_b
     elif function == "NotIpAddress":
-        return lambda kwargs: kwargs[arg_a] not in arg_b and kwargs[arg_a] != arg_b
+        return lambda kwargs: kwargs[arg_a] not in arg_b
 
     elif function == "Null":
-        return lambda kwargs: (kwargs.get(arg_a) is None) is arg_b
+        return lambda kwargs: (kwargs.get(arg_a) is not None) is arg_b
 
     elif function in ("NumericEquals", "DateEquals"):
         return lambda kwargs: kwargs[arg_a] == arg_b
@@ -61,10 +61,10 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
         return lambda kwargs: kwargs[arg_a] != arg_b
     elif function == "StringEqualsIgnoreCase":
         arg_b = normalize("NFKD", arg_b.casefold())
-        return lambda kwargs: normalize("NFKD", kwargs[arg_a]) == arg_b
+        return lambda kwargs: normalize("NFKD", kwargs[arg_a].casefold()) == arg_b
     elif function == "StringNotEqualsIgnoreCase":
         arg_b = normalize("NFKD", arg_b.casefold())
-        return lambda kwargs: normalize("NFKD", kwargs[arg_a]) != arg_b
+        return lambda kwargs: normalize("NFKD", kwargs[arg_a].casefold()) != arg_b
     elif function in ("StringLike", "ArnLike"):
         arg_b = re.compile(arg_b.replace("*", ".*"))
         return lambda kwargs: bool(arg_b.match(kwargs[arg_a]))
