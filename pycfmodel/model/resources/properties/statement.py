@@ -1,6 +1,5 @@
 import logging
-
-from typing import List, Pattern, Optional, Union, Dict
+from typing import Dict, List, Optional, Pattern, Union
 
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.types import ResolvableStr, ResolvableStrOrList

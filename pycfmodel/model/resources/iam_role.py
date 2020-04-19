@@ -4,7 +4,7 @@ from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy import Policy
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableStr, ResolvableIntOrStr
+from pycfmodel.model.types import Resolvable, ResolvableIntOrStr, ResolvableStr
 
 
 class IAMRoleProperties(CustomModel):

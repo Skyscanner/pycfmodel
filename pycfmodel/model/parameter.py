@@ -1,4 +1,4 @@
-from typing import List, Optional, Any, ClassVar
+from typing import Any, ClassVar, List, Optional
 
 from pydantic import PositiveInt
 

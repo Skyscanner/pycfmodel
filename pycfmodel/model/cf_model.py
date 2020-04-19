@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Dict, Union, ClassVar, Optional, List, Any, Collection, Type
+from typing import Any, ClassVar, Collection, Dict, List, Optional, Type, Union
 
 from pycfmodel.constants import AWS_NOVALUE
 from pycfmodel.model.base import CustomModel

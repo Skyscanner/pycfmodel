@@ -1,5 +1,5 @@
 import re
-from typing import List, Pattern, Union, Optional
+from typing import List, Optional, Pattern, Union
 
 from pydantic import Extra
 

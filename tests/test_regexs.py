@@ -1,6 +1,6 @@
 import pytest
 
-from pycfmodel.constants import CONTAINS_STAR, CONTAINS_CF_PARAM
+from pycfmodel.constants import CONTAINS_CF_PARAM, CONTAINS_STAR
 
 
 @pytest.mark.parametrize(

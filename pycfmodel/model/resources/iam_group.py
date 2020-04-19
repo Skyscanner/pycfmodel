@@ -3,7 +3,7 @@ from typing import ClassVar, List, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.iam_policy import IAMPolicy
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import ResolvableStr, Resolvable
+from pycfmodel.model.types import Resolvable, ResolvableStr
 
 
 class IAMGroupProperties(CustomModel):
