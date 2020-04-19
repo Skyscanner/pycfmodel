@@ -9,8 +9,12 @@ install-dev: install
 install-docs:
 	pip install -e ".[dev,docs]"
 
-format:
+format: isort-format black-format
+
+isort-format:
 	isort --recursive .
+
+black-format:
 	black .
 
 lint: isort-lint black-lint flake8-lint
@@ -22,7 +26,7 @@ black-lint:
 	black --check .
 
 flake8-lint:
-	flake8 pycfmodel/ tests/
+	flake8 .
 
 unit:
 	pytest -svvv tests
@@ -41,5 +45,4 @@ freeze:
 freeze-upgrade:
 	CUSTOM_COMPILE_COMMAND="make freeze-upgrade" pip-compile --no-index --upgrade --output-file requirements.txt setup.py
 
-
-.PHONY: install install-dev format lint isort-lint black-lint flake8-lint unit coverage test freeze freeze-upgrade
+.PHONY: install install-dev install-docs format isort-format black-format lint isort-lint black-lint flake8-lint unit coverage test freeze freeze-upgrade
