@@ -2,6 +2,7 @@ import logging
 from typing import Dict, List, Optional, Pattern, Union
 
 from pycfmodel.model.resources.properties.property import Property
+from pycfmodel.model.resources.properties.statement_condition import StatementCondition
 from pycfmodel.model.types import ResolvableStr, ResolvableStrOrList
 from pycfmodel.utils import is_resolvable_dict
 
@@ -24,6 +25,7 @@ class Statement(Property):
     - NotAction: Explicitly matches everything except the specified action or list of actions.
     - Resource: Specifies the object or objects that the statement covers.
     - NotResource: Specifies the object or objects that the statement does not cover.
+    - Condition: Element to match the condition key and value in the policy against values in the request context.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html)
     """
@@ -36,6 +38,7 @@ class Statement(Property):
     NotAction: Optional[ResolvableStrOrList] = None
     Resource: Optional[ResolvableStrOrList] = None
     NotResource: Optional[ResolvableStrOrList] = None
+    Condition: Optional[StatementCondition] = None
 
     def get_action_list(self) -> List[ResolvableStr]:
         """

@@ -1,8 +1,10 @@
-from datetime import date
+from datetime import date, datetime
 from ipaddress import IPv4Network, IPv6Network
 from typing import List, TypeVar, Union
 
-from pycfmodel.model.base import ConditionDict, FunctionDict
+from pycfmodel.model.base import FunctionDict
+
+IPNetwork = Union[IPv4Network, IPv6Network]
 
 T = TypeVar("T")
 Resolvable = Union[T, FunctionDict]
@@ -15,5 +17,15 @@ ResolvableStrOrList = Resolvable[Union[str, List]]
 ResolvableIntOrStr = Resolvable[Union[int, str]]
 ResolvableIPv4Network = Resolvable[IPv4Network]
 ResolvableIPv6Network = Resolvable[IPv6Network]
+ResolvableCondition = ResolvableStr
 
-ResolvableCondition = Union[ConditionDict, ResolvableStr]
+
+TOrList = Union[T, List[T]]
+
+
+IPOrList = TOrList[IPNetwork]
+StrOrList = TOrList[ResolvableStr]
+ARNOrList = TOrList[ResolvableStr]
+IntOrList = TOrList[ResolvableInt]
+BytesOrList = TOrList[bytes]
+DatetimeOrList = TOrList[datetime]

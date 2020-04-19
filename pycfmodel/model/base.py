@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Extra, root_validator
 
-from pycfmodel.utils import is_conditional_dict, is_resolvable_dict
+from pycfmodel.utils import is_resolvable_dict
 
 
 class CustomModel(BaseModel):
@@ -21,17 +21,4 @@ class FunctionDict(BaseModel):
     def check_if_valid_function(cls, values):
         if not is_resolvable_dict(values):
             raise ValueError("FunctionDict should only have 1 key and be a function")
-        return values
-
-
-class ConditionDict(BaseModel):
-    # Inheriting directly from base model as we want to allow extra fields
-    # and there are no default values that we need to suppress
-    class Config(BaseModel.Config):
-        extra = Extra.allow
-
-    @root_validator(pre=True)
-    def check_if_valid_function(cls, values):
-        if not is_conditional_dict(values):
-            raise ValueError("ConditionDict should only have 1 key and be a function")
         return values
