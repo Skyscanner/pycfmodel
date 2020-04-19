@@ -4,28 +4,28 @@ from typing import List, TypeVar, Union
 
 from pycfmodel.model.base import FunctionDict
 
-IPNetwork = Union[IPv4Network, IPv6Network]
-
 T = TypeVar("T")
+
 Resolvable = Union[T, FunctionDict]
+TOrList = Union[T, List[T]]
 
 ResolvableStr = Resolvable[str]
 ResolvableInt = Resolvable[int]
 ResolvableDate = Resolvable[date]
+ResolvableDatetime = Resolvable[datetime]
 ResolvableBool = Resolvable[bool]
-ResolvableStrOrList = Resolvable[Union[str, List]]
-ResolvableIntOrStr = Resolvable[Union[int, str]]
+
 ResolvableIPv4Network = Resolvable[IPv4Network]
 ResolvableIPv6Network = Resolvable[IPv6Network]
 ResolvableCondition = ResolvableStr
 
+ResolvableIntOrStr = Resolvable[Union[int, str]]
 
-TOrList = Union[T, List[T]]
 
-
-IPOrList = TOrList[IPNetwork]
-StrOrList = TOrList[ResolvableStr]
-ARNOrList = TOrList[ResolvableStr]
-IntOrList = TOrList[ResolvableInt]
-BytesOrList = TOrList[bytes]
-DatetimeOrList = TOrList[datetime]
+ResolvableStrOrList = TOrList[ResolvableStr]
+ResolvableARNOrList = ResolvableStrOrList
+ResolvableIntOrList = TOrList[ResolvableInt]
+ResolvableIPOrList = TOrList[Union[ResolvableIPv4Network, ResolvableIPv6Network]]
+ResolvableBoolOrList = TOrList[ResolvableBool]
+ResolvableBytesOrList = TOrList[bytes]
+ResolvableDatetimeOrList = TOrList[ResolvableDatetime]
