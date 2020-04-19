@@ -288,8 +288,8 @@ def test_template_conditions():
             "Bool": True,
             "BoolStr": "True",
             "IsEqualNum": {"Fn::Equals": [123456, 123456]},
-            "IsEqualStr": {"Fn::Equals": ["a", "a"]},
-            "IsEqualStr": {"Fn::Equals": [True, True]},
+            "IsEqualStr": {"Fn::Equals": ["a", "a"]},  # noqa: F601
+            "IsEqualStr": {"Fn::Equals": [True, True]},  # noqa: F601
             "IsEqualRef": {"Fn::Equals": [{"Ref": "AWS::AccountId"}, "123"]},
             "Not": {"Fn::Not": [False]},
         },
