@@ -57,12 +57,12 @@ def test_security_group_egress(security_group_egress_ipv4_1):
 
 
 def test_slash_zero4(security_group_egress_ipv4_1):
-    assert security_group_egress_ipv4_1.ipv4_slash_zero() == True
+    assert security_group_egress_ipv4_1.ipv4_slash_zero() is True
 
 
 def test_not_slash_zero4(security_group_egress_ipv4_2):
-    assert security_group_egress_ipv4_2.ipv4_slash_zero() == False
+    assert security_group_egress_ipv4_2.ipv4_slash_zero() is False
 
 
 def test_not_slash_zero6(security_group_egress_ipv6):
-    assert security_group_egress_ipv6.ipv6_slash_zero() == False
+    assert security_group_egress_ipv6.ipv6_slash_zero() is False
