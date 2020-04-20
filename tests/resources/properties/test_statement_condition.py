@@ -1,5 +1,5 @@
 from datetime import datetime
-from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network
+from ipaddress import IPv4Address, IPv4Network
 from typing import Any, Dict, Tuple, Union
 
 import pytest
