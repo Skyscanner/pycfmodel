@@ -18,7 +18,7 @@ from pycfmodel.model.types import (
     ResolvableIPOrList,
     ResolvableStrOrList,
 )
-from pycfmodel.utils import is_resolvable_dict
+from pycfmodel.utils import convert_to_list, is_resolvable_dict
 
 logger = logging.getLogger()
 
@@ -71,12 +71,6 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
     elif function in ("StringNotLike", "ArnNotLike"):
         arg_b = re.compile(arg_b.replace("*", ".*"))
         return lambda kwargs: not bool(arg_b.match(kwargs[arg_a]))
-
-
-def convert_to_list(item: Union[Any, List[Any]]) -> List:
-    if isinstance(item, list):
-        return item
-    return [item]
 
 
 def build_root_evaluator(function: str, arguments: Union[Dict, Tuple]) -> Callable:
@@ -317,7 +311,7 @@ class StatementCondition(BaseModel):
             values["eval"] = lambda kwargs: all(condition(kwargs) for condition in conditions_lambdas)
         except StatementConditionBuildEvaluatorError:
             values["eval"] = lambda kwargs: (_ for _ in ()).throw(StatementConditionBuildEvaluatorError)
-            logger.error("Resolvable function found. Try resolving the model...")
+            logger.error("Resolvable function found. Try resolving the model.")
         return values
 
     def __call__(self, kwargs) -> Optional[bool]:
@@ -326,3 +320,9 @@ class StatementCondition(BaseModel):
         except Exception:
             logger.exception("Error raised while evaluating condition")
             return None
+
+    def __eq__(self, other: Any) -> bool:
+        if isinstance(other, self.__class__):
+            return self.dict(exclude_unset={"eval"}) == other.dict(exclude_unset={"eval"})
+        else:
+            return self.dict() == other
