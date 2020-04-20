@@ -2,7 +2,7 @@ import binascii
 import logging
 import re
 from base64 import b64decode
-from typing import Any, Callable, Dict, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from unicodedata import normalize
 
 from pydantic import BaseModel, root_validator, validator
@@ -73,32 +73,44 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
         return lambda kwargs: not bool(arg_b.match(kwargs[arg_a]))
 
 
+def convert_to_list(item: Union[Any, List[Any]]) -> List:
+    if isinstance(item, list):
+        return item
+    return [item]
+
+
 def build_root_evaluator(function: str, arguments: Union[Dict, Tuple]) -> Callable:
     if isinstance(arguments, dict):
         arguments = arguments.items()
     elif isinstance(arguments, tuple):
         arguments = [arguments]
 
-    if function.startswith("ForAllValues:"):
-        new_function = function.replace("ForAllValues:", "")
-    elif function.endswith("ForAnyValue:"):
-        new_function = function.replace("ForAnyValue:", "")
-    elif function.endswith("IfExists"):
+    if function.endswith("IfExists"):
         new_function = function.replace("IfExists", "")
+    elif function.startswith("ForAllValues"):
+        new_function = function.replace("ForAllValues", "")
+    elif function.startswith("ForAnyValue"):
+        new_function = function.replace("ForAnyValue", "")
     else:
         new_function = function
 
     group_of_nodes = []
     for arg_a, arg_b in arguments:
-        if function.startswith("ForAllValues:"):
-            nodes = [build_root_evaluator(new_function, (item, arg_b)) for item in arg_a]
-            group_of_nodes.append(lambda kwargs: all(node(kwargs) for node in nodes))
-        elif function.endswith("ForAnyValue:"):
-            nodes = [build_root_evaluator(new_function, (item, arg_b)) for item in arg_a]
-            group_of_nodes.append(lambda kwargs: any(node(kwargs) for node in nodes))
-        elif function.endswith("IfExists"):
+        if function.endswith("IfExists"):
             node = build_root_evaluator(new_function, (arg_a, arg_b))
-            group_of_nodes.append(lambda kwargs: kwargs.get(arg_a) is not None and node(kwargs))
+            group_of_nodes.append(lambda kwargs: node(kwargs) if kwargs.get(arg_a) is not None else True)
+        elif function.startswith("ForAllValues"):
+            nodes = [build_root_evaluator(new_function, (arg_a, item)) for item in convert_to_list(arg_b)]
+            all_nodes = lambda kwargs: any(node(kwargs) for node in nodes)
+            group_of_nodes.append(
+                lambda kwargs: all(all_nodes({**kwargs, arg_a: item}) for item in convert_to_list(kwargs[arg_a]))
+            )
+        elif function.startswith("ForAnyValue"):
+            nodes = [build_root_evaluator(new_function, (arg_a, item)) for item in convert_to_list(arg_b)]
+            all_nodes = lambda kwargs: any(node(kwargs) for node in nodes)
+            group_of_nodes.append(
+                lambda kwargs: any(all_nodes({**kwargs, arg_a: item}) for item in convert_to_list(kwargs[arg_a]))
+            )
         else:
             if isinstance(arg_b, list):
                 nodes = [build_evaluator(new_function, arg_a, item) for item in arg_b]
