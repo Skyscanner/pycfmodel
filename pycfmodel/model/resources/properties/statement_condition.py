@@ -20,7 +20,7 @@ from pycfmodel.model.types import (
 )
 from pycfmodel.utils import convert_to_list, is_resolvable_dict
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class StatementConditionBuildEvaluatorError(Exception):
