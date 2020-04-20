@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional, Dict
+from typing import ClassVar, Dict, List, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.parameter import Parameter

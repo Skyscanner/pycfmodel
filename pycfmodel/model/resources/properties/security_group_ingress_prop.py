@@ -1,15 +1,16 @@
 from ipaddress import IPv4Network, IPv6Network
 from typing import Optional
+
 from pydantic import validator
 
 from pycfmodel.constants import IPV4_ZERO_VALUE, IPV6_ZERO_VALUE
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.types import (
+    ResolvableInt,
+    ResolvableIntOrStr,
     ResolvableIPv4Network,
     ResolvableIPv6Network,
     ResolvableStr,
-    ResolvableIntOrStr,
-    ResolvableInt,
 )
 
 

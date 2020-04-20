@@ -5,7 +5,7 @@ python:
 install:
 - make install-dev
 script:
-- make coverage
+- make lint coverage
 
 jobs:
   include:

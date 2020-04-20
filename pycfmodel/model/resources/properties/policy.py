@@ -1,6 +1,6 @@
-from pycfmodel.model.types import ResolvableStr, Resolvable
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.properties.property import Property
+from pycfmodel.model.types import Resolvable, ResolvableStr
 
 
 class Policy(Property):

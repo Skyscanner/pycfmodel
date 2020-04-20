@@ -1,4 +1,5 @@
 from typing import ClassVar, Optional
+
 from pycfmodel.model.resources.properties.security_group_egress_prop import SecurityGroupEgressProp
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import ResolvableStr
@@ -22,7 +23,6 @@ class SecurityGroupEgressProperties(SecurityGroupEgressProp):
     """
 
     GroupId: Optional[ResolvableStr] = None
-
 
 
 class SecurityGroupEgress(Resource):

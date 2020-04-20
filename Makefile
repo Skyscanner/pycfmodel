@@ -9,27 +9,40 @@ install-dev: install
 install-docs:
 	pip install -e ".[dev,docs]"
 
-format:
+format: isort-format black-format
+
+isort-format:
+	isort --recursive .
+
+black-format:
 	black .
 
-lint:
-	black --check .
-	flake8 pycfmodel/ # tests/
+lint: isort-lint black-lint flake8-lint
 
-component:
-	pytest -sv tests
+isort-lint:
+	isort --check-only --recursive .
+
+black-lint:
+	black --check .
+
+flake8-lint:
+	flake8 .
+
+unit:
+	pytest -svvv tests
 
 coverage:
 	coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
 	coverage report
 	coverage xml -i -o build/coverage.xml
+	coverage html
 
-test: lint component
+test: lint unit
 
 freeze:
-	CUSTOM_COMPILE_COMMAND="make freeze" PIP_CONFIG_FILE=pip.conf pip-compile --no-index --output-file requirements.txt setup.py
+	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile --no-index --output-file requirements.txt setup.py
 
 freeze-upgrade:
 	CUSTOM_COMPILE_COMMAND="make freeze-upgrade" pip-compile --no-index --upgrade --output-file requirements.txt setup.py
 
-.PHONY: install install-dev install-docs lint component coverage test freeze freeze-upgrade format
+.PHONY: install install-dev install-docs format isort-format black-format lint isort-lint black-lint flake8-lint unit coverage test freeze freeze-upgrade

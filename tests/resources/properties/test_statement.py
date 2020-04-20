@@ -1,4 +1,5 @@
 import re
+
 import pytest
 
 from pycfmodel.model.resources.properties.statement import Statement

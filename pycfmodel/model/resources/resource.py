@@ -1,4 +1,4 @@
-from typing import Dict, ClassVar, Optional
+from typing import ClassVar, Dict, Optional
 
 from pydantic import validator
 

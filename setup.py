@@ -1,14 +1,20 @@
 from pathlib import Path
 
-from setuptools import setup, find_namespace_packages
-
+from setuptools import find_namespace_packages, setup
 
 readme = Path(__file__).parent / "README.md"
 long_description = readme.read_text()
 
 install_requires = ["pydantic~=1.0"]
 
-dev_requires = ["black==19.3b0", "pytest==3.6.0", "flake8>=3.3.0", "pytest-cov>=2.5.1", "pip-tools==2.0.2"]
+dev_requires = [
+    "black==19.3b0",
+    "flake8>=3.3.0",
+    "isort==4.3.21",
+    "pip-tools==2.0.2",
+    "pytest==3.6.0",
+    "pytest-cov>=2.5.1",
+]
 
 docs_requires = ["AutoMacDoc==0.3", "mkdocs-material==4.6.3", "mkdocs==1.1", "mkdocstrings==0.10.0"]
 

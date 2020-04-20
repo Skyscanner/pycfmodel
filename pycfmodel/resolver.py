@@ -1,5 +1,4 @@
 import logging
-
 from base64 import b64encode
 from datetime import date
 from ipaddress import IPv4Network, IPv6Network
