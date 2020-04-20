@@ -71,6 +71,9 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
     elif function in ("StringNotLike", "ArnNotLike"):
         arg_b = re.compile(arg_b.replace("*", ".*"))
         return lambda kwargs: not bool(arg_b.match(kwargs[arg_a]))
+    else:
+        logger.error(f"{function} is not supported.")
+        raise NotImplementedError
 
 
 def build_root_evaluator(function: str, arguments: Union[Dict, Tuple]) -> Callable:
@@ -293,15 +296,15 @@ class StatementCondition(BaseModel):
         each_item=True,
         pre=True,
     )
-    def validate_binary(cls, value):
+    def validate_binary(cls, value: Any) -> bytearray:
         try:
             value = b64decode(value)
         except binascii.Error:
-            raise ValueError(f"Binary value not valid")
+            raise ValueError("Binary value not valid")
         return value
 
     @root_validator()
-    def build_eval(cls, values):
+    def build_eval(cls, values: Dict) -> Dict:
         try:
             conditions_lambdas = [
                 build_root_evaluator(function=key, arguments=value)
