@@ -29,7 +29,6 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Skyscanner/pycfmodel",
     packages=find_namespace_packages(exclude=("tests", "docs")),
-    include_package_data=True,
     python_requires=">=3.7",
     install_requires=install_requires,
     tests_require=dev_requires,

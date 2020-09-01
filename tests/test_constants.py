@@ -2,7 +2,7 @@ import json
 
 import httpx
 
-from pycfmodel.constants import CLOUDFORMATION_ACTIONS
+from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 
 
 def test_cloudformation_actions():

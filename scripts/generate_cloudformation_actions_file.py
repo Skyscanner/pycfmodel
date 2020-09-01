@@ -19,5 +19,5 @@ for service in json_response["serviceMap"].values():
         ALL_ACTIONS.add(f"{service_prefix}:{action}")
 
 
-with open(Path(__file__).parent.parent / "pycfmodel/artifacts/cloudformation_actions.json", "w") as json_file:
-    json.dump(sorted(ALL_ACTIONS), json_file)
+cloudformation_actions_file = Path(__file__).parent.parent / "pycfmodel/cloudformation_actions.py"
+cloudformation_actions_file.write_text(f"CLOUDFORMATION_ACTIONS = {sorted(ALL_ACTIONS)}")

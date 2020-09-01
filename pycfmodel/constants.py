@@ -60,6 +60,3 @@ CONTAINS_CF_PARAM = re.compile(r"(\$\{[\w\:]+\})")
 
 IPV4_ZERO_VALUE = "0.0.0.0/0"
 IPV6_ZERO_VALUE = "::/0"
-
-with open(Path(__file__).parent / "artifacts/cloudformation_actions.json", "r") as f:
-    CLOUDFORMATION_ACTIONS = json.load(f)

@@ -3,7 +3,7 @@ from typing import List, Optional, Pattern, Union
 from pydantic import Extra
 
 from pycfmodel.action_expander import _expand_action
-from pycfmodel.constants import CLOUDFORMATION_ACTIONS
+from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.resources.properties.statement import Statement
 from pycfmodel.model.types import Resolvable, ResolvableDate

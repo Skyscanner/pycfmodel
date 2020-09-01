@@ -4,7 +4,7 @@ import pytest
 
 from pycfmodel import parse
 from pycfmodel.action_expander import _build_regex, _expand_action, _expand_actions
-from pycfmodel.constants import CLOUDFORMATION_ACTIONS
+from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 
 
 @pytest.mark.parametrize(

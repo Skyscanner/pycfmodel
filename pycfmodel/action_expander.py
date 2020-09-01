@@ -1,7 +1,7 @@
 import re
 from typing import List, Pattern, Union
 
-from pycfmodel.constants import CLOUDFORMATION_ACTIONS
+from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 
 
 def _build_regex(action: str) -> Pattern:
