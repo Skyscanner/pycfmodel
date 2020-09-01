@@ -71,7 +71,7 @@ def policy_document_not_principal():
         **{
             "Statement": [
                 {
-                    "Action": ["IAM:Delete*"],
+                    "Action": ["iam:Delete*"],
                     "Effect": "Allow",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
                     "NotPrincipal": {"AWS": ["156460612806"]},
@@ -117,27 +117,27 @@ def test_non_whitelisted_allowed_principals(policy_document_multi_statement):
 
 def test_get_iam_actions(policy_document_not_principal):
     correct_list = [
-        "IAM:DeleteAccountPasswordPolicy",
-        "IAM:DeleteServiceLinkedRole",
-        "IAM:DeleteRole",
-        "IAM:DeleteOpenIDConnectProvider",
-        "IAM:DeleteGroup",
-        "IAM:DeleteRolePolicy",
-        "IAM:DeleteSSHPublicKey",
-        "IAM:DeleteLoginProfile",
-        "IAM:DeleteServiceSpecificCredential",
-        "IAM:DeleteUserPolicy",
-        "IAM:DeleteVirtualMFADevice",
-        "IAM:DeletePolicyVersion",
-        "IAM:DeleteGroupPolicy",
-        "IAM:DeleteAccountAlias",
-        "IAM:DeleteSigningCertificate",
-        "IAM:DeleteUser",
-        "IAM:DeletePolicy",
-        "IAM:DeleteSAMLProvider",
-        "IAM:DeleteAccessKey",
-        "IAM:DeleteServerCertificate",
-        "IAM:DeleteInstanceProfile",
+        "iam:DeleteAccountPasswordPolicy",
+        "iam:DeleteServiceLinkedRole",
+        "iam:DeleteRole",
+        "iam:DeleteOpenIDConnectProvider",
+        "iam:DeleteGroup",
+        "iam:DeleteRolePolicy",
+        "iam:DeleteSSHPublicKey",
+        "iam:DeleteLoginProfile",
+        "iam:DeleteServiceSpecificCredential",
+        "iam:DeleteUserPolicy",
+        "iam:DeleteVirtualMFADevice",
+        "iam:DeletePolicyVersion",
+        "iam:DeleteGroupPolicy",
+        "iam:DeleteAccountAlias",
+        "iam:DeleteSigningCertificate",
+        "iam:DeleteUser",
+        "iam:DeletePolicy",
+        "iam:DeleteSAMLProvider",
+        "iam:DeleteAccessKey",
+        "iam:DeleteServerCertificate",
+        "iam:DeleteInstanceProfile",
     ]
 
     assert Counter(correct_list) == Counter(policy_document_not_principal.get_iam_actions())

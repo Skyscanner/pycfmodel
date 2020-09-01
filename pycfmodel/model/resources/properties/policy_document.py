@@ -107,12 +107,14 @@ class PolicyDocument(Property):
                     continue
 
                 for expanded_action in _expand_action(action):
-                    if expanded_action.startswith("iam:"):
+                    if expanded_action.lower().startswith("iam:"):
                         actions.add(expanded_action)
 
         if difference:
             return sorted(
-                set([action for action in CLOUDFORMATION_ACTIONS if action.startswith("iam:")]).difference(actions)
+                set([action for action in CLOUDFORMATION_ACTIONS if action.lower().startswith("iam:")]).difference(
+                    actions
+                )
             )
 
         return sorted(actions)
