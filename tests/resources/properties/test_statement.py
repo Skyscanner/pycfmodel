@@ -102,7 +102,7 @@ def test_get_action_list(statement, expected_output):
         (Statement(**{"Effect": "Allow", "Action": "ec2:Run?nstances", "Resource": ["arn"]}), ["ec2:RunInstances"]),
         (Statement(**{"Effect": "Allow", "Action": "ec?:RunInstances", "Resource": ["arn"]}), ["ec2:RunInstances"]),
         (
-            Statement(**{"Effect": "Allow", "Action": "ec2:Run.*", "Resource": ["arn"]}),
+            Statement(**{"Effect": "Allow", "Action": "ec2:Run*", "Resource": ["arn"]}),
             ["ec2:RunInstances", "ec2:RunScheduledInstances"],
         ),
     ],
