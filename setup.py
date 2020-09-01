@@ -8,12 +8,12 @@ long_description = readme.read_text()
 install_requires = ["pydantic~=1.0"]
 
 dev_requires = [
-    "black==19.3b0",
-    "flake8>=3.3.0",
-    "isort==4.3.21",
-    "pip-tools==2.0.2",
-    "pytest==3.6.0",
-    "pytest-cov>=2.5.1",
+    "black>=20.8b1",
+    "flake8>=3.8.3",
+    "isort>=5.4.2",
+    "pip-tools>=2.0.2",
+    "pytest>=6.0.1",
+    "pytest-cov>=2.10.1",
 ]
 
 docs_requires = ["AutoMacDoc==0.3", "mkdocs-material==4.6.3", "mkdocs==1.1", "mkdocstrings==0.10.0"]
@@ -28,6 +28,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Skyscanner/pycfmodel",
     packages=find_namespace_packages(exclude=("tests", "docs")),
+    include_package_data=True,
     python_requires=">=3.7",
     install_requires=install_requires,
     tests_require=dev_requires,
