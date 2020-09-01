@@ -1,6 +1,4 @@
-import json
 import re
-from pathlib import Path
 
 AWS_NOVALUE = "AWS::NoValue"
 
