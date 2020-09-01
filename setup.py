@@ -10,6 +10,7 @@ install_requires = ["pydantic~=1.0"]
 dev_requires = [
     "black>=20.8b1",
     "flake8>=3.8.3",
+    "httpx>=0.14.2",
     "isort>=5.4.2",
     "pip-tools>=2.0.2",
     "pytest>=6.0.1",
