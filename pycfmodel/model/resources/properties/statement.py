@@ -1,6 +1,7 @@
 import logging
 from typing import Dict, List, Optional, Pattern, Union
 
+from pycfmodel.action_expander import _expand_action
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.types import ResolvableStr, ResolvableStrOrList
 from pycfmodel.utils import is_resolvable_dict
@@ -51,6 +52,12 @@ class Statement(Property):
             elif isinstance(actions, (str, dict)):
                 action_list.append(actions)
         return action_list
+
+    def get_expanded_action_list(self) -> List[str]:
+        action_list = set()
+        for action in self.get_action_list():
+            action_list.update(_expand_action(action))
+        return sorted(action_list)
 
     def get_resource_list(self) -> List[ResolvableStr]:
         """

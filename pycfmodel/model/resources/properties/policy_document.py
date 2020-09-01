@@ -1,141 +1,12 @@
-import re
 from typing import List, Optional, Pattern, Union
 
 from pydantic import Extra
 
+from pycfmodel.action_expander import _expand_action
+from pycfmodel.constants import CLOUDFORMATION_ACTIONS
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.resources.properties.statement import Statement
 from pycfmodel.model.types import Resolvable, ResolvableDate
-
-_IAM_ACTIONS = [
-    "IAM:AddClientIDToOpenIDConnectProvider",
-    "IAM:AddRoleToInstanceProfile",
-    "IAM:AddUserToGroup",
-    "IAM:AttachGroupPolicy",
-    "IAM:AttachRolePolicy",
-    "IAM:AttachUserPolicy",
-    "IAM:ChangePassword",
-    "IAM:CreateAccessKey",
-    "IAM:CreateAccountAlias",
-    "IAM:CreateGroup",
-    "IAM:CreateInstanceProfile",
-    "IAM:CreateLoginProfile",
-    "IAM:CreateOpenIDConnectProvider",
-    "IAM:CreatePolicy",
-    "IAM:CreatePolicyVersion",
-    "IAM:CreateRole",
-    "IAM:CreateSAMLProvider",
-    "IAM:CreateServiceLinkedRole",
-    "IAM:CreateServiceSpecificCredential",
-    "IAM:CreateUser",
-    "IAM:CreateVirtualMFADevice",
-    "IAM:DeactivateMFADevice",
-    "IAM:DeleteAccessKey",
-    "IAM:DeleteAccountAlias",
-    "IAM:DeleteAccountPasswordPolicy",
-    "IAM:DeleteGroup",
-    "IAM:DeleteGroupPolicy",
-    "IAM:DeleteInstanceProfile",
-    "IAM:DeleteLoginProfile",
-    "IAM:DeleteOpenIDConnectProvider",
-    "IAM:DeletePolicy",
-    "IAM:DeletePolicyVersion",
-    "IAM:DeleteRole",
-    "IAM:DeleteRolePolicy",
-    "IAM:DeleteSAMLProvider",
-    "IAM:DeleteServerCertificate",
-    "IAM:DeleteServiceLinkedRole",
-    "IAM:DeleteServiceSpecificCredential",
-    "IAM:DeleteSigningCertificate",
-    "IAM:DeleteSSHPublicKey",
-    "IAM:DeleteUser",
-    "IAM:DeleteUserPolicy",
-    "IAM:DeleteVirtualMFADevice",
-    "IAM:DetachGroupPolicy",
-    "IAM:DetachRolePolicy",
-    "IAM:DetachUserPolicy",
-    "IAM:EnableMFADevice",
-    "IAM:GenerateCredentialReport",
-    "IAM:GenerateServiceLastAccessedDetails",
-    "IAM:GetAccessKeyLastUsed",
-    "IAM:GetAccountAuthorizationDetails",
-    "IAM:GetAccountPasswordPolicy",
-    "IAM:GetAccountSummary",
-    "IAM:GetContextKeysForCustomPolicy",
-    "IAM:GetContextKeysForPrincipalPolicy",
-    "IAM:GetCredentialReport",
-    "IAM:GetGroup",
-    "IAM:GetGroupPolicy",
-    "IAM:GetInstanceProfile",
-    "IAM:GetLoginProfile",
-    "IAM:GetOpenIDConnectProvider",
-    "IAM:GetPolicy",
-    "IAM:GetPolicyVersion",
-    "IAM:GetRole",
-    "IAM:GetRolePolicy",
-    "IAM:GetSAMLProvider",
-    "IAM:GetServerCertificate",
-    "IAM:GetServiceLastAccessedDetails",
-    "IAM:GetServiceLastAccessedDetailsWithEntities",
-    "IAM:GetServiceLinkedRoleDeletionStatus",
-    "IAM:GetSSHPublicKey",
-    "IAM:GetUser",
-    "IAM:GetUserPolicy",
-    "IAM:ListAccessKeys",
-    "IAM:ListAccountAliases",
-    "IAM:ListAttachedGroupPolicies",
-    "IAM:ListAttachedRolePolicies",
-    "IAM:ListAttachedUserPolicies",
-    "IAM:ListEntitiesForPolicy",
-    "IAM:ListGroupPolicies",
-    "IAM:ListGroups",
-    "IAM:ListGroupsForUser",
-    "IAM:ListInstanceProfiles",
-    "IAM:ListInstanceProfilesForRole",
-    "IAM:ListMFADevices",
-    "IAM:ListOpenIDConnectProviders",
-    "IAM:ListPolicies",
-    "IAM:ListPoliciesGrantingServiceAccess",
-    "IAM:ListPolicyVersions",
-    "IAM:ListRolePolicies",
-    "IAM:ListRoles",
-    "IAM:ListSAMLProviders",
-    "IAM:ListServerCertificates",
-    "IAM:ListServiceSpecificCredentials",
-    "IAM:ListSigningCertificates",
-    "IAM:ListSSHPublicKeys",
-    "IAM:ListUserPolicies",
-    "IAM:ListUsers",
-    "IAM:ListVirtualMFADevices",
-    "IAM:PassRole",
-    "IAM:PutGroupPolicy",
-    "IAM:PutRolePolicy",
-    "IAM:PutUserPolicy",
-    "IAM:RemoveClientIDFromOpenIDConnectProvider",
-    "IAM:RemoveRoleFromInstanceProfile",
-    "IAM:RemoveUserFromGroup",
-    "IAM:ResetServiceSpecificCredential",
-    "IAM:ResyncMFADevice",
-    "IAM:SetDefaultPolicyVersion",
-    "IAM:SimulateCustomPolicy",
-    "IAM:SimulatePrincipalPolicy",
-    "IAM:UpdateAccessKey",
-    "IAM:UpdateAccountPasswordPolicy",
-    "IAM:UpdateAssumeRolePolicy",
-    "IAM:UpdateGroup",
-    "IAM:UpdateLoginProfile",
-    "IAM:UpdateOpenIDConnectProviderThumbprint",
-    "IAM:UpdateRoleDescription",
-    "IAM:UpdateSAMLProvider",
-    "IAM:UpdateServerCertificate",
-    "IAM:UpdateServiceSpecificCredential",
-    "IAM:UpdateSigningCertificate",
-    "IAM:UpdateSSHPublicKey",
-    "IAM:UpdateUser",
-    "IAM:UploadServerCertificate",
-    "IAM:UploadSigningCertificate",
-    "IAM:UploadSSHPublicKey",
-]
 
 
 class PolicyDocument(Property):
@@ -235,12 +106,13 @@ class PolicyDocument(Property):
                 if not isinstance(action, str):
                     continue
 
-                pattern = re.compile(f"^{action}$".replace("*", ".*"), re.IGNORECASE)
-                for iam in _IAM_ACTIONS:
-                    if pattern.match(iam):
-                        actions.add(iam)
+                for expanded_action in _expand_action(action):
+                    if expanded_action.startswith("iam:"):
+                        actions.add(expanded_action)
 
         if difference:
-            return sorted(set(_IAM_ACTIONS).difference(actions))
+            return sorted(
+                set([action for action in CLOUDFORMATION_ACTIONS if action.startswith("iam:")]).difference(actions)
+            )
 
         return sorted(actions)
