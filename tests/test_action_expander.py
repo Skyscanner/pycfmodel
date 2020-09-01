@@ -29,7 +29,7 @@ def test_build_regex(action, expected_pattern):
         ("ec2:RunInstances", ["ec2:RunInstances"]),
         ("ec2:Run?nstances", ["ec2:RunInstances"]),
         ("ec?:RunInstances", ["ec2:RunInstances"]),
-        ("ec2:Run.*", ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
+        ("ec2:Run*", ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
     ],
 )
 def test_expand_action(action, expected_output):
@@ -42,15 +42,15 @@ def test_expand_action(action, expected_output):
         ("ec2:RunInstances", ["ec2:RunInstances"]),
         ("ec2:Run?nstances", ["ec2:RunInstances"]),
         ("ec?:RunInstances", ["ec2:RunInstances"]),
-        ("ec2:Run.*", ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
+        ("ec2:Run*", ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
         (["ec2:RunInstances"], ["ec2:RunInstances"]),
         (["ec2:Run?nstances"], ["ec2:RunInstances"]),
         (["ec?:RunInstances"], ["ec2:RunInstances"]),
-        (["ec2:Run.*"], ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
+        (["ec2:Run*"], ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
         (["ec2:RunInstances", "ec2:RunInstances"], ["ec2:RunInstances"]),
         (["ec2:Run?nstances", "ec2:Run?nstances"], ["ec2:RunInstances"]),
         (["ec?:RunInstances", "ec?:RunInstances"], ["ec2:RunInstances"]),
-        (["ec2:Run.*", "ec2:Run.*"], ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
+        (["ec2:Run*", "ec2:Run*"], ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
     ],
 )
 def test_expand_actions(action, expected_output):
