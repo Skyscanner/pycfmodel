@@ -715,6 +715,7 @@ CLOUDFORMATION_ACTIONS = [
     "chime:CreateBotMembership",
     "chime:CreateCDRBucket",
     "chime:CreateMeeting",
+    "chime:CreateMeetingWithAttendees",
     "chime:CreatePhoneNumberOrder",
     "chime:CreateProxySession",
     "chime:CreateRoom",
