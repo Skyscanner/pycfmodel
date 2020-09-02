@@ -8,7 +8,7 @@ def _build_regex(action: str) -> Pattern:
     # Replace *
     action = action.replace("*", ".*")
 
-    # Resplace ?
+    # Replace ?
     action = action.replace("?", ".{1}")
 
     return re.compile(f"^{action}$", re.IGNORECASE)
