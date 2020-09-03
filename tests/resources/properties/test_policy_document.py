@@ -71,7 +71,7 @@ def policy_document_not_principal():
         **{
             "Statement": [
                 {
-                    "Action": ["IAM:Delete*"],
+                    "Action": ["iam:Delete*"],
                     "Effect": "Allow",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
                     "NotPrincipal": {"AWS": ["156460612806"]},
@@ -117,27 +117,29 @@ def test_non_whitelisted_allowed_principals(policy_document_multi_statement):
 
 def test_get_iam_actions(policy_document_not_principal):
     correct_list = [
-        "IAM:DeleteAccountPasswordPolicy",
-        "IAM:DeleteServiceLinkedRole",
-        "IAM:DeleteRole",
-        "IAM:DeleteOpenIDConnectProvider",
-        "IAM:DeleteGroup",
-        "IAM:DeleteRolePolicy",
-        "IAM:DeleteSSHPublicKey",
-        "IAM:DeleteLoginProfile",
-        "IAM:DeleteServiceSpecificCredential",
-        "IAM:DeleteUserPolicy",
-        "IAM:DeleteVirtualMFADevice",
-        "IAM:DeletePolicyVersion",
-        "IAM:DeleteGroupPolicy",
-        "IAM:DeleteAccountAlias",
-        "IAM:DeleteSigningCertificate",
-        "IAM:DeleteUser",
-        "IAM:DeletePolicy",
-        "IAM:DeleteSAMLProvider",
-        "IAM:DeleteAccessKey",
-        "IAM:DeleteServerCertificate",
-        "IAM:DeleteInstanceProfile",
+        "iam:DeleteAccessKey",
+        "iam:DeleteAccountAlias",
+        "iam:DeleteAccountPasswordPolicy",
+        "iam:DeleteGroup",
+        "iam:DeleteGroupPolicy",
+        "iam:DeleteInstanceProfile",
+        "iam:DeleteLoginProfile",
+        "iam:DeleteOpenIDConnectProvider",
+        "iam:DeletePolicy",
+        "iam:DeletePolicyVersion",
+        "iam:DeleteRole",
+        "iam:DeleteRolePermissionsBoundary",
+        "iam:DeleteRolePolicy",
+        "iam:DeleteSAMLProvider",
+        "iam:DeleteSSHPublicKey",
+        "iam:DeleteServerCertificate",
+        "iam:DeleteServiceLinkedRole",
+        "iam:DeleteServiceSpecificCredential",
+        "iam:DeleteSigningCertificate",
+        "iam:DeleteUser",
+        "iam:DeleteUserPermissionsBoundary",
+        "iam:DeleteUserPolicy",
+        "iam:DeleteVirtualMFADevice",
     ]
 
-    assert Counter(correct_list) == Counter(policy_document_not_principal.get_iam_actions())
+    assert Counter(policy_document_not_principal.get_iam_actions()) == Counter(correct_list)

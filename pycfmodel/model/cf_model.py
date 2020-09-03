@@ -1,6 +1,7 @@
 from datetime import date
 from typing import Any, ClassVar, Collection, Dict, List, Optional, Type, Union
 
+from pycfmodel.action_expander import expand_actions
 from pycfmodel.constants import AWS_NOVALUE
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.parameter import Parameter
@@ -91,6 +92,14 @@ class CFModel(CustomModel):
             for key, value in resources.items()
         }
         return CFModel(**dict_value, Conditions=resolved_conditions, Resources=resolved_resources)
+
+    def expand_actions(self) -> "CFModel":
+        dict_value = self.dict()
+
+        resources = dict_value.pop("Resources")
+        expanded_resources = {key: expand_actions(value) for key, value in resources.items()}
+
+        return CFModel(**dict_value, Resources=expanded_resources)
 
     def resources_filtered_by_type(
         self, allowed_types: Collection[Union[str, Type[Resource]]]
