@@ -6,7 +6,8 @@ from pycfmodel.actions.query import get_all_actions
 
 def _expand_action(action_pattern: str) -> List[str]:
     if isinstance(action_pattern, str):
-        return sorted(set(action for action in get_all_actions() if fnmatchcase(action, action_pattern)))
+        action_pattern = action_pattern.lower()
+        return sorted(set(action for action in get_all_actions() if fnmatchcase(action.lower(), action_pattern)))
 
     raise ValueError(f"Not supported type: {type(action_pattern)}")
 
