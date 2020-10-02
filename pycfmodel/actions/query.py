@@ -21,5 +21,5 @@ def get_all_actions() -> Set[str]:
 
 
 @lru_cache(maxsize=None)
-def get_actions_for_service(service_prefix) -> Set[str]:
+def get_actions_for_service(service_prefix: str) -> Set[str]:
     return _get_actions_from_service_info(iam_definition_data[service_prefix])
