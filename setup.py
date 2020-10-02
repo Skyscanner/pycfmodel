@@ -13,8 +13,9 @@ dev_requires = [
     "httpx>=0.14.2",
     "isort>=5.4.2",
     "pip-tools>=2.0.2",
-    "pytest>=6.0.1",
+    "policy-sentry>=0.9.0",
     "pytest-cov>=2.10.1",
+    "pytest>=6.0.1",
 ]
 
 docs_requires = ["AutoMacDoc==0.3", "mkdocs-material==4.6.3", "mkdocs==1.1", "mkdocstrings==0.10.0"]
