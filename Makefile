@@ -12,7 +12,7 @@ install-docs:
 format: isort-format black-format
 
 isort-format:
-	isort --recursive .
+	isort .
 
 black-format:
 	black .
@@ -40,9 +40,9 @@ coverage:
 test: lint unit
 
 freeze:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile --no-index --output-file requirements.txt setup.py
+	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile --no-emit-index-url --output-file requirements.txt setup.py
 
 freeze-upgrade:
-	CUSTOM_COMPILE_COMMAND="make freeze-upgrade" pip-compile --no-index --upgrade --output-file requirements.txt setup.py
+	CUSTOM_COMPILE_COMMAND="make freeze-upgrade" pip-compile --no-emit-index-url --upgrade --output-file requirements.txt setup.py
 
 .PHONY: install install-dev install-docs format isort-format black-format lint isort-lint black-lint flake8-lint unit coverage test freeze freeze-upgrade
