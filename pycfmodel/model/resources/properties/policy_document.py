@@ -3,7 +3,7 @@ from typing import List, Optional, Pattern, Union
 from pydantic import Extra
 
 from pycfmodel.action_expander import _expand_action
-from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
+from pycfmodel.actions.query import get_actions_for_service
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.resources.properties.statement import Statement
 from pycfmodel.model.types import Resolvable, ResolvableDate
@@ -111,10 +111,6 @@ class PolicyDocument(Property):
                         actions.add(expanded_action)
 
         if difference:
-            return sorted(
-                set([action for action in CLOUDFORMATION_ACTIONS if action.lower().startswith("iam:")]).difference(
-                    actions
-                )
-            )
+            return sorted(get_actions_for_service("iam").difference(actions))
 
         return sorted(actions)

@@ -1,25 +1,14 @@
-import re
-from typing import List, Pattern, Union
+from fnmatch import fnmatchcase
+from typing import List, Union
 
-from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
-
-
-def _build_regex(action: str) -> Pattern:
-    # Replace *
-    action = action.replace("*", ".*")
-
-    # Replace ?
-    action = action.replace("?", ".{1}")
-
-    return re.compile(f"^{action}$", re.IGNORECASE)
+from pycfmodel.actions.query import get_all_actions
 
 
-def _expand_action(action: str) -> List[str]:
-    if isinstance(action, str):
-        pattern = _build_regex(action)
-        return sorted(set(action for action in CLOUDFORMATION_ACTIONS if pattern.match(action)))
+def _expand_action(action_pattern: str) -> List[str]:
+    if isinstance(action_pattern, str):
+        return sorted(set(action for action in get_all_actions() if fnmatchcase(action, action_pattern)))
 
-    raise ValueError(f"Not supported type: {type(action)}")
+    raise ValueError(f"Not supported type: {type(action_pattern)}")
 
 
 def _expand_actions(actions: Union[str, List[str]]) -> List[str]:

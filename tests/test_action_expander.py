@@ -3,24 +3,8 @@ import re
 import pytest
 
 from pycfmodel import parse
-from pycfmodel.action_expander import _build_regex, _expand_action, _expand_actions
-from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
-
-
-@pytest.mark.parametrize(
-    "action, expected_pattern",
-    [
-        ("", re.compile("^$", re.IGNORECASE)),
-        ("*", re.compile("^.*$", re.IGNORECASE)),
-        ("?", re.compile("^.{1}$", re.IGNORECASE)),
-        ("a", re.compile("^a$", re.IGNORECASE)),
-        ("a*", re.compile("^a.*$", re.IGNORECASE)),
-        ("a?", re.compile("^a.{1}$", re.IGNORECASE)),
-        ("a*a?", re.compile("^a.*a.{1}$", re.IGNORECASE)),
-    ],
-)
-def test_build_regex(action, expected_pattern):
-    assert _build_regex(action) == expected_pattern
+from pycfmodel.action_expander import _expand_action, _expand_actions
+from pycfmodel.actions.query import get_all_actions
 
 
 @pytest.mark.parametrize(
@@ -99,7 +83,7 @@ def test_expand_actions_scenario_1():
     model = parse(template).resolve(extra_params={"AWS::AccountId": "123"}).expand_actions()
 
     assert (
-        model.Resources["rootRole"].Properties.Policies[0].PolicyDocument.Statement[0].Action == CLOUDFORMATION_ACTIONS
+        set(model.Resources["rootRole"].Properties.Policies[0].PolicyDocument.Statement[0].Action) == get_all_actions()
     )
 
 
