@@ -1,0 +1,3 @@
+from policy_sentry.shared.constants import BUNDLED_DATASTORE_FILE_PATH
+
+print(BUNDLED_DATASTORE_FILE_PATH)
