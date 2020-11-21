@@ -1,0 +1,28 @@
+name: PyPI release
+
+#on:
+#  release:
+#    types: [published]
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+
+      - run: make install-dev
+
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: oscarbc
+          password: ${{ secrets.pypi_password }}
+          repository_url: https://test.pypi.org/legacy/
