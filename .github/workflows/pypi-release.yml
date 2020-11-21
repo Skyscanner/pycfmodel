@@ -18,6 +18,8 @@ jobs:
         with:
           python-version: '3.7'
 
+      - run: pip install setuptools wheel
+
       - run: make install
 
       - name: Build a binary wheel
