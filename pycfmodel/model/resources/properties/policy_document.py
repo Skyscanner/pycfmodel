@@ -2,7 +2,6 @@ from typing import List, Optional, Pattern, Union
 
 from pydantic import Extra
 
-from pycfmodel.action_expander import _expand_action
 from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.resources.properties.statement import Statement
@@ -95,20 +94,17 @@ class PolicyDocument(Property):
         Find all IAM Actions which are specified in statements.
 
         Arguments:
-            difference: when True, the behaviour changes to find the difference between all IAM Actions and those specified in the statements of the policy. Default = False.
+            difference: when True, the behaviour changes to find the difference between all IAM Actions and those
+            specified in the statements of the policy. Default = False.
 
         Returns:
             List of matching actions.
         """
         actions = set()
         for statement in self._statement_as_list():
-            for action in statement.get_action_list():
-                if not isinstance(action, str):
-                    continue
-
-                for expanded_action in _expand_action(action):
-                    if expanded_action.lower().startswith("iam:"):
-                        actions.add(expanded_action)
+            for action in statement.get_expanded_action_list():
+                if action.startswith("iam:"):
+                    actions.add(action)
 
         if difference:
             return sorted(
@@ -117,4 +113,17 @@ class PolicyDocument(Property):
                 )
             )
 
+        return sorted(actions)
+
+    def get_allowed_actions(self) -> List[str]:
+        """
+        Find all allowed Actions which are specified in statements.
+
+        Returns:
+            List of matching actions.
+        """
+        actions = set()
+        for statement in self._statement_as_list():
+            if statement.Effect.lower() == "allow":
+                actions.update(statement.get_expanded_action_list())
         return sorted(actions)

@@ -1,13 +1,14 @@
 import re
-from collections import Counter
 
-import pytest
+from pytest import fixture
 
+from pycfmodel.action_expander import _expand_actions
+from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 from pycfmodel.constants import CONTAINS_STAR
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 
 
-@pytest.fixture()
+@fixture
 def policy_document_one_statement():
     return PolicyDocument(
         **{
@@ -21,7 +22,7 @@ def policy_document_one_statement():
     )
 
 
-@pytest.fixture()
+@fixture
 def policy_document_multi_statement():
     return PolicyDocument(
         **{
@@ -42,14 +43,14 @@ def policy_document_multi_statement():
     )
 
 
-@pytest.fixture()
+@fixture
 def policy_document_star_resource():
     return PolicyDocument(
         **{"Statement": [{"Action": ["*"], "Effect": "Allow", "Resource": "*", "Principal": {"AWS": ["156460612806"]}}]}
     )
 
 
-@pytest.fixture()
+@fixture
 def policy_document_wildcard_actions():
     return PolicyDocument(
         **{
@@ -65,17 +66,28 @@ def policy_document_wildcard_actions():
     )
 
 
-@pytest.fixture()
+@fixture
 def policy_document_not_principal():
     return PolicyDocument(
         **{
             "Statement": [
                 {
-                    "Action": ["iam:Delete*"],
+                    "Action": [
+                        "iam:Delete*",
+                        "s3:GetObject*",
+                    ],
                     "Effect": "Allow",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
                     "NotPrincipal": {"AWS": ["156460612806"]},
-                }
+                },
+                {
+                    "Action": [
+                        "s3:List*",
+                    ],
+                    "Effect": "Deny",
+                    "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
+                    "NotPrincipal": {"AWS": ["156460612806"]},
+                },
             ]
         }
     )
@@ -142,4 +154,68 @@ def test_get_iam_actions(policy_document_not_principal):
         "iam:DeleteVirtualMFADevice",
     ]
 
-    assert Counter(policy_document_not_principal.get_iam_actions()) == Counter(correct_list)
+    assert policy_document_not_principal.get_iam_actions() == correct_list
+
+
+def test_get_allowed_actions(policy_document_not_principal):
+    correct_list = [
+        "iam:DeleteAccessKey",
+        "iam:DeleteAccountAlias",
+        "iam:DeleteAccountPasswordPolicy",
+        "iam:DeleteGroup",
+        "iam:DeleteGroupPolicy",
+        "iam:DeleteInstanceProfile",
+        "iam:DeleteLoginProfile",
+        "iam:DeleteOpenIDConnectProvider",
+        "iam:DeletePolicy",
+        "iam:DeletePolicyVersion",
+        "iam:DeleteRole",
+        "iam:DeleteRolePermissionsBoundary",
+        "iam:DeleteRolePolicy",
+        "iam:DeleteSAMLProvider",
+        "iam:DeleteSSHPublicKey",
+        "iam:DeleteServerCertificate",
+        "iam:DeleteServiceLinkedRole",
+        "iam:DeleteServiceSpecificCredential",
+        "iam:DeleteSigningCertificate",
+        "iam:DeleteUser",
+        "iam:DeleteUserPermissionsBoundary",
+        "iam:DeleteUserPolicy",
+        "iam:DeleteVirtualMFADevice",
+        "s3:GetObject",
+        "s3:GetObjectAcl",
+        "s3:GetObjectLegalHold",
+        "s3:GetObjectRetention",
+        "s3:GetObjectTagging",
+        "s3:GetObjectTorrent",
+        "s3:GetObjectVersion",
+        "s3:GetObjectVersionAcl",
+        "s3:GetObjectVersionForReplication",
+        "s3:GetObjectVersionTagging",
+        "s3:GetObjectVersionTorrent",
+    ]
+
+    assert policy_document_not_principal.get_allowed_actions() == correct_list
+
+
+@fixture
+def policy_document_not_action():
+    return PolicyDocument(
+        **{
+            "Statement": [
+                {
+                    "NotAction": [
+                        "rds:*",
+                    ],
+                    "Effect": "Allow",
+                    "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
+                    "NotPrincipal": {"AWS": ["156460612806"]},
+                },
+            ]
+        }
+    )
+
+
+def test_get_allowed_not_actions(policy_document_not_action):
+    allowed_actions = set(entry for entry in CLOUDFORMATION_ACTIONS if not entry.startswith("rds:"))
+    assert policy_document_not_action.get_allowed_actions() == sorted(allowed_actions)

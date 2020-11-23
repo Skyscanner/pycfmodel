@@ -1,6 +1,21 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.8.0 - [2020-11-23]
+### Additions
+- New function `pycfmodel.model.resources.properties.policy_document.PolicyDocument.get_allowed_actions`
+### Improvements
+- Improve action expansion to support `NotAction`
+- Improve Cloudformation action file generator
+- Update Cloudformation actions to latest
+- Improved tests
+- New optional parameters added to `pycfmodel.model.resources.properties.statement.Statement.get_action_list`
+- New optional parameters added to `pycfmodel.action_expander._expand_action`
+- New optional parameters added to `pycfmodel.action_expander._expand_actions`
+### Fixes
+- Fix isort testing issue
+
+
 ## 0.7.2 - [2020-09-01]
 ### Improvements
 - Added all cloudformation actions file (script to generate them and test to check for new actions)

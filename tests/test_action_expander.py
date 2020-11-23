@@ -51,10 +51,36 @@ def test_expand_action(action, expected_output):
         (["ec2:Run?nstances", "ec2:Run?nstances"], ["ec2:RunInstances"]),
         (["ec?:RunInstances", "ec?:RunInstances"], ["ec2:RunInstances"]),
         (["ec2:Run*", "ec2:Run*"], ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
+        (["*"], CLOUDFORMATION_ACTIONS),
+        (["ec2:Run*", "*"], CLOUDFORMATION_ACTIONS),
     ],
 )
 def test_expand_actions(action, expected_output):
     assert _expand_actions(action) == expected_output
+
+
+@pytest.mark.parametrize(
+    "action, reverse_expected_output",
+    [
+        ("ec2:RunInstances", ["ec2:RunInstances"]),
+        ("ec2:Run?nstances", ["ec2:RunInstances"]),
+        ("ec?:RunInstances", ["ec2:RunInstances"]),
+        ("ec2:Run*", ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
+        (["ec2:RunInstances"], ["ec2:RunInstances"]),
+        (["ec2:Run?nstances"], ["ec2:RunInstances"]),
+        (["ec?:RunInstances"], ["ec2:RunInstances"]),
+        (["ec2:Run*"], ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
+        (["ec2:RunInstances", "ec2:RunInstances"], ["ec2:RunInstances"]),
+        (["ec2:Run?nstances", "ec2:Run?nstances"], ["ec2:RunInstances"]),
+        (["ec?:RunInstances", "ec?:RunInstances"], ["ec2:RunInstances"]),
+        (["ec2:Run*", "ec2:Run*"], ["ec2:RunInstances", "ec2:RunScheduledInstances"]),
+        (["*"], CLOUDFORMATION_ACTIONS),
+        (["ec2:Run*", "*"], CLOUDFORMATION_ACTIONS),
+    ],
+)
+def test_expand_not_actions(action, reverse_expected_output):
+    expected_output = sorted(set(CLOUDFORMATION_ACTIONS) - set(reverse_expected_output))
+    assert _expand_actions(action, not_action=True) == expected_output
 
 
 def test_expand_actions_scenario_1():
@@ -97,7 +123,6 @@ def test_expand_actions_scenario_1():
     }
 
     model = parse(template).resolve(extra_params={"AWS::AccountId": "123"}).expand_actions()
-
     assert (
         model.Resources["rootRole"].Properties.Policies[0].PolicyDocument.Statement[0].Action == CLOUDFORMATION_ACTIONS
     )
