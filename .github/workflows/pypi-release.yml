@@ -1,10 +1,8 @@
 name: PyPI release
 
-#on:
-#  release:
-#    types: [published]
-
-on: push
+on:
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -25,9 +23,13 @@ jobs:
       - name: Build a binary wheel
         run: python setup.py sdist bdist_wheel
 
-      - name: Publish package to PyPI
+      - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
-          user: oscarbc
-          password: ${{ secrets.pypi_password }}
+          password: ${{ secrets.test_pypi_password }}
           repository_url: https://test.pypi.org/legacy/
+
+      - name: Publish distribution 📦 to PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.pypi_password }}
