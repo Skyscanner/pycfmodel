@@ -2,7 +2,6 @@ import re
 
 from pytest import fixture
 
-from pycfmodel.action_expander import _expand_actions
 from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 from pycfmodel.constants import CONTAINS_STAR
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
