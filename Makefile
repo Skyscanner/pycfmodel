@@ -12,7 +12,7 @@ install-docs:
 format: isort-format black-format
 
 isort-format:
-	isort --recursive .
+	isort .
 
 black-format:
 	black .
@@ -20,7 +20,7 @@ black-format:
 lint: isort-lint black-lint flake8-lint
 
 isort-lint:
-	isort --check-only --recursive .
+	isort --check-only .
 
 black-lint:
 	black --check .

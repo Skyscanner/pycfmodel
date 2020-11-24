@@ -38,7 +38,7 @@ class Statement(Property):
     Resource: Optional[ResolvableStrOrList] = None
     NotResource: Optional[ResolvableStrOrList] = None
 
-    def get_action_list(self) -> List[ResolvableStr]:
+    def get_action_list(self, include_action=True, include_not_action=True) -> List[ResolvableStr]:
         """
         Gets all actions specified in `Action` and `NotAction`.
 
@@ -46,7 +46,12 @@ class Statement(Property):
             List of actions.
         """
         action_list = []
-        for actions in [self.Action, self.NotAction]:
+        included_actions = []
+        if include_action:
+            included_actions.append(self.Action)
+        if include_not_action:
+            included_actions.append(self.NotAction)
+        for actions in included_actions:
             if isinstance(actions, List):
                 action_list.extend(actions)
             elif isinstance(actions, (str, dict)):
@@ -55,8 +60,12 @@ class Statement(Property):
 
     def get_expanded_action_list(self) -> List[str]:
         action_list = set()
-        for action in self.get_action_list():
+        for action in self.get_action_list(include_action=True, include_not_action=False):
             action_list.update(_expand_action(action))
+
+        for not_action in self.get_action_list(include_not_action=True, include_action=False):
+            action_list.update(_expand_action(not_action, not_action=True))
+
         return sorted(action_list)
 
     def get_resource_list(self) -> List[ResolvableStr]:
