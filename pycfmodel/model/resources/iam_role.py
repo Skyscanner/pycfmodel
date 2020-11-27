@@ -47,6 +47,7 @@ class IAMRole(Resource):
     @property
     def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
         result = []
-        for policy in self.Properties.Policies or []:
+        policies = self.Properties.Policies if self.Properties and self.Properties.Policies else []
+        for policy in policies:
             result.append(OptionallyNamedPolicyDocument(name=policy.PolicyName, policy_document=policy.PolicyDocument))
         return result

@@ -58,7 +58,7 @@ class IAMUser(Resource):
     @property
     def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
         result = []
-        if self.Properties.Policies:
-            for policy in self.Properties.Policies:
-                result.append(OptionallyNamedPolicyDocument(policy.PolicyName, policy.PolicyDocument))
+        policies = self.Properties.Policies if self.Properties and self.Properties.Policies else []
+        for policy in policies:
+            result.append(OptionallyNamedPolicyDocument(policy.PolicyName, policy.PolicyDocument))
         return result
