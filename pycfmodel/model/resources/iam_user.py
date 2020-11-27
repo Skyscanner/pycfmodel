@@ -5,6 +5,7 @@ from pycfmodel.model.parameter import Parameter
 from pycfmodel.model.resources.properties.policy import Policy
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableStr
+from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 class IAMUserProperties(CustomModel):
@@ -53,3 +54,11 @@ class IAMUser(Resource):
                     return True
 
         return super().has_hardcoded_credentials()
+
+    @property
+    def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
+        result = []
+        policies = self.Properties.Policies if self.Properties and self.Properties.Policies else []
+        for policy in policies:
+            result.append(OptionallyNamedPolicyDocument(policy.PolicyName, policy.PolicyDocument))
+        return result

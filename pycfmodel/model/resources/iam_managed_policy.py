@@ -4,6 +4,7 @@ from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableStr
+from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 class IAMManagedPolicyProperties(CustomModel):
@@ -42,3 +43,11 @@ class IAMManagedPolicy(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::ManagedPolicy"
     Type: str = TYPE_VALUE
     Properties: Resolvable[IAMManagedPolicyProperties]
+
+    @property
+    def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
+        return [
+            OptionallyNamedPolicyDocument(
+                name=self.Properties.ManagedPolicyName, policy_document=self.Properties.PolicyDocument
+            )
+        ]

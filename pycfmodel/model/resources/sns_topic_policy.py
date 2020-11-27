@@ -4,6 +4,7 @@ from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableStr
+from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 class SNSTopicPolicyProperties(CustomModel):
@@ -32,3 +33,7 @@ class SNSTopicPolicy(Resource):
     TYPE_VALUE: ClassVar = "AWS::SNS::TopicPolicy"
     Type: str = TYPE_VALUE
     Properties: Resolvable[SNSTopicPolicyProperties]
+
+    @property
+    def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
+        return [OptionallyNamedPolicyDocument(name=None, policy_document=self.Properties.PolicyDocument)]

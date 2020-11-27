@@ -1,22 +1,12 @@
-import re
-from typing import List, Pattern, Union
+from typing import List, Union
 
 from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
-
-
-def _build_regex(action: str) -> Pattern:
-    # Replace *
-    action = action.replace("*", ".*")
-
-    # Replace ?
-    action = action.replace("?", ".{1}")
-
-    return re.compile(f"^{action}$", re.IGNORECASE)
+from pycfmodel.utils import regex_from_cf_string
 
 
 def _expand_action(action: str, not_action=False) -> List[str]:
     if isinstance(action, str):
-        pattern = _build_regex(action)
+        pattern = regex_from_cf_string(action)
         if not_action:
             return sorted(
                 set(CLOUDFORMATION_ACTIONS) - set(action for action in CLOUDFORMATION_ACTIONS if pattern.match(action))
