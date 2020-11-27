@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Improvements
 - Added basic tests for the resources that didn't have
 ### Changes
-- `_build_regex` moved to `utils` and renamed to `test_build_regex`
+- `_build_regex` moved to `utils` and renamed to `regex_from_cf_string`
 ### Fixes
 - Fixed IAMGroup model
 
