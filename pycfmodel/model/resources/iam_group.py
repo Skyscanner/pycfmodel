@@ -41,9 +41,8 @@ class IAMGroup(Resource):
     @property
     def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
         result = []
-        if self.Properties.Policies:
-            for policy in self.Properties.Policies:
-                result.append(
-                    OptionallyNamedPolicyDocument(name=policy.PolicyName, policy_document=policy.PolicyDocument)
-                )
+        for policy in self.Properties.Policies or []:
+            result.append(
+                OptionallyNamedPolicyDocument(name=policy.PolicyName, policy_document=policy.PolicyDocument)
+            )
         return result
