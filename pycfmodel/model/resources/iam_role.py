@@ -3,7 +3,7 @@ from typing import ClassVar, List, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy import Policy
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
-from pycfmodel.model.resources.resource import Resource
+from pycfmodel.model.resources.resource import OptionallyNamedPolicyDocument, Resource
 from pycfmodel.model.types import Resolvable, ResolvableIntOrStr, ResolvableStr
 
 
@@ -43,3 +43,10 @@ class IAMRole(Resource):
     TYPE_VALUE: ClassVar = "AWS::IAM::Role"
     Type: str = TYPE_VALUE
     Properties: Resolvable[IAMRoleProperties]
+
+    @property
+    def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
+        result = []
+        for policy in self.Properties.Policies:
+            result.append(OptionallyNamedPolicyDocument(name=policy.PolicyName, policy_document=policy.PolicyDocument))
+        return result

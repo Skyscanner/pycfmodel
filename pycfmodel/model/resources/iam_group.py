@@ -1,9 +1,10 @@
 from typing import ClassVar, List, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.resources.iam_policy import IAMPolicy
+from pycfmodel.model.resources.properties.policy import Policy
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableStr
+from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 class IAMGroupProperties(CustomModel):
@@ -21,7 +22,7 @@ class IAMGroupProperties(CustomModel):
     GroupName: Optional[ResolvableStr] = None
     ManagedPolicyArns: Optional[Resolvable[List[ResolvableStr]]] = None
     Path: Optional[ResolvableStr] = None
-    Policies: Optional[Resolvable[List[IAMPolicy]]] = None
+    Policies: Optional[Resolvable[List[Resolvable[Policy]]]] = None
 
 
 class IAMGroup(Resource):
@@ -35,4 +36,14 @@ class IAMGroup(Resource):
 
     TYPE_VALUE: ClassVar = "AWS::IAM::Group"
     Type: str = TYPE_VALUE
-    Properties: Resolvable[IAMGroupProperties]
+    Properties: Optional[Resolvable[IAMGroupProperties]]
+
+    @property
+    def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
+        result = []
+        if self.Properties.Policies:
+            for policy in self.Properties.Policies:
+                result.append(
+                    OptionallyNamedPolicyDocument(name=policy.PolicyName, policy_document=policy.PolicyDocument)
+                )
+        return result

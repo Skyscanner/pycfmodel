@@ -1,10 +1,11 @@
-from typing import ClassVar, Dict, Optional
+from typing import ClassVar, Dict, List, Optional
 
 from pydantic import validator
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.parameter import Parameter
 from pycfmodel.model.types import ResolvableCondition, ResolvableStr, ResolvableStrOrList
+from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 class Resource(CustomModel):
@@ -39,3 +40,7 @@ class Resource(CustomModel):
                 return True
 
         return False
+
+    @property
+    def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
+        return []

@@ -1,6 +1,7 @@
 import pytest
 
 from pycfmodel.model.resources.iam_role import IAMRole
+from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 @pytest.fixture()
@@ -36,3 +37,9 @@ def test_policies(iam_role):
     policies = iam_role.Properties.Policies
     assert len(policies) == 1
     assert policies[0].PolicyName == "root"
+
+
+def test_iamrole_policy_documents(iam_role):
+    assert iam_role.policy_documents == [
+        OptionallyNamedPolicyDocument(name="root", policy_document=iam_role.Properties.Policies[0].PolicyDocument)
+    ]

@@ -1,9 +1,10 @@
-from typing import ClassVar
+from typing import ClassVar, List
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableStr
+from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 class S3BucketPolicyProperties(CustomModel):
@@ -32,3 +33,7 @@ class S3BucketPolicy(Resource):
     TYPE_VALUE: ClassVar = "AWS::S3::BucketPolicy"
     Type: str = TYPE_VALUE
     Properties: Resolvable[S3BucketPolicyProperties]
+
+    @property
+    def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
+        return [OptionallyNamedPolicyDocument(name=None, policy_document=self.Properties.PolicyDocument)]

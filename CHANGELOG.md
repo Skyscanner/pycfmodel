@@ -1,6 +1,19 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.8.1 - [2020-11-27]
+### Additions
+- New property `policy_documents` to Resources
+- New `model.utils` module
+- New helper dataclass: `model.utils.OptionallyNamedPolicyDocument`
+### Improvements
+- Added basic tests for the resources that didn't have
+### Changes
+- `_build_regex` moved to `utils` and renamed to `test_build_regex`
+### Fixes
+- Fixed IAMGroup model
+
+
 ## 0.8.0 - [2020-11-23]
 ### Additions
 - New function `pycfmodel.model.resources.properties.policy_document.PolicyDocument.get_allowed_actions`
