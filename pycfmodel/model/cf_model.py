@@ -103,6 +103,11 @@ class CFModel(CustomModel):
         This method can handle the cases of both `Action` and `NotAction`.
 
         [Known AWS Actions](https://github.com/Skyscanner/pycfmodel/blob/master/pycfmodel/cloudformation_actions.py).
+        These known actions can be updated by executing:
+
+        ```
+        python3 scripts/generate_cloudformation_actions_file.py
+        ```
         """
         dict_value = self.dict()
 
