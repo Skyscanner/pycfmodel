@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file.
 ## 0.7.2 - [2020-09-01]
 ### Improvements
 - Added all cloudformation actions file (script to generate them and test to check for new actions)
-- Added `expand_actions`, it will return a new model expading stars to get all implied actions
+- Added `expand_actions`, it will return a new model expanding stars to get all implied actions
 - Added `get_expanded_action_list` to Statement to get all implied actions
 
 
