@@ -98,10 +98,18 @@ assert statement.Resource == "*"
 assert rootRole.Properties.AssumeRolePolicyDocument.Statement[0].Principal == {"AWS": "arn:aws:iam::123:root"}
 
 ```
+
 ## Local Development Commands
-```
+
+```bash
 make install-dev
 make coverage
 make test
 make freeze
+```
+
+If the test `tests/test_constants.py::test_cloudformation_actions` is failing, it can be resolved by updating the known AWS Actions:
+
+```bash
+python3 scripts/generate_cloudformation_actions_file.py
 ```
