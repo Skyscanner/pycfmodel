@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.8.2 - [2021-02-11]
+### Additions
+- Add `EC2 VPC Endpoint Policy` resource.
+### Changes
+- Update list of all CloudFormation actions.
+
 ## 0.8.1 - [2020-11-27]
 ### Additions
 - New property `policy_documents` to Resources
