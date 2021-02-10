@@ -31,6 +31,7 @@ inspecting CloudFormation scripts.
         * Security Group Egress Prop
         * Security Group Ingress Prop
         * Statement
+    * EC2 VPC Endpoint Policy
     * Generic Resource
     * IAM Group
     * IAM Managed Policy
