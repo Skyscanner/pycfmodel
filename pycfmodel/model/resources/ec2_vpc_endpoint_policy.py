@@ -49,4 +49,6 @@ class EC2VpcEndpointPolicy(Resource):
 
     @property
     def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
+        if not self.Properties.PolicyDocument:
+            return []
         return [OptionallyNamedPolicyDocument(name=None, policy_document=self.Properties.PolicyDocument)]
