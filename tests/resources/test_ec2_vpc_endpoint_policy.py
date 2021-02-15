@@ -29,6 +29,27 @@ def ec2_vpc_endpoint_policy():
     )
 
 
+@pytest.fixture()
+def ec2_vpc_endpoint_policy_no_policy_document():
+    return EC2VpcEndpointPolicy(
+        **{
+            "Type": "AWS::EC2::VPCEndpoint",
+            "Properties": {
+                "SecurityGroupIds": [{"Ref": "VPCEndpointSecurityGroup"}],
+                "ServiceName": {
+                    "Fn::Sub": [
+                        "com.amazonaws.vpce.${AWS::Region}.${ServiceID}",
+                        {"ServiceID": {"Ref": "VPCEndpointService"}},
+                    ]
+                },
+                "SubnetIds": ["subnet-123", "subnet-456"],
+                "VpcEndpointType": "Interface",
+                "VpcId": "vpc-abc987",
+            },
+        }
+    )
+
+
 def test_ec2_vpc_endpoint(ec2_vpc_endpoint_policy: EC2VpcEndpointPolicy):
     assert ec2_vpc_endpoint_policy.Properties.ServiceName == "com.amazonaws.eu-west-1.s3"
     assert ec2_vpc_endpoint_policy.Properties.VpcId == "vpc-123-abc"
@@ -41,3 +62,7 @@ def test_ec2_vpc_endpoint_policy_documents(ec2_vpc_endpoint_policy):
     assert ec2_vpc_endpoint_policy.policy_documents == [
         OptionallyNamedPolicyDocument(name=None, policy_document=ec2_vpc_endpoint_policy.Properties.PolicyDocument)
     ]
+
+
+def test_ec2_vpc_endpoint_policy_documents_no_document(ec2_vpc_endpoint_policy_no_policy_document):
+    assert ec2_vpc_endpoint_policy_no_policy_document.policy_documents == []

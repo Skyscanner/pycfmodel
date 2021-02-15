@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.8.3 - [2021-02-15]
+### Fixes
+- Fix to `policy_documents` method on `EC2 VPC Endpoint` resource type for when no policy document is added to the resource.
+
 ## 0.8.2 - [2021-02-11]
 ### Additions
 - Add `EC2 VPC Endpoint Policy` resource.
