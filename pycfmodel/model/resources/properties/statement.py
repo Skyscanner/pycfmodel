@@ -40,7 +40,7 @@ class Statement(Property):
     Resource: Optional[ResolvableStrOrList] = None
     NotResource: Optional[ResolvableStrOrList] = None
 
-    @validator('Effect')
+    @validator("Effect")
     def capitalize_if_str(cls, v: ResolvableStr):
         if isinstance(v, str):
             return v.capitalize()
