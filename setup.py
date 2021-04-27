@@ -8,7 +8,7 @@ long_description = readme.read_text()
 install_requires = ["pydantic~=1.0"]
 
 dev_requires = [
-    "black>=20.8b1",
+    "black>=21.4b0",
     "flake8>=3.8.3",
     "httpx>=0.14.2",
     "isort>=5.4.2",
