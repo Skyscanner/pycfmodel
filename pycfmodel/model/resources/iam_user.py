@@ -46,7 +46,7 @@ class IAMUser(Resource):
     Properties: Optional[Resolvable[IAMUserProperties]]
 
     def has_hardcoded_credentials(self) -> bool:
-        """ Returns True if login profile password contains a hardcoded string, otherwise False. """
+        """Returns True if login profile password contains a hardcoded string, otherwise False."""
         if self.Properties:
             login_profile = self.Properties.LoginProfile
             if login_profile and login_profile.get("Password"):

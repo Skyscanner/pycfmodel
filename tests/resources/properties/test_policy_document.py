@@ -98,7 +98,7 @@ def test_one_statement(policy_document_one_statement):
 
 def test_multi_statements(policy_document_multi_statement):
     assert policy_document_multi_statement.Statement[0].Effect == "Allow"
-    assert policy_document_multi_statement.Statement[1].Effect == "bar"
+    assert policy_document_multi_statement.Statement[1].Effect == "Bar"
 
 
 def test_star_resource(policy_document_star_resource):

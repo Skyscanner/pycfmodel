@@ -50,14 +50,14 @@ class SecurityGroupEgressProp(Property):
         return IPv6Network(v, strict=False)
 
     def ipv4_slash_zero(self) -> bool:
-        """ Returns True if `CidrIp` matches `0.0.0.0/0`, otherwise False. """
+        """Returns True if `CidrIp` matches `0.0.0.0/0`, otherwise False."""
         # Remove after this is fixed https://bugs.python.org/issue38655
         if not self.CidrIp:
             return False
         return self.CidrIp == IPv4Network(IPV4_ZERO_VALUE)
 
     def ipv6_slash_zero(self) -> bool:
-        """ Returns True if `CidrIpv6` matches `::/0`, otherwise False. """
+        """Returns True if `CidrIpv6` matches `::/0`, otherwise False."""
         # Remove after this is fixed https://bugs.python.org/issue38655
         if not self.CidrIpv6:
             return False
