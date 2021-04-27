@@ -82,6 +82,11 @@ def statement_not_principal_5():
     )
 
 
+def test_capitalize_effect():
+    statement = Statement(**{"Effect": "allOw", "Action": ["action1"], "NotAction": "action2", "Resource": ["arn"]})
+    assert statement.Effect == "Allow"
+
+
 @pytest.mark.parametrize(
     "statement, expected_output",
     [

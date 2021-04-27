@@ -1,6 +1,8 @@
 import logging
 from typing import Dict, List, Optional, Pattern, Union
 
+from pydantic import validator
+
 from pycfmodel.action_expander import _expand_action
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.types import ResolvableStr, ResolvableStrOrList
@@ -37,6 +39,12 @@ class Statement(Property):
     NotAction: Optional[ResolvableStrOrList] = None
     Resource: Optional[ResolvableStrOrList] = None
     NotResource: Optional[ResolvableStrOrList] = None
+
+    @validator('Effect')
+    def capitalize_if_str(cls, v: ResolvableStr):
+        if isinstance(v, str):
+            return v.capitalize()
+        return v
 
     def get_action_list(self, include_action=True, include_not_action=True) -> List[ResolvableStr]:
         """
