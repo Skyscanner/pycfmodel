@@ -13,17 +13,14 @@ from pycfmodel.model.resources.properties.statement_condition import (
 from pycfmodel.resolver import resolve
 
 
-@pytest.fixture()
 def datetime_in_the_present():
     return datetime(2000, 1, 1, 0, 0)
 
 
-@pytest.fixture()
 def datetime_in_the_past():
     return datetime(1990, 1, 1, 0, 0)
 
 
-@pytest.fixture()
 def datetime_in_the_future():
     return datetime(2010, 1, 1, 0, 0)
 
