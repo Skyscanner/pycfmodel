@@ -1,6 +1,7 @@
 from datetime import date
 from typing import Any, ClassVar, Collection, Dict, List, Optional, Type, Union
 
+from pycfmodel.action_expander import expand_actions
 from pycfmodel.constants import AWS_NOVALUE
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.parameter import Parameter
@@ -91,6 +92,29 @@ class CFModel(CustomModel):
             for key, value in resources.items()
         }
         return CFModel(**dict_value, Conditions=resolved_conditions, Resources=resolved_resources)
+
+    def expand_actions(self) -> "CFModel":
+        """
+        Returns a model which has expanded all wildcards (`*`) to get all implied actions for every resource.
+        For example:\n
+          - a model containing `s3:*` will be expanded to list all the possible S3 actions.
+          - a model containing `s3:Get*` will be expanded to all the `Get*` actions only.
+
+        This method can handle the cases of both `Action` and `NotAction`.
+
+        [Known AWS Actions](https://github.com/Skyscanner/pycfmodel/blob/master/pycfmodel/cloudformation_actions.py).
+        These known actions can be updated by executing:
+
+        ```
+        python3 scripts/generate_cloudformation_actions_file.py
+        ```
+        """
+        dict_value = self.dict()
+
+        resources = dict_value.pop("Resources")
+        expanded_resources = {key: expand_actions(value) for key, value in resources.items()}
+
+        return CFModel(**dict_value, Resources=expanded_resources)
 
     def resources_filtered_by_type(
         self, allowed_types: Collection[Union[str, Type[Resource]]]

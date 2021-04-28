@@ -1,6 +1,9 @@
 import logging
 from typing import Dict, List, Optional, Pattern, Union
 
+from pydantic import validator
+
+from pycfmodel.action_expander import _expand_action
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.resources.properties.statement_condition import StatementCondition
 from pycfmodel.model.types import ResolvableStr, ResolvableStrOrList
@@ -40,7 +43,13 @@ class Statement(Property):
     NotResource: Optional[ResolvableStrOrList] = None
     Condition: Optional[StatementCondition] = None
 
-    def get_action_list(self) -> List[ResolvableStr]:
+    @validator("Effect")
+    def capitalize_if_str(cls, v: ResolvableStr):
+        if isinstance(v, str):
+            return v.capitalize()
+        return v
+
+    def get_action_list(self, include_action=True, include_not_action=True) -> List[ResolvableStr]:
         """
         Gets all actions specified in `Action` and `NotAction`.
 
@@ -48,12 +57,27 @@ class Statement(Property):
             List of actions.
         """
         action_list = []
-        for actions in [self.Action, self.NotAction]:
+        included_actions = []
+        if include_action:
+            included_actions.append(self.Action)
+        if include_not_action:
+            included_actions.append(self.NotAction)
+        for actions in included_actions:
             if isinstance(actions, List):
                 action_list.extend(actions)
             elif isinstance(actions, (str, dict)):
                 action_list.append(actions)
         return action_list
+
+    def get_expanded_action_list(self) -> List[str]:
+        action_list = set()
+        for action in self.get_action_list(include_action=True, include_not_action=False):
+            action_list.update(_expand_action(action))
+
+        for not_action in self.get_action_list(include_not_action=True, include_action=False):
+            action_list.update(_expand_action(not_action, not_action=True))
+
+        return sorted(action_list)
 
     def get_resource_list(self) -> List[ResolvableStr]:
         """

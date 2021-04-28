@@ -150,13 +150,13 @@ def resolve_base64(function_body: str, params: Dict, mappings: Dict[str, Dict], 
 
 def resolve_get_attr(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
     # TODO: Implement.
-    logger.warning(f"`Fn::GetAtt` resolver not implemented, returning `GETATT`")
+    logger.warning("`Fn::GetAtt` resolver not implemented, returning `GETATT`")
     return "GETATT"
 
 
 def resolve_get_azs(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
     # TODO: Implement.
-    logger.warning(f"`Fn::GetAZs` resolver not implemented, returning `GETAZS`")
+    logger.warning("`Fn::GetAZs` resolver not implemented, returning `GETAZS`")
     return "GETAZS"
 
 

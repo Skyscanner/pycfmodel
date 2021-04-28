@@ -1,6 +1,7 @@
 import pytest
 
 from pycfmodel.model.resources.sqs_queue_policy import SQSQueuePolicy
+from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 @pytest.fixture()
@@ -29,3 +30,9 @@ def test_sqs_queue(sqs_queue_policy):
     assert len(sqs_queue_policy.Properties.Queues) == 1
     assert sqs_queue_policy.Properties.PolicyDocument.Statement[0].Effect == "Allow"
     assert sqs_queue_policy.Properties.PolicyDocument.Statement[0].NotAction[0] == "sqs:Break*"
+
+
+def test_sqs_policy_documents(sqs_queue_policy):
+    assert sqs_queue_policy.policy_documents == [
+        OptionallyNamedPolicyDocument(name=None, policy_document=sqs_queue_policy.Properties.PolicyDocument)
+    ]

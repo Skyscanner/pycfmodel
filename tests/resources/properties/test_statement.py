@@ -82,6 +82,11 @@ def statement_not_principal_5():
     )
 
 
+def test_capitalize_effect():
+    statement = Statement(**{"Effect": "allOw", "Action": ["action1"], "NotAction": "action2", "Resource": ["arn"]})
+    assert statement.Effect == "Allow"
+
+
 @pytest.mark.parametrize(
     "statement, expected_output",
     [
@@ -93,6 +98,22 @@ def statement_not_principal_5():
 )
 def test_get_action_list(statement, expected_output):
     assert statement.get_action_list() == expected_output
+
+
+@pytest.mark.parametrize(
+    "statement, expected_output",
+    [
+        (Statement(**{"Effect": "Allow", "Action": "ec2:RunInstances", "Resource": ["arn"]}), ["ec2:RunInstances"]),
+        (Statement(**{"Effect": "Allow", "Action": "ec2:Run?nstances", "Resource": ["arn"]}), ["ec2:RunInstances"]),
+        (Statement(**{"Effect": "Allow", "Action": "ec?:RunInstances", "Resource": ["arn"]}), ["ec2:RunInstances"]),
+        (
+            Statement(**{"Effect": "Allow", "Action": "ec2:Run*", "Resource": ["arn"]}),
+            ["ec2:RunInstances", "ec2:RunScheduledInstances"],
+        ),
+    ],
+)
+def test_get_expanded_action_list(statement, expected_output):
+    assert statement.get_expanded_action_list() == expected_output
 
 
 @pytest.mark.parametrize(

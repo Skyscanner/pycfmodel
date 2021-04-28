@@ -1,5 +1,6 @@
 from typing import Union
 
+from pycfmodel.model.resources.ec2_vpc_endpoint_policy import EC2VpcEndpointPolicy
 from pycfmodel.model.resources.iam_group import IAMGroup
 from pycfmodel.model.resources.iam_managed_policy import IAMManagedPolicy
 from pycfmodel.model.resources.iam_policy import IAMPolicy
@@ -14,6 +15,7 @@ from pycfmodel.model.resources.sns_topic_policy import SNSTopicPolicy
 from pycfmodel.model.resources.sqs_queue_policy import SQSQueuePolicy
 
 ResourceModels = Union[
+    EC2VpcEndpointPolicy,
     IAMGroup,
     IAMManagedPolicy,
     IAMPolicy,

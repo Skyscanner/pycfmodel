@@ -4,4 +4,4 @@
 #
 #    make freeze-upgrade
 #
-pydantic==1.4
+pydantic==1.7.2

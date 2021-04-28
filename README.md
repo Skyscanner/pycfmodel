@@ -1,6 +1,6 @@
 # pycfmodel
 
-[![Build Status](https://travis-ci.org/Skyscanner/pycfmodel.svg?branch=master)](https://travis-ci.org/Skyscanner/pycfmodel)
+![Build Status](https://github.com/Skyscanner/pycfmodel/workflows/PyPI%20release/badge.svg)
 [![PyPI version](https://badge.fury.io/py/pycfmodel.svg)](https://badge.fury.io/py/pycfmodel)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/Skyscanner/pycfmodel.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Skyscanner/pycfmodel/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/Skyscanner/pycfmodel.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Skyscanner/pycfmodel/context:python)
@@ -31,6 +31,7 @@ inspecting CloudFormation scripts.
         * Security Group Egress Prop
         * Security Group Ingress Prop
         * Statement
+    * EC2 VPC Endpoint Policy
     * Generic Resource
     * IAM Group
     * IAM Managed Policy
@@ -98,10 +99,18 @@ assert statement.Resource == "*"
 assert rootRole.Properties.AssumeRolePolicyDocument.Statement[0].Principal == {"AWS": "arn:aws:iam::123:root"}
 
 ```
+
 ## Local Development Commands
-```
+
+```bash
 make install-dev
 make coverage
 make test
 make freeze
+```
+
+If the test `tests/test_constants.py::test_cloudformation_actions` is failing, it can be resolved by updating the known AWS Actions:
+
+```bash
+python3 scripts/generate_cloudformation_actions_file.py
 ```

@@ -1,6 +1,56 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.8.4 - [2021-04-27]
+### Fixes
+- Fix to ensure all `Statement.Effect` fields are always capitalized
+- Update `CLOUDFORMATION_ACTIONS`
+
+## 0.8.3 - [2021-02-15]
+### Fixes
+- Fix to `policy_documents` method on `EC2 VPC Endpoint` resource type for when no policy document is added to the resource.
+
+## 0.8.2 - [2021-02-11]
+### Additions
+- Add `EC2 VPC Endpoint Policy` resource.
+### Changes
+- Update list of all CloudFormation actions.
+
+## 0.8.1 - [2020-11-27]
+### Additions
+- New property `policy_documents` to Resources
+- New `model.utils` module
+- New helper dataclass: `model.utils.OptionallyNamedPolicyDocument`
+### Improvements
+- Added basic tests for the resources that didn't have
+### Changes
+- `_build_regex` moved to `utils` and renamed to `regex_from_cf_string`
+### Fixes
+- Fixed IAMGroup model
+
+
+## 0.8.0 - [2020-11-23]
+### Additions
+- New function `pycfmodel.model.resources.properties.policy_document.PolicyDocument.get_allowed_actions`
+### Improvements
+- Improve action expansion to support `NotAction`
+- Improve Cloudformation action file generator
+- Update Cloudformation actions to latest
+- Improved tests
+- New optional parameters added to `pycfmodel.model.resources.properties.statement.Statement.get_action_list`
+- New optional parameters added to `pycfmodel.action_expander._expand_action`
+- New optional parameters added to `pycfmodel.action_expander._expand_actions`
+### Fixes
+- Fix isort testing issue
+
+
+## 0.7.2 - [2020-09-01]
+### Improvements
+- Added all cloudformation actions file (script to generate them and test to check for new actions)
+- Added `expand_actions`, it will return a new model expanding stars to get all implied actions
+- Added `get_expanded_action_list` to Statement to get all implied actions
+
+
 ## 0.7.1 - [2020-04-06]
 ### Improvements
 - Refactor `SecurityGroupIngress`, `SecurityGroupEgress`, `SecurityGroupIngressProp` and `SecurityGroupEgressProp`.

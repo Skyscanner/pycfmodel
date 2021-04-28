@@ -1,3 +1,5 @@
+::: pycfmodel.model.resources.ec2_vpc_endpoint_policy
+
 ::: pycfmodel.model.resources.generic_resource
 
 ::: pycfmodel.model.resources.iam_group

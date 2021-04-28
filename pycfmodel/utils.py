@@ -1,4 +1,5 @@
-from typing import Any, List, Union
+import re
+from typing import Any, List, Pattern, Union
 
 from pycfmodel.constants import IMPLEMENTED_FUNCTIONS
 
@@ -11,3 +12,13 @@ def convert_to_list(item: Union[Any, List[Any]]) -> List[Any]:
     if isinstance(item, list):
         return item
     return [item]
+
+
+def regex_from_cf_string(action: str) -> Pattern:
+    # Replace *
+    action = action.replace("*", ".*")
+
+    # Replace ?
+    action = action.replace("?", ".{1}")
+
+    return re.compile(f"^{action}$", re.IGNORECASE)
