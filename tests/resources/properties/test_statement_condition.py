@@ -26,6 +26,7 @@ def datetime_in_the_future():
 
 
 def test_all_possible_conditions():
+    # Based on https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html
     all_operators = set()
     for operator in [
         "ArnEquals",
@@ -59,6 +60,7 @@ def test_all_possible_conditions():
         all_operators.add(f"{operator}IfExists")
 
     # Null
+    # Null is not compatible with IfExists
     all_operators.add("Null")
 
     # For(Any/All)Values
