@@ -197,6 +197,12 @@ class StatementCondition(BaseModel):
 
     IpAddress: Optional[Dict[str, ResolvableIPOrList]]
     NotIpAddress: Optional[Dict[str, ResolvableIPOrList]]
+    IpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
+    NotIpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
+    ForAllValuesIpAddress: Optional[Dict[str, ResolvableIPOrList]]
+    ForAllValuesNotIpAddress: Optional[Dict[str, ResolvableIPOrList]]
+    ForAnyValueIpAddress: Optional[Dict[str, ResolvableIPOrList]]
+    ForAnyValueNotIpAddress: Optional[Dict[str, ResolvableIPOrList]]
     ForAllValuesIpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
     ForAllValuesNotIpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
     ForAnyValueIpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
