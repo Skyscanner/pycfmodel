@@ -36,7 +36,7 @@ class CFModel(CustomModel):
     Conditions: Optional[Dict] = {}
     Description: Optional[str] = None
     Mappings: Optional[Dict[str, Dict[str, Dict[str, Any]]]] = {}
-    Metadata: Optional[Dict[str, Dict]] = None
+    Metadata: Optional[Dict[str, Any]] = None
     Outputs: Optional[Dict[str, Dict[str, Union[str, Dict]]]] = {}
     Parameters: Optional[Dict[str, Parameter]] = {}
     Resources: Dict[str, Resolvable[Union[ResourceModels, GenericResource]]] = {}
