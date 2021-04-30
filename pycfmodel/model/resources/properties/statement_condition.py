@@ -66,10 +66,10 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
         arg_b = normalize("NFKD", arg_b.casefold())
         return lambda kwargs: normalize("NFKD", kwargs[arg_a].casefold()) != arg_b
     elif function in ("StringLike", "ArnLike"):
-        arg_b = re.compile(arg_b.replace("*", ".*"))
+        arg_b = regex_from_cf_string(arg_b)
         return lambda kwargs: bool(arg_b.match(kwargs[arg_a]))
     elif function in ("StringNotLike", "ArnNotLike"):
-        arg_b = re.compile(arg_b.replace("*", ".*"))
+        arg_b = regex_from_cf_string(arg_b)
         return lambda kwargs: not bool(arg_b.match(kwargs[arg_a]))
     else:
         logger.error(f"{function} is not supported.")
