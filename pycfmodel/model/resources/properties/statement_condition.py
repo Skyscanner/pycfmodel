@@ -1,6 +1,5 @@
 import binascii
 import logging
-import re
 from base64 import b64decode
 from typing import Any, Callable, Dict, Optional, Tuple, Union
 from unicodedata import normalize
@@ -18,7 +17,7 @@ from pycfmodel.model.types import (
     ResolvableIPOrList,
     ResolvableStrOrList,
 )
-from pycfmodel.utils import convert_to_list, is_resolvable_dict
+from pycfmodel.utils import convert_to_list, is_resolvable_dict, regex_from_cf_string
 
 logger = logging.getLogger(__name__)
 
