@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.8.5 - [2021-??-??]
+### Fixes
+- Update `CLOUDFORMATION_ACTIONS`
+
 ## 0.8.4 - [2021-04-27]
 ### Fixes
 - Fix to ensure all `Statement.Effect` fields are always capitalized
