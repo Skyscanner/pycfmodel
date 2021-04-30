@@ -25,6 +25,51 @@ def datetime_in_the_future():
     return datetime(2010, 1, 1, 0, 0)
 
 
+def test_all_possible_conditions():
+    all_operators = set()
+    for operator in [
+        "ArnEquals",
+        "ArnLike",
+        "ArnNotEquals",
+        "ArnNotLike",
+        "Bool",
+        "BinaryEquals",
+        "DateEquals",
+        "DateNotEquals",
+        "DateLessThan",
+        "DateLessThanEquals",
+        "DateGreaterThan",
+        "DateGreaterThanEquals",
+        "IpAddress",
+        "NotIpAddress",
+        "NumericEquals",
+        "NumericNotEquals",
+        "NumericLessThan",
+        "NumericLessThanEquals",
+        "NumericGreaterThan",
+        "NumericGreaterThanEquals",
+        "StringEquals",
+        "StringNotEquals",
+        "StringEqualsIgnoreCase",
+        "StringNotEqualsIgnoreCase",
+        "StringLike",
+        "StringNotLike",
+    ]:
+        all_operators.add(operator)
+        all_operators.add(f"{operator}IfExists")
+
+    # Null
+    all_operators.add("Null")
+
+    # For(Any/All)Values
+    for operator in all_operators.copy():
+        all_operators.add(f"ForAllValues{operator}")
+        all_operators.add(f"ForAnyValue{operator}")
+
+    implemented_operators = sorted(StatementCondition.schema()["properties"].keys())
+    assert implemented_operators == sorted(all_operators)
+
+
 def test_statement_condition_remove_colon():
     assert StatementCondition.parse_obj(
         {
