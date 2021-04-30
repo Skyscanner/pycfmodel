@@ -90,6 +90,8 @@ class CFModel(CustomModel):
         resolved_resources = {
             key: resolve(value, extended_parameters, self.Mappings, resolved_conditions)
             for key, value in resources.items()
+            if value.get("Condition") is None
+            or (value.get("Condition") is not None and resolved_conditions.get(value["Condition"], True))
         }
         return CFModel(**dict_value, Conditions=resolved_conditions, Resources=resolved_resources)
 
