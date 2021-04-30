@@ -37,47 +37,6 @@ def test_statement_condition_remove_colon():
 
 
 @pytest.mark.parametrize(
-    "statement_condition, attribute, expected_output",
-    [
-        (
-            StatementCondition(BinaryEquals={"key": "QmluYXJ5VmFsdWVJbkJhc2U2NA=="}),
-            "BinaryEquals",
-            {"key": b"BinaryValueInBase64"},
-        ),
-        (
-            StatementCondition(BinaryEqualsIfExists={"key": "QmluYXJ5VmFsdWVJbkJhc2U2NA=="}),
-            "BinaryEqualsIfExists",
-            {"key": b"BinaryValueInBase64"},
-        ),
-        (
-            StatementCondition(ForAllValuesBinaryEquals={"key": "QmluYXJ5VmFsdWVJbkJhc2U2NA=="}),
-            "ForAllValuesBinaryEquals",
-            {"key": b"BinaryValueInBase64"},
-        ),
-        (
-            StatementCondition(ForAllValuesBinaryEquals={"key": "QmluYXJ5VmFsdWVJbkJhc2U2NA=="}),
-            "ForAllValuesBinaryEquals",
-            {"key": b"BinaryValueInBase64"},
-        ),
-        (
-            StatementCondition(ForAnyValueBinaryEquals={"key": "QmluYXJ5VmFsdWVJbkJhc2U2NA=="}),
-            "ForAnyValueBinaryEquals",
-            {"key": b"BinaryValueInBase64"},
-        ),
-        (
-            StatementCondition(ForAnyValueBinaryEqualsIfExists={"key": "QmluYXJ5VmFsdWVJbkJhc2U2NA=="}),
-            "ForAnyValueBinaryEqualsIfExists",
-            {"key": b"BinaryValueInBase64"},
-        ),
-    ],
-)
-def test_statement_condition_validate_binary(
-    statement_condition: StatementCondition, attribute: str, expected_output: bytearray
-):
-    assert getattr(statement_condition, attribute) == expected_output
-
-
-@pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
         # Bool
@@ -333,18 +292,20 @@ def test_build_root_evaluator(function: str, arguments: Union[Dict, Tuple], para
         ),
     ],
 )
-def test_statement_condition_eval(statement_condition: StatementCondition, params: Dict, expected_output: bool):
+def test_statement_condition_eval_all_conditions_are_true(
+    statement_condition: StatementCondition, params: Dict, expected_output: bool
+):
     assert statement_condition.eval(params) == expected_output
 
 
-def test_statement_condition_without_resolving():
+def test_statement_condition_without_resolving_raises_error():
     statement_condition_raw = {"StringLike": {"patata": {"Fn::Sub": "${ClusterId}*"}}}
     statement_condition = StatementCondition.parse_obj(statement_condition_raw)
     with pytest.raises(StatementConditionBuildEvaluatorError):
         statement_condition.eval({"patata": "test_cluster"})
 
 
-def test_statement_condition_with_resolver():
+def test_statement_condition_with_resolver_works_fine():
     statement_condition_raw = {"StringLike": {"patata": {"Fn::Sub": "${ClusterId}*"}}}
     resolved_statement_condition_raw = resolve(statement_condition_raw, {"ClusterId": "test_cluster"}, {}, {})
     resolved_statement_condition = StatementCondition.parse_obj(resolved_statement_condition_raw)

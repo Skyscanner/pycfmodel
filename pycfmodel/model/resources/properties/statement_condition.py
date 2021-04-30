@@ -41,10 +41,11 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
     elif function == "Null":
         return lambda kwargs: (kwargs.get(arg_a) is not None) is arg_b
 
-    elif function in ("NumericEquals", "DateEquals"):
+    elif function in ("StringEquals", "ArnEquals", "BinaryEquals", "NumericEquals", "DateEquals"):
         return lambda kwargs: kwargs[arg_a] == arg_b
-    elif function in ("NumericNotEquals", "DateNotEquals"):
+    elif function in ("StringNotEquals", "ArnNotEquals", "NumericNotEquals", "DateNotEquals"):
         return lambda kwargs: kwargs[arg_a] != arg_b
+
     elif function in ("NumericLessThan", "DateLessThan"):
         return lambda kwargs: kwargs[arg_a] < arg_b
     elif function in ("NumericLessThanEquals", "DateLessThanEquals"):
@@ -54,10 +55,6 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
     elif function in ("NumericGreaterThanEquals", "DateGreaterThanEquals"):
         return lambda kwargs: kwargs[arg_a] >= arg_b
 
-    elif function in ("StringEquals", "ArnEquals", "BinaryEquals"):
-        return lambda kwargs: kwargs[arg_a] == arg_b
-    elif function in ("StringNotEquals", "ArnNotEquals"):
-        return lambda kwargs: kwargs[arg_a] != arg_b
     elif function == "StringEqualsIgnoreCase":
         arg_b = normalize("NFKD", arg_b.casefold())
         return lambda kwargs: normalize("NFKD", kwargs[arg_a].casefold()) == arg_b
