@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Dict
+from typing import Dict, List
 
 import pytest
 
@@ -298,6 +298,88 @@ def test_template_conditions():
     model = parse(template).resolve(extra_params={"AWS::AccountId": "123"})
     assert isinstance(model.Conditions, Dict)
     assert all(isinstance(cv, bool) for cv in model.Conditions.values())
+
+
+@pytest.mark.parametrize(
+    "conditions, expected",
+    [
+        (
+            {
+                "testCondition": {"Fn::Equals": [True, False]},
+            },
+            [],
+        ),
+        (
+            {
+                "testCondition": {"Fn::Equals": [True, True]},
+            },
+            ["test_resource_id"],
+        ),
+        (
+            {
+                "whatever": {"Fn::Equals": [True, False]},
+            },
+            ["test_resource_id"],
+        ),
+        (
+            {
+                "whatever": {"Fn::Equals": [True, True]},
+            },
+            ["test_resource_id"],
+        ),
+    ],
+)
+def test_resolve_include_resource_when_condition_is_true_or_doesnt_exist(conditions: Dict, expected: List):
+    template = {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Conditions": conditions,
+        "Resources": {
+            "test_resource_id": {
+                "Type": "AWS::IAM::Role",
+                "Condition": "testCondition",
+                "Properties": {
+                    "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [],
+                    },
+                    "Path": "/",
+                    "Policies": [],
+                },
+            }
+        },
+    }
+    model = parse(template).resolve()
+    assert list(model.Resources.keys()) == expected
+
+
+def test_resolve_include_resource_when_condition_is_not_present():
+    template = {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Conditions": {
+            "Bool": True,
+            "BoolStr": "True",
+            "IsEqualNum": {"Fn::Equals": [123456, 123456]},
+            "IsEqualStr": {"Fn::Equals": ["a", "a"]},
+            "IsEqualBool": {"Fn::Equals": [True, True]},
+            "IsEqualRef": {"Fn::Equals": [{"Ref": "AWS::AccountId"}, "123"]},
+            "Not": {"Fn::Not": [False]},
+        },
+        "Resources": {
+            "test_resource_id": {
+                "Type": "AWS::IAM::Role",
+                "Properties": {
+                    "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [],
+                    },
+                    "Path": "/",
+                    "Policies": [],
+                },
+            }
+        },
+    }
+    model = parse(template).resolve()
+    assert list(model.Resources.keys()) == ["test_resource_id"]
 
 
 def test_resolve_scenario_1():
