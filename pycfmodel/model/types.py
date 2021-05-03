@@ -7,7 +7,7 @@ from pycfmodel.model.base import FunctionDict
 T = TypeVar("T")
 
 Resolvable = Union[T, FunctionDict]
-TOrList = Union[T, List[T]]
+InstanceOrListOf = Union[T, List[T]]
 
 ResolvableStr = Resolvable[str]
 ResolvableArn = ResolvableStr
@@ -23,10 +23,10 @@ ResolvableIPv6Network = Resolvable[IPv6Network]
 ResolvableIntOrStr = Resolvable[Union[int, str]]
 
 
-ResolvableStrOrList = TOrList[ResolvableStr]
-ResolvableArnOrList = TOrList[ResolvableArn]
-ResolvableIntOrList = TOrList[ResolvableInt]
-ResolvableIPOrList = TOrList[Union[ResolvableIPv4Network, ResolvableIPv6Network]]
-ResolvableBoolOrList = TOrList[ResolvableBool]
-ResolvableBytesOrList = TOrList[bytes]
-ResolvableDatetimeOrList = TOrList[ResolvableDatetime]
+ResolvableStrOrList = InstanceOrListOf[ResolvableStr]
+ResolvableArnOrList = InstanceOrListOf[ResolvableArn]
+ResolvableIntOrList = InstanceOrListOf[ResolvableInt]
+ResolvableIPOrList = InstanceOrListOf[Union[ResolvableIPv4Network, ResolvableIPv6Network]]
+ResolvableBoolOrList = InstanceOrListOf[ResolvableBool]
+ResolvableBytesOrList = InstanceOrListOf[bytes]
+ResolvableDatetimeOrList = InstanceOrListOf[ResolvableDatetime]
