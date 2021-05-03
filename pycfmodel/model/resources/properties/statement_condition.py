@@ -115,6 +115,42 @@ def build_root_evaluator(function: str, arguments: Union[Dict, Tuple]) -> Callab
 
 
 class StatementCondition(BaseModel):
+    """
+    Contains the condition to be matched to apply the statement that belongs to.
+
+    | Type                       | Operators                 | ...IfExists | ForAllValues... | ForAnyValue... |
+    | -------------------------- | ------------------------- | ----------- | --------------- | -------------- |
+    | String                     | StringEquals              | Yes         | Yes             | Yes            |
+    | String                     | StringNotEquals           | Yes         | Yes             | Yes            |
+    | String                     | StringEqualsIgnoreCase    | Yes         | Yes             | Yes            |
+    | String                     | StringNotEqualsIgnoreCase | Yes         | Yes             | Yes            |
+    | String                     | StringLike                | Yes         | Yes             | Yes            |
+    | String                     | StringNotLike             | Yes         | Yes             | Yes            |
+    | Numeric                    | NumericEquals             | Yes         | Yes             | Yes            |
+    | Numeric                    | NumericNotEquals          | Yes         | Yes             | Yes            |
+    | Numeric                    | NumericLessThan           | Yes         | Yes             | Yes            |
+    | Numeric                    | NumericLessThanEquals     | Yes         | Yes             | Yes            |
+    | Numeric                    | NumericGreaterThan        | Yes         | Yes             | Yes            |
+    | Numeric                    | NumericGreaterThanEquals  | Yes         | Yes             | Yes            |
+    | Date and time              | DateEquals                | Yes         | Yes             | Yes            |
+    | Date and time              | DateNotEquals             | Yes         | Yes             | Yes            |
+    | Date and time              | DateLessThan              | Yes         | Yes             | Yes            |
+    | Date and time              | DateLessThanEquals        | Yes         | Yes             | Yes            |
+    | Date and time              | DateGreaterThan           | Yes         | Yes             | Yes            |
+    | Date and time              | DateGreaterThanEquals     | Yes         | Yes             | Yes            |
+    | Boolean                    | Bool                      | Yes         | Yes             | Yes            |
+    | Binary                     | BinaryEquals              | Yes         | Yes             | Yes            |
+    | IP address                 | IpAddress                 | Yes         | Yes             | Yes            |
+    | IP address                 | NotIpAddress              | Yes         | Yes             | Yes            |
+    | Amazon Resource Name (ARN) | ArnEquals                 | Yes         | Yes             | Yes            |
+    | Amazon Resource Name (ARN) | ArnLike                   | Yes         | Yes             | Yes            |
+    | Amazon Resource Name (ARN) | ArnNotEquals              | Yes         | Yes             | Yes            |
+    | Amazon Resource Name (ARN) | ArnNotLike                | Yes         | Yes             | Yes            |
+    | Existence                  | Null                      | No          | Yes             | Yes            |
+
+    Table based on [AWS Docs](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html)
+    """
+
     ArnEquals: Optional[Dict[str, ResolvableArnOrList]]
     ArnLike: Optional[Dict[str, ResolvableArnOrList]]
     ArnNotEquals: Optional[Dict[str, ResolvableArnOrList]]
