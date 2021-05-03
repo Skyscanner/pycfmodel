@@ -512,14 +512,33 @@ def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, pa
 @pytest.mark.parametrize(
     "function, arguments, params, expected_output",
     [
-        # Normal
         ("NumericEquals", {"patata": 1}, {"patata": 1}, True),
         ("NumericEquals", {"patata": 1}, {"patata": 2}, False),
-        # ...IfExists
+    ],
+)
+def test_build_root_evaluator(function: str, arguments: Union[Dict, Tuple], params: Dict, expected_output: bool):
+    node = build_root_evaluator(function, arguments)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arguments, params, expected_output",
+    [
         ("NumericEqualsIfExists", {"patata": 1}, {"patata": 1}, True),
         ("NumericEqualsIfExists", {"patata": 1}, {"patata": 2}, False),
         ("NumericEqualsIfExists", {"patata": 1}, {}, True),
-        # ForAllValues...
+    ],
+)
+def test_build_root_evaluator_if_exists(
+    function: str, arguments: Union[Dict, Tuple], params: Dict, expected_output: bool
+):
+    node = build_root_evaluator(function, arguments)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arguments, params, expected_output",
+    [
         ("ForAllValuesNumericEquals", {"patata": 1}, {"patata": 1}, True),
         ("ForAllValuesNumericEquals", {"patata": [1, 2, 3]}, {"patata": 1}, True),
         ("ForAllValuesNumericEquals", {"patata": 1}, {"patata": [1, 1]}, True),
@@ -528,14 +547,36 @@ def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, pa
         ("ForAllValuesNumericEquals", {"patata": [1, 2, 3]}, {"patata": 4}, False),
         ("ForAllValuesNumericEquals", {"patata": 1}, {"patata": [2, 3]}, False),
         ("ForAllValuesNumericEquals", {"patata": [1, 2, 3]}, {"patata": [1, 4]}, False),
-        # ForAllValues...IfExists
+    ],
+)
+def test_build_root_evaluator_for_all_values(
+    function: str, arguments: Union[Dict, Tuple], params: Dict, expected_output: bool
+):
+    node = build_root_evaluator(function, arguments)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arguments, params, expected_output",
+    [
         ("ForAllValuesNumericEqualsIfExists", {"patata": 1}, {}, True),
         ("ForAllValuesNumericEqualsIfExists", {"patata": [1, 2, 3]}, {}, True),
         ("ForAllValuesNumericEqualsIfExists", {"patata": 1}, {"patata": 2}, False),
         ("ForAllValuesNumericEqualsIfExists", {"patata": [1, 2, 3]}, {"patata": 4}, False),
         ("ForAllValuesNumericEqualsIfExists", {"patata": 1}, {"patata": [2, 3]}, False),
         ("ForAllValuesNumericEqualsIfExists", {"patata": [1, 2, 3]}, {"patata": [1, 4]}, False),
-        # ForAnyValue...
+    ],
+)
+def test_build_root_evaluator_for_all_values_if_exists(
+    function: str, arguments: Union[Dict, Tuple], params: Dict, expected_output: bool
+):
+    node = build_root_evaluator(function, arguments)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arguments, params, expected_output",
+    [
         ("ForAnyValueNumericEquals", {"patata": 1}, {"patata": 1}, True),
         ("ForAnyValueNumericEquals", {"patata": [1, 2, 3]}, {"patata": 1}, True),
         ("ForAnyValueNumericEquals", {"patata": 1}, {"patata": [1, 2]}, True),
@@ -544,7 +585,18 @@ def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, pa
         ("ForAnyValueNumericEquals", {"patata": [1, 2, 3]}, {"patata": 4}, False),
         ("ForAnyValueNumericEquals", {"patata": 1}, {"patata": [2, 3]}, False),
         ("ForAnyValueNumericEquals", {"patata": [1, 2, 3]}, {"patata": [4, 5]}, False),
-        # ForAnyValue...IfExists
+    ],
+)
+def test_build_root_evaluator_for_any_value(
+    function: str, arguments: Union[Dict, Tuple], params: Dict, expected_output: bool
+):
+    node = build_root_evaluator(function, arguments)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arguments, params, expected_output",
+    [
         ("ForAnyValueNumericEqualsIfExists", {"patata": 1}, {}, True),
         ("ForAnyValueNumericEqualsIfExists", {"patata": [1, 2, 3]}, {}, True),
         ("ForAnyValueNumericEqualsIfExists", {"patata": 1}, {"patata": 2}, False),
@@ -553,7 +605,9 @@ def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, pa
         ("ForAnyValueNumericEqualsIfExists", {"patata": [1, 2, 3]}, {"patata": [4, 5, 6]}, False),
     ],
 )
-def test_build_root_evaluator(function: str, arguments: Union[Dict, Tuple], params: Dict, expected_output: bool):
+def test_build_root_evaluator_for_any_value_if_exists(
+    function: str, arguments: Union[Dict, Tuple], params: Dict, expected_output: bool
+):
     node = build_root_evaluator(function, arguments)
     assert node(params) == expected_output
 
