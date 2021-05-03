@@ -86,75 +86,228 @@ def test_statement_condition_remove_colon():
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        # Bool
         ("Bool", "patata", True, {"patata": True}, True),
         ("Bool", "patata", True, {"patata": False}, False),
         ("Bool", "patata", False, {"patata": True}, False),
         ("Bool", "patata", False, {"patata": False}, True),
-        # IpAddress
+    ],
+)
+def test_build_evaluator_bool(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("IpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Address("203.0.113.12")}, True),
         ("IpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Address("10.1.1.1")}, False),
         ("IpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Address("203.0.113.10")}, True),
         ("IpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Address("10.1.1.1")}, False),
         ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Address("203.0.113.10")}, False),
         ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Address("172.16.0.13")}, True),
-        # NotIpAddress
+    ],
+)
+def test_build_evaluator_ip_address(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("NotIpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Address("203.0.113.12")}, False),
         ("NotIpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Address("10.1.1.1")}, True),
         ("NotIpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Address("203.0.113.10")}, False),
         ("NotIpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Address("10.1.1.1")}, True),
         ("NotIpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Address("203.0.113.10")}, True),
         ("NotIpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Address("172.16.0.13")}, False),
-        # Null
+    ],
+)
+def test_build_evaluator_not_ip_address(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("Null", "patata", True, {"patata": 1}, True),
         ("Null", "patata", True, {}, False),
         ("Null", "patata", False, {"patata": 1}, False),
         ("Null", "patata", False, {}, True),
-        # NumericEquals
+    ],
+)
+def test_build_evaluator_null(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("NumericEquals", "patata", 1, {"patata": 1}, True),
         ("NumericEquals", "patata", 1, {"patata": 2}, False),
-        # NumericNotEquals
+    ],
+)
+def test_build_evaluator_numeric_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("NumericNotEquals", "patata", 1, {"patata": 1}, False),
         ("NumericNotEquals", "patata", 1, {"patata": 2}, True),
-        # NumericLessThan
+    ],
+)
+def test_build_evaluator_numeric_not_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("NumericLessThan", "patata", 1, {"patata": 1}, False),
         ("NumericLessThan", "patata", 1, {"patata": 2}, False),
         ("NumericLessThan", "patata", 2, {"patata": 1}, True),
-        # NumericLessThanEquals
+    ],
+)
+def test_build_evaluator_numeric_less_than(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("NumericLessThanEquals", "patata", 1, {"patata": 1}, True),
         ("NumericLessThanEquals", "patata", 1, {"patata": 2}, False),
         ("NumericLessThanEquals", "patata", 2, {"patata": 1}, True),
-        # NumericGreaterThan
+    ],
+)
+def test_build_evaluator_numeric_less_than_equals(
+    function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool
+):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("NumericGreaterThan", "patata", 2, {"patata": 2}, False),
         ("NumericGreaterThan", "patata", 2, {"patata": 1}, False),
         ("NumericGreaterThan", "patata", 1, {"patata": 2}, True),
-        # NumericGreaterThanEquals
+    ],
+)
+def test_build_evaluator_numeric_greater_than(
+    function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool
+):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("NumericGreaterThanEquals", "patata", 2, {"patata": 2}, True),
         ("NumericGreaterThanEquals", "patata", 2, {"patata": 1}, False),
         ("NumericGreaterThanEquals", "patata", 1, {"patata": 2}, True),
-        # DateEquals
+    ],
+)
+def test_build_evaluator_numeric_greater_than_equals(
+    function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool
+):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("DateEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, True),
         ("DateEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_past()}, False),
-        # DateNotEquals
+    ],
+)
+def test_build_evaluator_date_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("DateNotEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, False),
         ("DateNotEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_past()}, True),
-        # DateLessThan
+    ],
+)
+def test_build_evaluator_date_not_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("DateLessThan", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, False),
         ("DateLessThan", "patata", datetime_in_the_present(), {"patata": datetime_in_the_future()}, False),
         ("DateLessThan", "patata", datetime_in_the_future(), {"patata": datetime_in_the_present()}, True),
-        # DateLessThanEquals
+    ],
+)
+def test_build_evaluator_date_less_than(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("DateLessThanEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, True),
         ("DateLessThanEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_future()}, False),
         ("DateLessThanEquals", "patata", datetime_in_the_future(), {"patata": datetime_in_the_present()}, True),
-        # DateGreaterThan
+    ],
+)
+def test_build_evaluator_date_less_than_equals(
+    function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool
+):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("DateGreaterThan", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, False),
         ("DateGreaterThan", "patata", datetime_in_the_future(), {"patata": datetime_in_the_present()}, False),
         ("DateGreaterThan", "patata", datetime_in_the_present(), {"patata": datetime_in_the_future()}, True),
-        # DateGreaterThanEquals
+    ],
+)
+def test_build_evaluator_date_greater_than(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("DateGreaterThanEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, True),
         ("DateGreaterThanEquals", "patata", datetime_in_the_future(), {"patata": datetime_in_the_present()}, False),
         ("DateGreaterThanEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_future()}, True),
-        # StringEquals
+    ],
+)
+def test_build_evaluator_date_greater_than_equals(
+    function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool
+):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("StringEquals", "patata", "aaaaa", {"patata": "aaaaa"}, True),
         ("StringEquals", "patata", "AAAAA", {"patata": "AAAAA"}, True),
         ("StringEquals", "patata", "AaAaA", {"patata": "AaAaA"}, True),
@@ -162,7 +315,16 @@ def test_statement_condition_remove_colon():
         ("StringEquals", "patata", "aaaaa", {"patata": "AAAAA"}, False),
         ("StringEquals", "patata", "aAaAa", {"patata": "AaAaA"}, False),
         ("StringEquals", "patata", "aaaaa", {"patata": "bbbbb"}, False),
-        # StringNotEquals
+    ],
+)
+def test_build_evaluator_string_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("StringNotEquals", "patata", "aaaaa", {"patata": "aaaaa"}, False),
         ("StringNotEquals", "patata", "AAAAA", {"patata": "AAAAA"}, False),
         ("StringNotEquals", "patata", "AaAaA", {"patata": "AaAaA"}, False),
@@ -170,7 +332,16 @@ def test_statement_condition_remove_colon():
         ("StringNotEquals", "patata", "aaaaa", {"patata": "AAAAA"}, True),
         ("StringNotEquals", "patata", "aAaAa", {"patata": "AaAaA"}, True),
         ("StringNotEquals", "patata", "aaaaa", {"patata": "bbbbb"}, True),
-        # StringEqualsIgnoreCase
+    ],
+)
+def test_build_evaluator_string_not_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("StringEqualsIgnoreCase", "patata", "aaaaa", {"patata": "aaaaa"}, True),
         ("StringEqualsIgnoreCase", "patata", "AAAAA", {"patata": "AAAAA"}, True),
         ("StringEqualsIgnoreCase", "patata", "AaAaA", {"patata": "AaAaA"}, True),
@@ -178,7 +349,18 @@ def test_statement_condition_remove_colon():
         ("StringEqualsIgnoreCase", "patata", "aaaaa", {"patata": "AAAAA"}, True),
         ("StringEqualsIgnoreCase", "patata", "aAaAa", {"patata": "AaAaA"}, True),
         ("StringEqualsIgnoreCase", "patata", "aaaaa", {"patata": "bbbbb"}, False),
-        # StringNotEqualsIgnoreCase
+    ],
+)
+def test_build_evaluator_string_equals_ignore_case(
+    function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool
+):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("StringNotEqualsIgnoreCase", "patata", "aaaaa", {"patata": "aaaaa"}, False),
         ("StringNotEqualsIgnoreCase", "patata", "AAAAA", {"patata": "AAAAA"}, False),
         ("StringNotEqualsIgnoreCase", "patata", "AaAaA", {"patata": "AaAaA"}, False),
@@ -186,13 +368,42 @@ def test_statement_condition_remove_colon():
         ("StringNotEqualsIgnoreCase", "patata", "aaaaa", {"patata": "AAAAA"}, False),
         ("StringNotEqualsIgnoreCase", "patata", "aAaAa", {"patata": "AaAaA"}, False),
         ("StringNotEqualsIgnoreCase", "patata", "aaaaa", {"patata": "bbbbb"}, True),
-        # StringLike
+    ],
+)
+def test_build_evaluator_string_not_equals_ignore_case(
+    function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool
+):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("StringLike", "patata", "aa*cc", {"patata": "aabcc"}, True),
         ("StringLike", "patata", "aa*cc", {"patata": "abbcc"}, False),
-        # StringNotLike
+    ],
+)
+def test_build_evaluator_string_like(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("StringNotLike", "patata", "aa*cc", {"patata": "abbcc"}, True),
         ("StringNotLike", "patata", "aa*cc", {"patata": "aabcc"}, False),
-        # ArnEquals
+    ],
+)
+def test_build_evaluator_string_not_like(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         (
             "ArnEquals",
             "patata",
@@ -207,7 +418,16 @@ def test_statement_condition_remove_colon():
             {"patata": "arn:aws:ec2:sa-east-1:111122223333:instance/test_instance"},
             False,
         ),
-        # ArnNotEquals
+    ],
+)
+def test_build_evaluator_arn_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         (
             "ArnNotEquals",
             "patata",
@@ -222,7 +442,16 @@ def test_statement_condition_remove_colon():
             {"patata": "arn:aws:ec2:sa-east-1:111122223333:instance/test_instance"},
             True,
         ),
-        # ArnLike
+    ],
+)
+def test_build_evaluator_arn_not_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         (
             "ArnLike",
             "patata",
@@ -237,7 +466,16 @@ def test_statement_condition_remove_colon():
             {"patata": "arn:aws:ec2:eu-west-1:111122223333:instance/test_instance"},
             False,
         ),
-        # ArnNotLike
+    ],
+)
+def test_build_evaluator_arn_like(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         (
             "ArnNotLike",
             "patata",
@@ -252,12 +490,21 @@ def test_statement_condition_remove_colon():
             {"patata": "arn:aws:ec2:sa-east-1:111122223333:instance/test_instance"},
             False,
         ),
-        # BinaryEquals
+    ],
+)
+def test_build_evaluator_arn_not_like(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+    node = build_evaluator(function, arg_a, arg_b)
+    assert node(params) == expected_output
+
+
+@pytest.mark.parametrize(
+    "function, arg_a, arg_b, params, expected_output",
+    [
         ("BinaryEquals", "patata", bytearray("AaAaA", "utf-8"), {"patata": bytearray("AaAaA", "utf-8")}, True),
         ("BinaryEquals", "patata", bytearray("AAAAA", "utf-8"), {"patata": bytearray("aaaaa", "utf-8")}, False),
     ],
 )
-def test_build_evaluator(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
+def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
     node = build_evaluator(function, arg_a, arg_b)
     assert node(params) == expected_output
 
