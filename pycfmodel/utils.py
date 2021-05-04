@@ -1,20 +1,17 @@
 import re
-from typing import Any, Pattern
+from typing import Any, List, Pattern, Union
 
-from pycfmodel.constants import CONDITION_FUNCTIONS, IMPLEMENTED_FUNCTIONS
+from pycfmodel.constants import IMPLEMENTED_FUNCTIONS
 
 
 def is_resolvable_dict(value: Any) -> bool:
     return isinstance(value, dict) and len(value) == 1 and next(iter(value)) in IMPLEMENTED_FUNCTIONS
 
 
-def is_conditional_dict(value: Any) -> bool:
-    if isinstance(value, dict):
-        for func in value.keys():
-            if not any(f in func for f in CONDITION_FUNCTIONS):
-                return False
-        return True
-    return False
+def convert_to_list(item: Union[Any, List[Any]]) -> List[Any]:
+    if isinstance(item, list):
+        return item
+    return [item]
 
 
 def regex_from_cf_string(action: str) -> Pattern:

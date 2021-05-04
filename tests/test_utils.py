@@ -1,28 +1,20 @@
 import re
+from typing import Any, List
 
 import pytest
 
 from pycfmodel.constants import IMPLEMENTED_FUNCTIONS
 from pycfmodel.resolver import FUNCTION_MAPPINGS
-from pycfmodel.utils import is_conditional_dict, regex_from_cf_string
+from pycfmodel.utils import convert_to_list, regex_from_cf_string
 
 
 def test_implemented_functions():
     assert set(FUNCTION_MAPPINGS) == IMPLEMENTED_FUNCTIONS
 
 
-@pytest.mark.parametrize(
-    "condition, expected_output",
-    [
-        ({"ArnEquals": ""}, True),
-        ({"ForAllValues:ArnLike": ""}, True),
-        ({"ArnEquals": "", "ForAllValues:ArnLike": ""}, True),
-        ({"ArnEquals": "", "patata": ""}, False),
-        ({"ForAllValues:ArnLike": "", "patata": ""}, False),
-    ],
-)
-def test_is_conditional_dict(condition, expected_output):
-    assert is_conditional_dict(condition) == expected_output
+@pytest.mark.parametrize("param, expected_output", [(1, [1]), ([1], [1]), ("a", ["a"]), (["a"], ["a"])])
+def test_convert_to_list(param: Any, expected_output: List):
+    assert convert_to_list(param) == expected_output
 
 
 @pytest.mark.parametrize(

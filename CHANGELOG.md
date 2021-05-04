@@ -1,7 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 0.8.5 - [2021-??-??]
+## 0.9.0 - [2021-05-??]
+### Improvements
+- Add `StatementCondition` class, with a function resolver as a replacement for `ConditionDict`.
+### Removes
+- Removes constants `CONDITION_MODIFIERS` and `CONDITION_FUNCTIONS` from `pycfmodel/constants.py`
+- Removes `is_conditional_dict` from `pycfmodel/utils.py`
 ### Fixes
 - Update `CLOUDFORMATION_ACTIONS`
 

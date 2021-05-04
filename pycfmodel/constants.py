@@ -21,37 +21,6 @@ IMPLEMENTED_FUNCTIONS = {
     "Ref",
 }
 
-CONDITION_MODIFIERS = {"ForAllValues", "ForAnyValue", "IfExists"}
-
-CONDITION_FUNCTIONS = {
-    "ArnEquals",
-    "ArnLike",
-    "ArnNotEquals",
-    "ArnNotLike",
-    "Bool",
-    "DateEquals",
-    "DateGreaterThan",
-    "DateGreaterThanEquals",
-    "DateLessThan",
-    "DateLessThanEquals",
-    "DateNotEquals",
-    "IpAddress",
-    "Null",
-    "NotIpAddress",
-    "NumericEquals",
-    "NumericNotEquals",
-    "NumericLessThan",
-    "NumericLessThanEquals",
-    "NumericGreaterThan",
-    "NumericGreaterThanEquals",
-    "StringEquals",
-    "StringLike",
-    "StringNotEquals",
-    "StringEqualsIgnoreCase",
-    "StringNotEqualsIgnoreCase",
-    "StringLike",
-    "StringNotLike",
-}
 
 CONTAINS_STAR = re.compile(r"^.*[*].*$")
 CONTAINS_CF_PARAM = re.compile(r"(\$\{[\w\:]+\})")
