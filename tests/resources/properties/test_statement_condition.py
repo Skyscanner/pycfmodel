@@ -76,10 +76,10 @@ def test_statement_condition_remove_colon():
     assert StatementCondition.parse_obj(
         {
             "ForAllValues:ArnEqualsIfExists": {"patata_1": "test_1"},
-            "ForAnyValue:ARNEquals": {"patata_2": ["test_2", "test_3"]},
+            "ForAnyValue:ArnEquals": {"patata_2": ["test_2", "test_3"]},
         }
     ) == StatementCondition(
-        ForAllValuesArnEqualsIfExists={"patata_1": "test_1"}, ForAnyValueARNEquals={"patata_2": ["test_2", "test_3"]}
+        ForAllValuesArnEqualsIfExists={"patata_1": "test_1"}, ForAnyValueArnEquals={"patata_2": ["test_2", "test_3"]}
     )
 
 
