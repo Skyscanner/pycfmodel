@@ -83,6 +83,13 @@ def test_statement_condition_remove_colon():
     )
 
 
+def test_eval_is_built_only_if_called():
+    condition = StatementCondition()
+    assert condition._eval is None
+    condition.eval({})
+    assert condition._eval is not None
+
+
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
