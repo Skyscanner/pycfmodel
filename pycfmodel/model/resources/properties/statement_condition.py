@@ -346,6 +346,7 @@ class StatementCondition(CustomModel):
             self._eval = self.build_eval(self.dict())
         return self._eval(values)
 
+    @classmethod
     def build_eval(cls, values: Dict) -> Dict:
         conditions_lambdas = [
             build_root_evaluator(function=key, arguments=value) for key, value in values.items() if value is not None
