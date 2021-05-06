@@ -4,9 +4,9 @@ from base64 import b64decode
 from typing import Any, Callable, Dict, Optional, Tuple, Union
 from unicodedata import normalize
 
-from pydantic import BaseModel, root_validator, validator
+from pydantic import root_validator, validator
 
-from pycfmodel.model.base import FunctionDict
+from pycfmodel.model.base import CustomModel, FunctionDict
 from pycfmodel.model.types import (
     ResolvableArnOrList,
     ResolvableBool,
@@ -114,7 +114,7 @@ def build_root_evaluator(function: str, arguments: Union[Dict, Tuple]) -> Callab
     return lambda kwargs: all(group(kwargs) for group in group_of_nodes)
 
 
-class StatementCondition(BaseModel):
+class StatementCondition(CustomModel):
     """
     Contains the condition to be matched to apply the statement that belongs to.
 
@@ -318,7 +318,7 @@ class StatementCondition(BaseModel):
     ForAnyValueStringLikeIfExists: Optional[Dict[str, ResolvableStrOrList]]
     ForAnyValueStringNotLikeIfExists: Optional[Dict[str, ResolvableStrOrList]]
 
-    eval: Optional[Callable]
+    _eval: Optional[Callable] = None
 
     @root_validator(pre=True)
     def remove_colon(cls, values):
@@ -341,19 +341,16 @@ class StatementCondition(BaseModel):
             raise ValueError("Binary value not valid")
         return value
 
-    @root_validator()
+    def eval(self, values):
+        if self._eval is None:
+            self._eval = self.build_eval(self.dict())
+        return self._eval(values)
+
     def build_eval(cls, values: Dict) -> Dict:
-        try:
-            conditions_lambdas = [
-                build_root_evaluator(function=key, arguments=value)
-                for key, value in values.items()
-                if value is not None
-            ]
-            values["eval"] = lambda kwargs: all(condition(kwargs) for condition in conditions_lambdas)
-        except StatementConditionBuildEvaluatorError:
-            values["eval"] = lambda kwargs: (_ for _ in ()).throw(StatementConditionBuildEvaluatorError)
-            logger.error("Resolvable function found. Try resolving the model.")
-        return values
+        conditions_lambdas = [
+            build_root_evaluator(function=key, arguments=value) for key, value in values.items() if value is not None
+        ]
+        return lambda kwargs: all(condition(kwargs) for condition in conditions_lambdas)
 
     def __call__(self, kwargs) -> Optional[bool]:
         try:

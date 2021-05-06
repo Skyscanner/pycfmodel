@@ -6,6 +6,7 @@ from pycfmodel.utils import is_resolvable_dict
 class CustomModel(BaseModel):
     class Config(BaseModel.Config):
         extra = Extra.forbid
+        underscore_attrs_are_private = True
 
     def dict(self, *args, exclude_unset=True, **kwargs):
         return super().dict(*args, **kwargs, exclude_unset=exclude_unset)
