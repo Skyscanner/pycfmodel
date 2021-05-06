@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.9.1 - [2021-05-06]
+### Fixes
+- `StatementCondition` only builds evaluator if `eval` is called.
+
 ## 0.9.0 - [2021-05-05]
 ### Improvements
 - Add `StatementCondition` class, with a function resolver as a replacement for `ConditionDict`.
