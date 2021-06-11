@@ -6,7 +6,7 @@ from typing import Dict, List, Union
 
 from pydantic import BaseModel
 
-from pycfmodel.constants import AWS_NOVALUE, CONTAINS_CF_PARAM
+from pycfmodel.constants import AWS_NOVALUE, CONTAINS_CF_PARAM, CONTAINS_SSM_PARAMETER
 from pycfmodel.utils import is_resolvable_dict
 
 logger = logging.getLogger(__file__)
@@ -23,7 +23,13 @@ class _BooleanModel(BaseModel):
 
 
 def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]):
-    if function is None or isinstance(function, str):
+    if function is None:
+        return function
+
+    if isinstance(function, str):
+        if CONTAINS_SSM_PARAMETER.match(function):
+            ssm_parameter_key = CONTAINS_SSM_PARAMETER.match(function).group(1)
+            return resolve_ssm(ssm_parameter_key, params)
         return function
 
     if isinstance(function, (int, float, date, bool, IPv4Network, IPv6Network)):
@@ -51,6 +57,16 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
         return result
 
     raise ValueError(f"Not supported type: {type(function)}")
+
+
+def resolve_ssm(ssm_parameter_key: str, params: Dict) -> str:
+    ssm_value = params.get(ssm_parameter_key)
+    if not ssm_value or not isinstance(ssm_value, str):
+        logger.warning(
+            f"Using `UNDEFINED_PARAM_{ssm_parameter_key}` - value not found in AWS SSM or not of string type."
+        )
+        return f"UNDEFINED_PARAM_{ssm_parameter_key}"
+    return ssm_value
 
 
 def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
