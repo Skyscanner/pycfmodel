@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.10.0 - [2021-06-14]
+### Additions
+- Resolver able to handle AWS SSM values in templates.
+### Fixes
+- Update `CLOUDFORMATION_ACTIONS`
+
 ## 0.9.1 - [2021-05-06]
 ### Fixes
 - Update `CLOUDFORMATION_ACTIONS`
