@@ -545,3 +545,24 @@ def test_resolve_scenario_3():
         model.Resources["InstanceSecurityGroup"].Properties.SecurityGroupEgress[0].CidrIp.with_netmask
         == "127.0.0.1/255.255.255.255"
     )
+
+
+def test_resolve_ssm():
+    template = {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "Test resolving SSM dynamic values",
+        "Resources": {
+            "InstanceHTTPTargets": {
+                "Type": "Custom::DynamicNLBTarget",
+                "Properties": {
+                    "ServiceArn": "{{resolve:ssm:some-service-arn:1}}",
+                    "Cluster": "{{resolve:ssm:main-k8s-cluster-arn:3}}",
+                },
+            }
+        },
+    }
+    model = parse(template).resolve(extra_params={"some-service-arn:1": "vpc-123-abc"})
+    assert model.Resources["InstanceHTTPTargets"].Properties == {
+        "Cluster": "UNDEFINED_PARAM_main-k8s-cluster-arn:3",
+        "ServiceArn": "vpc-123-abc",
+    }
