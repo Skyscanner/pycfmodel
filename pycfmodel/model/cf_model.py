@@ -77,10 +77,7 @@ class CFModel(CustomModel):
         extended_parameters = {**self.PSEUDO_PARAMETERS, **params, **extra_params}
         dict_value = self.dict()
 
-        if self.Conditions:
-            conditions = dict_value.pop("Conditions")
-        else:
-            conditions = {}
+        conditions = dict_value.pop("Conditions", {})
         resolved_conditions = {
             key: _extended_bool(resolve(value, extended_parameters, self.Mappings, {}))
             for key, value in conditions.items()

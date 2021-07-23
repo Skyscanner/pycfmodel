@@ -75,6 +75,7 @@ def test_actions(kms_key):
         "kms:UpdateAlias",
         "kms:UpdateCustomKeyStore",
         "kms:UpdateKeyDescription",
+        "kms:UpdatePrimaryRegion",
     ] == kms_key.Properties.KeyPolicy.get_allowed_actions()
 
 

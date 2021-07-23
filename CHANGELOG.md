@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.10.1 - [2021-07-23]
+### Fixes
+- Fix bug when calling `resolve` on `CFModel` with default (empty dict) `Conditions`
+
 ## 0.10.0 - [2021-06-14]
 ### Additions
 - Resolver able to handle AWS SSM values in templates.

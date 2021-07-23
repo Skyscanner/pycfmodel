@@ -49,3 +49,7 @@ def test_backwards_compatible_metadata():
 
     model = CFModel(Metadata=metadata)
     assert model.Metadata == metadata
+
+
+def test_resolve_model(model):
+    assert model.resolve() == model
