@@ -24,7 +24,7 @@ def model():
 
 def test_basic_json(model):
     assert type(model).__name__ == "CFModel"
-    assert len(model.Resources) == 1
+    assert len(model.Resources) == 2
 
 
 def test_resources_filtered_by_type():
