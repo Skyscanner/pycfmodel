@@ -105,11 +105,7 @@ def build_root_evaluator(function: str, arguments: Union[Dict, Tuple]) -> Callab
                 lambda kwargs: any(all_nodes({**kwargs, arg_a: item}) for item in convert_to_list(kwargs[arg_a]))
             )
         else:
-            if isinstance(arg_b, list):
-                nodes = [build_evaluator(new_function, arg_a, item) for item in arg_b]
-                group_of_nodes.append(lambda kwargs: any(node(kwargs) for node in nodes))
-            else:
-                group_of_nodes.append(build_evaluator(new_function, arg_a, arg_b))
+            group_of_nodes.append(build_evaluator(new_function, arg_a, arg_b))
 
     return lambda kwargs: all(group(kwargs) for group in group_of_nodes)
 

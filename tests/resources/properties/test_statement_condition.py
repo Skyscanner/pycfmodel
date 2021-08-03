@@ -520,7 +520,9 @@ def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, pa
     "function, arguments, params, expected_output",
     [
         ("NumericEquals", {"patata": 1}, {"patata": 1}, True),
+        ("StringEquals", {"patata": ["1", "2"]}, {"patata": ["1", "2"]}, True),
         ("NumericEquals", {"patata": 1}, {"patata": 2}, False),
+        ("StringEquals", {"patata": ["1", "3"]}, {"patata": ["1"]}, False),
     ],
 )
 def test_build_root_evaluator(function: str, arguments: Union[Dict, Tuple], params: Dict, expected_output: bool):
