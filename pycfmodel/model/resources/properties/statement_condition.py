@@ -145,6 +145,10 @@ class StatementCondition(CustomModel):
     | Existence                  | Null                      | No          | Yes             | Yes            |
 
     Table based on [AWS Docs](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html)
+
+    For conditions such as `StringEquals` with multiple values for one key, we evaluate them using the logical `OR`,
+    similar to if the condition key was `ForAnyValue:StringEquals`. This follows the
+    [documentation from AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_multi-value-conditions.html).
     """
 
     ArnEquals: Optional[Dict[str, ResolvableArnOrList]]
