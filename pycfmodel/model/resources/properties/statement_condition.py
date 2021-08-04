@@ -98,7 +98,7 @@ def build_root_evaluator(function: str, arguments: Union[Dict, Tuple]) -> Callab
             group_of_nodes.append(
                 lambda kwargs: all(all_nodes({**kwargs, arg_a: item}) for item in convert_to_list(kwargs[arg_a]))
             )
-        elif function.startswith("ForAnyValue"):
+        elif function.startswith("ForAnyValue") or isinstance(arg_b, list):
             nodes = [build_root_evaluator(new_function, (arg_a, item)) for item in convert_to_list(arg_b)]
             all_nodes = lambda kwargs: any(node(kwargs) for node in nodes)  # noqa: E731
             group_of_nodes.append(
