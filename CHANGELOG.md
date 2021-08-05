@@ -3,7 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## 0.10.2 - [2021-08-05]
 ### Fixes
-- Update evaluators on Conditions when `arg_b` is of type List, to match AWS semantics.
+- Update evaluators on Conditions when `arg_b` is of type List, to match AWS sema\ntics.
+- Update `IPv4Network` and `IPv6Network` to not be strict when parsing strings.  
+  Before:
+  ```
+  A ValueError is raised if address does not represent a valid IPv4 or IPv6 address, or if the network has host bits set.
+  ```
+  After:
+  ```
+  A ValueError is raised if address does not represent a valid IPv4 or IPv6 address.
+  ```
 
 ## 0.10.1 - [2021-07-23]
 ### Fixes
