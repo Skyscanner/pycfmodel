@@ -1,8 +1,6 @@
 from ipaddress import IPv4Network, IPv6Network
 from typing import Optional
 
-from pydantic import validator
-
 from pycfmodel.constants import IPV4_ZERO_VALUE, IPV6_ZERO_VALUE
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.types import (
@@ -44,14 +42,6 @@ class SecurityGroupIngressProp(Property):
     SourceSecurityGroupName: Optional[ResolvableStr] = None
     SourceSecurityGroupOwnerId: Optional[ResolvableStr] = None
     ToPort: Optional[ResolvableInt] = None
-
-    @validator("CidrIp", pre=True)
-    def set_CidrIp(cls, v):
-        return IPv4Network(v, strict=False)
-
-    @validator("CidrIpv6", pre=True)
-    def set_CidrIpv6(cls, v):
-        return IPv6Network(v, strict=False)
 
     def ipv4_slash_zero(self) -> bool:
         """Returns True if `CidrIp` matches `0.0.0.0/0`, otherwise False."""
