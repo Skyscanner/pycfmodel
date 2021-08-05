@@ -98,18 +98,14 @@ def build_root_evaluator(function: str, arguments: Union[Dict, Tuple]) -> Callab
             group_of_nodes.append(
                 lambda kwargs: all(all_nodes({**kwargs, arg_a: item}) for item in convert_to_list(kwargs[arg_a]))
             )
-        elif function.startswith("ForAnyValue"):
+        elif function.startswith("ForAnyValue") or isinstance(arg_b, list):
             nodes = [build_root_evaluator(new_function, (arg_a, item)) for item in convert_to_list(arg_b)]
             all_nodes = lambda kwargs: any(node(kwargs) for node in nodes)  # noqa: E731
             group_of_nodes.append(
                 lambda kwargs: any(all_nodes({**kwargs, arg_a: item}) for item in convert_to_list(kwargs[arg_a]))
             )
         else:
-            if isinstance(arg_b, list):
-                nodes = [build_evaluator(new_function, arg_a, item) for item in arg_b]
-                group_of_nodes.append(lambda kwargs: any(node(kwargs) for node in nodes))
-            else:
-                group_of_nodes.append(build_evaluator(new_function, arg_a, arg_b))
+            group_of_nodes.append(build_evaluator(new_function, arg_a, arg_b))
 
     return lambda kwargs: all(group(kwargs) for group in group_of_nodes)
 
@@ -149,6 +145,10 @@ class StatementCondition(CustomModel):
     | Existence                  | Null                      | No          | Yes             | Yes            |
 
     Table based on [AWS Docs](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html)
+
+    For conditions such as `StringEquals` with multiple values for one key, we evaluate them using the logical `OR`,
+    similar to if the condition key was `ForAnyValue:StringEquals`. This follows the
+    [documentation from AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_multi-value-conditions.html).
     """
 
     ArnEquals: Optional[Dict[str, ResolvableArnOrList]]

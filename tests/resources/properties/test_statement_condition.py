@@ -521,6 +521,13 @@ def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, pa
     [
         ("NumericEquals", {"patata": 1}, {"patata": 1}, True),
         ("NumericEquals", {"patata": 1}, {"patata": 2}, False),
+        ("StringEquals", {"patata": ["1", "2", "3"]}, {"patata": ["2", "1"]}, True),
+        ("StringEquals", {"patata": ["1", "2", "3"]}, {"patata": ["1", "3"]}, True),
+        ("StringEquals", {"patata": "2"}, {"patata": ["2"]}, False),
+        ("StringEquals", {"patata": "2"}, {"patata": ["2", "1"]}, False),
+        ("StringEquals", {"patata": ["1", "3"]}, {"patata": ["4"]}, False),
+        ("StringLike", {"patata": ["sky*"]}, {"patata": ["skyx", "skyscanner", "nope"]}, True),
+        ("StringLike", {"patata": ["sky*"]}, {"patata": ["nopeskyx", "nopeskyscanner", "nope"]}, False),
     ],
 )
 def test_build_root_evaluator(function: str, arguments: Union[Dict, Tuple], params: Dict, expected_output: bool):

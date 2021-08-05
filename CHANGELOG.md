@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.10.2 - [2021-08-05]
+### Fixes
+- Update evaluators on Conditions when `arg_b` is of type List, to match AWS semantics.
+
 ## 0.10.1 - [2021-07-23]
 ### Fixes
 - Fix bug when calling `resolve` on `CFModel` with default (empty dict) `Conditions`
