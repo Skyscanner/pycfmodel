@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.10.3 - [2021-08-12]
+### Fixes
+- Update condition handling for `IpAddress` conditions to handle both `IPv*Network` and `IPv*Address` types.
+
 ## 0.10.2 - [2021-08-05]
 ### Fixes
 - Update evaluators on Conditions when `arg_b` is of type List, to match AWS sema\ntics.
