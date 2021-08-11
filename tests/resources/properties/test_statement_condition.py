@@ -1,5 +1,5 @@
 from datetime import datetime
-from ipaddress import IPv4Address, IPv4Network
+from ipaddress import IPv4Network
 from typing import Any, Dict, Tuple, Union
 
 import pytest
@@ -107,12 +107,14 @@ def test_build_evaluator_bool(function: str, arg_a: Any, arg_b: Any, params: Dic
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("IpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Address("203.0.113.12")}, True),
-        ("IpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Address("10.1.1.1")}, False),
-        ("IpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Address("203.0.113.10")}, True),
-        ("IpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Address("10.1.1.1")}, False),
-        ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Address("203.0.113.10")}, False),
-        ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Address("172.16.0.13")}, True),
+        ("IpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Network("203.0.113.12")}, True),
+        ("IpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Network("10.1.1.1")}, False),
+        ("IpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Network("203.0.113.10")}, True),
+        ("IpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Network("10.1.1.1")}, False),
+        ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("203.0.113.10")}, False),
+        ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("172.16.0.13")}, True),
+        ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("172.16.0.0/12")}, True),
+        ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("203.0.113.10/32")}, False),
     ],
 )
 def test_build_evaluator_ip_address(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
@@ -123,12 +125,13 @@ def test_build_evaluator_ip_address(function: str, arg_a: Any, arg_b: Any, param
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("NotIpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Address("203.0.113.12")}, False),
-        ("NotIpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Address("10.1.1.1")}, True),
-        ("NotIpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Address("203.0.113.10")}, False),
-        ("NotIpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Address("10.1.1.1")}, True),
-        ("NotIpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Address("203.0.113.10")}, True),
-        ("NotIpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Address("172.16.0.13")}, False),
+        ("NotIpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Network("203.0.113.12")}, False),
+        ("NotIpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Network("10.1.1.1")}, True),
+        ("NotIpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Network("203.0.113.10")}, False),
+        ("NotIpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Network("10.1.1.1")}, True),
+        ("NotIpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("203.0.113.10")}, True),
+        ("NotIpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("172.16.0.13")}, False),
+        ("NotIpAddress", "patata", IPv4Network("172.0.0.0/8"), {"patata": IPv4Network("172.0.0.0/8")}, False),
     ],
 )
 def test_build_evaluator_not_ip_address(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
@@ -528,6 +531,14 @@ def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, pa
         ("StringEquals", {"patata": ["1", "3"]}, {"patata": ["4"]}, False),
         ("StringLike", {"patata": ["sky*"]}, {"patata": ["skyx", "skyscanner", "nope"]}, True),
         ("StringLike", {"patata": ["sky*"]}, {"patata": ["nopeskyx", "nopeskyscanner", "nope"]}, False),
+        ("IpAddress", {"patata": [IPv4Network("203.0.113.0/24")]}, {"patata": IPv4Network("203.0.113.0/24")}, True),
+        ("IpAddress", {"patata": [IPv4Network("203.0.113.0/24")]}, {"patata": [IPv4Network("203.0.113.0/24")]}, True),
+        (
+            "IpAddress",
+            {"patata": [IPv4Network("203.0.113.0/24"), IPv4Network("103.0.113.0/24"), IPv4Network("85.0.113.0/24")]},
+            {"patata": [IPv4Network("10.0.0.0/8")]},
+            False,
+        ),
     ],
 )
 def test_build_root_evaluator(function: str, arguments: Union[Dict, Tuple], params: Dict, expected_output: bool):

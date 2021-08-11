@@ -34,9 +34,9 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
         return lambda kwargs: kwargs[arg_a] is arg_b
 
     elif function == "IpAddress":
-        return lambda kwargs: kwargs[arg_a] in arg_b
+        return lambda kwargs: kwargs[arg_a].subnet_of(arg_b)
     elif function == "NotIpAddress":
-        return lambda kwargs: kwargs[arg_a] not in arg_b
+        return lambda kwargs: not kwargs[arg_a].subnet_of(arg_b)
 
     elif function == "Null":
         return lambda kwargs: (kwargs.get(arg_a) is not None) is arg_b
