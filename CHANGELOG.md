@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.10.4 - [2021-08-13]
+### Fixes
+- Update `CLOUDFORMATION_ACTIONS`
+- Add `MultiRegion` and `KeySpec` properties in `KMSKeyProperties`
+
 ## 0.10.3 - [2021-08-12]
 ### Fixes
 - Update condition handling for `IpAddress` to handle `IPv*Network` comparison with `subnet_of` method.
