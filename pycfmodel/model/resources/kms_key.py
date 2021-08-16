@@ -16,6 +16,8 @@ class KMSKeyProperties(CustomModel):
     - Enabled: Specifies whether the customer master key (CMK) is enabled.
     - KeyPolicy: A [policy document][pycfmodel.model.resources.properties.policy_document.PolicyDocument] object.
     - KeyUsage: Determines the cryptographic operations.
+    - KeySpec: Specifies the type of CMK to create.
+    - MultiRegion: Allows multi-Region primary CMK to be replicated in other AWS Regions.
     - PendingWindowInDays: Number of days in the waiting period before AWS KMS deletes a CMK that has been removed from a CloudFormation stack.
     - Tags: Array of key-value pairs.
 
@@ -27,6 +29,8 @@ class KMSKeyProperties(CustomModel):
     Enabled: Optional[ResolvableBool] = None
     KeyPolicy: Resolvable[PolicyDocument]
     KeyUsage: Optional[ResolvableStr] = None
+    KeySpec: Optional[ResolvableStr] = None
+    MultiRegion: Optional[ResolvableBool] = None
     PendingWindowInDays: Optional[ResolvableInt] = None
     Tags: Optional[Resolvable[List[Dict]]] = None
 
