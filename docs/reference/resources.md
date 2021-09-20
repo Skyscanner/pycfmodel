@@ -16,6 +16,8 @@
 
 ::: pycfmodel.model.resources.resource
 
+::: pycfmodel.model.resources.s3_bucket
+
 ::: pycfmodel.model.resources.s3_bucket_policy
 
 ::: pycfmodel.model.resources.security_group

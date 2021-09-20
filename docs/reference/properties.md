@@ -11,3 +11,5 @@
 ::: pycfmodel.model.resources.properties.statement
 
 ::: pycfmodel.model.resources.properties.statement_condition
+
+::: pycfmodel.model.resources.properties.tag

@@ -31,6 +31,7 @@ inspecting CloudFormation scripts.
         * Security Group Egress Prop
         * Security Group Ingress Prop
         * Statement
+        * Tag
     * EC2 VPC Endpoint Policy
     * Generic Resource
     * IAM Group
@@ -39,6 +40,7 @@ inspecting CloudFormation scripts.
     * IAM Role
     * IAM User
     * KMS Key
+    * S3 Bucket
     * S3 Bucket Policy
     * Security Group
     * Security Group Egress

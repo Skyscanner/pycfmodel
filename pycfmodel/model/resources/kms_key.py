@@ -1,7 +1,8 @@
-from typing import ClassVar, Dict, List, Optional
+from typing import ClassVar, List, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableStr
 from pycfmodel.model.utils import OptionallyNamedPolicyDocument
@@ -32,7 +33,7 @@ class KMSKeyProperties(CustomModel):
     KeySpec: Optional[ResolvableStr] = None
     MultiRegion: Optional[ResolvableBool] = None
     PendingWindowInDays: Optional[ResolvableInt] = None
-    Tags: Optional[Resolvable[List[Dict]]] = None
+    Tags: Optional[Resolvable[List[Tag]]] = None
 
 
 class KMSKey(Resource):
