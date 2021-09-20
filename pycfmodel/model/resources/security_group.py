@@ -1,8 +1,9 @@
-from typing import ClassVar, Dict, List, Optional, Union
+from typing import ClassVar, List, Optional, Union
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.security_group_egress_prop import SecurityGroupEgressProp
 from pycfmodel.model.resources.properties.security_group_ingress_prop import SecurityGroupIngressProp
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableStr
 
@@ -29,7 +30,7 @@ class SecurityGroupProperties(CustomModel):
     SecurityGroupIngress: Optional[
         Resolvable[Union[SecurityGroupIngressProp, List[Resolvable[SecurityGroupIngressProp]]]]
     ] = None
-    Tags: Optional[Resolvable[List[Dict]]] = None
+    Tags: Optional[Resolvable[List[Tag]]] = None
     VpcId: Optional[ResolvableStr] = None
 
 

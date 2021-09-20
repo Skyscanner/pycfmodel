@@ -7,6 +7,7 @@ from pycfmodel.model.resources.iam_policy import IAMPolicy
 from pycfmodel.model.resources.iam_role import IAMRole
 from pycfmodel.model.resources.iam_user import IAMUser
 from pycfmodel.model.resources.kms_key import KMSKey
+from pycfmodel.model.resources.s3_bucket import S3Bucket
 from pycfmodel.model.resources.s3_bucket_policy import S3BucketPolicy
 from pycfmodel.model.resources.security_group import SecurityGroup
 from pycfmodel.model.resources.security_group_egress import SecurityGroupEgress
@@ -22,6 +23,7 @@ ResourceModels = Union[
     IAMRole,
     IAMUser,
     KMSKey,
+    S3Bucket,
     S3BucketPolicy,
     SecurityGroup,
     SecurityGroupEgress,

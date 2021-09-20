@@ -39,6 +39,7 @@ inspecting CloudFormation scripts.
     * IAM Role
     * IAM User
     * KMS Key
+    * S3 Bucket
     * S3 Bucket Policy
     * Security Group
     * Security Group Egress
