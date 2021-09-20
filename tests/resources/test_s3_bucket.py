@@ -1,7 +1,7 @@
 import pytest
+from pydantic import ValidationError
 
 from pycfmodel.model.resources.s3_bucket import S3Bucket
-from pydantic import ValidationError
 
 
 @pytest.fixture()
