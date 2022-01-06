@@ -99,7 +99,6 @@ statement = policy.PolicyDocument.Statement[0]
 assert statement.Action == "*"
 assert statement.Resource == "*"
 assert rootRole.Properties.AssumeRolePolicyDocument.Statement[0].Principal == {"AWS": "arn:aws:iam::123:root"}
-
 ```
 
 ## Local Development Commands
