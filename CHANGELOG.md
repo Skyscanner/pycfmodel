@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.12.0 - [2022-01-10]
+### Fixes
+- Support the usage of `aws:sourceVpce` in `IpAddress` conditions. When comparing conditions however, `pycfmodel` will block any comparison with something that is not an IPv4 or IPv6 address.
+- Update `CLOUDFORMATION_ACTIONS`
+
 ## 0.11.0 - [2021-09-21]
 ### Additions
 - Add `S3Bucket` resource.

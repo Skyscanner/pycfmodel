@@ -1,11 +1,12 @@
 import re
+from ipaddress import IPv4Network, IPv6Network
 from typing import Any, List
 
 import pytest
 
 from pycfmodel.constants import IMPLEMENTED_FUNCTIONS
 from pycfmodel.resolver import FUNCTION_MAPPINGS
-from pycfmodel.utils import convert_to_list, regex_from_cf_string
+from pycfmodel.utils import convert_to_list, not_ip, regex_from_cf_string
 
 
 def test_implemented_functions():
@@ -31,3 +32,18 @@ def test_convert_to_list(param: Any, expected_output: List):
 )
 def test_build_regex(action, expected_pattern):
     assert regex_from_cf_string(action) == expected_pattern
+
+
+@pytest.mark.parametrize(
+    "argument, expected",
+    [
+        (None, True),
+        ("", True),
+        ("vpce-123456", True),
+        ("192.168.0.1", True),
+        (IPv4Network("192.168.0.1"), False),
+        (IPv6Network("::ff"), False),
+    ],
+)
+def test_not_ip(argument: Any, expected: bool):
+    assert not_ip(argument) == expected

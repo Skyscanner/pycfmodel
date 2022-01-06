@@ -533,6 +533,8 @@ def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, pa
         ("StringLike", {"patata": ["sky*"]}, {"patata": ["nopeskyx", "nopeskyscanner", "nope"]}, False),
         ("IpAddress", {"patata": [IPv4Network("203.0.113.0/24")]}, {"patata": IPv4Network("203.0.113.0/24")}, True),
         ("IpAddress", {"patata": [IPv4Network("203.0.113.0/24")]}, {"patata": [IPv4Network("203.0.113.0/24")]}, True),
+        ("IpAddress", {"patata": ["vpce-123456"]}, {"patata": ["vpce-123456"]}, False),
+        ("NotIpAddress", {"patata": ["vpce-123456"]}, {"patata": ["vpce-654321"]}, False),
         (
             "IpAddress",
             {"patata": [IPv4Network("203.0.113.0/24"), IPv4Network("103.0.113.0/24"), IPv4Network("85.0.113.0/24")]},
