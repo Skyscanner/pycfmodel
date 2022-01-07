@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.11.1 - [2022-01-10]
+### Additions
+- Update `CLOUDFORMATION_ACTIONS`.
+- Add documentation regarding missing IAM actions.
+
 ## 0.11.0 - [2021-09-21]
 ### Additions
 - Add `S3Bucket` resource.
