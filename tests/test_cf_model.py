@@ -14,7 +14,7 @@ def model():
             "Parameters": {},
             "Mappings": {},
             "Conditions": {},
-            "Transform": [],
+            "Transform": ["MyMacro", "AWS::Serverless"],
             "Resources": {"Logical ID": {"Type": "Resource type", "Properties": {"foo": "bar"}}},
             "Rules": {},
             "Outputs": {},
@@ -22,9 +22,10 @@ def model():
     )
 
 
-def test_basic_json(model):
+def test_basic_json(model: CFModel):
     assert type(model).__name__ == "CFModel"
     assert len(model.Resources) == 1
+    assert model.Transform == ["MyMacro", "AWS::Serverless"]
 
 
 def test_resources_filtered_by_type():
@@ -49,6 +50,13 @@ def test_backwards_compatible_metadata():
 
     model = CFModel(Metadata=metadata)
     assert model.Metadata == metadata
+
+
+def test_transform_handles_string():
+    transform = "MyMacro"
+
+    model = CFModel(Transform=transform)
+    assert model.Transform == transform
 
 
 def test_resolve_model(model):
