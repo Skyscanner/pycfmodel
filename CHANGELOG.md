@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.12.0 - [2022-01-11]
+### Fixes
+- `Transform` field of a CloudFormation template can now correctly handle both string and list of strings (see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html)
+
+### Additions
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.11.1 - [2022-01-10]
 ### Additions
 - Update `CLOUDFORMATION_ACTIONS`.

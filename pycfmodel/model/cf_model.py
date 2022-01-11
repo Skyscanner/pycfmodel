@@ -41,7 +41,7 @@ class CFModel(CustomModel):
     Parameters: Optional[Dict[str, Parameter]] = {}
     Resources: Dict[str, Resolvable[Union[ResourceModels, GenericResource]]] = {}
     Rules: Optional[Dict] = {}
-    Transform: Optional[List]
+    Transform: Optional[Union[str, List[str]]]
 
     PSEUDO_PARAMETERS: ClassVar[Dict[str, Union[str, List[str]]]] = {
         # default pseudo parameters
