@@ -1,4 +1,5 @@
 import re
+from ipaddress import IPv4Network, IPv6Network
 from typing import Any, List, Pattern, Union
 
 from pycfmodel.constants import IMPLEMENTED_FUNCTIONS
@@ -22,3 +23,7 @@ def regex_from_cf_string(action: str) -> Pattern:
     action = action.replace("?", ".{1}")
 
     return re.compile(f"^{action}$", re.IGNORECASE)
+
+
+def not_ip(arg: Any) -> bool:
+    return not isinstance(arg, IPv4Network) and not isinstance(arg, IPv6Network)

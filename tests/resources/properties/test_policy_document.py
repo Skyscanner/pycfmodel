@@ -1,4 +1,5 @@
 import re
+from ipaddress import IPv4Network
 
 from pytest import fixture
 
@@ -218,3 +219,49 @@ def policy_document_not_action():
 def test_get_allowed_not_actions(policy_document_not_action):
     allowed_actions = set(entry for entry in CLOUDFORMATION_ACTIONS if not entry.startswith("rds:"))
     assert policy_document_not_action.get_allowed_actions() == sorted(allowed_actions)
+
+
+@fixture
+def policy_document_condition_with_source_ip():
+    return PolicyDocument(
+        **{
+            "Statement": [
+                {
+                    "Action": ["s3:ListBucket"],
+                    "Condition": {"IpAddress": {"aws:SourceIp": ["116.202.65.160", "116.202.68.32/27"]}},
+                    "Effect": "Allow",
+                    "Principal": {"AWS": "*"},
+                    "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
+                },
+            ],
+        }
+    )
+
+
+@fixture
+def policy_document_condition_with_source_vpce():
+    return PolicyDocument(
+        **{
+            "Statement": [
+                {
+                    "Action": ["s3:ListBucket"],
+                    "Condition": {"IpAddress": {"aws:SourceVpce": ["vpce-123456"]}},
+                    "Effect": "Allow",
+                    "Principal": {"AWS": "*"},
+                    "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
+                },
+            ],
+        }
+    )
+
+
+def test_policy_document_condition_with_source_ip(policy_document_condition_with_source_ip: PolicyDocument):
+    assert policy_document_condition_with_source_ip.Statement[0].Condition.IpAddress == {
+        "aws:SourceIp": [IPv4Network("116.202.65.160/32"), IPv4Network("116.202.68.32/27")]
+    }
+
+
+def test_policy_document_condition_with_source_vpce(policy_document_condition_with_source_vpce: PolicyDocument):
+    assert policy_document_condition_with_source_vpce.Statement[0].Condition.IpAddress == {
+        "aws:SourceVpce": ["vpce-123456"]
+    }

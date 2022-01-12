@@ -1,9 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 0.12.0 - [2022-01-11]
+## 0.12.0 - [2022-01-13]
 ### Fixes
 - `Transform` field of a CloudFormation template can now correctly handle both string and list of strings (see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html)
+- Support the usage of `aws:sourceVpce` in `IpAddress` conditions. When comparing conditions however, `pycfmodel` will block any comparison with something that is not an IPv4 or IPv6 address.
 
 ### Additions
 - Update `CLOUDFORMATION_ACTIONS`.
