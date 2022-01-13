@@ -17,7 +17,7 @@ from pycfmodel.model.types import (
     ResolvableIPOrList,
     ResolvableStrOrList,
 )
-from pycfmodel.utils import convert_to_list, is_resolvable_dict, regex_from_cf_string
+from pycfmodel.utils import convert_to_list, is_resolvable_dict, not_ip, regex_from_cf_string
 
 logger = logging.getLogger(__name__)
 
@@ -34,8 +34,12 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
         return lambda kwargs: kwargs[arg_a] is arg_b
 
     elif function == "IpAddress":
+        if not_ip(arg_b):
+            return lambda _: False
         return lambda kwargs: kwargs[arg_a].subnet_of(arg_b)
     elif function == "NotIpAddress":
+        if not_ip(arg_b):
+            return lambda _: False
         return lambda kwargs: not kwargs[arg_a].subnet_of(arg_b)
 
     elif function == "Null":
@@ -227,18 +231,18 @@ class StatementCondition(CustomModel):
     ForAnyValueDateGreaterThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
     ForAnyValueDateGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
 
-    IpAddress: Optional[Dict[str, ResolvableIPOrList]]
-    NotIpAddress: Optional[Dict[str, ResolvableIPOrList]]
-    IpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
-    NotIpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
-    ForAllValuesIpAddress: Optional[Dict[str, ResolvableIPOrList]]
-    ForAllValuesNotIpAddress: Optional[Dict[str, ResolvableIPOrList]]
-    ForAnyValueIpAddress: Optional[Dict[str, ResolvableIPOrList]]
-    ForAnyValueNotIpAddress: Optional[Dict[str, ResolvableIPOrList]]
-    ForAllValuesIpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
-    ForAllValuesNotIpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
-    ForAnyValueIpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
-    ForAnyValueNotIpAddressIfExists: Optional[Dict[str, ResolvableIPOrList]]
+    IpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    NotIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    IpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    NotIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    ForAllValuesIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    ForAllValuesNotIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    ForAnyValueIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    ForAnyValueNotIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    ForAllValuesIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    ForAllValuesNotIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    ForAnyValueIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    ForAnyValueNotIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
 
     Null: Optional[Dict[str, ResolvableBool]]
     ForAllValuesNull: Optional[Dict[str, ResolvableBool]]
