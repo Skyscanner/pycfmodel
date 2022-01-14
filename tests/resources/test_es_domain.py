@@ -1,0 +1,163 @@
+import pytest
+from pydantic import ValidationError
+
+from pycfmodel.model.resources.es_domain import ESDomain
+
+
+@pytest.fixture()
+def valid_empty_es_domain():
+    return ESDomain(
+        **{
+            "Type": "AWS::Elasticsearch::Domain",
+            "Properties": {},
+        }
+    )
+
+
+@pytest.fixture()
+def valid_es_domain_from_aws_documentation_examples():
+    return ESDomain(
+        **{
+            "Type": "AWS::Elasticsearch::Domain",
+            "Properties": {
+                "AccessPolicies": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {"AWS": "arn:aws:iam::123456789012:user/es-user"},
+                            "Action": "es:*",
+                            "Resource": "arn:aws:es:us-east-1:123456789012:domain/test/*",
+                        }
+                    ],
+                },
+                "AdvancedOptions": {"rest.action.multi.allow_explicit_index": True},
+                "DomainName": "test",
+                "EBSOptions": {"EBSEnabled": True, "Iops": "0", "VolumeSize": "20", "VolumeType": "gp2"},
+                "ElasticsearchClusterConfig": {
+                    "DedicatedMasterEnabled": True,
+                    "InstanceCount": "2",
+                    "ZoneAwarenessEnabled": True,
+                    "InstanceType": "m3.medium.elasticsearch",
+                    "DedicatedMasterType": "m3.medium.elasticsearch",
+                    "DedicatedMasterCount": "3",
+                },
+                "ElasticsearchVersion": "7.10",
+                "LogPublishingOptions": {
+                    "ES_APPLICATION_LOGS": {
+                        "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-application-logs",
+                        "Enabled": True,
+                    },
+                    "SEARCH_SLOW_LOGS": {
+                        "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-slow-logs",
+                        "Enabled": True,
+                    },
+                    "INDEX_SLOW_LOGS": {
+                        "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-index-slow-logs",
+                        "Enabled": True,
+                    },
+                },
+            },
+        }
+    )
+
+
+def test_valid_empty_es_domain_resource_can_be_built(valid_empty_es_domain):
+    assert valid_empty_es_domain.Type == "AWS::Elasticsearch::Domain"
+    assert valid_empty_es_domain.Properties.AccessPolicies is None
+    assert valid_empty_es_domain.Properties.AdvancedOptions is None
+    assert valid_empty_es_domain.Properties.AdvancedSecurityOptions is None
+    assert valid_empty_es_domain.Properties.CognitoOptions is None
+    assert valid_empty_es_domain.Properties.DomainEndpointOptions is None
+    assert valid_empty_es_domain.Properties.DomainName is None
+    assert valid_empty_es_domain.Properties.EBSOptions is None
+    assert valid_empty_es_domain.Properties.ElasticsearchClusterConfig is None
+    assert valid_empty_es_domain.Properties.ElasticsearchVersion is None
+    assert valid_empty_es_domain.Properties.EncryptionAtRestOptions is None
+    assert valid_empty_es_domain.Properties.LogPublishingOptions is None
+    assert valid_empty_es_domain.Properties.NodeToNodeEncryptionOptions is None
+    assert valid_empty_es_domain.Properties.SnapshotOptions is None
+    assert valid_empty_es_domain.Properties.Tags is None
+    assert valid_empty_es_domain.Properties.VPCOptions is None
+
+
+def test_valid_es_domain_from_aws_documentation_examples_resource_can_be_built(
+    valid_es_domain_from_aws_documentation_examples,
+):
+    assert valid_es_domain_from_aws_documentation_examples.Type == "AWS::Elasticsearch::Domain"
+    assert valid_es_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Effect == "Allow"
+    assert valid_es_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Action == "es:*"
+    assert valid_es_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Principal == {
+        "AWS": "arn:aws:iam::123456789012:user/es-user"
+    }
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Resource
+        == "arn:aws:es:us-east-1:123456789012:domain/test/*"
+    )
+    assert valid_es_domain_from_aws_documentation_examples.Properties.AdvancedOptions == {
+        "rest.action.multi.allow_explicit_index": True
+    }
+    assert valid_es_domain_from_aws_documentation_examples.Properties.AdvancedSecurityOptions is None
+    assert valid_es_domain_from_aws_documentation_examples.Properties.CognitoOptions is None
+    assert valid_es_domain_from_aws_documentation_examples.Properties.DomainEndpointOptions is None
+    assert valid_es_domain_from_aws_documentation_examples.Properties.DomainName == "test"
+    assert valid_es_domain_from_aws_documentation_examples.Properties.EBSOptions == {
+        "EBSEnabled": True,
+        "Iops": "0",
+        "VolumeSize": "20",
+        "VolumeType": "gp2",
+    }
+    assert valid_es_domain_from_aws_documentation_examples.Properties.ElasticsearchClusterConfig == {
+        "DedicatedMasterEnabled": True,
+        "InstanceCount": "2",
+        "ZoneAwarenessEnabled": True,
+        "InstanceType": "m3.medium.elasticsearch",
+        "DedicatedMasterType": "m3.medium.elasticsearch",
+        "DedicatedMasterCount": "3",
+    }
+    assert valid_es_domain_from_aws_documentation_examples.Properties.ElasticsearchVersion == "7.10"
+    assert valid_es_domain_from_aws_documentation_examples.Properties.EncryptionAtRestOptions is None
+    assert valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions == {
+        "ES_APPLICATION_LOGS": {
+            "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-application-logs",
+            "Enabled": True,
+        },
+        "SEARCH_SLOW_LOGS": {
+            "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-slow-logs",
+            "Enabled": True,
+        },
+        "INDEX_SLOW_LOGS": {
+            "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-index-slow-logs",
+            "Enabled": True,
+        },
+    }
+    assert valid_es_domain_from_aws_documentation_examples.Properties.NodeToNodeEncryptionOptions is None
+    assert valid_es_domain_from_aws_documentation_examples.Properties.SnapshotOptions is None
+    assert valid_es_domain_from_aws_documentation_examples.Properties.Tags is None
+    assert valid_es_domain_from_aws_documentation_examples.Properties.VPCOptions is None
+
+
+def test_raise_error_if_invalid_fields_in_resource():
+    with pytest.raises(ValidationError) as exc_info:
+        ESDomain(
+            **{
+                "Type": "AWS::Elasticsearch::Domain",
+                "Properties": {
+                    "DomainName": [],
+                },
+            }
+        )
+
+    assert exc_info.value.errors() == [
+        {"loc": ("Properties", "DomainName"), "msg": "str type expected", "type": "type_error.str"},
+        {
+            "loc": ("Properties", "DomainName", "__root__"),
+            "msg": "FunctionDict should only have 1 key and be a function",
+            "type": "value_error",
+        },
+        {
+            "loc": ("Properties", "__root__"),
+            "msg": "FunctionDict should only have 1 key and be a function",
+            "type": "value_error",
+        },
+    ]
