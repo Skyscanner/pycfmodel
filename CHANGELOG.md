@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.13.0 - [2022-01-14]
+### Additions
+- Added `ESDomain` resource.
+- Added `OpenSearchDomain` resource.
+- Update `CLOUDFORMATION_ACTIONS`
+
 ## 0.12.0 - [2022-01-13]
 ### Fixes
 - `Transform` field of a CloudFormation template can now correctly handle both string and list of strings (see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html)
