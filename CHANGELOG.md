@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Additions
 - Added `ESDomain` resource.
 - Added `OpenSearchDomain` resource.
+- Update `CLOUDFORMATION_ACTIONS`
 
 ## 0.12.0 - [2022-01-13]
 ### Fixes
