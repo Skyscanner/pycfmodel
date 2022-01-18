@@ -30,7 +30,7 @@ class OpenSearchDomainProperties(CustomModel):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchservice-domain.html)
     """
 
-    AccessPolicies: Optional[Resolvable[PolicyDocument]] = None
+    AccessPolicies: Optional[Resolvable[PolicyDocument]] = []
     AdvancedOptions: Optional[ResolvableDict] = None
     AdvancedSecurityOptions: Optional[ResolvableDict] = None
     ClusterConfig: Optional[ResolvableDict] = None

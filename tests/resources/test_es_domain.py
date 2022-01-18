@@ -64,7 +64,7 @@ def valid_es_domain_from_aws_documentation_examples():
 
 def test_valid_empty_es_domain_resource_can_be_built(valid_empty_es_domain):
     assert valid_empty_es_domain.Type == "AWS::Elasticsearch::Domain"
-    assert valid_empty_es_domain.Properties.AccessPolicies is None
+    assert valid_empty_es_domain.Properties.AccessPolicies == []
     assert valid_empty_es_domain.Properties.AdvancedOptions is None
     assert valid_empty_es_domain.Properties.AdvancedSecurityOptions is None
     assert valid_empty_es_domain.Properties.CognitoOptions is None

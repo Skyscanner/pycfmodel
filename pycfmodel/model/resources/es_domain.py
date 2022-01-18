@@ -30,7 +30,7 @@ class ESDomainProperties(CustomModel):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticsearch-domain.html)
     """
 
-    AccessPolicies: Optional[Resolvable[PolicyDocument]] = None
+    AccessPolicies: Optional[Resolvable[PolicyDocument]] = []
     AdvancedOptions: Optional[ResolvableDict] = None
     AdvancedSecurityOptions: Optional[ResolvableDict] = None
     CognitoOptions: Optional[ResolvableDict] = None

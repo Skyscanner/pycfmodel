@@ -67,7 +67,7 @@ def valid_opensearch_domain_from_aws_documentation_examples():
 
 def test_valid_empty_opensearch_domain_resource_can_be_built(valid_empty_opensearch_domain):
     assert valid_empty_opensearch_domain.Type == "AWS::OpenSearchService::Domain"
-    assert valid_empty_opensearch_domain.Properties.AccessPolicies is None
+    assert valid_empty_opensearch_domain.Properties.AccessPolicies == []
     assert valid_empty_opensearch_domain.Properties.AdvancedOptions is None
     assert valid_empty_opensearch_domain.Properties.AdvancedSecurityOptions is None
     assert valid_empty_opensearch_domain.Properties.ClusterConfig is None
