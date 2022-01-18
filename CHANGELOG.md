@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.13.1 - [2022-01-18]
+### Fixes
+- Changed `AccessPolices` default value to empty list for, `ESDomain` and `OpenSearchDomain` resources.
+
 ## 0.13.0 - [2022-01-14]
 ### Additions
 - Added `ESDomain` resource.
