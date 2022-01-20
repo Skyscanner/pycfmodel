@@ -62,25 +62,6 @@ class Generic(BaseModel):
     def casting(cls, values):
         return {k: _Auxiliar.cast(v) for k, v in values.items()}
 
-    #
-    # @root_validator(pre=True)
-    # def casting(cls, values):
-    #     parsed = {}
-    #     for k, v in values.items():
-    #         v = _Auxiliar.cast(v)
-    #         if isinstance(v, list):
-    #             aux = []
-    #             for i in v:
-    #                 i = _Auxiliar.cast(i)
-    #                 if isinstance(i, dict):
-    #                     i = Generic.parse_obj(i)
-    #                 aux.append(i)
-    #             v = aux
-    #         if isinstance(v, dict):
-    #             v = Generic.parse_obj(v)
-    #         parsed[k] = v
-    #     return parsed
-
 
 ResolvableGeneric = Resolvable[Generic]
 ResolvableGenericOrList = InstanceOrListOf[ResolvableGeneric]
