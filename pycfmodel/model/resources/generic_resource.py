@@ -3,6 +3,7 @@ from typing import ClassVar
 
 from pydantic import Extra, validator
 
+from pycfmodel.model.generic import Generic
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.resources.types import ResourceModels
 
@@ -16,6 +17,7 @@ class GenericResource(Resource):
 
     ALLOW_EXISTING_TYPES: ClassVar[bool] = True
     Type: str
+    Properties: Generic
 
     class Config(Resource.Config):
         extra = Extra.allow

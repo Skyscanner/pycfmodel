@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, List, Optional, Pattern, Union
+from typing import List, Optional, Pattern, Union
 
 from pydantic import validator
 
@@ -11,7 +11,15 @@ from pycfmodel.utils import is_resolvable_dict
 
 logger = logging.getLogger(__file__)
 
-PrincipalTypes = Union[ResolvableStr, List[ResolvableStr], Dict[str, Union[ResolvableStr, List[ResolvableStr]]]]
+
+class Principal(Property):
+    AWS: Optional[ResolvableStrOrList] = None
+    CanonicalUser: Optional[ResolvableStrOrList] = None
+    Federated: Optional[ResolvableStrOrList] = None
+    Service: Optional[ResolvableStrOrList] = None
+
+
+PrincipalTypes = Union[ResolvableStrOrList, Principal]
 
 
 class Statement(Property):
@@ -109,11 +117,11 @@ class Statement(Property):
                 principal_list.append(principals)
             elif is_resolvable_dict(principals):
                 principal_list.append(principals)
-            elif isinstance(principals, dict):
-                for value in principals.values():
-                    if isinstance(value, (str, Dict)):
+            elif isinstance(principals, Principal):
+                for value in principals.dict().values():
+                    if isinstance(value, (str, dict)):
                         principal_list.append(value)
-                    elif isinstance(value, List):
+                    elif isinstance(value, list):
                         principal_list.extend(value)
             elif principals is not None:
                 raise ValueError(f"Not supported type: {type(principals)}")
