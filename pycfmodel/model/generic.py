@@ -1,0 +1,86 @@
+from contextlib import suppress
+from typing import Union
+
+from pydantic import BaseModel, Extra, ValidationError, root_validator
+
+from pycfmodel.model.base import FunctionDict
+from pycfmodel.model.resources.properties.types import Properties
+from pycfmodel.model.types import (
+    InstanceOrListOf,
+    Resolvable,
+    ResolvableArnOrList,
+    ResolvableBoolOrList,
+    ResolvableBytesOrList,
+    ResolvableDatetimeOrList,
+    ResolvableIntOrList,
+    ResolvableIPOrList,
+    ResolvableStrOrList,
+)
+
+
+class _Auxiliar(BaseModel):
+    aux: Union[
+        FunctionDict,
+        Properties,
+        ResolvableBoolOrList,
+        ResolvableIntOrList,
+        ResolvableDatetimeOrList,
+        ResolvableIPOrList,
+        ResolvableArnOrList,
+        ResolvableStrOrList,
+        ResolvableBytesOrList,
+    ]
+
+    class Config(BaseModel.Config):
+        smart_union = True
+
+    @classmethod
+    def cast(cls, value):
+        with suppress(ValidationError):
+            value = _Auxiliar(aux=value).aux
+
+        if isinstance(value, list):
+            auxiliar_list = []
+            for v in value:
+                v = _Auxiliar.cast(v)
+                if isinstance(v, dict):
+                    v = Generic.parse_obj(v)
+                auxiliar_list.append(v)
+            value = auxiliar_list
+
+        if isinstance(value, dict):
+            value = Generic.parse_obj(value)
+
+        return value
+
+
+class Generic(BaseModel):
+    class Config(BaseModel.Config):
+        extra = Extra.allow
+
+    @root_validator(pre=True)
+    def casting(cls, values):
+        return {k: _Auxiliar.cast(v) for k, v in values.items()}
+
+    #
+    # @root_validator(pre=True)
+    # def casting(cls, values):
+    #     parsed = {}
+    #     for k, v in values.items():
+    #         v = _Auxiliar.cast(v)
+    #         if isinstance(v, list):
+    #             aux = []
+    #             for i in v:
+    #                 i = _Auxiliar.cast(i)
+    #                 if isinstance(i, dict):
+    #                     i = Generic.parse_obj(i)
+    #                 aux.append(i)
+    #             v = aux
+    #         if isinstance(v, dict):
+    #             v = Generic.parse_obj(v)
+    #         parsed[k] = v
+    #     return parsed
+
+
+ResolvableGeneric = Resolvable[Generic]
+ResolvableGenericOrList = InstanceOrListOf[ResolvableGeneric]
