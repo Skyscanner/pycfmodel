@@ -49,7 +49,6 @@ ResolvableInt = Resolvable[int]
 ResolvableDate = Resolvable[date]
 ResolvableDatetime = Resolvable[datetime]
 ResolvableBool = Resolvable[StrictBool]
-ResolvableDict = Resolvable[dict]
 
 ResolvableIPv4Network = Resolvable[LooseIPv4Network]
 ResolvableIPv6Network = Resolvable[LooseIPv6Network]
