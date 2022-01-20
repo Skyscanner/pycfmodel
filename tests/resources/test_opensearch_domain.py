@@ -102,11 +102,19 @@ def test_valid_opensearch_domain_from_aws_documentation_examples_resource_can_be
         valid_opensearch_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Resource
         == "arn:aws:es:us-east-1:123456789012:domain/test/*"
     )
-    # assert valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedOptions."rest.action.multi.allow_explicit_index" == True
+    assert (
+        getattr(
+            valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedOptions,
+            "rest.action.multi.allow_explicit_index",
+        )
+        is True
+    )
+
     assert (
         valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedOptions.override_main_response_version
         is True
     )
+
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedSecurityOptions is None
 
     assert (
