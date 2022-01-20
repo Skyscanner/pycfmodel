@@ -10,7 +10,7 @@ from pycfmodel.model.types import (
     Resolvable,
     ResolvableArnOrList,
     ResolvableBoolOrList,
-    ResolvableBytesOrList,
+    ResolvableDateOrList,
     ResolvableDatetimeOrList,
     ResolvableIntOrList,
     ResolvableIPOrList,
@@ -25,10 +25,10 @@ class _Auxiliar(BaseModel):
         ResolvableBoolOrList,
         ResolvableIntOrList,
         ResolvableDatetimeOrList,
+        ResolvableDateOrList,
         ResolvableIPOrList,
         ResolvableArnOrList,
         ResolvableStrOrList,
-        ResolvableBytesOrList,
     ]
 
     class Config(BaseModel.Config):

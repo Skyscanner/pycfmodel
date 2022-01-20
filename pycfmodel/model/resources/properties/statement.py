@@ -4,6 +4,7 @@ from typing import List, Optional, Pattern, Union
 from pydantic import validator
 
 from pycfmodel.action_expander import _expand_action
+from pycfmodel.model.base import FunctionDict
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.resources.properties.statement_condition import StatementCondition
 from pycfmodel.model.types import ResolvableStr, ResolvableStrOrList
@@ -119,7 +120,7 @@ class Statement(Property):
                 principal_list.append(principals)
             elif isinstance(principals, Principal):
                 for value in principals.dict().values():
-                    if isinstance(value, (str, dict)):
+                    if isinstance(value, (str, FunctionDict)):
                         principal_list.append(value)
                     elif isinstance(value, list):
                         principal_list.extend(value)
