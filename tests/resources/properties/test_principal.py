@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 
 from pycfmodel.model.resources.properties.statement import Principal
 
@@ -24,4 +25,7 @@ from pycfmodel.model.resources.properties.statement import Principal
     ],
 )
 def test_principal(principal):
-    Principal.parse_obj(principal)
+    try:
+        Principal.parse_obj(principal)
+    except ValidationError as exc:
+        assert False, f"{principal} raised an exception {exc}"
