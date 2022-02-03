@@ -55,6 +55,8 @@ class _Auxiliar(BaseModel):
 
 
 class Generic(BaseModel):
+    """Any property under this class will be casted to an existing model of pycfmodel if possible."""
+
     class Config(BaseModel.Config):
         extra = Extra.allow
 
