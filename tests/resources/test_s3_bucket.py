@@ -38,12 +38,9 @@ def valid_s3_bucket():
 
 
 def test_valid_s3_bucket_resource(valid_s3_bucket):
-    assert (
-        valid_s3_bucket.Properties.ReplicationConfiguration.get("Role")
-        == "arn:aws:iam::123456789012:role/replication_role"
-    )
-    assert valid_s3_bucket.Properties.ReplicationConfiguration.get("Rules")[1].get("Status") == "Enabled"
-    assert valid_s3_bucket.Properties.VersioningConfiguration == {"Status": "Enabled"}
+    assert valid_s3_bucket.Properties.ReplicationConfiguration.Role == "arn:aws:iam::123456789012:role/replication_role"
+    assert valid_s3_bucket.Properties.ReplicationConfiguration.Rules[1].Status == "Enabled"
+    assert valid_s3_bucket.Properties.VersioningConfiguration.Status == "Enabled"
     assert valid_s3_bucket.Properties.Tags[0].Value == "test"
 
 

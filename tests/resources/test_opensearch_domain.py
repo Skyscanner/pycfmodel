@@ -94,51 +94,81 @@ def test_valid_opensearch_domain_from_aws_documentation_examples_resource_can_be
     assert (
         valid_opensearch_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Action == "es:*"
     )
-    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Principal == {
-        "AWS": "arn:aws:iam::123456789012:user/opensearch-user"
-    }
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Principal.AWS
+        == "arn:aws:iam::123456789012:user/opensearch-user"
+    )
     assert (
         valid_opensearch_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Resource
         == "arn:aws:es:us-east-1:123456789012:domain/test/*"
     )
-    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedOptions == {
-        "rest.action.multi.allow_explicit_index": True,
-        "override_main_response_version": True,
-    }
+    assert (
+        getattr(
+            valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedOptions,
+            "rest.action.multi.allow_explicit_index",
+        )
+        is True
+    )
+
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedOptions.override_main_response_version
+        is True
+    )
+
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedSecurityOptions is None
-    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.ClusterConfig == {
-        "DedicatedMasterEnabled": True,
-        "InstanceCount": "2",
-        "ZoneAwarenessEnabled": True,
-        "InstanceType": "m3.medium.search",
-        "DedicatedMasterType": "m3.medium.search",
-        "DedicatedMasterCount": "3",
-    }
+
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.ClusterConfig.DedicatedMasterEnabled is True
+    )
+    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.ClusterConfig.InstanceCount == 2
+    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.ClusterConfig.ZoneAwarenessEnabled is True
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.ClusterConfig.InstanceType
+        == "m3.medium.search"
+    )
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.ClusterConfig.DedicatedMasterType
+        == "m3.medium.search"
+    )
+    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.ClusterConfig.DedicatedMasterCount == 3
+
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.CognitoOptions is None
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.DomainEndpointOptions is None
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.DomainName == "test"
-    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.EBSOptions == {
-        "EBSEnabled": True,
-        "Iops": "0",
-        "VolumeSize": "20",
-        "VolumeType": "gp2",
-    }
+
+    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.EBSOptions.EBSEnabled is True
+    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.EBSOptions.Iops == 0
+    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.EBSOptions.VolumeSize == 20
+    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.EBSOptions.VolumeType == "gp2"
+
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.EngineVersion == "OpenSearch_1.0"
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.EncryptionAtRestOptions is None
-    assert valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions == {
-        "ES_APPLICATION_LOGS": {
-            "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearch/domains/opensearch-application-logs",
-            "Enabled": True,
-        },
-        "SEARCH_SLOW_LOGS": {
-            "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearch/domains/opensearch-slow-logs",
-            "Enabled": True,
-        },
-        "INDEX_SLOW_LOGS": {
-            "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearch/domains/opensearch-index-slow-logs",
-            "Enabled": True,
-        },
-    }
+
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.ES_APPLICATION_LOGS.CloudWatchLogsLogGroupArn
+        == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearch/domains/opensearch-application-logs"
+    )
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.ES_APPLICATION_LOGS.Enabled
+        is True
+    )
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.SEARCH_SLOW_LOGS.CloudWatchLogsLogGroupArn
+        == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearch/domains/opensearch-slow-logs"
+    )
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.SEARCH_SLOW_LOGS.Enabled
+        is True
+    )
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.INDEX_SLOW_LOGS.CloudWatchLogsLogGroupArn
+        == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearch/domains/opensearch-index-slow-logs"
+    )
+    assert (
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.INDEX_SLOW_LOGS.Enabled
+        is True
+    )
+
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.NodeToNodeEncryptionOptions is None
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.SnapshotOptions is None
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.Tags is None

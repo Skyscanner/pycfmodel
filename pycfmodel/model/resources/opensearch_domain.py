@@ -1,10 +1,11 @@
 from typing import ClassVar, List, Optional
 
 from pycfmodel.model.base import CustomModel
+from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableDict, ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableStr
 
 
 class OpenSearchDomainProperties(CustomModel):
@@ -31,20 +32,20 @@ class OpenSearchDomainProperties(CustomModel):
     """
 
     AccessPolicies: Optional[Resolvable[PolicyDocument]] = None
-    AdvancedOptions: Optional[ResolvableDict] = None
-    AdvancedSecurityOptions: Optional[ResolvableDict] = None
-    ClusterConfig: Optional[ResolvableDict] = None
-    CognitoOptions: Optional[ResolvableDict] = None
-    DomainEndpointOptions: Optional[ResolvableDict] = None
+    AdvancedOptions: Optional[ResolvableGeneric] = None
+    AdvancedSecurityOptions: Optional[ResolvableGeneric] = None
+    ClusterConfig: Optional[ResolvableGeneric] = None
+    CognitoOptions: Optional[ResolvableGeneric] = None
+    DomainEndpointOptions: Optional[ResolvableGeneric] = None
     DomainName: Optional[ResolvableStr] = None
-    EBSOptions: Optional[ResolvableDict] = None
-    EncryptionAtRestOptions: Optional[ResolvableDict] = None
+    EBSOptions: Optional[ResolvableGeneric] = None
+    EncryptionAtRestOptions: Optional[ResolvableGeneric] = None
     EngineVersion: Optional[ResolvableStr] = None
-    LogPublishingOptions: Optional[ResolvableDict] = None
-    NodeToNodeEncryptionOptions: Optional[ResolvableDict] = None
-    SnapshotOptions: Optional[ResolvableDict] = None
+    LogPublishingOptions: Optional[ResolvableGeneric] = None
+    NodeToNodeEncryptionOptions: Optional[ResolvableGeneric] = None
+    SnapshotOptions: Optional[ResolvableGeneric] = None
     Tags: Optional[Resolvable[List[Tag]]] = None
-    VPCOptions: Optional[ResolvableDict] = None
+    VPCOptions: Optional[ResolvableGeneric] = None
 
 
 class OpenSearchDomain(Resource):

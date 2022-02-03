@@ -1,9 +1,10 @@
 from typing import ClassVar, List, Optional
 
 from pycfmodel.model.base import CustomModel
+from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableDict, ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableStr
 
 
 class S3BucketProperties(CustomModel):
@@ -34,26 +35,26 @@ class S3BucketProperties(CustomModel):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html)
     """
 
-    AccelerateConfiguration: Optional[ResolvableDict] = None
+    AccelerateConfiguration: Optional[ResolvableGeneric] = None
     AccessControl: Optional[ResolvableStr] = None
-    AnalyticsConfigurations: Optional[Resolvable[List[ResolvableDict]]] = None
-    BucketEncryption: Optional[ResolvableDict] = None
+    AnalyticsConfigurations: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    BucketEncryption: Optional[ResolvableGeneric] = None
     BucketName: Optional[ResolvableStr] = None
-    CorsConfiguration: Optional[ResolvableDict] = None
-    IntelligentTieringConfigurations: Optional[Resolvable[List[ResolvableDict]]] = None
-    InventoryConfigurations: Optional[Resolvable[List[ResolvableDict]]] = None
-    LifecycleConfiguration: Optional[ResolvableDict] = None
-    LoggingConfiguration: Optional[ResolvableDict] = None
-    MetricsConfigurations: Optional[Resolvable[List[ResolvableDict]]] = None
-    NotificationConfiguration: Optional[ResolvableDict] = None
-    ObjectLockConfiguration: Optional[ResolvableDict] = None
+    CorsConfiguration: Optional[ResolvableGeneric] = None
+    IntelligentTieringConfigurations: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    InventoryConfigurations: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    LifecycleConfiguration: Optional[ResolvableGeneric] = None
+    LoggingConfiguration: Optional[ResolvableGeneric] = None
+    MetricsConfigurations: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    NotificationConfiguration: Optional[ResolvableGeneric] = None
+    ObjectLockConfiguration: Optional[ResolvableGeneric] = None
     ObjectLockEnabled: Optional[ResolvableBool] = None
-    OwnershipControls: Optional[ResolvableDict] = None
-    PublicAccessBlockConfiguration: Optional[ResolvableDict] = None
-    ReplicationConfiguration: Optional[ResolvableDict] = None
+    OwnershipControls: Optional[ResolvableGeneric] = None
+    PublicAccessBlockConfiguration: Optional[ResolvableGeneric] = None
+    ReplicationConfiguration: Optional[ResolvableGeneric] = None
     Tags: Optional[Resolvable[List[Tag]]] = None
-    VersioningConfiguration: Optional[ResolvableDict] = None
-    WebsiteConfiguration: Optional[ResolvableDict] = None
+    VersioningConfiguration: Optional[ResolvableGeneric] = None
+    WebsiteConfiguration: Optional[ResolvableGeneric] = None
 
 
 class S3Bucket(Resource):

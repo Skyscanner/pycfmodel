@@ -87,50 +87,79 @@ def test_valid_es_domain_from_aws_documentation_examples_resource_can_be_built(
     assert valid_es_domain_from_aws_documentation_examples.Type == "AWS::Elasticsearch::Domain"
     assert valid_es_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Effect == "Allow"
     assert valid_es_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Action == "es:*"
-    assert valid_es_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Principal == {
-        "AWS": "arn:aws:iam::123456789012:user/es-user"
-    }
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Principal.AWS
+        == "arn:aws:iam::123456789012:user/es-user"
+    )
     assert (
         valid_es_domain_from_aws_documentation_examples.Properties.AccessPolicies.Statement[0].Resource
         == "arn:aws:es:us-east-1:123456789012:domain/test/*"
     )
-    assert valid_es_domain_from_aws_documentation_examples.Properties.AdvancedOptions == {
-        "rest.action.multi.allow_explicit_index": True
-    }
+
+    assert (
+        getattr(
+            valid_es_domain_from_aws_documentation_examples.Properties.AdvancedOptions,
+            "rest.action.multi.allow_explicit_index",
+        )
+        is True
+    )
+
     assert valid_es_domain_from_aws_documentation_examples.Properties.AdvancedSecurityOptions is None
     assert valid_es_domain_from_aws_documentation_examples.Properties.CognitoOptions is None
     assert valid_es_domain_from_aws_documentation_examples.Properties.DomainEndpointOptions is None
     assert valid_es_domain_from_aws_documentation_examples.Properties.DomainName == "test"
-    assert valid_es_domain_from_aws_documentation_examples.Properties.EBSOptions == {
-        "EBSEnabled": True,
-        "Iops": "0",
-        "VolumeSize": "20",
-        "VolumeType": "gp2",
-    }
-    assert valid_es_domain_from_aws_documentation_examples.Properties.ElasticsearchClusterConfig == {
-        "DedicatedMasterEnabled": True,
-        "InstanceCount": "2",
-        "ZoneAwarenessEnabled": True,
-        "InstanceType": "m3.medium.elasticsearch",
-        "DedicatedMasterType": "m3.medium.elasticsearch",
-        "DedicatedMasterCount": "3",
-    }
+    assert valid_es_domain_from_aws_documentation_examples.Properties.EBSOptions.EBSEnabled is True
+    assert valid_es_domain_from_aws_documentation_examples.Properties.EBSOptions.Iops == 0
+    assert valid_es_domain_from_aws_documentation_examples.Properties.EBSOptions.VolumeSize == 20
+    assert valid_es_domain_from_aws_documentation_examples.Properties.EBSOptions.VolumeType == "gp2"
+
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.ElasticsearchClusterConfig.DedicatedMasterEnabled
+        is True
+    )
+    assert valid_es_domain_from_aws_documentation_examples.Properties.ElasticsearchClusterConfig.InstanceCount == 2
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.ElasticsearchClusterConfig.ZoneAwarenessEnabled
+        is True
+    )
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.ElasticsearchClusterConfig.InstanceType
+        == "m3.medium.elasticsearch"
+    )
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.ElasticsearchClusterConfig.DedicatedMasterType
+        == "m3.medium.elasticsearch"
+    )
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.ElasticsearchClusterConfig.DedicatedMasterCount == 3
+    )
+
     assert valid_es_domain_from_aws_documentation_examples.Properties.ElasticsearchVersion == "7.10"
     assert valid_es_domain_from_aws_documentation_examples.Properties.EncryptionAtRestOptions is None
-    assert valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions == {
-        "ES_APPLICATION_LOGS": {
-            "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-application-logs",
-            "Enabled": True,
-        },
-        "SEARCH_SLOW_LOGS": {
-            "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-slow-logs",
-            "Enabled": True,
-        },
-        "INDEX_SLOW_LOGS": {
-            "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-index-slow-logs",
-            "Enabled": True,
-        },
-    }
+
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.ES_APPLICATION_LOGS.CloudWatchLogsLogGroupArn
+        == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-application-logs"
+    )
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.ES_APPLICATION_LOGS.Enabled
+        is True
+    )
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.SEARCH_SLOW_LOGS.CloudWatchLogsLogGroupArn
+        == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-slow-logs"
+    )
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.SEARCH_SLOW_LOGS.Enabled is True
+    )
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.INDEX_SLOW_LOGS.CloudWatchLogsLogGroupArn
+        == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-index-slow-logs"
+    )
+    assert (
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.INDEX_SLOW_LOGS.Enabled is True
+    )
+
     assert valid_es_domain_from_aws_documentation_examples.Properties.NodeToNodeEncryptionOptions is None
     assert valid_es_domain_from_aws_documentation_examples.Properties.SnapshotOptions is None
     assert valid_es_domain_from_aws_documentation_examples.Properties.Tags is None

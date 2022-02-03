@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.14.0 - [2022-02-03]
+### Additions
+- Added `Principal` property.
+- Modified `Statement` property to work with `Principal` property
+- Added `Generic` property. Any property under this class will be cast to an existing model of `pycfmodel` if possible.
+- Modified `GenericResource`, `ESDomainProperties`, `OpenSearchDomainProperties` and `S3BucketProperties` to work with `Generic` property
+- Update `CLOUDFORMATION_ACTIONS`
+
 ## 0.13.0 - [2022-01-14]
 ### Additions
 - Added `ESDomain` resource.

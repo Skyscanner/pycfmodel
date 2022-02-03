@@ -2,6 +2,7 @@ from datetime import date, datetime
 from ipaddress import IPv4Network, IPv6Network, _BaseNetwork
 from typing import Any, Dict, Generator, List, TypeVar, Union
 
+from pydantic import StrictBool
 from pydantic.networks import NetworkType
 from pydantic.typing import AnyCallable
 
@@ -47,8 +48,7 @@ ResolvableCondition = ResolvableStr
 ResolvableInt = Resolvable[int]
 ResolvableDate = Resolvable[date]
 ResolvableDatetime = Resolvable[datetime]
-ResolvableBool = Resolvable[bool]
-ResolvableDict = Resolvable[dict]
+ResolvableBool = Resolvable[StrictBool]
 
 ResolvableIPv4Network = Resolvable[LooseIPv4Network]
 ResolvableIPv6Network = Resolvable[LooseIPv6Network]
@@ -61,6 +61,6 @@ ResolvableArnOrList = InstanceOrListOf[ResolvableArn]
 ResolvableIntOrList = InstanceOrListOf[ResolvableInt]
 ResolvableIPOrList = InstanceOrListOf[Union[ResolvableIPv4Network, ResolvableIPv6Network]]
 ResolvableBoolOrList = InstanceOrListOf[ResolvableBool]
-ResolvableDictOrList = InstanceOrListOf[ResolvableDict]
 ResolvableBytesOrList = InstanceOrListOf[bytes]
+ResolvableDateOrList = InstanceOrListOf[ResolvableDate]
 ResolvableDatetimeOrList = InstanceOrListOf[ResolvableDatetime]
