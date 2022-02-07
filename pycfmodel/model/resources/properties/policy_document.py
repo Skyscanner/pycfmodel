@@ -24,7 +24,7 @@ class PolicyDocument(Property):
     Statement: Resolvable[Union[Statement, List[Resolvable[Statement]]]]
     Version: Optional[ResolvableDate] = None
 
-    def _statement_as_list(self) -> List[Statement]:
+    def statement_as_list(self) -> List[Statement]:
         if isinstance(self.Statement, Statement):
             return [self.Statement]
         return self.Statement
@@ -39,7 +39,7 @@ class PolicyDocument(Property):
         Returns:
             List of [statements][pycfmodel.model.resources.properties.statement.Statement].
         """
-        return [statement for statement in self._statement_as_list() if statement.resources_with(pattern)]
+        return [statement for statement in self.statement_as_list() if statement.resources_with(pattern)]
 
     def allowed_actions_with(self, pattern: Pattern) -> List[Statement]:
         """
@@ -53,7 +53,7 @@ class PolicyDocument(Property):
         """
         return [
             statement
-            for statement in self._statement_as_list()
+            for statement in self.statement_as_list()
             if statement.actions_with(pattern) and statement.Effect == "Allow"
         ]
 
@@ -68,7 +68,7 @@ class PolicyDocument(Property):
             List of principals.
         """
         principals = set()
-        for statement in self._statement_as_list():
+        for statement in self.statement_as_list():
             if statement.Effect == "Allow":
                 principals.update(statement.principals_with(pattern))
         return list(principals)
@@ -84,7 +84,7 @@ class PolicyDocument(Property):
             List of principals.
         """
         principals = set()
-        for statement in self._statement_as_list():
+        for statement in self.statement_as_list():
             if statement.Effect == "Allow":
                 principals.update(statement.non_whitelisted_principals(whitelist))
         return list(principals)
@@ -101,7 +101,7 @@ class PolicyDocument(Property):
             List of matching actions.
         """
         actions = set()
-        for statement in self._statement_as_list():
+        for statement in self.statement_as_list():
             for action in statement.get_expanded_action_list():
                 if action.startswith("iam:"):
                     actions.add(action)
@@ -123,7 +123,7 @@ class PolicyDocument(Property):
             List of matching actions.
         """
         actions = set()
-        for statement in self._statement_as_list():
+        for statement in self.statement_as_list():
             if statement.Effect.lower() == "allow":
                 actions.update(statement.get_expanded_action_list())
         return sorted(actions)

@@ -4,6 +4,7 @@ from pydantic import validator
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.parameter import Parameter
+from pycfmodel.model.resources.properties.statement_condition import StatementCondition
 from pycfmodel.model.types import ResolvableCondition, ResolvableStr, ResolvableStrOrList
 from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
@@ -44,3 +45,13 @@ class Resource(CustomModel):
     @property
     def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
         return []
+
+    @property
+    def all_statement_conditions(self) -> List[StatementCondition]:
+        conditions = []
+        for pd in self.policy_documents:
+            pd_statements = pd.policy_document.statement_as_list()
+            for statement in pd_statements:
+                if statement.Condition:
+                    conditions.append(statement.Condition)
+        return conditions

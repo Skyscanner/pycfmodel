@@ -11,12 +11,21 @@ def test_generic_resource():
                     "Version": "2012-10-17",
                     "Statement": [
                         {
-                            "Sid": "ReplicationAccessCrossAccount",
+                            "Sid": "ReplicationAccessCrossAccount1",
                             "Effect": "Allow",
                             "Principal": {"AWS": "arn:aws:iam::210987654321:root"},
                             "Action": ["ecr:CreateRepository", "ecr:ReplicateImage"],
+                            "Condition": {"StringEquals": {"aws:username": "jamesbond"}},
                             "Resource": "arn:aws:ecr:us-west-2:123456789012:repository/*",
-                        }
+                        },
+                        {
+                            "Sid": "DeleteAccessCrossAccount2",
+                            "Effect": "Allow",
+                            "Principal": {"AWS": "arn:aws:iam::111222333444:root"},
+                            "Action": ["ecr:DeleteRepository"],
+                            "Condition": {"IpAddress": {"aws:SourceIp": "203.0.113.0/24"}},
+                            "Resource": "arn:aws:ecr:us-west-2:123456789012:repository/*",
+                        },
                     ],
                 }
             },
