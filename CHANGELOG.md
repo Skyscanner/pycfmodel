@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.14.1 - [2022-02-09]
+### Additions
+- Added `all_statement_conditions` property to `Resource`. This enables a list of all IAM Conditions defined in a Resource to be captured and used.
+- Update `CLOUDFORMATION_ACTIONS`
+
 ## 0.14.0 - [2022-02-03]
 ### Additions
 - Added `Principal` property.
