@@ -37,7 +37,7 @@ def test_loose_ip_v6_network_type():
     [
         ("192.168.0.0/24"),
         ("192.168.128.0/30"),
-        (2**32 - 1),  # no mask equals to mask /32
+        (2 ** 32 - 1),  # no mask equals to mask /32
         (b"\xff\xff\xff\xff"),  # /32
         (("192.168.0.0", 24)),
         (IPv4Network("192.168.0.0/24")),
@@ -119,7 +119,7 @@ def test_loose_ip_v6_is_not_strict(value):
             ],
         ),
         (
-            2**128 + 1,
+            2 ** 128 + 1,
             [
                 {
                     "loc": ("ip",),
@@ -171,7 +171,7 @@ def test_loose_ip_v4_network_fails(value, errors):
             ],
         ),
         (
-            2**128 + 1,
+            2 ** 128 + 1,
             [
                 {
                     "loc": ("ip",),
