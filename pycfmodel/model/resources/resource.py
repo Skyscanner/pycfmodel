@@ -47,7 +47,7 @@ class Resource(CustomModel):
     def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
         """
         Returns a list with all the optionally named policy documents in this resource within its properties.
-        Every resource has a Properties field, if not, it's a bad formed CloudFormation template.
+        Every resource has a Properties field, if not, it's a malformed CloudFormation template.
         """
         policy_documents = []
         self.obtain_policy_documents(
