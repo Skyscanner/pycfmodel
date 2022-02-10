@@ -313,6 +313,48 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
             ],
             2,
         ),
+        (
+            {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "Test resolving a nonexistent resource to Resource class",
+                "Resources": {
+                    "NonexistentResource": {
+                        "Type": "AWS::Non::Existent",
+                        "Properties": {
+                            "Policies": [
+                                {
+                                    "PolicyName": "BadPolicy",
+                                    "PolicyDocument": {
+                                        "Statement": [
+                                            {
+                                                "Effect": "Allow",
+                                                "Action": ["service:GetService"],
+                                                "Resource": "*",
+                                            }
+                                        ],
+                                    },
+                                }
+                            ],
+                        },
+                    }
+                },
+            },
+            [
+                OptionallyNamedPolicyDocument(
+                    policy_document=PolicyDocument(
+                        Statement=[
+                            Statement(
+                                Effect="Allow",
+                                Action=["service:GetService"],
+                                Resource="*",
+                            )
+                        ]
+                    ),
+                    name=None,
+                ),
+            ],
+            1,
+        ),
     ],
 )
 def test_given_a_template_with_a_resource_it_should_return_its_policy_documents(

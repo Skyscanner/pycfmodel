@@ -5,6 +5,7 @@ from pydantic import validator
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.generic import Generic
 from pycfmodel.model.parameter import Parameter
+from pycfmodel.model.resources.properties.policy import Policy
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.types import ResolvableCondition, ResolvableStr, ResolvableStrOrList
 from pycfmodel.model.utils import OptionallyNamedPolicyDocument
@@ -62,6 +63,10 @@ class Resource(CustomModel):
         for property_type in properties:
             if isinstance(property_type, PolicyDocument):
                 policy_documents.append(OptionallyNamedPolicyDocument(policy_document=property_type, name=None))
+            elif isinstance(property_type, Policy):
+                policy_documents.append(
+                    OptionallyNamedPolicyDocument(policy_document=property_type.PolicyDocument, name=None)
+                )
             elif isinstance(property_type, OptionallyNamedPolicyDocument):
                 policy_documents.append(property_type)
             elif isinstance(property_type, list):
