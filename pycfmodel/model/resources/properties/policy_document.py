@@ -24,6 +24,9 @@ class PolicyDocument(Property):
     Statement: Resolvable[Union[Statement, List[Resolvable[Statement]]]]
     Version: Optional[ResolvableDate] = None
 
+    def statement_as_list(self) -> List[Statement]:
+        return self._statement_as_list()
+
     def _statement_as_list(self) -> List[Statement]:
         if isinstance(self.Statement, Statement):
             return [self.Statement]
