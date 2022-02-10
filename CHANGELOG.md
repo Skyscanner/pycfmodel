@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.15.0 - [2022-02-10]
+### Additions
+- `Resource` class is able to run `policy_documents` when it's not a mapped resource and return a valid list of `OptionallyNamedPolicyDocument`.
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.14.0 - [2022-02-03]
 ### Additions
 - Added `Principal` property.

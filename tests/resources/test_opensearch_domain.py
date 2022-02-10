@@ -2,6 +2,9 @@ import pytest
 from pydantic import ValidationError
 
 from pycfmodel.model.resources.opensearch_domain import OpenSearchDomain
+from pycfmodel.model.resources.properties.policy_document import PolicyDocument
+from pycfmodel.model.resources.properties.statement import Principal, Statement
+from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 @pytest.fixture()
@@ -59,6 +62,27 @@ def valid_opensearch_domain_from_aws_documentation_examples():
                         "CloudWatchLogsLogGroupArn": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearch/domains/opensearch-index-slow-logs",
                         "Enabled": True,
                     },
+                },
+            },
+        }
+    )
+
+
+@pytest.fixture()
+def valid_opensearch_domain_with_access_policies():
+    return OpenSearchDomain(
+        **{
+            "Type": "AWS::OpenSearchService::Domain",
+            "Properties": {
+                "AccessPolicies": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {"AWS": "arn:aws:iam::123456789012:user/opensearch-user"},
+                            "Action": "es:*",
+                            "Resource": "arn:aws:es:us-east-1:123456789012:domain/test/*",
+                        }
+                    ],
                 },
             },
         }
@@ -198,4 +222,23 @@ def test_raise_error_if_invalid_fields_in_resource():
             "msg": "FunctionDict should only have 1 key and be a function",
             "type": "value_error",
         },
+    ]
+
+
+def test_can_obtain_policy_documents_from_inherited_method(valid_opensearch_domain_with_access_policies):
+    assert len(valid_opensearch_domain_with_access_policies.policy_documents) == 1
+    assert valid_opensearch_domain_with_access_policies.policy_documents == [
+        OptionallyNamedPolicyDocument(
+            policy_document=PolicyDocument(
+                Statement=[
+                    Statement(
+                        Effect="Allow",
+                        Action="es:*",
+                        Resource="arn:aws:es:us-east-1:123456789012:domain/test/*",
+                        Principal=Principal(AWS="arn:aws:iam::123456789012:user/opensearch-user"),
+                    )
+                ]
+            ),
+            name=None,
+        ),
     ]
