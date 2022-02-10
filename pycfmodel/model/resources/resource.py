@@ -55,7 +55,7 @@ class Resource(CustomModel):
         )
         return policy_documents
 
-    def obtain_policy_documents(self, policy_documents: List[OptionallyNamedPolicyDocument], properties: List[Any]):
+    def obtain_policy_documents(self, policy_documents: List, properties: List[Any]):
         """
         Obtains recursively all the optionally named policy documents within a given list of properties.
         """
