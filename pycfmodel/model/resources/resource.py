@@ -65,7 +65,9 @@ class Resource(CustomModel):
                 policy_documents.append(OptionallyNamedPolicyDocument(policy_document=property_type, name=None))
             elif isinstance(property_type, Policy):
                 policy_documents.append(
-                    OptionallyNamedPolicyDocument(policy_document=property_type.PolicyDocument, name=None)
+                    OptionallyNamedPolicyDocument(
+                        policy_document=property_type.PolicyDocument, name=property_type.PolicyName
+                    )
                 )
             elif isinstance(property_type, OptionallyNamedPolicyDocument):
                 policy_documents.append(property_type)

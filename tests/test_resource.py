@@ -323,7 +323,7 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                         "Properties": {
                             "Policies": [
                                 {
-                                    "PolicyName": "BadPolicy",
+                                    "PolicyName": "APolicyName",
                                     "PolicyDocument": {
                                         "Statement": [
                                             {
@@ -350,7 +350,7 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                             )
                         ]
                     ),
-                    name=None,
+                    name="APolicyName",
                 ),
             ],
             1,
