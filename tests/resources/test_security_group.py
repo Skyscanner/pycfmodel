@@ -22,5 +22,6 @@ def security_group():
 def test_security_group(security_group):
     assert security_group.Properties.GroupDescription == "some_group_desc"
     assert security_group.Properties.Tags[0].Value == "b"
+    assert security_group.all_statement_conditions == []
     assert not security_group.Properties.SecurityGroupIngress[0].ipv4_slash_zero()
     assert not security_group.Properties.SecurityGroupEgress[0].ipv4_slash_zero()

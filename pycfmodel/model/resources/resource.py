@@ -7,6 +7,7 @@ from pycfmodel.model.generic import Generic
 from pycfmodel.model.parameter import Parameter
 from pycfmodel.model.resources.properties.policy import Policy
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
+from pycfmodel.model.resources.properties.statement_condition import StatementCondition
 from pycfmodel.model.types import ResolvableCondition, ResolvableStr, ResolvableStrOrList
 from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
@@ -77,3 +78,13 @@ class Resource(CustomModel):
                 self.obtain_policy_documents(
                     policy_documents=policy_documents, properties=list(property_type.__dict__.values())
                 )
+
+    @property
+    def all_statement_conditions(self) -> List[StatementCondition]:
+        conditions = []
+        for pd in self.policy_documents:
+            pd_statements = pd.policy_document.statement_as_list()
+            for statement in pd_statements:
+                if statement.Condition:
+                    conditions.append(statement.Condition)
+        return conditions

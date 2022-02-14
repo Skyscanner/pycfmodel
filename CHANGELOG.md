@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.16.0 - [2022-02-11]
+### Additions
+- Added `all_statement_conditions` property to `Resource`. This enables a list of all IAM Conditions defined in a Resource to be captured and used.
+
 ## 0.15.0 - [2022-02-10]
 ### Additions
 - `Resource` class is able to run `policy_documents` when it's not a mapped resource and return a valid list of `OptionallyNamedPolicyDocument`.
