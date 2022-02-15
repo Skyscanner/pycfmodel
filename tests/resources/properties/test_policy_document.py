@@ -93,7 +93,87 @@ def policy_document_not_principal():
     )
 
 
+@fixture
+def policy_document_kms_key():
+    return PolicyDocument(
+        **{
+            "Version": "2012-10-17",
+            "Id": "key-consolepolicy-2",
+            "Statement": [
+                {
+                    "Sid": "Enable IAM policies",
+                    "Effect": "Allow",
+                    "Principal": {"AWS": "arn:aws:iam::111122223333:root"},
+                    "Action": "kms:*",
+                    "Resource": "*",
+                },
+                {
+                    "Sid": "Allow access for Key Administrators",
+                    "Effect": "Allow",
+                    "Principal": {
+                        "AWS": [
+                            "arn:aws:iam::111122223333:user/KMSAdminUser",
+                            "arn:aws:iam::111122223333:role/KMSAdminRole",
+                        ]
+                    },
+                    "Action": [
+                        "kms:Create*",
+                        "kms:Describe*",
+                        "kms:Enable*",
+                        "kms:List*",
+                        "kms:Put*",
+                        "kms:Update*",
+                        "kms:Revoke*",
+                        "kms:Disable*",
+                        "kms:Get*",
+                        "kms:Delete*",
+                        "kms:TagResource",
+                        "kms:UntagResource",
+                        "kms:ScheduleKeyDeletion",
+                        "kms:CancelKeyDeletion",
+                    ],
+                    "Resource": "*",
+                },
+                {
+                    "Sid": "Allow use of the key",
+                    "Effect": "Allow",
+                    "Principal": {
+                        "AWS": [
+                            "arn:aws:iam::111122223333:user/ExampleUser",
+                            "arn:aws:iam::111122223333:role/ExampleRole",
+                            "arn:aws:iam::444455556666:root",
+                        ]
+                    },
+                    "Action": [
+                        "kms:Encrypt",
+                        "kms:Decrypt",
+                        "kms:ReEncrypt*",
+                        "kms:GenerateDataKey*",
+                        "kms:DescribeKey",
+                    ],
+                    "Resource": "*",
+                },
+                {
+                    "Sid": "Allow attachment of persistent resources",
+                    "Effect": "Allow",
+                    "Principal": {
+                        "AWS": [
+                            "arn:aws:iam::111122223333:user/ExampleUser",
+                            "arn:aws:iam::111122223333:role/ExampleRole",
+                            "arn:aws:iam::444455556666:root",
+                        ]
+                    },
+                    "Action": ["kms:CreateGrant", "kms:ListGrants", "kms:RevokeGrant"],
+                    "Resource": "*",
+                    "Condition": {"Bool": {"kms:GrantIsForAWSResource": True}},
+                },
+            ],
+        }
+    )
+
+
 def test_one_statement(policy_document_one_statement):
+    assert policy_document_one_statement.Id is None
     assert policy_document_one_statement.Statement.Effect == "Allow"
 
 
@@ -265,3 +345,9 @@ def test_policy_document_condition_with_source_vpce(policy_document_condition_wi
     assert policy_document_condition_with_source_vpce.Statement[0].Condition.IpAddress == {
         "aws:SourceVpce": ["vpce-123456"]
     }
+
+
+def test_policy_document_kms_key(policy_document_kms_key: PolicyDocument):
+    assert policy_document_kms_key.Id == "key-consolepolicy-2"
+    assert len(policy_document_kms_key.Statement) == 4
+    assert policy_document_kms_key.Statement[3].Condition.Bool == {"kms:GrantIsForAWSResource": True}

@@ -5,7 +5,7 @@ from pydantic import Extra
 from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 from pycfmodel.model.resources.properties.property import Property
 from pycfmodel.model.resources.properties.statement import Statement
-from pycfmodel.model.types import Resolvable, ResolvableDate
+from pycfmodel.model.types import Resolvable, ResolvableDate, ResolvableStr
 
 
 class PolicyDocument(Property):
@@ -15,13 +15,15 @@ class PolicyDocument(Property):
     Properties:
 
     - Statement: A [statement][pycfmodel.model.resources.properties.statement.Statement] object.
-    - Version
+    - Id: An optional string to provide the policy document with an ID.
+    - Version: An optional date indiciating the version of the policy document being used.
     """
 
     class Config(Property.Config):
         extra = Extra.allow
 
     Statement: Resolvable[Union[Statement, List[Resolvable[Statement]]]]
+    Id: Optional[ResolvableStr] = None
     Version: Optional[ResolvableDate] = None
 
     def statement_as_list(self) -> List[Statement]:

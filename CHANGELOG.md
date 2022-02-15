@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.16.1 - [2022-02-16]
+### Fixes
+- AWS KMS Key policies can contain an `Id` field in a `PolicyDocument`. The model for `PolicyDocument` has been updated accordingly to support this.
+
 ## 0.16.0 - [2022-02-11]
 ### Additions
 - Added `all_statement_conditions` property to `Resource`. This enables a list of all IAM Conditions defined in a Resource to be captured and used.
