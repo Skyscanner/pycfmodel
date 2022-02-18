@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.16.2 - [2022-02-21]
+### Fixes
+- `resolve` was converting to string booleans, this is incompatible since 0.14.0 because bool were converted to StrictBooleans.
+
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.16.1 - [2022-02-16]
 ### Fixes
 - AWS KMS Key policies can contain an `Id` field in a `PolicyDocument`. The model for `PolicyDocument` has been updated accordingly to support this.
