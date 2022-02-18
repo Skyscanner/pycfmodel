@@ -32,7 +32,10 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
             return resolve_ssm(ssm_parameter_key, params)
         return function
 
-    if isinstance(function, (int, float, date, bool, IPv4Network, IPv6Network)):
+    if isinstance(function, bool):
+        return function
+
+    if isinstance(function, (int, float, date, IPv4Network, IPv6Network)):
         return str(function)
 
     if isinstance(function, list):
