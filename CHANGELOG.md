@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 0.16.2 - [2022-02-21]
+## 0.16.2 - [2022-02-16]
 ### Fixes
 - `resolve` was converting to string booleans, this is incompatible since 0.14.0 because bool were converted to StrictBooleans.
 
