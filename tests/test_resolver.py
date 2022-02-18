@@ -4,6 +4,7 @@ from typing import Dict, List
 import pytest
 
 from pycfmodel import parse
+from pycfmodel.model.resources.kms_key import KMSKey
 from pycfmodel.resolver import resolve
 
 
@@ -188,6 +189,10 @@ def test_not(function, expected_output):
         ({"Fn::Equals": ["1123456789", 1123456789]}, True),
         ({"Fn::Equals": ["2019-12-10", date(2019, 12, 10)]}, True),
         ({"Fn::Equals": ["0.3", 0.3]}, True),
+        ({"Fn::Equals": [True, True]}, True),
+        ({"Fn::Equals": [False, False]}, True),
+        ({"Fn::Equals": [False, True]}, False),
+        ({"Fn::Equals": [True, False]}, False),
     ],
 )
 def test_equals(function, expected_output):
@@ -566,3 +571,24 @@ def test_resolve_ssm():
         "Cluster": "UNDEFINED_PARAM_main-k8s-cluster-arn:3",
         "ServiceArn": "vpc-123-abc",
     }
+
+
+def test_resolve_booleans():
+    template = {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Resources": {
+            "KMSKey": {
+                "Type": "AWS::KMS::Key",
+                "Properties": {
+                    "Enabled": True,
+                    "EnableKeyRotation": True,
+                    "KeyPolicy": {
+                        "Version": "2012-10-17",
+                        "Statement": [],
+                    },
+                },
+            }
+        },
+    }
+    model = parse(template).resolve(extra_params={"some-service-arn:1": "vpc-123-abc"})
+    assert isinstance(model.Resources["KMSKey"], KMSKey)
