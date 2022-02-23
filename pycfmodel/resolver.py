@@ -1,6 +1,7 @@
 import logging
 from base64 import b64encode
 from datetime import date
+from distutils.util import strtobool
 from ipaddress import IPv4Network, IPv6Network
 from typing import Dict, List, Union
 
@@ -31,7 +32,7 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
             ssm_parameter_key = CONTAINS_SSM_PARAMETER.match(function).group(1)
             return resolve_ssm(ssm_parameter_key, params)
         if function.lower() in ["true", "false"]:
-            return bool(function)
+            return bool(strtobool(function))
         return function
 
     if isinstance(function, bool):
