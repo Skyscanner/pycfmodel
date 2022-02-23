@@ -193,6 +193,10 @@ def test_not(function, expected_output):
         ({"Fn::Equals": [False, False]}, True),
         ({"Fn::Equals": [False, True]}, False),
         ({"Fn::Equals": [True, False]}, False),
+        ({"Fn::Equals": ["true", True]}, True),
+        ({"Fn::Equals": ["false", False]}, True),
+        ({"Fn::Equals": ["true", False]}, False),
+        ({"Fn::Equals": ["false", True]}, False),
     ],
 )
 def test_equals(function, expected_output):
