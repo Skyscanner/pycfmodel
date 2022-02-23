@@ -30,6 +30,8 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
         if CONTAINS_SSM_PARAMETER.match(function):
             ssm_parameter_key = CONTAINS_SSM_PARAMETER.match(function).group(1)
             return resolve_ssm(ssm_parameter_key, params)
+        if function.lower() in ["true", "false"]:
+            return bool(function)
         return function
 
     if isinstance(function, bool):

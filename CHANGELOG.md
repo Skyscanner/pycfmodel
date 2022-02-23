@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.16.3 - [2022-02-23]
+### Fixes
+- `resolve` was converting possible string booleans as string instead of booleans.
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.16.2 - [2022-02-16]
 ### Fixes
 - `resolve` was converting to string booleans, this is incompatible since 0.14.0 because bool were converted to StrictBooleans.
