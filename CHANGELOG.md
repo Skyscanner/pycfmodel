@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.16.3 - [2022-02-23]
 ### Fixes
-- `resolve` was converting possible string booleans as string instead of booleans.
+- Some strings such as `"true"` or `"false"` are being resolved as `str` instead of `bool`, when they should be `bool`. It fails to resolve known models.
 ### Updates
 - Update `CLOUDFORMATION_ACTIONS`.
 
