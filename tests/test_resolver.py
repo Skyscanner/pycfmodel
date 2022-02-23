@@ -193,6 +193,10 @@ def test_not(function, expected_output):
         ({"Fn::Equals": [False, False]}, True),
         ({"Fn::Equals": [False, True]}, False),
         ({"Fn::Equals": [True, False]}, False),
+        ({"Fn::Equals": ["true", True]}, True),
+        ({"Fn::Equals": ["false", False]}, True),
+        ({"Fn::Equals": ["true", False]}, False),
+        ({"Fn::Equals": ["false", True]}, False),
     ],
 )
 def test_equals(function, expected_output):
@@ -590,5 +594,38 @@ def test_resolve_booleans():
             }
         },
     }
-    model = parse(template).resolve(extra_params={"some-service-arn:1": "vpc-123-abc"})
+    model = parse(template).resolve()
+    assert isinstance(model.Resources["KMSKey"], KMSKey)
+
+
+def test_resolve_booleans_on_conditions():
+    template = {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Resources": {
+            "KMSKey": {
+                "Type": "AWS::KMS::Key",
+                "Properties": {
+                    "Description": "a key with an statement with a bool condition in it",
+                    "Enabled": True,
+                    "EnableKeyRotation": True,
+                    "KeyPolicy": {
+                        "Version": "2012-10-17",
+                        "Id": "Key-Policy",
+                        "Statement": [
+                            {
+                                "Action": ["kms:CreateGrant", "kms:ListGrants", "kms:RevokeGrant"],
+                                "Effect": "Allow",
+                                "Sid": "Allow attachment of persistent resources",
+                                "Principal": {"AWS": "*"},
+                                "Resource": "*",
+                                "Condition": {"Bool": {"kms:GrantIsForAWSResource": "true"}},
+                            }
+                        ],
+                    },
+                },
+            }
+        },
+    }
+
+    model = parse(template).resolve()
     assert isinstance(model.Resources["KMSKey"], KMSKey)
