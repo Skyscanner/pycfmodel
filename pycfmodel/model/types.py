@@ -38,7 +38,7 @@ class LooseIPv6Network(_BaseNetwork):
 
 class SemiStrictBool(int):
     """
-    StrictBool to allow for bools which are not type-coerced.
+    SemiStrictBool to allow for bools which are not type-coerced.
     """
 
     @classmethod
@@ -60,7 +60,7 @@ class SemiStrictBool(int):
         if isinstance(value, str) and value.lower() in ("true", "false"):
             return value == "true"
 
-        raise ValueError("Patata")
+        raise ValueError("Value given is can't be validated as bool")
 
 
 T = TypeVar("T")
