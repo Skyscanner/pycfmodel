@@ -58,9 +58,9 @@ class SemiStrictBool(int):
             return value
 
         if isinstance(value, str) and value.lower() in ("true", "false"):
-            return value == "true"
+            return value.lower() == "true"
 
-        raise ValueError("Value given is can't be validated as bool")
+        raise ValueError("Value given can't be validated as bool")
 
 
 T = TypeVar("T")
