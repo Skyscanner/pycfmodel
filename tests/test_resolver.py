@@ -4,6 +4,7 @@ from typing import Dict, List
 import pytest
 
 from pycfmodel import parse
+from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.kms_key import KMSKey
 from pycfmodel.resolver import resolve
 
@@ -598,7 +599,7 @@ def test_resolve_booleans():
     assert isinstance(model.Resources["KMSKey"], KMSKey)
 
 
-def test_resolve_booleans_on_conditions():
+def test_resolve_booleans_on_conditions_for_modeled_resource():
     template = {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Resources": {
@@ -628,4 +629,42 @@ def test_resolve_booleans_on_conditions():
     }
 
     model = parse(template).resolve()
-    assert isinstance(model.Resources["KMSKey"], KMSKey)
+    resource = model.Resources["KMSKey"]
+    assert isinstance(resource, KMSKey)
+    assert resource.Properties.Enabled is True
+    assert resource.Properties.EnableKeyRotation is True
+    assert resource.Properties.KeyPolicy.Statement[0].Condition.Bool["kms:GrantIsForAWSResource"] is True
+
+
+def test_resolve_booleans_different_properties_for_generic_resource():
+    template = {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Resources": {
+            "NotModeledResource": {
+                "Type": "AWS::Not::Modeled",
+                "Properties": {
+                    "PropertyOne": True,
+                    "PropertyTwo": "true",
+                    "Policy": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Action": ["kms:CreateGrant", "kms:ListGrants", "kms:RevokeGrant"],
+                                "Effect": "Allow",
+                                "Principal": {"AWS": "*"},
+                                "Resource": "*",
+                                "Condition": {"Bool": {"kms:GrantIsForAWSResource": "true"}},
+                            }
+                        ],
+                    },
+                },
+            }
+        },
+    }
+
+    model = parse(template).resolve()
+    resource = model.Resources["NotModeledResource"]
+    assert isinstance(resource, GenericResource)
+    assert resource.Properties.PropertyOne is True
+    assert resource.Properties.PropertyTwo is True
+    assert resource.Properties.Policy.Statement[0].Condition.Bool["kms:GrantIsForAWSResource"] is True
