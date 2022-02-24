@@ -7,7 +7,6 @@ from typing import Dict, List, Union
 from pydantic import BaseModel
 
 from pycfmodel.constants import AWS_NOVALUE, CONTAINS_CF_PARAM, CONTAINS_SSM_PARAMETER
-from pycfmodel.model.types import SemiStrictBool
 from pycfmodel.utils import is_resolvable_dict
 
 logger = logging.getLogger(__file__)
@@ -20,7 +19,7 @@ def _extended_bool(value) -> bool:
 
 
 class _BooleanModel(BaseModel):
-    bool_value: SemiStrictBool
+    bool_value: bool
 
 
 def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]):
