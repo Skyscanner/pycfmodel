@@ -649,6 +649,8 @@ def test_resolve_booleans_different_properties_for_generic_resource():
                 "Properties": {
                     "PropertyOne": True,
                     "PropertyTwo": "true",
+                    "PropertyThree": "TRUE",
+                    "PropertyFour": "True",
                     "Policy": {
                         "Version": "2012-10-17",
                         "Statement": [
@@ -671,4 +673,6 @@ def test_resolve_booleans_different_properties_for_generic_resource():
     assert isinstance(resource, GenericResource)
     assert resource.Properties.PropertyOne is True
     assert resource.Properties.PropertyTwo is True
+    assert resource.Properties.PropertyThree is True
+    assert resource.Properties.PropertyFour is True
     assert resource.Properties.Policy.Statement[0].Condition.Bool["kms:GrantIsForAWSResource"] is True
