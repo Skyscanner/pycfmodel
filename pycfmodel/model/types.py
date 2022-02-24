@@ -2,7 +2,6 @@ from datetime import date, datetime
 from ipaddress import IPv4Network, IPv6Network, _BaseNetwork
 from typing import Any, Dict, Generator, List, TypeVar, Union
 
-from pydantic import StrictBool
 from pydantic.networks import NetworkType
 from pydantic.typing import AnyCallable
 
@@ -37,6 +36,33 @@ class LooseIPv6Network(_BaseNetwork):
         return IPv6Network(value, False)
 
 
+class SemiStrictBool(int):
+    """
+    SemiStrictBool to allow for bools which are not type-coerced.
+    """
+
+    @classmethod
+    def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
+        field_schema.update(type="boolean")
+
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, value: Any) -> bool:
+        """
+        Ensure that we only allow bools.
+        """
+        if isinstance(value, bool):
+            return value
+
+        if isinstance(value, str) and value.lower() in ("true", "false"):
+            return value.lower() == "true"
+
+        raise ValueError("Value given can't be validated as bool")
+
+
 T = TypeVar("T")
 
 Resolvable = Union[T, FunctionDict]
@@ -48,7 +74,7 @@ ResolvableCondition = ResolvableStr
 ResolvableInt = Resolvable[int]
 ResolvableDate = Resolvable[date]
 ResolvableDatetime = Resolvable[datetime]
-ResolvableBool = Resolvable[StrictBool]
+ResolvableBool = Resolvable[SemiStrictBool]
 
 ResolvableIPv4Network = Resolvable[LooseIPv4Network]
 ResolvableIPv6Network = Resolvable[LooseIPv6Network]

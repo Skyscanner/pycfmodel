@@ -30,10 +30,12 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
         if CONTAINS_SSM_PARAMETER.match(function):
             ssm_parameter_key = CONTAINS_SSM_PARAMETER.match(function).group(1)
             return resolve_ssm(ssm_parameter_key, params)
+        if function.lower() in ["true", "false"]:
+            return function.lower()
         return function
 
     if isinstance(function, bool):
-        return function
+        return "true" if function else "false"
 
     if isinstance(function, (int, float, date, IPv4Network, IPv6Network)):
         return str(function)

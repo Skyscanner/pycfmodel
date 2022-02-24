@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.16.3 - [2022-02-24]
+### Fixes
+- Fix `resolve` for `bool`s that can be `str` such as `"true"` or `"false"` or similar, by making `ResolvableBool` to be resolvable to `SemiStrictBool`.
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.16.2 - [2022-02-16]
 ### Fixes
 - `resolve` was converting to string booleans, this is incompatible since 0.14.0 because bool were converted to StrictBooleans.
