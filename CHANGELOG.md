@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.16.4 - [2022-02-25]
+### Additions
+- Add `PropagateAtLaunch` to `Tag`.
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.16.3 - [2022-02-24]
 ### Fixes
 - Fix `resolve` for `bool`s that can be `str` such as `"true"` or `"false"` or similar, by making `ResolvableBool` to be resolvable to `SemiStrictBool`.
