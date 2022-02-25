@@ -24,6 +24,14 @@ def test_recursive():
         # Properties
         ({"Key": "test", "Value": "potatoe"}, Tag(Key="test", Value="potatoe")),
         ([{"Key": "test", "Value": "potatoe"}], [Tag(Key="test", Value="potatoe")]),
+        (
+            [{"Key": "test", "Value": "potatoe", "PropagateAtLaunch": True}],
+            [Tag(Key="test", Value="potatoe", PropagateAtLaunch=True)],
+        ),
+        (
+            [{"Key": "test", "Value": "potatoe", "PropagateAtLaunch": "true"}],
+            [Tag(Key="test", Value="potatoe", PropagateAtLaunch=True)],
+        ),
         # ResolvableBoolOrList
         (True, True),
         ([True], [True]),
