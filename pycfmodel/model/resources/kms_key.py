@@ -5,7 +5,6 @@ from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableStr
-from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 class KMSKeyProperties(CustomModel):
@@ -48,8 +47,3 @@ class KMSKey(Resource):
     TYPE_VALUE: ClassVar = "AWS::KMS::Key"
     Type: str = TYPE_VALUE
     Properties: Resolvable[KMSKeyProperties]
-
-    @property
-    def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
-        # Key policies are a bit different than most policies and would raise issues if treated equally
-        return []
