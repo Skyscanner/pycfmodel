@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.17.1 - [2022-03-02]
+### Updates
+- `all_statements_condition` property updated for `IAMRole` to include statements on `AssumeRolePolicyDocuments`
+
 ## 0.17.0 - [2022-03-02]
 ### Additions
 - `KMSKey` to use default `policy_documents` property instead of returning an empty list.
