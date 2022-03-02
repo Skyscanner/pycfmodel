@@ -1,6 +1,8 @@
 import pytest
 
 from pycfmodel.model.resources.kms_key import KMSKey
+from pycfmodel.model.resources.properties.policy_document import PolicyDocument
+from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 @pytest.fixture()
@@ -115,4 +117,50 @@ def test_actions(kms_key):
 
 
 def test_kms_policy_documents(kms_key):
-    assert kms_key.policy_documents == []
+    assert kms_key.policy_documents == [
+        OptionallyNamedPolicyDocument(
+            name=None,
+            policy_document=PolicyDocument(
+                **{
+                    "Version": "2012-10-17",
+                    "Id": "key-default-1",
+                    "Statement": [
+                        {
+                            "Sid": "Enable IAM User Permissions",
+                            "Effect": "Allow",
+                            "Principal": {"AWS": "arn:aws:iam::111122223333:root"},
+                            "Action": "kms:*",
+                            "Resource": "*",
+                        },
+                        {
+                            "Sid": "Allow administration of the key",
+                            "Effect": "Allow",
+                            "Principal": {"AWS": "arn:aws:iam::111122223333:role/Admin"},
+                            "Action": [
+                                "kms:Create*",
+                                "kms:Describe*",
+                                "kms:Enable*",
+                                "kms:List*",
+                                "kms:Put*",
+                                "kms:Update*",
+                                "kms:Revoke*",
+                                "kms:Disable*",
+                                "kms:Get*",
+                                "kms:Delete*",
+                                "kms:ScheduleKeyDeletion",
+                                "kms:CancelKeyDeletion",
+                            ],
+                            "Resource": "*",
+                        },
+                        {
+                            "Sid": "Allow use of the key",
+                            "Effect": "Allow",
+                            "Principal": {"AWS": "arn:aws:iam::111122223333:role/Developer"},
+                            "Action": ["kms:Sign", "kms:Verify", "kms:DescribeKey"],
+                            "Resource": "*",
+                        },
+                    ],
+                }
+            ),
+        )
+    ]
