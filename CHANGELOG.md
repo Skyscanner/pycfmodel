@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.17.1 - [2022-03-02]
+### Additions
+- Add `assume_role_statement_conditions` property for `IAMRole` to include statements on `AssumeRolePolicyDocuments`.
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.17.0 - [2022-03-02]
 ### Additions
 - `KMSKey` to use default `policy_documents` property instead of returning an empty list.

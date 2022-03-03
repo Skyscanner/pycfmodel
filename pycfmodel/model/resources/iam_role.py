@@ -3,6 +3,7 @@ from typing import ClassVar, List, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy import Policy
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
+from pycfmodel.model.resources.properties.statement_condition import StatementCondition
 from pycfmodel.model.resources.resource import OptionallyNamedPolicyDocument, Resource
 from pycfmodel.model.types import Resolvable, ResolvableIntOrStr, ResolvableStr
 
@@ -51,3 +52,11 @@ class IAMRole(Resource):
         for policy in policies:
             result.append(OptionallyNamedPolicyDocument(name=policy.PolicyName, policy_document=policy.PolicyDocument))
         return result
+
+    @property
+    def assume_role_statement_conditions(self) -> List[StatementCondition]:
+        return [
+            statement.Condition
+            for statement in self.Properties.AssumeRolePolicyDocument.statement_as_list()
+            if statement.Condition
+        ]
