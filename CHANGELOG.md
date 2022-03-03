@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file.
 - Add `PropagateAtLaunch` to `Tag`.
 ### Updates
 - Update `CLOUDFORMATION_ACTIONS`.
+- 
+## 0.17.0 - [2022-03-02]
+### Additions
+- `KMSKey` to use default `policy_documents` property instead of returning an empty list.
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
 
 ## 0.16.3 - [2022-02-24]
 ### Fixes
