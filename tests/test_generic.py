@@ -6,6 +6,7 @@ import pytest
 from pycfmodel.model.base import FunctionDict
 from pycfmodel.model.generic import Generic, _Auxiliar
 from pycfmodel.model.resources.properties.tag import Tag
+from pycfmodel.model.resources.properties.tag_property import TagProperty
 
 
 def test_recursive():
@@ -26,11 +27,11 @@ def test_recursive():
         ([{"Key": "test", "Value": "potatoe"}], [Tag(Key="test", Value="potatoe")]),
         (
             [{"Key": "test", "Value": "potatoe", "PropagateAtLaunch": True}],
-            [Tag(Key="test", Value="potatoe", PropagateAtLaunch=True)],
+            [TagProperty(Key="test", Value="potatoe", PropagateAtLaunch=True)],
         ),
         (
             [{"Key": "test", "Value": "potatoe", "PropagateAtLaunch": "true"}],
-            [Tag(Key="test", Value="potatoe", PropagateAtLaunch=True)],
+            [TagProperty(Key="test", Value="potatoe", PropagateAtLaunch=True)],
         ),
         # ResolvableBoolOrList
         (True, True),

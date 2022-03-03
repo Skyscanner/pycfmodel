@@ -1,7 +1,5 @@
-from typing import Optional
-
 from pycfmodel.model.resources.properties.property import Property
-from pycfmodel.model.types import ResolvableBool, ResolvableStr
+from pycfmodel.model.types import ResolvableStr
 
 
 class Tag(Property):
@@ -13,4 +11,3 @@ class Tag(Property):
 
     Key: ResolvableStr
     Value: ResolvableStr
-    PropagateAtLaunch: Optional[ResolvableBool]

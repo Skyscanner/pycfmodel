@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.17.1 - [2022-03-03]
 ### Additions
-- Add `PropagateAtLaunch` to `Tag`.
+- Create `TagProperty`, child class of `Tag`.
 ### Updates
 - Update `CLOUDFORMATION_ACTIONS`.
 
