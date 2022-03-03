@@ -2,8 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## 0.17.1 - [2022-03-02]
-### Updates
-- `all_statements_condition` property updated for `IAMRole` to include statements on `AssumeRolePolicyDocuments`.
+### Additions
+- Add `assume_role_statement_conditions` property for `IAMRole` to include statements on `AssumeRolePolicyDocuments`.
 - Update `CLOUDFORMATION_ACTIONS`.
 
 ## 0.17.0 - [2022-03-02]

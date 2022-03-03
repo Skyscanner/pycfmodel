@@ -54,10 +54,9 @@ class IAMRole(Resource):
         return result
 
     @property
-    def all_statement_conditions(self) -> List[StatementCondition]:
-        assume_role_policy_document_conditions = [
+    def assume_role_statement_conditions(self) -> List[StatementCondition]:
+        return [
             statement.Condition
             for statement in self.Properties.AssumeRolePolicyDocument.statement_as_list()
             if statement.Condition
         ]
-        return super().all_statement_conditions + assume_role_policy_document_conditions

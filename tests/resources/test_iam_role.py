@@ -17,11 +17,9 @@ def iam_role():
                         "Principal": {"Service": ["ec2.amazonaws.com"], "AWS": "arn:aws:iam::111111111111:root"},
                         "Action": ["sts:AssumeRole"],
                         "Condition": {
-                            "StringEquals": {"iam:PassedToService": "ec2.amazonaws.com"},
                             "StringLike": {
                                 "iam:AssociatedResourceARN": [
-                                    "arn:aws:ec2:us-east-1:111122223333:instance/*",
-                                    "arn:aws:ec2:us-west-1:111122223333:instance/*",
+                                    "arn:aws:ec2:us-east-1:999999999999:instance/*",
                                 ]
                             },
                         },
@@ -62,7 +60,19 @@ def test_policies(iam_role):
 
 
 def test_all_conditions(iam_role):
-    assert len(iam_role.all_statement_conditions) == 2
+    assert iam_role.all_statement_conditions[0].StringEquals == {"iam:PassedToService": "ec2.amazonaws.com"}
+    assert iam_role.all_statement_conditions[0].StringLike == {
+        "iam:AssociatedResourceARN": [
+            "arn:aws:ec2:us-east-1:111122223333:instance/*",
+            "arn:aws:ec2:us-west-1:111122223333:instance/*",
+        ]
+    }
+
+    assert iam_role.assume_role_statement_conditions[0].StringLike == {
+        "iam:AssociatedResourceARN": [
+            "arn:aws:ec2:us-east-1:999999999999:instance/*",
+        ]
+    }
 
 
 def test_iamrole_policy_documents(iam_role):
