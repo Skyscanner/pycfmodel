@@ -31,9 +31,6 @@ class _Auxiliar(BaseModel):
         ResolvableStrOrList,
     ]
 
-    class Config(BaseModel.Config):
-        smart_union = True
-
     @classmethod
     def cast(cls, value):
         with suppress(ValidationError):
