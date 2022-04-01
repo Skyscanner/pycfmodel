@@ -27,6 +27,10 @@ def test_recursive():
         # ResolvableBoolOrList
         (True, True),
         ([True], [True]),
+        ("true", True),
+        (["true"], [True]),
+        ("True", True),
+        (["True"], [True]),
         # ResolvableIntOrList
         ("1", 1),
         (["1"], [1]),
