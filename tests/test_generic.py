@@ -31,6 +31,8 @@ def test_recursive():
         (["true"], [True]),
         ("True", True),
         (["True"], [True]),
+        ("TRUE", True),
+        (["TRUE"], [True]),
         # ResolvableIntOrList
         ("1", 1),
         (["1"], [1]),
