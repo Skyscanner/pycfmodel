@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.18.0 - [2022-04-01]
+### Fixes
+- Removes `smart_union` flag from Generic. See https://github.com/Skyscanner/pycfmodel/pull/95
+
 ## 0.17.1 - [2022-03-02]
 ### Additions
 - Add `assume_role_statement_conditions` property for `IAMRole` to include statements on `AssumeRolePolicyDocuments`.
