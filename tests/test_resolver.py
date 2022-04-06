@@ -676,3 +676,20 @@ def test_resolve_booleans_different_properties_for_generic_resource():
     assert resource.Properties.PropertyThree is True
     assert resource.Properties.PropertyFour is True
     assert resource.Properties.Policy.Statement[0].Condition.Bool["kms:GrantIsForAWSResource"] is True
+
+
+def test_resolve_template_with_a_valid_resource_without_properties():
+    template = {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Resources": {
+            "MySNSTopic": {
+                "Type": "AWS::SNS::Topic",
+            }
+        },
+    }
+
+    model = parse(template).resolve()
+    resource = model.Resources["MySNSTopic"]
+    assert isinstance(resource, GenericResource)
+    assert resource.Properties is None
+    assert resource.Type == "AWS::SNS::Topic"

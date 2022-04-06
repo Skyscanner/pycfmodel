@@ -38,3 +38,14 @@ def test_generic_resource():
         StatementCondition(StringEquals={"aws:username": "jamesbond"}),
         StatementCondition(IpAddress={"aws:SourceIp": "203.0.113.0/24"}),
     ]
+
+
+def test_parse_generic_resource_without_properties():
+    resource = GenericResource.parse_obj(
+        {
+            "Type": "AWS::SNS::Topic",
+        }
+    )
+    assert isinstance(resource, GenericResource)
+    assert resource.Properties is None
+    assert resource.Type == "AWS::SNS::Topic"
