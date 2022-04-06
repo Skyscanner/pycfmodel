@@ -1,5 +1,5 @@
 import logging
-from typing import ClassVar
+from typing import ClassVar, Optional
 
 from pydantic import Extra, validator
 
@@ -17,7 +17,7 @@ class GenericResource(Resource):
 
     ALLOW_EXISTING_TYPES: ClassVar[bool] = True
     Type: str
-    Properties: Generic
+    Properties: Optional[Generic] = None
 
     class Config(Resource.Config):
         extra = Extra.allow
