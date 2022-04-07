@@ -355,6 +355,19 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
             ],
             1,
         ),
+        (
+            {
+                "AWSTemplateFormatVersion": "2010-09-09",
+                "Description": "Test resolving a nonexistent resource without properties",
+                "Resources": {
+                    "NonexistentResource": {
+                        "Type": "AWS::Non::Existent",
+                    }
+                },
+            },
+            [],
+            0,
+        ),
     ],
 )
 def test_given_a_template_with_a_resource_it_should_return_its_policy_documents(
