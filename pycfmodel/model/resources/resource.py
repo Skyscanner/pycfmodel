@@ -52,6 +52,10 @@ class Resource(CustomModel):
         Every resource has a Properties field, if not, it's a malformed CloudFormation template.
         """
         policy_documents = []
+
+        if self.Properties is None:
+            return policy_documents
+
         self.obtain_policy_documents(
             policy_documents=policy_documents, properties=list(self.Properties.__dict__.values())
         )

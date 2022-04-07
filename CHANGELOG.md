@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.18.2
+### Fixes
+- Fix obtaining `policy_documents` for resources without properties. [#98](https://github.com/Skyscanner/pycfmodel/pull/96)
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.18.1
 ### Fixes
 - `Properties` can now be optional for Generic. See [PR #96](https://github.com/Skyscanner/pycfmodel/pull/96)
