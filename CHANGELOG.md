@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.18.2
 ### Fixes
-- Fix obtaining `policy_documents` for resources without properties.
+- Fix obtaining `policy_documents` for resources without properties. [#98](https://github.com/Skyscanner/pycfmodel/pull/96)
 ### Updates
 - Update `CLOUDFORMATION_ACTIONS`.
 
