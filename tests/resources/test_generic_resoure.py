@@ -41,11 +41,7 @@ def test_generic_resource():
 
 
 def test_parse_generic_resource_without_properties():
-    resource = GenericResource.parse_obj(
-        {
-            "Type": "AWS::SNS::Topic",
-        }
-    )
+    resource = GenericResource.parse_obj({"Type": "AWS::SNS::Topic"})
     assert isinstance(resource, GenericResource)
     assert resource.Properties is None
     assert resource.Type == "AWS::SNS::Topic"

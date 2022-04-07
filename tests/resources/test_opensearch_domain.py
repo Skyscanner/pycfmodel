@@ -9,12 +9,7 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 @pytest.fixture()
 def valid_empty_opensearch_domain():
-    return OpenSearchDomain(
-        **{
-            "Type": "AWS::OpenSearchService::Domain",
-            "Properties": {},
-        }
-    )
+    return OpenSearchDomain(**{"Type": "AWS::OpenSearchService::Domain", "Properties": {}})
 
 
 @pytest.fixture()
@@ -82,8 +77,8 @@ def valid_opensearch_domain_with_access_policies():
                             "Action": "es:*",
                             "Resource": "arn:aws:es:us-east-1:123456789012:domain/test/*",
                         }
-                    ],
-                },
+                    ]
+                }
             },
         }
     )
@@ -201,14 +196,7 @@ def test_valid_opensearch_domain_from_aws_documentation_examples_resource_can_be
 
 def test_raise_error_if_invalid_fields_in_resource():
     with pytest.raises(ValidationError) as exc_info:
-        OpenSearchDomain(
-            **{
-                "Type": "AWS::OpenSearchService::Domain",
-                "Properties": {
-                    "DomainName": [],
-                },
-            }
-        )
+        OpenSearchDomain(**{"Type": "AWS::OpenSearchService::Domain", "Properties": {"DomainName": []}})
 
     assert exc_info.value.errors() == [
         {"loc": ("Properties", "DomainName"), "msg": "str type expected", "type": "type_error.str"},
@@ -240,5 +228,5 @@ def test_can_obtain_policy_documents_from_inherited_method(valid_opensearch_doma
                 ]
             ),
             name=None,
-        ),
+        )
     ]

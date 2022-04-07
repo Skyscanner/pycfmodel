@@ -6,12 +6,7 @@ from pycfmodel.model.resources.es_domain import ESDomain
 
 @pytest.fixture()
 def valid_empty_es_domain():
-    return ESDomain(
-        **{
-            "Type": "AWS::Elasticsearch::Domain",
-            "Properties": {},
-        }
-    )
+    return ESDomain(**{"Type": "AWS::Elasticsearch::Domain", "Properties": {}})
 
 
 @pytest.fixture()
@@ -168,14 +163,7 @@ def test_valid_es_domain_from_aws_documentation_examples_resource_can_be_built(
 
 def test_raise_error_if_invalid_fields_in_resource():
     with pytest.raises(ValidationError) as exc_info:
-        ESDomain(
-            **{
-                "Type": "AWS::Elasticsearch::Domain",
-                "Properties": {
-                    "DomainName": [],
-                },
-            }
-        )
+        ESDomain(**{"Type": "AWS::Elasticsearch::Domain", "Properties": {"DomainName": []}})
 
     assert exc_info.value.errors() == [
         {"loc": ("Properties", "DomainName"), "msg": "str type expected", "type": "type_error.str"},

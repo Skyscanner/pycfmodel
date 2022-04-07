@@ -67,10 +67,7 @@ def test_loose_ip_v6_network_success(value):
     assert Model(ip=value).ip == IPv6Network(value)
 
 
-@pytest.mark.parametrize(
-    "value",
-    [("213.174.214.100/27"), ("192.168.56.101/16"), ("192.0.2.1/24")],
-)
+@pytest.mark.parametrize("value", [("213.174.214.100/27"), ("192.168.56.101/16"), ("192.0.2.1/24")])
 def test_loose_ip_v4_is_not_strict(value):
     class Model(BaseModel):
         ip: LooseIPv4Network = None
@@ -82,11 +79,7 @@ def test_loose_ip_v4_is_not_strict(value):
 
 @pytest.mark.parametrize(
     "value",
-    [
-        ("2012::1234:abcd:ffff:c0a8:101/64"),
-        ("2022::1234:abcd:ffff:c0a8:101/64"),
-        ("2032::1234:abcd:ffff:c0a8:101/64"),
-    ],
+    [("2012::1234:abcd:ffff:c0a8:101/64"), ("2022::1234:abcd:ffff:c0a8:101/64"), ("2032::1234:abcd:ffff:c0a8:101/64")],
 )
 def test_loose_ip_v6_is_not_strict(value):
     class Model(BaseModel):
