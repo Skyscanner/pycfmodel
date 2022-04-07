@@ -10,13 +10,14 @@ from pycfmodel.model.types import Resolvable, ResolvableDate, ResolvableStr
 
 class PolicyDocument(Property):
     """
-    Contains information about an attached policy.
+    Contains information about a Policy Document. More info:
+    https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies.html
 
     Properties:
 
     - Statement: A [statement][pycfmodel.model.resources.properties.statement.Statement] object.
     - Id: An optional string to provide the policy document with an ID.
-    - Version: An optional date indiciating the version of the policy document being used.
+    - Version: An optional date indicating the version of the policy document being used.
     """
 
     class Config(Property.Config):
