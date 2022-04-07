@@ -32,7 +32,7 @@ class _Auxiliar(BaseModel):
         ResolvableStrOrList,
     ]
 
-    @validator("*", pre=True)
+    @validator("aux", pre=True)
     def validate_string_property_formatted_as_json(cls, value):
         """
         We have detected some properties that are defined as String in CloudFormation but including a
