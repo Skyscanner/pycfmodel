@@ -3870,6 +3870,7 @@ CLOUDFORMATION_ACTIONS = [
     "ec2:ModifyInstanceCreditSpecification",
     "ec2:ModifyInstanceEventStartTime",
     "ec2:ModifyInstanceEventWindow",
+    "ec2:ModifyInstanceMaintenanceOptions",
     "ec2:ModifyInstanceMetadataOptions",
     "ec2:ModifyInstancePlacement",
     "ec2:ModifyIpam",
