@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.19.0
+### Improvements
+- Able to parse PolicyDocument that are implicit in string properties.
+
 ## 0.18.0 - [2022-04-01]
 ### Fixes
 - Removes `smart_union` flag from Generic. See [PR #95](https://github.com/Skyscanner/pycfmodel/pull/95)
