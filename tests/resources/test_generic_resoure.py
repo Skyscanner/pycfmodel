@@ -79,3 +79,14 @@ def test_generic_resource_with_bad_json_as_string_is_converted_to_a_string_prope
     assert isinstance(resource, GenericResource)
     assert isinstance(resource.Properties.PolicyDocument, str)
     assert isinstance(resource.Properties.PolicyName, str)
+
+
+def test_parse_generic_resource_without_properties():
+    resource = GenericResource.parse_obj(
+        {
+            "Type": "AWS::SNS::Topic",
+        }
+    )
+    assert isinstance(resource, GenericResource)
+    assert resource.Properties is None
+    assert resource.Type == "AWS::SNS::Topic"

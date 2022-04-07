@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 ### Improvements
 - Able to parse PolicyDocument that are implicit in string properties. [#97](https://github.com/Skyscanner/pycfmodel/pull/97)
 
+## 0.18.1
+### Fixes
+- `Properties` can now be optional for Generic. See [PR #96](https://github.com/Skyscanner/pycfmodel/pull/96)
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.18.0 - [2022-04-01]
 ### Fixes
 - Removes `smart_union` flag from Generic. See [PR #95](https://github.com/Skyscanner/pycfmodel/pull/95)
