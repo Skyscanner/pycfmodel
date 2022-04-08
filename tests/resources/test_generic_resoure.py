@@ -1,5 +1,6 @@
 from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
+from pycfmodel.model.resources.properties.statement import Principal, Statement
 from pycfmodel.model.resources.properties.statement_condition import StatementCondition
 
 
@@ -38,6 +39,46 @@ def test_generic_resource():
         StatementCondition(StringEquals={"aws:username": "jamesbond"}),
         StatementCondition(IpAddress={"aws:SourceIp": "203.0.113.0/24"}),
     ]
+
+
+def test_generic_resource_with_policy_document_in_a_string_property():
+    resource = GenericResource.parse_obj(
+        {
+            "Type": "AWS::Logs::ResourcePolicy",
+            "Properties": {
+                "PolicyName": "guardduty-resourcepolicy",
+                "PolicyDocument": '{"Version":"2008-10-17","Statement":[{"Sid":"GDAllowLogs","Effect":"Allow","Principal":{"Service":["events.amazonaws.com","delivery.logs.amazonaws.com"]},"Action":["logs:CreateLogStream"],"Resource":"*"}]}',
+            },
+        }
+    )
+    resource_policy_document = resource.Properties.PolicyDocument
+    assert isinstance(resource, GenericResource)
+    assert isinstance(resource_policy_document, PolicyDocument)
+    assert isinstance(resource.Properties.PolicyName, str)
+    assert resource_policy_document.Statement == [
+        Statement(
+            Sid="GDAllowLogs",
+            Effect="Allow",
+            Resource="*",
+            Action=["logs:CreateLogStream"],
+            Principal=Principal(Service=["events.amazonaws.com", "delivery.logs.amazonaws.com"]),
+        )
+    ]
+
+
+def test_generic_resource_with_bad_json_as_string_is_converted_to_a_string_property():
+    resource = GenericResource.parse_obj(
+        {
+            "Type": "AWS::Logs::ResourcePolicy",
+            "Properties": {
+                "PolicyName": "guardduty-resourcepolicy",
+                "PolicyDocument": '{"Ve:{}]}',
+            },
+        }
+    )
+    assert isinstance(resource, GenericResource)
+    assert isinstance(resource.Properties.PolicyDocument, str)
+    assert isinstance(resource.Properties.PolicyName, str)
 
 
 def test_parse_generic_resource_without_properties():

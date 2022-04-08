@@ -1,7 +1,8 @@
+import json
 from contextlib import suppress
 from typing import Union
 
-from pydantic import BaseModel, Extra, ValidationError, root_validator
+from pydantic import BaseModel, Extra, ValidationError, root_validator, validator
 
 from pycfmodel.model.base import FunctionDict
 from pycfmodel.model.resources.properties.types import Properties
@@ -30,6 +31,22 @@ class _Auxiliar(BaseModel):
         ResolvableArnOrList,
         ResolvableStrOrList,
     ]
+
+    @validator("aux", pre=True)
+    def validate_string_property_formatted_as_json(cls, value):
+        """
+        We have detected some properties that are defined as String in CloudFormation but including a
+        PolicyDocument in them, such as:
+        https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-resourcepolicy.html#cfn-logs-resourcepolicy-policydocument
+        For that, we try to parse them to a JSON to be evaluated then to a known property.
+        If we fail to parse it, it means the property is a String without a JSON in it, we return the property as it is.
+        """
+        if isinstance(value, str):
+            try:
+                return json.loads(value)
+            except Exception:
+                return value
+        return value
 
     @classmethod
     def cast(cls, value):
