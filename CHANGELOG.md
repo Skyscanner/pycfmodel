@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## 0.20.0
 ### Updates
 - Compatible with Python3.10 [#100](https://github.com/Skyscanner/pycfmodel/pull/100)
+- Update `CLOUDFORMATION_ACTIONS`.
 
 ## 0.19.0
 ### Improvements
