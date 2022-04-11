@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.19.1
+### Fixes
+- `Effect` on `Statement` is **required**.
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.19.0
 ### Improvements
 - Able to parse PolicyDocument that are implicit in string properties. [#97](https://github.com/Skyscanner/pycfmodel/pull/97)

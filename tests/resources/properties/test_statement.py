@@ -22,62 +22,68 @@ def statement_4():
 
 
 def statement_principal_1():
-    return Statement(**{"Principal": {"AWS": "arn:aws:iam::123456789012:root"}})
+    return Statement(**{"Effect": "Allow", "Principal": {"AWS": "arn:aws:iam::123456789012:root"}})
 
 
 def statement_principal_2():
     return Statement(
         **{
+            "Effect": "Allow",
             "Principal": {
                 "AWS": ["arn:aws:iam::AWS-account-ID:user/user-name-1", "arn:aws:iam::AWS-account-ID:user/UserName2"]
-            }
+            },
         }
     )
 
 
 def statement_principal_3():
-    return Statement(**{"Principal": {"Federated": "cognito-identity.amazonaws.com"}})
+    return Statement(**{"Effect": "Allow", "Principal": {"Federated": "cognito-identity.amazonaws.com"}})
 
 
 def statement_principal_4():
-    return Statement(**{"Principal": "arn:aws:iam::123456789012:root"})
+    return Statement(**{"Effect": "Allow", "Principal": "arn:aws:iam::123456789012:root"})
 
 
 def statement_principal_5():
     return Statement(
-        **{"Principal": ["arn:aws:iam::AWS-account-ID:user/user-name-1", "arn:aws:iam::AWS-account-ID:user/UserName2"]}
+        **{
+            "Effect": "Allow",
+            "Principal": ["arn:aws:iam::AWS-account-ID:user/user-name-1", "arn:aws:iam::AWS-account-ID:user/UserName2"],
+        }
     )
 
 
 def statement_not_principal_1():
-    return Statement(**{"NotPrincipal": {"AWS": "arn:aws:iam::123456789012:root"}})
+    return Statement(**{"Effect": "Allow", "NotPrincipal": {"AWS": "arn:aws:iam::123456789012:root"}})
 
 
 def statement_not_principal_2():
     return Statement(
         **{
+            "Effect": "Allow",
             "NotPrincipal": {
                 "AWS": ["arn:aws:iam::AWS-account-ID:user/user-name-1", "arn:aws:iam::AWS-account-ID:user/UserName2"]
-            }
+            },
         }
     )
 
 
 def statement_not_principal_3():
-    return Statement(**{"NotPrincipal": {"Federated": "cognito-identity.amazonaws.com"}})
+    return Statement(**{"Effect": "Allow", "NotPrincipal": {"Federated": "cognito-identity.amazonaws.com"}})
 
 
 def statement_not_principal_4():
-    return Statement(**{"NotPrincipal": "arn:aws:iam::123456789012:root"})
+    return Statement(**{"Effect": "Allow", "NotPrincipal": "arn:aws:iam::123456789012:root"})
 
 
 def statement_not_principal_5():
     return Statement(
         **{
+            "Effect": "Allow",
             "NotPrincipal": [
                 "arn:aws:iam::AWS-account-ID:user/user-name-1",
                 "arn:aws:iam::AWS-account-ID:user/UserName2",
-            ]
+            ],
         }
     )
 
@@ -85,6 +91,11 @@ def statement_not_principal_5():
 def test_capitalize_effect():
     statement = Statement(**{"Effect": "allOw", "Action": ["action1"], "NotAction": "action2", "Resource": ["arn"]})
     assert statement.Effect == "Allow"
+
+
+def test_statement_effect_raises_error_if_it_is_not_an_allowed_value():
+    with pytest.raises(ValueError):
+        Statement(**{"Effect": "another string"})
 
 
 @pytest.mark.parametrize(

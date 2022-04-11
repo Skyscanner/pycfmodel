@@ -25,7 +25,7 @@ PrincipalTypes = Union[ResolvableStrOrList, Principal]
 
 class Statement(Property):
     """
-    Contains information about an attached policy.
+    Contains information about an statement of a policy document.
 
     Properties:
 
@@ -43,7 +43,7 @@ class Statement(Property):
     """
 
     Sid: Optional[ResolvableStr] = None
-    Effect: Optional[ResolvableStr] = None
+    Effect: ResolvableStr
     Principal: Optional[PrincipalTypes] = None
     NotPrincipal: Optional[PrincipalTypes] = None
     Action: Optional[ResolvableStrOrList] = None
@@ -53,9 +53,10 @@ class Statement(Property):
     Condition: Optional[StatementCondition] = None
 
     @validator("Effect")
-    def capitalize_if_str(cls, v: ResolvableStr):
-        if isinstance(v, str):
-            return v.capitalize()
+    def allowed_values_for_effect_and_capitalized(cls, v: ResolvableStr):
+        v = v.capitalize()
+        if v not in ["Allow", "Deny"]:
+            raise ValueError("Effect on Statement must either be Allow or Deny")
         return v
 
     def get_action_list(self, include_action=True, include_not_action=True) -> List[ResolvableStr]:
