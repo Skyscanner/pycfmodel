@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.19.1
 ### Fixes
-- `Effect` on `Statement` is **required**.
+- `Effect` on `Statement` is **required**. [#101](https://github.com/Skyscanner/pycfmodel/pull/97)
 ### Updates
 - Update `CLOUDFORMATION_ACTIONS`.
 
