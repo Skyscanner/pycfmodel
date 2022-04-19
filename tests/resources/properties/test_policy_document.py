@@ -1,6 +1,7 @@
 import re
 from ipaddress import IPv4Network
 
+import pytest
 from pytest import fixture
 
 from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
@@ -34,7 +35,7 @@ def policy_document_multi_statement():
                     "Action": ["sts:AssumeRole"],
                 },
                 {
-                    "Effect": "bar",
+                    "Effect": "Allow",
                     "Principal": {"Service": ["ec2.amazonaws.com"], "AWS": "arn:aws:iam::324320755747:root"},
                     "Action": ["sts:AssumeRole"],
                 },
@@ -174,7 +175,7 @@ def test_one_statement(policy_document_one_statement):
 
 def test_multi_statements(policy_document_multi_statement):
     assert policy_document_multi_statement.Statement[0].Effect == "Allow"
-    assert policy_document_multi_statement.Statement[1].Effect == "Bar"
+    assert policy_document_multi_statement.Statement[1].Effect == "Allow"
 
 
 def test_star_resource(policy_document_star_resource):
@@ -328,6 +329,17 @@ def policy_document_condition_with_source_vpce():
             ]
         }
     )
+
+
+@pytest.mark.parametrize(
+    "statement_effect, is_allow",
+    [
+        ("Allow", True),
+        ("Deny", False),
+    ],
+)
+def test_policy_document_chan_check_if_the_statement_effect_is_allow_or_deny(statement_effect: str, is_allow: bool):
+    assert PolicyDocument._is_statement_effect_allow(statement_effect=statement_effect) == is_allow
 
 
 def test_policy_document_condition_with_source_ip(policy_document_condition_with_source_ip: PolicyDocument):

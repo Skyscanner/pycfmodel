@@ -35,6 +35,10 @@ class PolicyDocument(Property):
             return [self.Statement]
         return self.Statement
 
+    @staticmethod
+    def _is_statement_effect_allow(statement_effect: str) -> bool:
+        return statement_effect.lower() == "allow"
+
     def statements_with(self, pattern: Pattern) -> List[Statement]:
         """
         Finds all statements which have at least one resource with the pattern.
@@ -60,7 +64,7 @@ class PolicyDocument(Property):
         return [
             statement
             for statement in self._statement_as_list()
-            if statement.actions_with(pattern) and statement.Effect == "Allow"
+            if statement.actions_with(pattern) and self._is_statement_effect_allow(statement.Effect)
         ]
 
     def allowed_principals_with(self, pattern: Pattern) -> List[str]:
@@ -75,7 +79,7 @@ class PolicyDocument(Property):
         """
         principals = set()
         for statement in self._statement_as_list():
-            if statement.Effect == "Allow":
+            if self._is_statement_effect_allow(statement.Effect):
                 principals.update(statement.principals_with(pattern))
         return list(principals)
 
@@ -91,7 +95,7 @@ class PolicyDocument(Property):
         """
         principals = set()
         for statement in self._statement_as_list():
-            if statement.Effect == "Allow":
+            if self._is_statement_effect_allow(statement.Effect):
                 principals.update(statement.non_whitelisted_principals(whitelist))
         return list(principals)
 
@@ -130,6 +134,6 @@ class PolicyDocument(Property):
         """
         actions = set()
         for statement in self._statement_as_list():
-            if statement.Effect.lower() == "allow":
+            if self._is_statement_effect_allow(statement.Effect):
                 actions.update(statement.get_expanded_action_list())
         return sorted(actions)
