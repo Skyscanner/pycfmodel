@@ -54,9 +54,10 @@ class Statement(Property):
 
     @validator("Effect")
     def allowed_values_for_effect_and_capitalized(cls, v: ResolvableStr):
-        v = v.capitalize()
-        if v not in ["Allow", "Deny"]:
-            raise ValueError("Effect on Statement must either be Allow or Deny")
+        if isinstance(v, str):
+            v = v.capitalize()
+            if v not in ["Allow", "Deny"]:
+                raise ValueError("Effect on Statement must either be Allow or Deny")
         return v
 
     def get_action_list(self, include_action=True, include_not_action=True) -> List[ResolvableStr]:
