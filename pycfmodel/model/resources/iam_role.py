@@ -16,7 +16,7 @@ class IAMRoleProperties(CustomModel):
     - ManagedPolicyArns: List of ARNs of the IAM managed policies to attach.
     - MaxSessionDuration: Maximum session duration (in seconds).
     - Path: Path to the role.
-    - PermissionsBoundary: ARN of the policy used to set the permissions boundary.
+    - PermissionsBoundary: ARN of the policy used to set the permissions' boundary.
     - Policies: A list of [policy][pycfmodel.model.resources.properties.policy.Policy] objects.
     - RoleName: Name of the role.
 
@@ -52,6 +52,10 @@ class IAMRole(Resource):
         for policy in policies:
             result.append(OptionallyNamedPolicyDocument(name=policy.PolicyName, policy_document=policy.PolicyDocument))
         return result
+
+    @property
+    def assume_role_as_optionally_named_policy_document_list(self) -> List[OptionallyNamedPolicyDocument]:
+        return [OptionallyNamedPolicyDocument(name=None, policy_document=self.Properties.AssumeRolePolicyDocument)]
 
     @property
     def assume_role_statement_conditions(self) -> List[StatementCondition]:
