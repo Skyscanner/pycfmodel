@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.20.0
 ### Improvements
-- IAM Role is able to return its `AssumeRolePolicyDocument` as a list of `OptionallyNamedPolicyDocument`. []()
+- IAM Role is able to return its `AssumeRolePolicyDocument` as a list of `OptionallyNamedPolicyDocument`. [#102](https://github.com/Skyscanner/pycfmodel/pull/102)
 ### Updates
 - Update `CLOUDFORMATION_ACTIONS`.
 
