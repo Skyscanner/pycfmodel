@@ -11,7 +11,7 @@ from pycfmodel.model.resources.kms_key import KMSKey
 from pycfmodel.model.resources.opensearch_domain import OpenSearchDomain
 from pycfmodel.model.resources.s3_bucket import S3Bucket
 from pycfmodel.model.resources.s3_bucket_policy import S3BucketPolicy
-from pycfmodel.model.resources.security_group import SecurityGroup
+from pycfmodel.model.resources.security_group import SecurityGroup, RDSDBSecurityGroup
 from pycfmodel.model.resources.security_group_egress import SecurityGroupEgress
 from pycfmodel.model.resources.security_group_ingress import SecurityGroupIngress
 from pycfmodel.model.resources.sns_topic_policy import SNSTopicPolicy
@@ -27,6 +27,7 @@ ResourceModels = Union[
     IAMUser,
     KMSKey,
     OpenSearchDomain,
+    RDSDBSecurityGroup,
     S3Bucket,
     S3BucketPolicy,
     SecurityGroup,

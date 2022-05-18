@@ -56,3 +56,19 @@ class SecurityGroupIngressProp(Property):
         if not self.CidrIpv6:
             return False
         return self.CidrIpv6 == IPv6Network(IPV6_ZERO_VALUE)
+
+
+class DBSecurityGroupIngressProp(Property):
+    CIDRIP: Optional[ResolvableIPv4Network]
+    EC2SecurityGroupId: Optional[ResolvableStr]
+    EC2SecurityGroupName: Optional[ResolvableStr]
+    EC2SecurityGroupOwnerId: Optional[ResolvableStr]
+
+    def is_public(self) -> bool:
+        """Returns True if `CidrIp` is public otherwise False."""
+        if not self.CIDRIP and (self.EC2SecurityGroupName or self.EC2SecurityGroupId):
+            return False
+        elif not self.CIDRIP:
+            return True
+        # Remove after this is fixed https://bugs.python.org/issue38655
+        return self.CIDRIP == IPv4Network(IPV4_ZERO_VALUE) or self.CIDRIP.is_global
