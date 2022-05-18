@@ -85,6 +85,7 @@ def test_actions(kms_key):
         "kms:GenerateDataKeyPair",
         "kms:GenerateDataKeyPairWithoutPlaintext",
         "kms:GenerateDataKeyWithoutPlaintext",
+        "kms:GenerateMac",
         "kms:GenerateRandom",
         "kms:GetKeyPolicy",
         "kms:GetKeyRotationStatus",
@@ -113,6 +114,7 @@ def test_actions(kms_key):
         "kms:UpdateKeyDescription",
         "kms:UpdatePrimaryRegion",
         "kms:Verify",
+        "kms:VerifyMac",
     ] == kms_key.Properties.KeyPolicy.get_allowed_actions()
 
 
