@@ -71,7 +71,13 @@ def test_all_conditions(iam_role):
     }
 
 
-def test_iamrole_policy_documents(iam_role):
+def test_iam_role_policy_documents(iam_role):
     assert iam_role.policy_documents == [
         OptionallyNamedPolicyDocument(name="root", policy_document=iam_role.Properties.Policies[0].PolicyDocument)
+    ]
+
+
+def test_iam_role_assume_role_as_optionally_named_policy_document_list(iam_role):
+    assert iam_role.assume_role_as_optionally_named_policy_document_list == [
+        OptionallyNamedPolicyDocument(name=None, policy_document=iam_role.Properties.AssumeRolePolicyDocument)
     ]
