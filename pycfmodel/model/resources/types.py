@@ -28,6 +28,7 @@ ResourceModels = Union[
     KMSKey,
     OpenSearchDomain,
     RDSDBSecurityGroup,
+    RDSDBSecurityGroupIngress,
     S3Bucket,
     S3BucketPolicy,
     SecurityGroup,
