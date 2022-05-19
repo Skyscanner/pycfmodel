@@ -13,7 +13,7 @@ from pycfmodel.model.resources.s3_bucket import S3Bucket
 from pycfmodel.model.resources.s3_bucket_policy import S3BucketPolicy
 from pycfmodel.model.resources.security_group import RDSDBSecurityGroup, SecurityGroup
 from pycfmodel.model.resources.security_group_egress import SecurityGroupEgress
-from pycfmodel.model.resources.security_group_ingress import SecurityGroupIngress
+from pycfmodel.model.resources.security_group_ingress import RDSDBSecurityGroupIngress, SecurityGroupIngress
 from pycfmodel.model.resources.sns_topic_policy import SNSTopicPolicy
 from pycfmodel.model.resources.sqs_queue_policy import SQSQueuePolicy
 
