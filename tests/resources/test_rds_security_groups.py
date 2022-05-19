@@ -37,6 +37,9 @@ def test_rds_db_security_group_parsing():
 
 def test_rds_db_security_group_ingress_parsing():
     sg_ingress = RDSDBSecurityGroupIngress(
-        **{"Type": "AWS::RDS::DBSecurityGroupIngress", "Properties": {"CIDRIP": "10.0.0.0/8"}}
+        **{
+            "Type": "AWS::RDS::DBSecurityGroupIngress",
+            "Properties": {"DBSecurityGroupName": "test-sg", "CIDRIP": "10.0.0.0/8"},
+        }
     )
     assert isinstance(sg_ingress, RDSDBSecurityGroupIngress)

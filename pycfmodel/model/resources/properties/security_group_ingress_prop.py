@@ -72,3 +72,7 @@ class DBSecurityGroupIngressProp(Property):
             return True
         # Remove after this is fixed https://bugs.python.org/issue38655
         return self.CIDRIP == IPv4Network(IPV4_ZERO_VALUE) or self.CIDRIP.is_global
+
+
+class DBSecurityGroupIngressResourceProp(DBSecurityGroupIngressProp):
+    DBSecurityGroupName: ResolvableStr

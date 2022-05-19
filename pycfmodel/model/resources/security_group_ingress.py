@@ -1,7 +1,7 @@
 from typing import ClassVar, Optional
 
 from pycfmodel.model.resources.properties.security_group_ingress_prop import (
-    DBSecurityGroupIngressProp,
+    DBSecurityGroupIngressResourceProp,
     SecurityGroupIngressProp,
 )
 from pycfmodel.model.resources.resource import Resource
@@ -55,4 +55,4 @@ class SecurityGroupIngress(Resource):
 class RDSDBSecurityGroupIngress(Resource):
     TYPE_VALUE: ClassVar = "AWS::RDS::DBSecurityGroupIngress"
     Type: str = TYPE_VALUE
-    Properties: DBSecurityGroupIngressProp
+    Properties: DBSecurityGroupIngressResourceProp
