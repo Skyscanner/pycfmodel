@@ -18,10 +18,8 @@ def iam_role():
                         "Action": ["sts:AssumeRole"],
                         "Condition": {
                             "StringLike": {
-                                "iam:AssociatedResourceARN": [
-                                    "arn:aws:ec2:us-east-1:999999999999:instance/*",
-                                ]
-                            },
+                                "iam:AssociatedResourceARN": ["arn:aws:ec2:us-east-1:999999999999:instance/*"]
+                            }
                         },
                     },
                 },
@@ -69,9 +67,7 @@ def test_all_conditions(iam_role):
     }
 
     assert iam_role.assume_role_statement_conditions[0].StringLike == {
-        "iam:AssociatedResourceARN": [
-            "arn:aws:ec2:us-east-1:999999999999:instance/*",
-        ]
+        "iam:AssociatedResourceARN": ["arn:aws:ec2:us-east-1:999999999999:instance/*"]
     }
 
 

@@ -317,30 +317,10 @@ def test_template_conditions():
 @pytest.mark.parametrize(
     "conditions, expected",
     [
-        (
-            {
-                "testCondition": {"Fn::Equals": [True, False]},
-            },
-            [],
-        ),
-        (
-            {
-                "testCondition": {"Fn::Equals": [True, True]},
-            },
-            ["test_resource_id"],
-        ),
-        (
-            {
-                "whatever": {"Fn::Equals": [True, False]},
-            },
-            ["test_resource_id"],
-        ),
-        (
-            {
-                "whatever": {"Fn::Equals": [True, True]},
-            },
-            ["test_resource_id"],
-        ),
+        ({"testCondition": {"Fn::Equals": [True, False]}}, []),
+        ({"testCondition": {"Fn::Equals": [True, True]}}, ["test_resource_id"]),
+        ({"whatever": {"Fn::Equals": [True, False]}}, ["test_resource_id"]),
+        ({"whatever": {"Fn::Equals": [True, True]}}, ["test_resource_id"]),
     ],
 )
 def test_resolve_include_resource_when_condition_is_true_or_doesnt_exist(conditions: Dict, expected: List):
@@ -352,10 +332,7 @@ def test_resolve_include_resource_when_condition_is_true_or_doesnt_exist(conditi
                 "Type": "AWS::IAM::Role",
                 "Condition": "testCondition",
                 "Properties": {
-                    "AssumeRolePolicyDocument": {
-                        "Version": "2012-10-17",
-                        "Statement": [],
-                    },
+                    "AssumeRolePolicyDocument": {"Version": "2012-10-17", "Statement": []},
                     "Path": "/",
                     "Policies": [],
                 },
@@ -382,10 +359,7 @@ def test_resolve_include_resource_when_condition_is_not_present():
             "test_resource_id": {
                 "Type": "AWS::IAM::Role",
                 "Properties": {
-                    "AssumeRolePolicyDocument": {
-                        "Version": "2012-10-17",
-                        "Statement": [],
-                    },
+                    "AssumeRolePolicyDocument": {"Version": "2012-10-17", "Statement": []},
                     "Path": "/",
                     "Policies": [],
                 },
@@ -591,10 +565,7 @@ def test_resolve_booleans():
                 "Properties": {
                     "Enabled": True,
                     "EnableKeyRotation": True,
-                    "KeyPolicy": {
-                        "Version": "2012-10-17",
-                        "Statement": [],
-                    },
+                    "KeyPolicy": {"Version": "2012-10-17", "Statement": []},
                 },
             }
         },
@@ -679,14 +650,7 @@ def test_resolve_booleans_different_properties_for_generic_resource():
 
 
 def test_resolve_template_with_a_valid_resource_without_properties():
-    template = {
-        "AWSTemplateFormatVersion": "2010-09-09",
-        "Resources": {
-            "MySNSTopic": {
-                "Type": "AWS::SNS::Topic",
-            }
-        },
-    }
+    template = {"AWSTemplateFormatVersion": "2010-09-09", "Resources": {"MySNSTopic": {"Type": "AWS::SNS::Topic"}}}
 
     model = parse(template).resolve()
     resource = model.Resources["MySNSTopic"]

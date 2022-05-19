@@ -3,10 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## 0.20.0
 ### Additions
-- New `RDSDBSecurityGroup` and `RDSDBSecurityGroupIngress` resources
+- New `RDSDBSecurityGroup` and `RDSDBSecurityGroupIngress` resources [#103]
 ### Improvements
 - IAM Role is able to return its `AssumeRolePolicyDocument` as a list of `OptionallyNamedPolicyDocument`. [#102](https://github.com/Skyscanner/pycfmodel/pull/102)
 ### Updates
+- Compatible with Python3.10 [#100](https://github.com/Skyscanner/pycfmodel/pull/100)
 - Update `CLOUDFORMATION_ACTIONS`.
 
 ## 0.19.1

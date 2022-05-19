@@ -20,10 +20,7 @@ def valid_s3_bucket():
                             "Id": "MyRule1",
                             "Status": "Enabled",
                             "Prefix": "MyPrefix",
-                            "Destination": {
-                                "Bucket": "arn:aws:s3:::my-replication-bucket",
-                                "StorageClass": "STANDARD",
-                            },
+                            "Destination": {"Bucket": "arn:aws:s3:::my-replication-bucket", "StorageClass": "STANDARD"},
                         },
                         {
                             "Status": "Enabled",

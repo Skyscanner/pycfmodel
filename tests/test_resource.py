@@ -42,13 +42,7 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                         "Properties": {
                             "PropertyRandom": "One",
                             "PolicyDocument": {
-                                "Statement": [
-                                    {
-                                        "Effect": "Allow",
-                                        "Action": ["service:GetService"],
-                                        "Resource": "*",
-                                    }
-                                ],
+                                "Statement": [{"Effect": "Allow", "Action": ["service:GetService"], "Resource": "*"}]
                             },
                         },
                     }
@@ -57,13 +51,7 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
             [
                 OptionallyNamedPolicyDocument(
                     policy_document=PolicyDocument(
-                        Statement=[
-                            Statement(
-                                Effect="Allow",
-                                Action=["service:GetService"],
-                                Resource="*",
-                            )
-                        ]
+                        Statement=[Statement(Effect="Allow", Action=["service:GetService"], Resource="*")]
                     ),
                     name=None,
                 )
@@ -80,22 +68,10 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                         "Properties": {
                             "PropertyRandom": "One",
                             "PolicyDocumentOne": {
-                                "Statement": [
-                                    {
-                                        "Effect": "Allow",
-                                        "Action": ["service:GetService"],
-                                        "Resource": "*",
-                                    }
-                                ],
+                                "Statement": [{"Effect": "Allow", "Action": ["service:GetService"], "Resource": "*"}]
                             },
                             "PolicyDocumentTwo": {
-                                "Statement": [
-                                    {
-                                        "Effect": "Allow",
-                                        "Action": ["service:GetService"],
-                                        "Resource": "*",
-                                    }
-                                ],
+                                "Statement": [{"Effect": "Allow", "Action": ["service:GetService"], "Resource": "*"}]
                             },
                         },
                     }
@@ -104,25 +80,13 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
             [
                 OptionallyNamedPolicyDocument(
                     policy_document=PolicyDocument(
-                        Statement=[
-                            Statement(
-                                Effect="Allow",
-                                Action=["service:GetService"],
-                                Resource="*",
-                            )
-                        ]
+                        Statement=[Statement(Effect="Allow", Action=["service:GetService"], Resource="*")]
                     ),
                     name=None,
                 ),
                 OptionallyNamedPolicyDocument(
                     policy_document=PolicyDocument(
-                        Statement=[
-                            Statement(
-                                Effect="Allow",
-                                Action=["service:GetService"],
-                                Resource="*",
-                            )
-                        ]
+                        Statement=[Statement(Effect="Allow", Action=["service:GetService"], Resource="*")]
                     ),
                     name=None,
                 ),
@@ -139,24 +103,14 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                         "Properties": {
                             "PropertyRandom": "One",
                             "PolicyDocumentOne": {
-                                "Statement": [
-                                    {
-                                        "Effect": "Allow",
-                                        "Action": ["service:GetService"],
-                                        "Resource": "*",
-                                    }
-                                ],
+                                "Statement": [{"Effect": "Allow", "Action": ["service:GetService"], "Resource": "*"}]
                             },
                             "PropertyTwo": {
                                 "PolicyDocumentTwo": {
                                     "Statement": [
-                                        {
-                                            "Effect": "Allow",
-                                            "Action": ["service:GetService"],
-                                            "Resource": "*",
-                                        }
-                                    ],
-                                },
+                                        {"Effect": "Allow", "Action": ["service:GetService"], "Resource": "*"}
+                                    ]
+                                }
                             },
                         },
                     }
@@ -165,25 +119,13 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
             [
                 OptionallyNamedPolicyDocument(
                     policy_document=PolicyDocument(
-                        Statement=[
-                            Statement(
-                                Effect="Allow",
-                                Action=["service:GetService"],
-                                Resource="*",
-                            )
-                        ]
+                        Statement=[Statement(Effect="Allow", Action=["service:GetService"], Resource="*")]
                     ),
                     name=None,
                 ),
                 OptionallyNamedPolicyDocument(
                     policy_document=PolicyDocument(
-                        Statement=[
-                            Statement(
-                                Effect="Allow",
-                                Action=["service:GetService"],
-                                Resource="*",
-                            )
-                        ]
+                        Statement=[Statement(Effect="Allow", Action=["service:GetService"], Resource="*")]
                     ),
                     name=None,
                 ),
@@ -202,24 +144,16 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                             "PropertyOne": {
                                 "PolicyDocumentOne": {
                                     "Statement": [
-                                        {
-                                            "Effect": "Allow",
-                                            "Action": ["service:GetService"],
-                                            "Resource": "*",
-                                        }
-                                    ],
-                                },
+                                        {"Effect": "Allow", "Action": ["service:GetService"], "Resource": "*"}
+                                    ]
+                                }
                             },
                             "PropertyTwo": {
                                 "PolicyDocumentTwo": {
                                     "Statement": [
-                                        {
-                                            "Effect": "Allow",
-                                            "Action": ["service:GetService"],
-                                            "Resource": "*",
-                                        }
-                                    ],
-                                },
+                                        {"Effect": "Allow", "Action": ["service:GetService"], "Resource": "*"}
+                                    ]
+                                }
                             },
                         },
                     }
@@ -228,25 +162,13 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
             [
                 OptionallyNamedPolicyDocument(
                     policy_document=PolicyDocument(
-                        Statement=[
-                            Statement(
-                                Effect="Allow",
-                                Action=["service:GetService"],
-                                Resource="*",
-                            )
-                        ]
+                        Statement=[Statement(Effect="Allow", Action=["service:GetService"], Resource="*")]
                     ),
                     name=None,
                 ),
                 OptionallyNamedPolicyDocument(
                     policy_document=PolicyDocument(
-                        Statement=[
-                            Statement(
-                                Effect="Allow",
-                                Action=["service:GetService"],
-                                Resource="*",
-                            )
-                        ]
+                        Statement=[Statement(Effect="Allow", Action=["service:GetService"], Resource="*")]
                     ),
                     name=None,
                 ),
@@ -262,23 +184,11 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                         "Type": "AWS::Non::Existent",
                         "Properties": {
                             "PolicyDocumentTwo": [
+                                {"Statement": [{"Effect": "Allow", "Action": ["service:GetService"], "Resource": "*"}]},
                                 {
                                     "Statement": [
-                                        {
-                                            "Effect": "Allow",
-                                            "Action": ["service:GetService"],
-                                            "Resource": "*",
-                                        }
-                                    ],
-                                },
-                                {
-                                    "Statement": [
-                                        {
-                                            "Effect": "Allow",
-                                            "Action": ["service:GetServiceAnother"],
-                                            "Resource": "*",
-                                        }
-                                    ],
+                                        {"Effect": "Allow", "Action": ["service:GetServiceAnother"], "Resource": "*"}
+                                    ]
                                 },
                             ]
                         },
@@ -288,25 +198,13 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
             [
                 OptionallyNamedPolicyDocument(
                     policy_document=PolicyDocument(
-                        Statement=[
-                            Statement(
-                                Effect="Allow",
-                                Action=["service:GetService"],
-                                Resource="*",
-                            )
-                        ]
+                        Statement=[Statement(Effect="Allow", Action=["service:GetService"], Resource="*")]
                     ),
                     name=None,
                 ),
                 OptionallyNamedPolicyDocument(
                     policy_document=PolicyDocument(
-                        Statement=[
-                            Statement(
-                                Effect="Allow",
-                                Action=["service:GetServiceAnother"],
-                                Resource="*",
-                            )
-                        ]
+                        Statement=[Statement(Effect="Allow", Action=["service:GetServiceAnother"], Resource="*")]
                     ),
                     name=None,
                 ),
@@ -326,15 +224,11 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                                     "PolicyName": "APolicyName",
                                     "PolicyDocument": {
                                         "Statement": [
-                                            {
-                                                "Effect": "Allow",
-                                                "Action": ["service:GetService"],
-                                                "Resource": "*",
-                                            }
-                                        ],
+                                            {"Effect": "Allow", "Action": ["service:GetService"], "Resource": "*"}
+                                        ]
                                     },
                                 }
-                            ],
+                            ]
                         },
                     }
                 },
@@ -342,16 +236,10 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
             [
                 OptionallyNamedPolicyDocument(
                     policy_document=PolicyDocument(
-                        Statement=[
-                            Statement(
-                                Effect="Allow",
-                                Action=["service:GetService"],
-                                Resource="*",
-                            )
-                        ]
+                        Statement=[Statement(Effect="Allow", Action=["service:GetService"], Resource="*")]
                     ),
                     name="APolicyName",
-                ),
+                )
             ],
             1,
         ),
@@ -359,11 +247,7 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
             {
                 "AWSTemplateFormatVersion": "2010-09-09",
                 "Description": "Test resolving a nonexistent resource without properties",
-                "Resources": {
-                    "NonexistentResource": {
-                        "Type": "AWS::Non::Existent",
-                    }
-                },
+                "Resources": {"NonexistentResource": {"Type": "AWS::Non::Existent"}},
             },
             [],
             0,

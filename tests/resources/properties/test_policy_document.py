@@ -73,18 +73,13 @@ def policy_document_not_principal():
         **{
             "Statement": [
                 {
-                    "Action": [
-                        "iam:Delete*",
-                        "s3:GetObject*",
-                    ],
+                    "Action": ["iam:Delete*", "s3:GetObject*"],
                     "Effect": "Allow",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
                     "NotPrincipal": {"AWS": ["156460612806"]},
                 },
                 {
-                    "Action": [
-                        "s3:List*",
-                    ],
+                    "Action": ["s3:List*"],
                     "Effect": "Deny",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
                     "NotPrincipal": {"AWS": ["156460612806"]},
@@ -287,13 +282,11 @@ def policy_document_not_action():
         **{
             "Statement": [
                 {
-                    "NotAction": [
-                        "rds:*",
-                    ],
+                    "NotAction": ["rds:*"],
                     "Effect": "Allow",
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
                     "NotPrincipal": {"AWS": ["156460612806"]},
-                },
+                }
             ]
         }
     )
@@ -315,8 +308,8 @@ def policy_document_condition_with_source_ip():
                     "Effect": "Allow",
                     "Principal": {"AWS": "*"},
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
-                },
-            ],
+                }
+            ]
         }
     )
 
@@ -332,8 +325,8 @@ def policy_document_condition_with_source_vpce():
                     "Effect": "Allow",
                     "Principal": {"AWS": "*"},
                     "Resource": "arn:aws:s3:::fakebucketfakebucket/*",
-                },
-            ],
+                }
+            ]
         }
     )
 

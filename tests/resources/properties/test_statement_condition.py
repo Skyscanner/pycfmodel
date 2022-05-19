@@ -155,10 +155,7 @@ def test_build_evaluator_null(function: str, arg_a: Any, arg_b: Any, params: Dic
 
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
-    [
-        ("NumericEquals", "patata", 1, {"patata": 1}, True),
-        ("NumericEquals", "patata", 1, {"patata": 2}, False),
-    ],
+    [("NumericEquals", "patata", 1, {"patata": 1}, True), ("NumericEquals", "patata", 1, {"patata": 2}, False)],
 )
 def test_build_evaluator_numeric_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
     node = build_evaluator(function, arg_a, arg_b)
@@ -167,10 +164,7 @@ def test_build_evaluator_numeric_equals(function: str, arg_a: Any, arg_b: Any, p
 
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
-    [
-        ("NumericNotEquals", "patata", 1, {"patata": 1}, False),
-        ("NumericNotEquals", "patata", 1, {"patata": 2}, True),
-    ],
+    [("NumericNotEquals", "patata", 1, {"patata": 1}, False), ("NumericNotEquals", "patata", 1, {"patata": 2}, True)],
 )
 def test_build_evaluator_numeric_not_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
     node = build_evaluator(function, arg_a, arg_b)
