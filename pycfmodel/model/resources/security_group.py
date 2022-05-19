@@ -2,7 +2,10 @@ from typing import ClassVar, List, Optional, Union
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.security_group_egress_prop import SecurityGroupEgressProp
-from pycfmodel.model.resources.properties.security_group_ingress_prop import SecurityGroupIngressProp
+from pycfmodel.model.resources.properties.security_group_ingress_prop import (
+    DBSecurityGroupIngressProp,
+    SecurityGroupIngressProp,
+)
 from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableStr
@@ -46,3 +49,27 @@ class SecurityGroup(Resource):
     TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroup"
     Type: str = TYPE_VALUE
     Properties: Resolvable[SecurityGroupProperties]
+
+
+class RDSDBSecurityGroupProperties(CustomModel):
+    """
+    Properties:
+
+    - DBSecurityGroupIngress: Inbound rules associated with the security group.
+    - EC2VpcId: The identifier of an Amazon VPC. This property indicates the VPC that this DB security group belongs to.
+    - GroupDescription: Description for the security group.
+    - Tags: Array of key-value pairs.
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/es_es/AWSCloudFormation/latest/UserGuide/aws-properties-rds-security-group.html)
+    """
+
+    DBSecurityGroupIngress: List[DBSecurityGroupIngressProp]
+    EC2VpcId: Optional[ResolvableStr]
+    GroupDescription: ResolvableStr
+    Tags: Optional[Resolvable[List[Tag]]] = None
+
+
+class RDSDBSecurityGroup(Resource):
+    TYPE_VALUE: ClassVar = "AWS::RDS::DBSecurityGroup"
+    Type: str = TYPE_VALUE
+    Properties: Resolvable[RDSDBSecurityGroupProperties]

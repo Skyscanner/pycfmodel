@@ -1,6 +1,9 @@
 from typing import ClassVar, Optional
 
-from pycfmodel.model.resources.properties.security_group_ingress_prop import SecurityGroupIngressProp
+from pycfmodel.model.resources.properties.security_group_ingress_prop import (
+    DBSecurityGroupIngressResourceProp,
+    SecurityGroupIngressProp,
+)
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import ResolvableStr
 
@@ -47,3 +50,9 @@ class SecurityGroupIngress(Resource):
 
     def ipv6_slash_zero(self) -> bool:
         return self.Properties.ipv6_slash_zero()
+
+
+class RDSDBSecurityGroupIngress(Resource):
+    TYPE_VALUE: ClassVar = "AWS::RDS::DBSecurityGroupIngress"
+    Type: str = TYPE_VALUE
+    Properties: DBSecurityGroupIngressResourceProp
