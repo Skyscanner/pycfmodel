@@ -85,7 +85,7 @@ class PolicyDocument(Property):
 
     def non_whitelisted_allowed_principals(self, whitelist: List[str]) -> List[str]:
         """
-        Find non whitelisted allowed principals.
+        Find non-whitelisted allowed principals.
 
         Arguments:
             whitelist: List of whitelisted principals.
@@ -105,7 +105,7 @@ class PolicyDocument(Property):
 
         Arguments:
             difference: when True, the behaviour changes to find the difference between all IAM Actions and those
-            specified in the statements of the policy. Default = False.
+                specified in the statements of the policy. Default = False.
 
         Returns:
             List of matching actions.
