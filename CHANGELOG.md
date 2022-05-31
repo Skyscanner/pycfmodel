@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.21.0
+### Fixes
+- Fix docs that were failing to get updated/generated
+### Improvements
+- Add tests for docs so they don't get outdated
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.20.0
 ### Additions
 - New `RDSDBSecurityGroup` and `RDSDBSecurityGroupIngress` resources [#103]
