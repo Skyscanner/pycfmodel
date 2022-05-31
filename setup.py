@@ -17,7 +17,13 @@ dev_requires = [
     "pytest-cov>=2.10.1",
 ]
 
-docs_requires = ["AutoMacDoc==0.3", "mkdocs-material==4.6.3", "mkdocs==1.3.0", "mkdocstrings==0.10.0"]
+docs_requires = [
+    "AutoMacDoc==0.3",
+    "livereload==2.6.3",
+    "mkdocs-material==4.6.3",
+    "mkdocs==1.3.0",
+    "mkdocstrings==0.10.0",
+]
 
 setup(
     name="pycfmodel",
