@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 0.21.0
+## 0.20.1
 ### Fixes
 - Fix docs that were failing to get updated/generated
 ### Improvements
