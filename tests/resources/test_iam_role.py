@@ -10,6 +10,7 @@ def iam_role():
         **{
             "Type": "AWS::IAM::Role",
             "Properties": {
+                "Description": "test description",
                 "AssumeRolePolicyDocument": {
                     "Version": "2012-10-17",
                     "Statement": {
@@ -46,6 +47,7 @@ def iam_role():
                         },
                     }
                 ],
+                "Tags": [{"Key": "test", "Value": "potatoe"}],
             },
         }
     )

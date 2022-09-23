@@ -41,9 +41,9 @@ inspecting CloudFormation scripts.
     * IAM User
     * KMS Key
     * OpenSearch Service (legacy ElasticSearch resource)
-      * Elasticsearch Domain
+        * Elasticsearch Domain
     * OpenSearch Service
-      * OpenSearchService Domain
+        * OpenSearchService Domain
     * S3 Bucket
     * S3 Bucket Policy
     * Security Group

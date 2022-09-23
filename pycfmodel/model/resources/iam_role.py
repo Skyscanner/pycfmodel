@@ -4,6 +4,7 @@ from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy import Policy
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.properties.statement_condition import StatementCondition
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import OptionallyNamedPolicyDocument, Resource
 from pycfmodel.model.types import Resolvable, ResolvableIntOrStr, ResolvableStr
 
@@ -24,12 +25,14 @@ class IAMRoleProperties(CustomModel):
     """
 
     AssumeRolePolicyDocument: Resolvable[PolicyDocument]
+    Description: Optional[ResolvableStr] = None
     ManagedPolicyArns: Optional[Resolvable[List[ResolvableStr]]] = None
     MaxSessionDuration: Optional[ResolvableIntOrStr] = None
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
     Policies: Optional[Resolvable[List[Resolvable[Policy]]]] = None
     RoleName: Optional[ResolvableStr] = None
+    Tags: Optional[Resolvable[List[Tag]]] = None
 
 
 class IAMRole(Resource):
