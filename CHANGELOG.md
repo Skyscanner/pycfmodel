@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.20.2
+### Fixes
+- Fix model for IAM Role which was missing `Description` and `Tags`.
+- Fix README.md tabs on list of available models.
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+- Updated tests accordingly for IAM Role
+
 ## 0.20.1
 ### Fixes
 - Fix docs that were failing to get updated/generated
