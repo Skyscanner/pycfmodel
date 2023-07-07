@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.20.3
+### Fixes
+- Fix resolver find_in_map for maps with bool values.
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.20.2
 ### Fixes
 - Fix model for IAM Role which was missing `Description` and `Tags`.
