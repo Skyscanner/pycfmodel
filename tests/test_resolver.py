@@ -6,7 +6,7 @@ import pytest
 from pycfmodel import parse
 from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.kms_key import KMSKey
-from pycfmodel.resolver import resolve
+from pycfmodel.resolver import resolve, resolve_find_in_map
 
 
 @pytest.mark.parametrize(
@@ -657,3 +657,18 @@ def test_resolve_template_with_a_valid_resource_without_properties():
     assert isinstance(resource, GenericResource)
     assert resource.Properties is None
     assert resource.Type == "AWS::SNS::Topic"
+
+
+@pytest.mark.parametrize(
+    "params, expected_resolved_value",
+    [
+        ({"Environment": "preprod"}, False),
+        ({"Environment": "prod"}, True),
+    ],
+)
+def test_resolve_find_in_map_for_bool_values_in_map(params, expected_resolved_value):
+    function_body = ["MyMap", {"Ref": "Environment"}, "Value"]
+    mappings = {"MyMap": {"preprod": {"Value": False}, "prod": {"Value": True}}}
+
+    result = resolve_find_in_map(function_body=function_body, params=params, mappings=mappings, conditions={})
+    assert result == expected_resolved_value
