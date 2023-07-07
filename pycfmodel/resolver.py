@@ -97,7 +97,7 @@ def resolve_find_in_map(function_body, params: Dict, mappings: Dict[str, Dict], 
     second_level_key = resolve(second_level_key, params, mappings, conditions)
 
     resolved_mapping = mappings.get(map_name, {}).get(top_level_key, {}).get(second_level_key)
-    if resolved_mapping:
+    if resolved_mapping is not None:
         return resolved_mapping
     else:
         logger.warning(
