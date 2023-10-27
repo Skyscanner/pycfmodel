@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 ## 0.21.1
 ### Fixes
 - Fix resolving conditions recursively [#114](https://github.com/Skyscanner/pycfmodel/pull/114)
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
 
 ## 0.21.0
 ### Updates
