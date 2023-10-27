@@ -78,10 +78,11 @@ class CFModel(CustomModel):
         dict_value = self.dict()
 
         conditions = dict_value.pop("Conditions", {})
-        resolved_conditions = {
-            key: _extended_bool(resolve(value, extended_parameters, self.Mappings, {}))
-            for key, value in conditions.items()
-        }
+        resolved_conditions = {}
+        for key, value in conditions.items():
+            resolved_conditions.update({
+                key: _extended_bool(resolve(value, extended_parameters, self.Mappings, resolved_conditions))
+            })
 
         resources = dict_value.pop("Resources")
         resolved_resources = {
