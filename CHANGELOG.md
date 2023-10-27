@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.20.4
+### Fixes
+- Fix resolving conditions recursively 
+
 ## 0.20.3
 ### Fixes
 - Fix resolver find_in_map for maps with bool values. [#112](https://github.com/Skyscanner/pycfmodel/pull/112)
