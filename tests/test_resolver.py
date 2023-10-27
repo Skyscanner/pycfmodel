@@ -253,20 +253,83 @@ def test_condition(function, expected_output):
 # We will repeat the test 10 times, in order to check conditions don't have a different order
 # and break the resolving of the model when they are depending of other conditions
 @pytest.mark.repeat(10)
-@pytest.mark.parametrize("num_custom_tags, expected", [
-    (0, []),
-    (1, ["HasAtLeast1Tags"]),
-    (2, ["HasAtLeast1Tags", "HasAtLeast2Tags"]),
-    (3, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags"]),
-    (4, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags"]),
-    (5, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags"]),
-    (6, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags","HasAtLeast6Tags"]),
-    (7, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags","HasAtLeast6Tags","HasAtLeast7Tags"]),
-    (8, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags","HasAtLeast6Tags","HasAtLeast7Tags","HasAtLeast8Tags"]),
-    (9, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags","HasAtLeast6Tags","HasAtLeast7Tags","HasAtLeast8Tags","HasAtLeast9Tags"]),
-    (10, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags","HasAtLeast6Tags","HasAtLeast7Tags","HasAtLeast8Tags","HasAtLeast9Tags","HasAtLeast10Tags"]),
-    (11, []),
-])
+@pytest.mark.parametrize(
+    "num_custom_tags, expected",
+    [
+        (0, []),
+        (1, ["HasAtLeast1Tags"]),
+        (2, ["HasAtLeast1Tags", "HasAtLeast2Tags"]),
+        (3, ["HasAtLeast1Tags", "HasAtLeast2Tags", "HasAtLeast3Tags"]),
+        (4, ["HasAtLeast1Tags", "HasAtLeast2Tags", "HasAtLeast3Tags", "HasAtLeast4Tags"]),
+        (5, ["HasAtLeast1Tags", "HasAtLeast2Tags", "HasAtLeast3Tags", "HasAtLeast4Tags", "HasAtLeast5Tags"]),
+        (
+            6,
+            [
+                "HasAtLeast1Tags",
+                "HasAtLeast2Tags",
+                "HasAtLeast3Tags",
+                "HasAtLeast4Tags",
+                "HasAtLeast5Tags",
+                "HasAtLeast6Tags",
+            ],
+        ),
+        (
+            7,
+            [
+                "HasAtLeast1Tags",
+                "HasAtLeast2Tags",
+                "HasAtLeast3Tags",
+                "HasAtLeast4Tags",
+                "HasAtLeast5Tags",
+                "HasAtLeast6Tags",
+                "HasAtLeast7Tags",
+            ],
+        ),
+        (
+            8,
+            [
+                "HasAtLeast1Tags",
+                "HasAtLeast2Tags",
+                "HasAtLeast3Tags",
+                "HasAtLeast4Tags",
+                "HasAtLeast5Tags",
+                "HasAtLeast6Tags",
+                "HasAtLeast7Tags",
+                "HasAtLeast8Tags",
+            ],
+        ),
+        (
+            9,
+            [
+                "HasAtLeast1Tags",
+                "HasAtLeast2Tags",
+                "HasAtLeast3Tags",
+                "HasAtLeast4Tags",
+                "HasAtLeast5Tags",
+                "HasAtLeast6Tags",
+                "HasAtLeast7Tags",
+                "HasAtLeast8Tags",
+                "HasAtLeast9Tags",
+            ],
+        ),
+        (
+            10,
+            [
+                "HasAtLeast1Tags",
+                "HasAtLeast2Tags",
+                "HasAtLeast3Tags",
+                "HasAtLeast4Tags",
+                "HasAtLeast5Tags",
+                "HasAtLeast6Tags",
+                "HasAtLeast7Tags",
+                "HasAtLeast8Tags",
+                "HasAtLeast9Tags",
+                "HasAtLeast10Tags",
+            ],
+        ),
+        (11, []),
+    ],
+)
 def test_resolve_recursive_conditions(num_custom_tags, expected):
     template = {
         "Parameters": {
@@ -309,9 +372,7 @@ def test_resolve_recursive_conditions(num_custom_tags, expected):
 
     # retrieve positive conditions in the model
     positive_conditions = [
-        condition_name
-        for condition_name, condition_value in model.Conditions.items()
-        if condition_value
+        condition_name for condition_name, condition_value in model.Conditions.items() if condition_value
     ]
     assert expected.sort() == positive_conditions.sort()
 
