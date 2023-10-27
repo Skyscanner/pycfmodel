@@ -250,6 +250,72 @@ def test_condition(function, expected_output):
     assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
+# We will repeat the test 10 times, in order to check conditions don't have a different order
+# and break the resolving of the model when they are depending of other conditions
+@pytest.mark.repeat(10)
+@pytest.mark.parametrize("num_custom_tags, expected", [
+    (0, []),
+    (1, ["HasAtLeast1Tags"]),
+    (2, ["HasAtLeast1Tags", "HasAtLeast2Tags"]),
+    (3, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags"]),
+    (4, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags"]),
+    (5, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags"]),
+    (6, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags","HasAtLeast6Tags"]),
+    (7, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags","HasAtLeast6Tags","HasAtLeast7Tags"]),
+    (8, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags","HasAtLeast6Tags","HasAtLeast7Tags","HasAtLeast8Tags"]),
+    (9, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags","HasAtLeast6Tags","HasAtLeast7Tags","HasAtLeast8Tags","HasAtLeast9Tags"]),
+    (10, ["HasAtLeast1Tags", "HasAtLeast2Tags","HasAtLeast3Tags","HasAtLeast4Tags","HasAtLeast5Tags","HasAtLeast6Tags","HasAtLeast7Tags","HasAtLeast8Tags","HasAtLeast9Tags","HasAtLeast10Tags"]),
+    (11, []),
+])
+def test_resolve_recursive_conditions(num_custom_tags, expected):
+    template = {
+        "Parameters": {
+            "NumCustomTags": {"Type": "Number", "Default": 0},
+        },
+        "Conditions": {
+            "HasAtLeast10Tags": {"Fn::Equals": [{"Ref": "NumCustomTags"}, 10]},  # this is the condition stopper
+            "HasAtLeast9Tags": {
+                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 9]}, {"Condition": "HasAtLeast10Tags"}]
+            },
+            "HasAtLeast8Tags": {
+                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 8]}, {"Condition": "HasAtLeast9Tags"}]
+            },
+            "HasAtLeast7Tags": {
+                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 7]}, {"Condition": "HasAtLeast8Tags"}]
+            },
+            "HasAtLeast6Tags": {
+                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 6]}, {"Condition": "HasAtLeast7Tags"}]
+            },
+            "HasAtLeast5Tags": {
+                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 5]}, {"Condition": "HasAtLeast6Tags"}]
+            },
+            "HasAtLeast4Tags": {
+                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 4]}, {"Condition": "HasAtLeast5Tags"}]
+            },
+            "HasAtLeast3Tags": {
+                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 3]}, {"Condition": "HasAtLeast4Tags"}]
+            },
+            "HasAtLeast2Tags": {
+                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 2]}, {"Condition": "HasAtLeast3Tags"}]
+            },
+            "HasAtLeast1Tags": {
+                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 1]}, {"Condition": "HasAtLeast2Tags"}]
+            },
+        },
+        "Resources": {},
+    }
+
+    model = parse(template).resolve(extra_params={"NumCustomTags": num_custom_tags})
+
+    # retrieve positive conditions in the model
+    positive_conditions = [
+        condition_name
+        for condition_name, condition_value in model.Conditions.items()
+        if condition_value
+    ]
+    assert expected.sort() == positive_conditions.sort()
+
+
 def test_select_and_ref():
     parameters = {"DbSubnetIpBlocks": ["10.0.48.0/24", "10.0.112.0/24", "10.0.176.0/24"]}
     mappings = {}
