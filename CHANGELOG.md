@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.21.1
+### Updates
+- Compatible with Python3.12
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
 
 ## 0.21.0
 ### Updates
