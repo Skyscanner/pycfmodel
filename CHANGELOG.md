@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.21.1
 ### Fixes
-- Fix resolving conditions recursively 
+- Fix resolving conditions recursively [#114](https://github.com/Skyscanner/pycfmodel/pull/114)
 
 ## 0.21.0
 ### Updates
