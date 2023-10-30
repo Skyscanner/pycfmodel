@@ -15,6 +15,7 @@ dev_requires = [
     "pip-tools>=2.0.2",
     "pytest>=6.0.1",
     "pytest-cov>=2.10.1",
+    "pytest-repeat==0.9.3",
 ]
 
 docs_requires = [

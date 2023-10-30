@@ -2,7 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## 0.21.0
-### Updates
+### Fixes
+- Fix resolving conditions recursively [#114](https://github.com/Skyscanner/pycfmodel/pull/114)
+### Enhancements
 - Compatible with Python3.11 [#110](https://github.com/Skyscanner/pycfmodel/pull/110)
 - Compatible with Python3.12 [#115](https://github.com/Skyscanner/pycfmodel/pull/115)
 ### Updates

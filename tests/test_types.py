@@ -35,11 +35,11 @@ def test_loose_ip_v6_network_type():
 @pytest.mark.parametrize(
     "value",
     [
-        ("192.168.0.0/24"),
-        ("192.168.128.0/30"),
+        "192.168.0.0/24",
+        "192.168.128.0/30",
         (2**32 - 1),  # no mask equals to mask /32
-        (b"\xff\xff\xff\xff"),  # /32
-        (("192.168.0.0", 24)),
+        b"\xff\xff\xff\xff",  # /32
+        ("192.168.0.0", 24),
         (IPv4Network("192.168.0.0/24")),
     ],
 )
@@ -53,10 +53,10 @@ def test_loose_ip_v4_network_success(value):
 @pytest.mark.parametrize(
     "value",
     [
-        ("2001:db00::0/120"),
-        (20_282_409_603_651_670_423_947_251_286_015),  # /128
-        (b"\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"),
-        (("2001:db00::0", 120)),
+        "2001:db00::0/120",
+        20_282_409_603_651_670_423_947_251_286_015,  # /128
+        b"\x00\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff",
+        ("2001:db00::0", 120),
         (IPv6Network("2001:db00::0/120")),
     ],
 )
@@ -67,7 +67,7 @@ def test_loose_ip_v6_network_success(value):
     assert Model(ip=value).ip == IPv6Network(value)
 
 
-@pytest.mark.parametrize("value", [("213.174.214.100/27"), ("192.168.56.101/16"), ("192.0.2.1/24")])
+@pytest.mark.parametrize("value", ["213.174.214.100/27", "192.168.56.101/16", "192.0.2.1/24"])
 def test_loose_ip_v4_is_not_strict(value):
     class Model(BaseModel):
         ip: LooseIPv4Network = None
@@ -79,7 +79,7 @@ def test_loose_ip_v4_is_not_strict(value):
 
 @pytest.mark.parametrize(
     "value",
-    [("2012::1234:abcd:ffff:c0a8:101/64"), ("2022::1234:abcd:ffff:c0a8:101/64"), ("2032::1234:abcd:ffff:c0a8:101/64")],
+    ["2012::1234:abcd:ffff:c0a8:101/64", "2022::1234:abcd:ffff:c0a8:101/64", "2032::1234:abcd:ffff:c0a8:101/64"],
 )
 def test_loose_ip_v6_is_not_strict(value):
     class Model(BaseModel):
