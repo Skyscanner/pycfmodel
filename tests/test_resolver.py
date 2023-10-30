@@ -377,6 +377,22 @@ def test_resolve_recursive_conditions(num_custom_tags, expected):
     assert expected.sort() == positive_conditions.sort()
 
 
+def test_resolve_infinite_loop_or_deadlock_conditions_will_resolve_to_false():
+    template = {
+        "Parameters": {},
+        "Conditions": {
+            "ConditionA": {"Condition": "ConditionB"},
+            "ConditionB": {"Condition": "ConditionA"},
+        },
+        "Resources": {},
+    }
+
+    model = parse(template).resolve()
+
+    assert model.Conditions.get("ConditionA") is False
+    assert model.Conditions.get("ConditionB") is False
+
+
 def test_select_and_ref():
     parameters = {"DbSubnetIpBlocks": ["10.0.48.0/24", "10.0.112.0/24", "10.0.176.0/24"]}
     mappings = {}
