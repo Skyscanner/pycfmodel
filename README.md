@@ -2,9 +2,8 @@
 
 ![Build Status](https://github.com/Skyscanner/pycfmodel/workflows/PyPI%20release/badge.svg)
 [![PyPI version](https://badge.fury.io/py/pycfmodel.svg)](https://badge.fury.io/py/pycfmodel)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/Skyscanner/pycfmodel.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Skyscanner/pycfmodel/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/Skyscanner/pycfmodel.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Skyscanner/pycfmodel/context:python)
 [![Documentation Status](https://readthedocs.org/projects/pycfmodel/badge/?version=latest)](https://pycfmodel.readthedocs.io/en/latest/?badge=latest)
+![License](https://img.shields.io/github/license/skyscanner/pycfmodel)
 
 *A python model for Cloud Formation scripts.*
 
@@ -16,6 +15,7 @@ inspecting CloudFormation scripts.
 `pip install pycfmodel`
 
 ## Currently Supported
+
 * AWSTemplateFormatVersion
 * Conditions
 * Description
@@ -54,6 +54,7 @@ inspecting CloudFormation scripts.
 * Transform
 
 ## Example
+
 ```python
 from pycfmodel import parse
 
@@ -114,7 +115,8 @@ make test
 make freeze
 ```
 
-If the test `tests/test_constants.py::test_cloudformation_actions` is failing, it can be resolved by updating the known AWS Actions:
+If the test `tests/test_constants.py::test_cloudformation_actions` is failing, it can be resolved by updating the known
+AWS Actions:
 
 ```bash
 python3 scripts/generate_cloudformation_actions_file.py

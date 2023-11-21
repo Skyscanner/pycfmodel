@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.21.1
+### Fixes
+- Documentation building.
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+- Actions versions.
+- ReadMe badges.
+
 ## 0.21.0
 ### Fixes
 - Fix resolving conditions recursively [#114](https://github.com/Skyscanner/pycfmodel/pull/114)
