@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.21.2
+### Fixes
+- Add the BypassPolicyLockoutSafetyCheck field in the KMS resource
+
 ## 0.21.1
 ### Fixes
 - Documentation building.
