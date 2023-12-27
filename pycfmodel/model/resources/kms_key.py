@@ -23,6 +23,7 @@ class KMSKeyProperties(CustomModel):
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html)
     """
+
     BypassPolicyLockoutSafetyCheck: Optional[ResolvableBool] = None
     Description: Optional[ResolvableStr] = None
     Enabled: Optional[ResolvableBool] = None

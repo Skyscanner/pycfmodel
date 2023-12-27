@@ -167,4 +167,3 @@ def test_kms_policy_documents(kms_key):
             ),
         )
     ]
-
