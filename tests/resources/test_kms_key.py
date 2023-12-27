@@ -16,6 +16,7 @@ def kms_key():
                 "KeyUsage": "SIGN_VERIFY",
                 "MultiRegion": True,
                 "EnableKeyRotation": True,
+                "BypassPolicyLockoutSafetyCheck": False,
                 "KeyPolicy": {
                     "Version": "2012-10-17",
                     "Id": "key-default-1",
@@ -166,3 +167,4 @@ def test_kms_policy_documents(kms_key):
             ),
         )
     ]
+
