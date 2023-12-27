@@ -17,6 +17,7 @@ def kms_key():
                 "MultiRegion": True,
                 "EnableKeyRotation": True,
                 "BypassPolicyLockoutSafetyCheck": False,
+                "Origin": "AWS_KMS",
                 "KeyPolicy": {
                     "Version": "2012-10-17",
                     "Id": "key-default-1",
