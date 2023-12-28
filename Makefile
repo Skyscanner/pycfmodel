@@ -17,7 +17,7 @@ isort-format:
 black-format:
 	black .
 
-lint: isort-lint black-lint flake8-lint
+lint: isort-lint black-lint ruff-lint
 
 isort-lint:
 	isort --check-only .
@@ -25,8 +25,8 @@ isort-lint:
 black-lint:
 	black --check .
 
-flake8-lint:
-	flake8 .
+ruff-lint:
+	ruff .
 
 unit:
 	pytest -svvv tests
