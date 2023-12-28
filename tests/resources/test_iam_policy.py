@@ -16,7 +16,11 @@ def iam_policy():
                     "Statement": [
                         {
                             "Effect": "Allow",
-                            "Action": ["lambda:AddPermission", "ssm:SendCommand", "kms:Decrypt"],
+                            "Action": [
+                                "lambda:AddPermission",
+                                "ssm:SendCommand",
+                                "kms:Decrypt",
+                            ],
                             "Resource": "*",
                         }
                     ],

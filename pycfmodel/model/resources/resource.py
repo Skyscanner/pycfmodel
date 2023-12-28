@@ -57,7 +57,8 @@ class Resource(CustomModel):
             return policy_documents
 
         self.obtain_policy_documents(
-            policy_documents=policy_documents, properties=list(self.Properties.__dict__.values())
+            policy_documents=policy_documents,
+            properties=list(self.Properties.__dict__.values()),
         )
         return policy_documents
 
@@ -71,7 +72,8 @@ class Resource(CustomModel):
             elif isinstance(property_type, Policy):
                 policy_documents.append(
                     OptionallyNamedPolicyDocument(
-                        name=property_type.PolicyName, policy_document=property_type.PolicyDocument
+                        name=property_type.PolicyName,
+                        policy_document=property_type.PolicyDocument,
                     )
                 )
             elif isinstance(property_type, OptionallyNamedPolicyDocument):
@@ -80,7 +82,8 @@ class Resource(CustomModel):
                 self.obtain_policy_documents(policy_documents=policy_documents, properties=property_type)
             elif isinstance(property_type, Generic):
                 self.obtain_policy_documents(
-                    policy_documents=policy_documents, properties=list(property_type.__dict__.values())
+                    policy_documents=policy_documents,
+                    properties=list(property_type.__dict__.values()),
                 )
 
     @property

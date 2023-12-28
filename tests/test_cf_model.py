@@ -34,12 +34,20 @@ def test_resources_filtered_by_type():
 
     model = CFModel(Resources={**generic_resource, **user})
     assert model.resources_filtered_by_type(("Resource type",)) == generic_resource
-    assert model.resources_filtered_by_type(("Resource type", IAMUser)) == {**generic_resource, **user}
+    assert model.resources_filtered_by_type(("Resource type", IAMUser)) == {
+        **generic_resource,
+        **user,
+    }
     assert model.resources_filtered_by_type((IAMUser,)) == user
 
 
 def test_complex_metadata_schema():
-    metadata = {"Foo": "a_string_value", "Bar": 1, "Fizz": ["a", "list"], "Buzz": {"another": "dict"}}
+    metadata = {
+        "Foo": "a_string_value",
+        "Bar": 1,
+        "Fizz": ["a", "list"],
+        "Buzz": {"another": "dict"},
+    }
 
     model = CFModel(Metadata=metadata)
     assert model.Metadata == metadata

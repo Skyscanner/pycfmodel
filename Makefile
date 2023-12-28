@@ -26,7 +26,7 @@ black-lint:
 	black --check .
 
 ruff-lint:
-	ruff .
+	ruff check .
 
 unit:
 	pytest -svvv tests

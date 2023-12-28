@@ -17,7 +17,11 @@ def iam_managed_policy():
                     "Statement": [
                         {
                             "Effect": "Allow",
-                            "Action": ["lambda:AddPermission", "ssm:SendCommand", "kms:Decrypt"],
+                            "Action": [
+                                "lambda:AddPermission",
+                                "ssm:SendCommand",
+                                "kms:Decrypt",
+                            ],
                             "Resource": "*",
                         }
                     ],
@@ -34,6 +38,7 @@ def test_policies(iam_managed_policy):
 def test_iam_managedpolicy_policy_documents(iam_managed_policy):
     assert iam_managed_policy.policy_documents == [
         OptionallyNamedPolicyDocument(
-            name="ManagedPolicy", policy_document=iam_managed_policy.Properties.PolicyDocument
+            name="ManagedPolicy",
+            policy_document=iam_managed_policy.Properties.PolicyDocument,
         )
     ]

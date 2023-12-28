@@ -10,7 +10,8 @@ from pycfmodel.resolver import resolve, resolve_find_in_map
 
 
 @pytest.mark.parametrize(
-    "function, expected_output", [({"Ref": "abc"}, "ABC"), ({"Ref": "potato"}, "UNDEFINED_PARAM_potato")]
+    "function, expected_output",
+    [({"Ref": "abc"}, "ABC"), ({"Ref": "potato"}, "UNDEFINED_PARAM_potato")],
 )
 def test_ref(function, expected_output):
     parameters = {"abc": "ABC"}
@@ -22,7 +23,10 @@ def test_ref(function, expected_output):
 
 @pytest.mark.parametrize(
     "function, expected_output",
-    [({"Fn::ImportValue": "abc"}, "ABC"), ({"Fn::ImportValue": "potato"}, "UNDEFINED_PARAM_potato")],
+    [
+        ({"Fn::ImportValue": "abc"}, "ABC"),
+        ({"Fn::ImportValue": "potato"}, "UNDEFINED_PARAM_potato"),
+    ],
 )
 def test_import_value(function, expected_output):
     parameters = {"abc": "ABC"}
@@ -38,7 +42,12 @@ def test_import_value(function, expected_output):
         ({"Fn::Join": ["", []]}, ""),
         ({"Fn::Join": ["", ["aws"]]}, "aws"),
         (
-            {"Fn::Join": ["", ["arn:", "aws", ":s3:::elasticbeanstalk-*-", "1234567890"]]},
+            {
+                "Fn::Join": [
+                    "",
+                    ["arn:", "aws", ":s3:::elasticbeanstalk-*-", "1234567890"],
+                ]
+            },
             "arn:aws:s3:::elasticbeanstalk-*-1234567890",
         ),
     ],
@@ -54,9 +63,18 @@ def test_join(function, expected_output):
 @pytest.mark.parametrize(
     "function, expected_output",
     [
-        ({"Fn::FindInMap": ["RegionMap", "eu-west-1", "HVM64"]}, "UNDEFINED_MAPPING_RegionMap_eu-west-1_HVM64"),
-        ({"Fn::FindInMap": ["RegionMap", "us-east-1", "HVM128"]}, "UNDEFINED_MAPPING_RegionMap_us-east-1_HVM128"),
-        ({"Fn::FindInMap": ["RegionMap", "us-east-1", "HVM64"]}, "ami-0ff8a91507f77f867"),
+        (
+            {"Fn::FindInMap": ["RegionMap", "eu-west-1", "HVM64"]},
+            "UNDEFINED_MAPPING_RegionMap_eu-west-1_HVM64",
+        ),
+        (
+            {"Fn::FindInMap": ["RegionMap", "us-east-1", "HVM128"]},
+            "UNDEFINED_MAPPING_RegionMap_us-east-1_HVM128",
+        ),
+        (
+            {"Fn::FindInMap": ["RegionMap", "us-east-1", "HVM64"]},
+            "ami-0ff8a91507f77f867",
+        ),
     ],
 )
 def test_find_in_map(function, expected_output):
@@ -71,7 +89,10 @@ def test_find_in_map(function, expected_output):
     "function, expected_output",
     [
         ({"Fn::Sub": "www.skyscanner.net"}, "www.skyscanner.net"),
-        ({"Fn::Sub": ["www.${Domain}", {"Domain": "skyscanner.net"}]}, "www.skyscanner.net"),
+        (
+            {"Fn::Sub": ["www.${Domain}", {"Domain": "skyscanner.net"}]},
+            "www.skyscanner.net",
+        ),
         ({"Fn::Sub": "---${abc}---"}, "---ABC---"),
         ({"Fn::Sub": ["--${abc}-${def}--", {"def": "DEF"}]}, "--ABC-DEF--"),
     ],
@@ -117,7 +138,8 @@ def test_split(function, expected_output):
 
 
 @pytest.mark.parametrize(
-    "function, expected_output", [({"Fn::If": ["A", "a", "b"]}, "a"), ({"Fn::If": ["B", "a", "b"]}, "b")]
+    "function, expected_output",
+    [({"Fn::If": ["A", "a", "b"]}, "a"), ({"Fn::If": ["B", "a", "b"]}, "b")],
 )
 def test_if(function, expected_output):
     parameters = {}
@@ -173,7 +195,10 @@ def test_or(function, expected_output):
     assert resolve(function, parameters, mappings, conditions) == expected_output
 
 
-@pytest.mark.parametrize("function, expected_output", [({"Fn::Not": [True]}, False), ({"Fn::Not": [False]}, True)])
+@pytest.mark.parametrize(
+    "function, expected_output",
+    [({"Fn::Not": [True]}, False), ({"Fn::Not": [False]}, True)],
+)
 def test_not(function, expected_output):
     parameters = {}
     mappings = {}
@@ -222,7 +247,8 @@ def test_base64(function, expected_output):
 
 
 @pytest.mark.parametrize(
-    "function, expected_output", [({"Fn::GetAtt": ["logicalNameOfResource", "attributeName"]}, "GETATT")]
+    "function, expected_output",
+    [({"Fn::GetAtt": ["logicalNameOfResource", "attributeName"]}, "GETATT")],
 )
 def test_get_attr(function, expected_output):
     parameters = {}
@@ -260,8 +286,25 @@ def test_condition(function, expected_output):
         (1, ["HasAtLeast1Tags"]),
         (2, ["HasAtLeast1Tags", "HasAtLeast2Tags"]),
         (3, ["HasAtLeast1Tags", "HasAtLeast2Tags", "HasAtLeast3Tags"]),
-        (4, ["HasAtLeast1Tags", "HasAtLeast2Tags", "HasAtLeast3Tags", "HasAtLeast4Tags"]),
-        (5, ["HasAtLeast1Tags", "HasAtLeast2Tags", "HasAtLeast3Tags", "HasAtLeast4Tags", "HasAtLeast5Tags"]),
+        (
+            4,
+            [
+                "HasAtLeast1Tags",
+                "HasAtLeast2Tags",
+                "HasAtLeast3Tags",
+                "HasAtLeast4Tags",
+            ],
+        ),
+        (
+            5,
+            [
+                "HasAtLeast1Tags",
+                "HasAtLeast2Tags",
+                "HasAtLeast3Tags",
+                "HasAtLeast4Tags",
+                "HasAtLeast5Tags",
+            ],
+        ),
         (
             6,
             [
@@ -338,31 +381,58 @@ def test_resolve_recursive_conditions(num_custom_tags, expected):
         "Conditions": {
             "HasAtLeast10Tags": {"Fn::Equals": [{"Ref": "NumCustomTags"}, 10]},  # this is the condition stopper
             "HasAtLeast9Tags": {
-                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 9]}, {"Condition": "HasAtLeast10Tags"}]
+                "Fn::Or": [
+                    {"Fn::Equals": [{"Ref": "NumCustomTags"}, 9]},
+                    {"Condition": "HasAtLeast10Tags"},
+                ]
             },
             "HasAtLeast8Tags": {
-                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 8]}, {"Condition": "HasAtLeast9Tags"}]
+                "Fn::Or": [
+                    {"Fn::Equals": [{"Ref": "NumCustomTags"}, 8]},
+                    {"Condition": "HasAtLeast9Tags"},
+                ]
             },
             "HasAtLeast7Tags": {
-                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 7]}, {"Condition": "HasAtLeast8Tags"}]
+                "Fn::Or": [
+                    {"Fn::Equals": [{"Ref": "NumCustomTags"}, 7]},
+                    {"Condition": "HasAtLeast8Tags"},
+                ]
             },
             "HasAtLeast6Tags": {
-                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 6]}, {"Condition": "HasAtLeast7Tags"}]
+                "Fn::Or": [
+                    {"Fn::Equals": [{"Ref": "NumCustomTags"}, 6]},
+                    {"Condition": "HasAtLeast7Tags"},
+                ]
             },
             "HasAtLeast5Tags": {
-                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 5]}, {"Condition": "HasAtLeast6Tags"}]
+                "Fn::Or": [
+                    {"Fn::Equals": [{"Ref": "NumCustomTags"}, 5]},
+                    {"Condition": "HasAtLeast6Tags"},
+                ]
             },
             "HasAtLeast4Tags": {
-                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 4]}, {"Condition": "HasAtLeast5Tags"}]
+                "Fn::Or": [
+                    {"Fn::Equals": [{"Ref": "NumCustomTags"}, 4]},
+                    {"Condition": "HasAtLeast5Tags"},
+                ]
             },
             "HasAtLeast3Tags": {
-                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 3]}, {"Condition": "HasAtLeast4Tags"}]
+                "Fn::Or": [
+                    {"Fn::Equals": [{"Ref": "NumCustomTags"}, 3]},
+                    {"Condition": "HasAtLeast4Tags"},
+                ]
             },
             "HasAtLeast2Tags": {
-                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 2]}, {"Condition": "HasAtLeast3Tags"}]
+                "Fn::Or": [
+                    {"Fn::Equals": [{"Ref": "NumCustomTags"}, 2]},
+                    {"Condition": "HasAtLeast3Tags"},
+                ]
             },
             "HasAtLeast1Tags": {
-                "Fn::Or": [{"Fn::Equals": [{"Ref": "NumCustomTags"}, 1]}, {"Condition": "HasAtLeast2Tags"}]
+                "Fn::Or": [
+                    {"Fn::Equals": [{"Ref": "NumCustomTags"}, 1]},
+                    {"Condition": "HasAtLeast2Tags"},
+                ]
             },
         },
         "Resources": {},
@@ -407,7 +477,15 @@ def test_join_and_ref():
     mappings = {}
     conditions = {}
     function = {
-        "Fn::Join": ["", ["arn:", {"Ref": "Partition"}, ":s3:::elasticbeanstalk-*-", {"Ref": "AWS::AccountId"}]]
+        "Fn::Join": [
+            "",
+            [
+                "arn:",
+                {"Ref": "Partition"},
+                ":s3:::elasticbeanstalk-*-",
+                {"Ref": "AWS::AccountId"},
+            ],
+        ]
     }
     assert resolve(function, parameters, mappings, conditions) == "arn:patata:s3:::elasticbeanstalk-*-1234567890"
 
@@ -475,7 +553,10 @@ def test_resolve_include_resource_when_condition_is_true_or_doesnt_exist(conditi
                 "Type": "AWS::IAM::Role",
                 "Condition": "testCondition",
                 "Properties": {
-                    "AssumeRolePolicyDocument": {"Version": "2012-10-17", "Statement": []},
+                    "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [],
+                    },
                     "Path": "/",
                     "Policies": [],
                 },
@@ -502,7 +583,10 @@ def test_resolve_include_resource_when_condition_is_not_present():
             "test_resource_id": {
                 "Type": "AWS::IAM::Role",
                 "Properties": {
-                    "AssumeRolePolicyDocument": {"Version": "2012-10-17", "Statement": []},
+                    "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [],
+                    },
                     "Path": "/",
                     "Policies": [],
                 },
@@ -516,7 +600,13 @@ def test_resolve_include_resource_when_condition_is_not_present():
 def test_resolve_scenario_1():
     template = {
         "AWSTemplateFormatVersion": "2010-09-09",
-        "Parameters": {"StarParameter": {"Type": "String", "Default": "*", "Description": "Star Param"}},
+        "Parameters": {
+            "StarParameter": {
+                "Type": "String",
+                "Default": "*",
+                "Description": "Star Param",
+            }
+        },
         "Resources": {
             "rootRole": {
                 "Type": "AWS::IAM::Role",
@@ -566,7 +656,12 @@ def test_resolve_scenario_2():
     template = {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "IAM role for Lambda",
-        "Parameters": {"LambdaFunctionName": {"Description": "Name of the lambda function", "Type": "String"}},
+        "Parameters": {
+            "LambdaFunctionName": {
+                "Description": "Name of the lambda function",
+                "Type": "String",
+            }
+        },
         "Resources": {
             "lambdaRole": {
                 "Properties": {
@@ -605,7 +700,10 @@ def test_resolve_scenario_2():
                             "PolicyDocument": {
                                 "Statement": [
                                     {
-                                        "Action": ["xray:PutTraceSegments", "xray:PutTelemetryRecords"],
+                                        "Action": [
+                                            "xray:PutTraceSegments",
+                                            "xray:PutTelemetryRecords",
+                                        ],
                                         "Effect": "Allow",
                                         "Resource": ["*"],
                                     }
@@ -618,7 +716,11 @@ def test_resolve_scenario_2():
                             "PolicyDocument": {
                                 "Statement": [
                                     {
-                                        "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+                                        "Action": [
+                                            "logs:CreateLogGroup",
+                                            "logs:CreateLogStream",
+                                            "logs:PutLogEvents",
+                                        ],
                                         "Effect": "Allow",
                                         "Resource": ["*"],
                                     }
@@ -657,10 +759,20 @@ def test_resolve_scenario_3():
                     "GroupDescription": "Allow http to client host",
                     "VpcId": "VPCID",
                     "SecurityGroupIngress": [
-                        {"IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "CidrIp": {"Ref": "IPValueIngress"}}
+                        {
+                            "IpProtocol": "tcp",
+                            "FromPort": 80,
+                            "ToPort": 80,
+                            "CidrIp": {"Ref": "IPValueIngress"},
+                        }
                     ],
                     "SecurityGroupEgress": [
-                        {"IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "CidrIp": {"Ref": "IPValueEgress"}}
+                        {
+                            "IpProtocol": "tcp",
+                            "FromPort": 80,
+                            "ToPort": 80,
+                            "CidrIp": {"Ref": "IPValueEgress"},
+                        }
                     ],
                 },
             }
@@ -732,7 +844,11 @@ def test_resolve_booleans_on_conditions_for_modeled_resource():
                         "Id": "Key-Policy",
                         "Statement": [
                             {
-                                "Action": ["kms:CreateGrant", "kms:ListGrants", "kms:RevokeGrant"],
+                                "Action": [
+                                    "kms:CreateGrant",
+                                    "kms:ListGrants",
+                                    "kms:RevokeGrant",
+                                ],
                                 "Effect": "Allow",
                                 "Sid": "Allow attachment of persistent resources",
                                 "Principal": {"AWS": "*"},
@@ -769,7 +885,11 @@ def test_resolve_booleans_different_properties_for_generic_resource():
                         "Version": "2012-10-17",
                         "Statement": [
                             {
-                                "Action": ["kms:CreateGrant", "kms:ListGrants", "kms:RevokeGrant"],
+                                "Action": [
+                                    "kms:CreateGrant",
+                                    "kms:ListGrants",
+                                    "kms:RevokeGrant",
+                                ],
                                 "Effect": "Allow",
                                 "Principal": {"AWS": "*"},
                                 "Resource": "*",
@@ -793,7 +913,10 @@ def test_resolve_booleans_different_properties_for_generic_resource():
 
 
 def test_resolve_template_with_a_valid_resource_without_properties():
-    template = {"AWSTemplateFormatVersion": "2010-09-09", "Resources": {"MySNSTopic": {"Type": "AWS::SNS::Topic"}}}
+    template = {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Resources": {"MySNSTopic": {"Type": "AWS::SNS::Topic"}},
+    }
 
     model = parse(template).resolve()
     resource = model.Resources["MySNSTopic"]

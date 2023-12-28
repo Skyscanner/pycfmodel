@@ -22,7 +22,12 @@ class _BooleanModel(BaseModel):
     bool_value: bool
 
 
-def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]):
+def resolve(
+    function: ValidResolvers,
+    params: Dict,
+    mappings: Dict[str, Dict],
+    conditions: Dict[str, bool],
+):
     if function is None:
         return function
 
@@ -147,24 +152,49 @@ def resolve_if(function_body, params: Dict, mappings: Dict[str, Dict], condition
         return resolve(false_section, params, mappings, conditions)
 
 
-def resolve_and(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
+def resolve_and(
+    function_body: List,
+    params: Dict,
+    mappings: Dict[str, Dict],
+    conditions: Dict[str, bool],
+) -> bool:
     return all(_extended_bool(resolve(part, params, mappings, conditions)) for part in function_body)
 
 
-def resolve_or(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
+def resolve_or(
+    function_body: List,
+    params: Dict,
+    mappings: Dict[str, Dict],
+    conditions: Dict[str, bool],
+) -> bool:
     return any(_extended_bool(resolve(part, params, mappings, conditions)) for part in function_body)
 
 
-def resolve_not(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
+def resolve_not(
+    function_body: List,
+    params: Dict,
+    mappings: Dict[str, Dict],
+    conditions: Dict[str, bool],
+) -> bool:
     return not _extended_bool(resolve(function_body[0], params, mappings, conditions))
 
 
-def resolve_equals(function_body: List, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> bool:
+def resolve_equals(
+    function_body: List,
+    params: Dict,
+    mappings: Dict[str, Dict],
+    conditions: Dict[str, bool],
+) -> bool:
     part_1, part_2 = function_body
     return resolve(part_1, params, mappings, conditions) == resolve(part_2, params, mappings, conditions)
 
 
-def resolve_base64(function_body: str, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> str:
+def resolve_base64(
+    function_body: str,
+    params: Dict,
+    mappings: Dict[str, Dict],
+    conditions: Dict[str, bool],
+) -> str:
     resolved_string = resolve(function_body, params, mappings, conditions)
     return str(b64encode(resolved_string.encode("utf-8")), "utf-8")
 

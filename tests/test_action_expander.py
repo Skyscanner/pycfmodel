@@ -68,7 +68,13 @@ def test_expand_not_actions(action, reverse_expected_output):
 def test_expand_actions_scenario_1():
     template = {
         "AWSTemplateFormatVersion": "2010-09-09",
-        "Parameters": {"StarParameter": {"Type": "String", "Default": "*", "Description": "Star Param"}},
+        "Parameters": {
+            "StarParameter": {
+                "Type": "String",
+                "Default": "*",
+                "Description": "Star Param",
+            }
+        },
         "Resources": {
             "rootRole": {
                 "Type": "AWS::IAM::Role",
@@ -114,7 +120,12 @@ def test_resolve_scenario_2():
     template = {
         "AWSTemplateFormatVersion": "2010-09-09",
         "Description": "IAM role for Lambda",
-        "Parameters": {"LambdaFunctionName": {"Description": "Name of the lambda function", "Type": "String"}},
+        "Parameters": {
+            "LambdaFunctionName": {
+                "Description": "Name of the lambda function",
+                "Type": "String",
+            }
+        },
         "Resources": {
             "lambdaRole": {
                 "Properties": {
@@ -153,7 +164,10 @@ def test_resolve_scenario_2():
                             "PolicyDocument": {
                                 "Statement": [
                                     {
-                                        "Action": ["xray:PutTraceSegments", "xray:PutTelemetryRecords"],
+                                        "Action": [
+                                            "xray:PutTraceSegments",
+                                            "xray:PutTelemetryRecords",
+                                        ],
                                         "Effect": "Allow",
                                         "Resource": ["*"],
                                     }
@@ -166,7 +180,11 @@ def test_resolve_scenario_2():
                             "PolicyDocument": {
                                 "Statement": [
                                     {
-                                        "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+                                        "Action": [
+                                            "logs:CreateLogGroup",
+                                            "logs:CreateLogStream",
+                                            "logs:PutLogEvents",
+                                        ],
                                         "Effect": "Allow",
                                         "Resource": ["*"],
                                     }

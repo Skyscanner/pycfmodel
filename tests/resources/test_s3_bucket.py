@@ -20,7 +20,10 @@ def valid_s3_bucket():
                             "Id": "MyRule1",
                             "Status": "Enabled",
                             "Prefix": "MyPrefix",
-                            "Destination": {"Bucket": "arn:aws:s3:::my-replication-bucket", "StorageClass": "STANDARD"},
+                            "Destination": {
+                                "Bucket": "arn:aws:s3:::my-replication-bucket",
+                                "StorageClass": "STANDARD",
+                            },
                         },
                         {
                             "Status": "Enabled",
@@ -46,7 +49,11 @@ def test_extra_fields_not_allowed_s3_bucket():
         S3Bucket(
             **{
                 "Type": "AWS::S3::Bucket",
-                "Properties": {"AccelerateConfiguration": "None", "AnalyticsConfigurations": {"a": "b"}, "foo": "bar"},
+                "Properties": {
+                    "AccelerateConfiguration": "None",
+                    "AnalyticsConfigurations": {"a": "b"},
+                    "foo": "bar",
+                },
             }
         )
 
@@ -71,7 +78,11 @@ def test_extra_fields_not_allowed_s3_bucket():
             "msg": "FunctionDict should only have 1 key and be a function",
             "type": "value_error",
         },
-        {"loc": ("Properties", "foo"), "msg": "extra fields not permitted", "type": "value_error.extra"},
+        {
+            "loc": ("Properties", "foo"),
+            "msg": "extra fields not permitted",
+            "type": "value_error.extra",
+        },
         {
             "loc": ("Properties", "__root__"),
             "msg": "FunctionDict should only have 1 key and be a function",

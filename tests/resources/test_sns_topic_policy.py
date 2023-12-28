@@ -15,7 +15,13 @@ def sns_topic_policy():
                     "Id": "MyTopicPolicy",
                     "Version": "2012-10-17",
                     "Statement": [
-                        {"Sid": "Stmt1", "Effect": "Allow", "Principal": "*", "Action": "sns:Publish", "Resource": "*"},
+                        {
+                            "Sid": "Stmt1",
+                            "Effect": "Allow",
+                            "Principal": "*",
+                            "Action": "sns:Publish",
+                            "Resource": "*",
+                        },
                         {
                             "Sid": "Stmt2",
                             "Effect": "Allow",

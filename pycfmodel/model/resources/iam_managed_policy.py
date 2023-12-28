@@ -48,6 +48,7 @@ class IAMManagedPolicy(Resource):
     def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:
         return [
             OptionallyNamedPolicyDocument(
-                name=self.Properties.ManagedPolicyName, policy_document=self.Properties.PolicyDocument
+                name=self.Properties.ManagedPolicyName,
+                policy_document=self.Properties.PolicyDocument,
             )
         ]

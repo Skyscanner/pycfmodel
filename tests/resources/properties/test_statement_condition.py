@@ -79,7 +79,8 @@ def test_statement_condition_remove_colon():
             "ForAnyValue:ArnEquals": {"patata_2": ["test_2", "test_3"]},
         }
     ) == StatementCondition(
-        ForAllValuesArnEqualsIfExists={"patata_1": "test_1"}, ForAnyValueArnEquals={"patata_2": ["test_2", "test_3"]}
+        ForAllValuesArnEqualsIfExists={"patata_1": "test_1"},
+        ForAnyValueArnEquals={"patata_2": ["test_2", "test_3"]},
     )
 
 
@@ -107,14 +108,62 @@ def test_build_evaluator_bool(function: str, arg_a: Any, arg_b: Any, params: Dic
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("IpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Network("203.0.113.12")}, True),
-        ("IpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Network("10.1.1.1")}, False),
-        ("IpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Network("203.0.113.10")}, True),
-        ("IpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Network("10.1.1.1")}, False),
-        ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("203.0.113.10")}, False),
-        ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("172.16.0.13")}, True),
-        ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("172.16.0.0/12")}, True),
-        ("IpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("203.0.113.10/32")}, False),
+        (
+            "IpAddress",
+            "patata",
+            IPv4Network("203.0.113.0/24"),
+            {"patata": IPv4Network("203.0.113.12")},
+            True,
+        ),
+        (
+            "IpAddress",
+            "patata",
+            IPv4Network("203.0.113.0/24"),
+            {"patata": IPv4Network("10.1.1.1")},
+            False,
+        ),
+        (
+            "IpAddress",
+            "patata",
+            IPv4Network("203.0.113.10/32"),
+            {"patata": IPv4Network("203.0.113.10")},
+            True,
+        ),
+        (
+            "IpAddress",
+            "patata",
+            IPv4Network("203.0.113.10/32"),
+            {"patata": IPv4Network("10.1.1.1")},
+            False,
+        ),
+        (
+            "IpAddress",
+            "patata",
+            IPv4Network("172.16.0.0/12"),
+            {"patata": IPv4Network("203.0.113.10")},
+            False,
+        ),
+        (
+            "IpAddress",
+            "patata",
+            IPv4Network("172.16.0.0/12"),
+            {"patata": IPv4Network("172.16.0.13")},
+            True,
+        ),
+        (
+            "IpAddress",
+            "patata",
+            IPv4Network("172.16.0.0/12"),
+            {"patata": IPv4Network("172.16.0.0/12")},
+            True,
+        ),
+        (
+            "IpAddress",
+            "patata",
+            IPv4Network("172.16.0.0/12"),
+            {"patata": IPv4Network("203.0.113.10/32")},
+            False,
+        ),
     ],
 )
 def test_build_evaluator_ip_address(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
@@ -125,13 +174,55 @@ def test_build_evaluator_ip_address(function: str, arg_a: Any, arg_b: Any, param
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("NotIpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Network("203.0.113.12")}, False),
-        ("NotIpAddress", "patata", IPv4Network("203.0.113.0/24"), {"patata": IPv4Network("10.1.1.1")}, True),
-        ("NotIpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Network("203.0.113.10")}, False),
-        ("NotIpAddress", "patata", IPv4Network("203.0.113.10/32"), {"patata": IPv4Network("10.1.1.1")}, True),
-        ("NotIpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("203.0.113.10")}, True),
-        ("NotIpAddress", "patata", IPv4Network("172.16.0.0/12"), {"patata": IPv4Network("172.16.0.13")}, False),
-        ("NotIpAddress", "patata", IPv4Network("172.0.0.0/8"), {"patata": IPv4Network("172.0.0.0/8")}, False),
+        (
+            "NotIpAddress",
+            "patata",
+            IPv4Network("203.0.113.0/24"),
+            {"patata": IPv4Network("203.0.113.12")},
+            False,
+        ),
+        (
+            "NotIpAddress",
+            "patata",
+            IPv4Network("203.0.113.0/24"),
+            {"patata": IPv4Network("10.1.1.1")},
+            True,
+        ),
+        (
+            "NotIpAddress",
+            "patata",
+            IPv4Network("203.0.113.10/32"),
+            {"patata": IPv4Network("203.0.113.10")},
+            False,
+        ),
+        (
+            "NotIpAddress",
+            "patata",
+            IPv4Network("203.0.113.10/32"),
+            {"patata": IPv4Network("10.1.1.1")},
+            True,
+        ),
+        (
+            "NotIpAddress",
+            "patata",
+            IPv4Network("172.16.0.0/12"),
+            {"patata": IPv4Network("203.0.113.10")},
+            True,
+        ),
+        (
+            "NotIpAddress",
+            "patata",
+            IPv4Network("172.16.0.0/12"),
+            {"patata": IPv4Network("172.16.0.13")},
+            False,
+        ),
+        (
+            "NotIpAddress",
+            "patata",
+            IPv4Network("172.0.0.0/8"),
+            {"patata": IPv4Network("172.0.0.0/8")},
+            False,
+        ),
     ],
 )
 def test_build_evaluator_not_ip_address(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
@@ -155,7 +246,10 @@ def test_build_evaluator_null(function: str, arg_a: Any, arg_b: Any, params: Dic
 
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
-    [("NumericEquals", "patata", 1, {"patata": 1}, True), ("NumericEquals", "patata", 1, {"patata": 2}, False)],
+    [
+        ("NumericEquals", "patata", 1, {"patata": 1}, True),
+        ("NumericEquals", "patata", 1, {"patata": 2}, False),
+    ],
 )
 def test_build_evaluator_numeric_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
     node = build_evaluator(function, arg_a, arg_b)
@@ -164,7 +258,10 @@ def test_build_evaluator_numeric_equals(function: str, arg_a: Any, arg_b: Any, p
 
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
-    [("NumericNotEquals", "patata", 1, {"patata": 1}, False), ("NumericNotEquals", "patata", 1, {"patata": 2}, True)],
+    [
+        ("NumericNotEquals", "patata", 1, {"patata": 1}, False),
+        ("NumericNotEquals", "patata", 1, {"patata": 2}, True),
+    ],
 )
 def test_build_evaluator_numeric_not_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
     node = build_evaluator(function, arg_a, arg_b)
@@ -232,8 +329,20 @@ def test_build_evaluator_numeric_greater_than_equals(
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("DateEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, True),
-        ("DateEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_past()}, False),
+        (
+            "DateEquals",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_present()},
+            True,
+        ),
+        (
+            "DateEquals",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_past()},
+            False,
+        ),
     ],
 )
 def test_build_evaluator_date_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
@@ -244,8 +353,20 @@ def test_build_evaluator_date_equals(function: str, arg_a: Any, arg_b: Any, para
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("DateNotEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, False),
-        ("DateNotEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_past()}, True),
+        (
+            "DateNotEquals",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_present()},
+            False,
+        ),
+        (
+            "DateNotEquals",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_past()},
+            True,
+        ),
     ],
 )
 def test_build_evaluator_date_not_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
@@ -256,9 +377,27 @@ def test_build_evaluator_date_not_equals(function: str, arg_a: Any, arg_b: Any, 
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("DateLessThan", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, False),
-        ("DateLessThan", "patata", datetime_in_the_present(), {"patata": datetime_in_the_future()}, False),
-        ("DateLessThan", "patata", datetime_in_the_future(), {"patata": datetime_in_the_present()}, True),
+        (
+            "DateLessThan",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_present()},
+            False,
+        ),
+        (
+            "DateLessThan",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_future()},
+            False,
+        ),
+        (
+            "DateLessThan",
+            "patata",
+            datetime_in_the_future(),
+            {"patata": datetime_in_the_present()},
+            True,
+        ),
     ],
 )
 def test_build_evaluator_date_less_than(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
@@ -269,9 +408,27 @@ def test_build_evaluator_date_less_than(function: str, arg_a: Any, arg_b: Any, p
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("DateLessThanEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, True),
-        ("DateLessThanEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_future()}, False),
-        ("DateLessThanEquals", "patata", datetime_in_the_future(), {"patata": datetime_in_the_present()}, True),
+        (
+            "DateLessThanEquals",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_present()},
+            True,
+        ),
+        (
+            "DateLessThanEquals",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_future()},
+            False,
+        ),
+        (
+            "DateLessThanEquals",
+            "patata",
+            datetime_in_the_future(),
+            {"patata": datetime_in_the_present()},
+            True,
+        ),
     ],
 )
 def test_build_evaluator_date_less_than_equals(
@@ -284,9 +441,27 @@ def test_build_evaluator_date_less_than_equals(
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("DateGreaterThan", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, False),
-        ("DateGreaterThan", "patata", datetime_in_the_future(), {"patata": datetime_in_the_present()}, False),
-        ("DateGreaterThan", "patata", datetime_in_the_present(), {"patata": datetime_in_the_future()}, True),
+        (
+            "DateGreaterThan",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_present()},
+            False,
+        ),
+        (
+            "DateGreaterThan",
+            "patata",
+            datetime_in_the_future(),
+            {"patata": datetime_in_the_present()},
+            False,
+        ),
+        (
+            "DateGreaterThan",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_future()},
+            True,
+        ),
     ],
 )
 def test_build_evaluator_date_greater_than(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
@@ -297,9 +472,27 @@ def test_build_evaluator_date_greater_than(function: str, arg_a: Any, arg_b: Any
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("DateGreaterThanEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_present()}, True),
-        ("DateGreaterThanEquals", "patata", datetime_in_the_future(), {"patata": datetime_in_the_present()}, False),
-        ("DateGreaterThanEquals", "patata", datetime_in_the_present(), {"patata": datetime_in_the_future()}, True),
+        (
+            "DateGreaterThanEquals",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_present()},
+            True,
+        ),
+        (
+            "DateGreaterThanEquals",
+            "patata",
+            datetime_in_the_future(),
+            {"patata": datetime_in_the_present()},
+            False,
+        ),
+        (
+            "DateGreaterThanEquals",
+            "patata",
+            datetime_in_the_present(),
+            {"patata": datetime_in_the_future()},
+            True,
+        ),
     ],
 )
 def test_build_evaluator_date_greater_than_equals(
@@ -504,8 +697,20 @@ def test_build_evaluator_arn_not_like(function: str, arg_a: Any, arg_b: Any, par
 @pytest.mark.parametrize(
     "function, arg_a, arg_b, params, expected_output",
     [
-        ("BinaryEquals", "patata", bytearray("AaAaA", "utf-8"), {"patata": bytearray("AaAaA", "utf-8")}, True),
-        ("BinaryEquals", "patata", bytearray("AAAAA", "utf-8"), {"patata": bytearray("aaaaa", "utf-8")}, False),
+        (
+            "BinaryEquals",
+            "patata",
+            bytearray("AaAaA", "utf-8"),
+            {"patata": bytearray("AaAaA", "utf-8")},
+            True,
+        ),
+        (
+            "BinaryEquals",
+            "patata",
+            bytearray("AAAAA", "utf-8"),
+            {"patata": bytearray("aaaaa", "utf-8")},
+            False,
+        ),
     ],
 )
 def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, params: Dict, expected_output: bool):
@@ -523,15 +728,46 @@ def test_build_evaluator_binary_equals(function: str, arg_a: Any, arg_b: Any, pa
         ("StringEquals", {"patata": "2"}, {"patata": ["2"]}, False),
         ("StringEquals", {"patata": "2"}, {"patata": ["2", "1"]}, False),
         ("StringEquals", {"patata": ["1", "3"]}, {"patata": ["4"]}, False),
-        ("StringLike", {"patata": ["sky*"]}, {"patata": ["skyx", "skyscanner", "nope"]}, True),
-        ("StringLike", {"patata": ["sky*"]}, {"patata": ["nopeskyx", "nopeskyscanner", "nope"]}, False),
-        ("IpAddress", {"patata": [IPv4Network("203.0.113.0/24")]}, {"patata": IPv4Network("203.0.113.0/24")}, True),
-        ("IpAddress", {"patata": [IPv4Network("203.0.113.0/24")]}, {"patata": [IPv4Network("203.0.113.0/24")]}, True),
-        ("IpAddress", {"patata": ["vpce-123456"]}, {"patata": ["vpce-123456"]}, False),
-        ("NotIpAddress", {"patata": ["vpce-123456"]}, {"patata": ["vpce-654321"]}, False),
+        (
+            "StringLike",
+            {"patata": ["sky*"]},
+            {"patata": ["skyx", "skyscanner", "nope"]},
+            True,
+        ),
+        (
+            "StringLike",
+            {"patata": ["sky*"]},
+            {"patata": ["nopeskyx", "nopeskyscanner", "nope"]},
+            False,
+        ),
         (
             "IpAddress",
-            {"patata": [IPv4Network("203.0.113.0/24"), IPv4Network("103.0.113.0/24"), IPv4Network("85.0.113.0/24")]},
+            {"patata": [IPv4Network("203.0.113.0/24")]},
+            {"patata": IPv4Network("203.0.113.0/24")},
+            True,
+        ),
+        (
+            "IpAddress",
+            {"patata": [IPv4Network("203.0.113.0/24")]},
+            {"patata": [IPv4Network("203.0.113.0/24")]},
+            True,
+        ),
+        ("IpAddress", {"patata": ["vpce-123456"]}, {"patata": ["vpce-123456"]}, False),
+        (
+            "NotIpAddress",
+            {"patata": ["vpce-123456"]},
+            {"patata": ["vpce-654321"]},
+            False,
+        ),
+        (
+            "IpAddress",
+            {
+                "patata": [
+                    IPv4Network("203.0.113.0/24"),
+                    IPv4Network("103.0.113.0/24"),
+                    IPv4Network("85.0.113.0/24"),
+                ]
+            },
             {"patata": [IPv4Network("10.0.0.0/8")]},
             False,
         ),
@@ -583,9 +819,19 @@ def test_build_root_evaluator_for_all_values(
         ("ForAllValuesNumericEqualsIfExists", {"patata": 1}, {}, True),
         ("ForAllValuesNumericEqualsIfExists", {"patata": [1, 2, 3]}, {}, True),
         ("ForAllValuesNumericEqualsIfExists", {"patata": 1}, {"patata": 2}, False),
-        ("ForAllValuesNumericEqualsIfExists", {"patata": [1, 2, 3]}, {"patata": 4}, False),
+        (
+            "ForAllValuesNumericEqualsIfExists",
+            {"patata": [1, 2, 3]},
+            {"patata": 4},
+            False,
+        ),
         ("ForAllValuesNumericEqualsIfExists", {"patata": 1}, {"patata": [2, 3]}, False),
-        ("ForAllValuesNumericEqualsIfExists", {"patata": [1, 2, 3]}, {"patata": [1, 4]}, False),
+        (
+            "ForAllValuesNumericEqualsIfExists",
+            {"patata": [1, 2, 3]},
+            {"patata": [1, 4]},
+            False,
+        ),
     ],
 )
 def test_build_root_evaluator_for_all_values_if_exists(
@@ -601,7 +847,12 @@ def test_build_root_evaluator_for_all_values_if_exists(
         ("ForAnyValueNumericEquals", {"patata": 1}, {"patata": 1}, True),
         ("ForAnyValueNumericEquals", {"patata": [1, 2, 3]}, {"patata": 1}, True),
         ("ForAnyValueNumericEquals", {"patata": 1}, {"patata": [1, 2]}, True),
-        ("ForAnyValueNumericEquals", {"patata": [1, 2, 3]}, {"patata": [1, 2, 5, 6]}, True),
+        (
+            "ForAnyValueNumericEquals",
+            {"patata": [1, 2, 3]},
+            {"patata": [1, 2, 5, 6]},
+            True,
+        ),
         ("ForAnyValueNumericEquals", {"patata": 1}, {"patata": 2}, False),
         ("ForAnyValueNumericEquals", {"patata": [1, 2, 3]}, {"patata": 4}, False),
         ("ForAnyValueNumericEquals", {"patata": 1}, {"patata": [2, 3]}, False),
@@ -621,9 +872,19 @@ def test_build_root_evaluator_for_any_value(
         ("ForAnyValueNumericEqualsIfExists", {"patata": 1}, {}, True),
         ("ForAnyValueNumericEqualsIfExists", {"patata": [1, 2, 3]}, {}, True),
         ("ForAnyValueNumericEqualsIfExists", {"patata": 1}, {"patata": 2}, False),
-        ("ForAnyValueNumericEqualsIfExists", {"patata": [1, 2, 3]}, {"patata": 4}, False),
+        (
+            "ForAnyValueNumericEqualsIfExists",
+            {"patata": [1, 2, 3]},
+            {"patata": 4},
+            False,
+        ),
         ("ForAnyValueNumericEqualsIfExists", {"patata": 1}, {"patata": [2, 3]}, False),
-        ("ForAnyValueNumericEqualsIfExists", {"patata": [1, 2, 3]}, {"patata": [4, 5, 6]}, False),
+        (
+            "ForAnyValueNumericEqualsIfExists",
+            {"patata": [1, 2, 3]},
+            {"patata": [4, 5, 6]},
+            False,
+        ),
     ],
 )
 def test_build_root_evaluator_for_any_value_if_exists(

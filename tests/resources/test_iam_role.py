@@ -15,7 +15,10 @@ def iam_role():
                     "Version": "2012-10-17",
                     "Statement": {
                         "Effect": "Allow",
-                        "Principal": {"Service": ["ec2.amazonaws.com"], "AWS": "arn:aws:iam::111111111111:root"},
+                        "Principal": {
+                            "Service": ["ec2.amazonaws.com"],
+                            "AWS": "arn:aws:iam::111111111111:root",
+                        },
                         "Action": ["sts:AssumeRole"],
                         "Condition": {
                             "StringLike": {
