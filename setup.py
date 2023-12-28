@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from setuptools import find_namespace_packages, setup
-from pycfmodel.__version__ import __version__
 
 readme = Path(__file__).parent / "README.md"
 long_description = readme.read_text()
@@ -29,7 +28,7 @@ docs_requires = [
 
 setup(
     name="pycfmodel",
-    version=__version__,
+    version="0.21.2",
     description="A python model for CloudFormation scripts",
     author="Skyscanner Product Security",
     author_email="security@skyscanner.net",
