@@ -42,7 +42,7 @@ test: lint unit
 test-docs:
 	mkdocs build --strict
 
-FREEZE_OPTIONS = --no-emit-index-url --no-annotate -v
+FREEZE_OPTIONS = --no-emit-index-url --no-annotate -v --resolver=backtracking
 freeze-base:
 	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile $(FREEZE_OPTIONS) setup.py --output-file requirements.txt
 freeze-dev:
