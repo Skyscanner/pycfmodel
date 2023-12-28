@@ -28,6 +28,6 @@ pyyaml-env-tag==0.1
 six==1.16.0
 soupsieve==2.5
 tornado==6.4
-typing-extensions==3.7.1
+typing-extensions==4.7.1
 watchdog==3.0.0
 zipp==3.17.0
