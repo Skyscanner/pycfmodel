@@ -28,12 +28,7 @@ def valid_es_domain_from_aws_documentation_examples():
                 },
                 "AdvancedOptions": {"rest.action.multi.allow_explicit_index": True},
                 "DomainName": "test",
-                "EBSOptions": {
-                    "EBSEnabled": True,
-                    "Iops": "0",
-                    "VolumeSize": "20",
-                    "VolumeType": "gp2",
-                },
+                "EBSOptions": {"EBSEnabled": True, "Iops": "0", "VolumeSize": "20", "VolumeType": "gp2"},
                 "ElasticsearchClusterConfig": {
                     "DedicatedMasterEnabled": True,
                     "InstanceCount": "2",
@@ -171,11 +166,7 @@ def test_raise_error_if_invalid_fields_in_resource():
         ESDomain(**{"Type": "AWS::Elasticsearch::Domain", "Properties": {"DomainName": []}})
 
     assert exc_info.value.errors() == [
-        {
-            "loc": ("Properties", "DomainName"),
-            "msg": "str type expected",
-            "type": "type_error.str",
-        },
+        {"loc": ("Properties", "DomainName"), "msg": "str type expected", "type": "type_error.str"},
         {
             "loc": ("Properties", "DomainName", "__root__"),
             "msg": "FunctionDict should only have 1 key and be a function",

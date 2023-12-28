@@ -48,14 +48,8 @@ def test_recursive():
         ("2001:db00::0/120", IPv6Network("2001:db00::0/120")),
         (["2001:db00::0/120"], [IPv6Network("2001:db00::0/120")]),
         # ResolvableArnOrList
-        (
-            "arn:aws:iam::123456789012:user/test-user",
-            "arn:aws:iam::123456789012:user/test-user",
-        ),
-        (
-            ["arn:aws:iam::123456789012:user/test-user"],
-            ["arn:aws:iam::123456789012:user/test-user"],
-        ),
+        ("arn:aws:iam::123456789012:user/test-user", "arn:aws:iam::123456789012:user/test-user"),
+        (["arn:aws:iam::123456789012:user/test-user"], ["arn:aws:iam::123456789012:user/test-user"]),
         # ResolvableStrOrList
         ("potato", "potato"),
         (["potato"], ["potato"]),

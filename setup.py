@@ -39,5 +39,8 @@ setup(
     python_requires=">=3.7",
     install_requires=install_requires,
     tests_require=dev_requires,
-    extras_require={"dev": dev_requires, "docs": docs_requires},
+    extras_require={
+        "dev": dev_requires,
+        "docs": docs_requires,
+    },
 )

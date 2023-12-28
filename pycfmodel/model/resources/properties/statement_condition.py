@@ -45,20 +45,9 @@ def build_evaluator(function: str, arg_a: Any, arg_b: Any) -> Callable:
     elif function == "Null":
         return lambda kwargs: (kwargs.get(arg_a) is not None) is arg_b
 
-    elif function in (
-        "StringEquals",
-        "ArnEquals",
-        "BinaryEquals",
-        "NumericEquals",
-        "DateEquals",
-    ):
+    elif function in ("StringEquals", "ArnEquals", "BinaryEquals", "NumericEquals", "DateEquals"):
         return lambda kwargs: kwargs[arg_a] == arg_b
-    elif function in (
-        "StringNotEquals",
-        "ArnNotEquals",
-        "NumericNotEquals",
-        "DateNotEquals",
-    ):
+    elif function in ("StringNotEquals", "ArnNotEquals", "NumericNotEquals", "DateNotEquals"):
         return lambda kwargs: kwargs[arg_a] != arg_b
 
     elif function in ("NumericLessThan", "DateLessThan"):

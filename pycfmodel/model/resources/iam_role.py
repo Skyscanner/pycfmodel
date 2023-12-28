@@ -57,9 +57,7 @@ class IAMRole(Resource):
         return result
 
     @property
-    def assume_role_as_optionally_named_policy_document_list(
-        self,
-    ) -> List[OptionallyNamedPolicyDocument]:
+    def assume_role_as_optionally_named_policy_document_list(self) -> List[OptionallyNamedPolicyDocument]:
         return [OptionallyNamedPolicyDocument(name=None, policy_document=self.Properties.AssumeRolePolicyDocument)]
 
     @property

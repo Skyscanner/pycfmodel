@@ -12,14 +12,7 @@ def ec2_vpc_endpoint_policy():
             "Properties": {
                 "PolicyDocument": {
                     "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Principal": "*",
-                            "Action": ["s3:GetObject"],
-                            "Resource": "*",
-                        }
-                    ],
+                    "Statement": [{"Effect": "Allow", "Principal": "*", "Action": ["s3:GetObject"], "Resource": "*"}],
                 },
                 "RouteTableIds": [{"Ref": "routetableA"}, {"Ref": "routetableB"}],
                 "ServiceName": "com.amazonaws.eu-west-1.s3",
@@ -64,7 +57,5 @@ def test_ec2_vpc_endpoint_policy_documents(ec2_vpc_endpoint_policy):
     ]
 
 
-def test_ec2_vpc_endpoint_policy_documents_no_document(
-    ec2_vpc_endpoint_policy_no_policy_document,
-):
+def test_ec2_vpc_endpoint_policy_documents_no_document(ec2_vpc_endpoint_policy_no_policy_document):
     assert ec2_vpc_endpoint_policy_no_policy_document.policy_documents == []

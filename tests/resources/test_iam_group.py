@@ -20,11 +20,7 @@ def iam_group():
                             "Statement": [
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "lambda:AddPermission",
-                                        "ssm:SendCommand",
-                                        "kms:Decrypt",
-                                    ],
+                                    "Action": ["lambda:AddPermission", "ssm:SendCommand", "kms:Decrypt"],
                                     "Resource": "*",
                                 }
                             ],
@@ -44,8 +40,5 @@ def test_policies(iam_group):
 
 def test_iamgroup_policy_documents(iam_group):
     assert iam_group.policy_documents == [
-        OptionallyNamedPolicyDocument(
-            name="BadPolicy",
-            policy_document=iam_group.Properties.Policies[0].PolicyDocument,
-        )
+        OptionallyNamedPolicyDocument(name="BadPolicy", policy_document=iam_group.Properties.Policies[0].PolicyDocument)
     ]

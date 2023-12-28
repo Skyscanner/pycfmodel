@@ -12,10 +12,7 @@ def iam_user():
             "Properties": {
                 "Path": "/",
                 "UserName": "TestUser",
-                "LoginProfile": {
-                    "Password": "ThisMyBestP@ssword",
-                    "PasswordResetRequired": False,
-                },
+                "LoginProfile": {"Password": "ThisMyBestP@ssword", "PasswordResetRequired": False},
                 "Policies": [
                     {
                         "PolicyName": "BadPolicy",
@@ -24,11 +21,7 @@ def iam_user():
                             "Statement": [
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "lambda:AddPermission",
-                                        "ssm:SendCommand",
-                                        "kms:Decrypt",
-                                    ],
+                                    "Action": ["lambda:AddPermission", "ssm:SendCommand", "kms:Decrypt"],
                                     "Resource": "*",
                                 }
                             ],
@@ -47,10 +40,7 @@ def test_policies(iam_user):
 
 def test_iam_role_policy_documents(iam_user):
     assert iam_user.policy_documents == [
-        OptionallyNamedPolicyDocument(
-            name="BadPolicy",
-            policy_document=iam_user.Properties.Policies[0].PolicyDocument,
-        )
+        OptionallyNamedPolicyDocument(name="BadPolicy", policy_document=iam_user.Properties.Policies[0].PolicyDocument)
     ]
 
 

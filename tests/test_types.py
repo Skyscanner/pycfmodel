@@ -14,13 +14,7 @@ def test_loose_ip_v4_network_type():
     assert model_schema == {
         "title": "Model",
         "type": "object",
-        "properties": {
-            "ip_network": {
-                "title": "Ip Network",
-                "type": "string",
-                "format": "looseipv4network",
-            }
-        },
+        "properties": {"ip_network": {"title": "Ip Network", "type": "string", "format": "looseipv4network"}},
         "required": ["ip_network"],
     }
 
@@ -33,13 +27,7 @@ def test_loose_ip_v6_network_type():
     assert model_schema == {
         "title": "Model",
         "type": "object",
-        "properties": {
-            "ip_network": {
-                "title": "Ip Network",
-                "type": "string",
-                "format": "looseipv6network",
-            }
-        },
+        "properties": {"ip_network": {"title": "Ip Network", "type": "string", "format": "looseipv6network"}},
         "required": ["ip_network"],
     }
 
@@ -91,11 +79,7 @@ def test_loose_ip_v4_is_not_strict(value):
 
 @pytest.mark.parametrize(
     "value",
-    [
-        "2012::1234:abcd:ffff:c0a8:101/64",
-        "2022::1234:abcd:ffff:c0a8:101/64",
-        "2032::1234:abcd:ffff:c0a8:101/64",
-    ],
+    ["2012::1234:abcd:ffff:c0a8:101/64", "2022::1234:abcd:ffff:c0a8:101/64", "2032::1234:abcd:ffff:c0a8:101/64"],
 )
 def test_loose_ip_v6_is_not_strict(value):
     class Model(BaseModel):
@@ -111,23 +95,11 @@ def test_loose_ip_v6_is_not_strict(value):
     [
         (
             "hello,world",
-            [
-                {
-                    "loc": ("ip",),
-                    "msg": "Expected 4 octets in 'hello,world'",
-                    "type": "value_error.addressvalue",
-                }
-            ],
+            [{"loc": ("ip",), "msg": "Expected 4 octets in 'hello,world'", "type": "value_error.addressvalue"}],
         ),
         (
             "192.168.0.1.1.1/24",
-            [
-                {
-                    "loc": ("ip",),
-                    "msg": "Expected 4 octets in '192.168.0.1.1.1'",
-                    "type": "value_error.addressvalue",
-                }
-            ],
+            [{"loc": ("ip",), "msg": "Expected 4 octets in '192.168.0.1.1.1'", "type": "value_error.addressvalue"}],
         ),
         (
             -1,
@@ -151,13 +123,7 @@ def test_loose_ip_v6_is_not_strict(value):
         ),
         (
             "2001:db00::1/120",
-            [
-                {
-                    "loc": ("ip",),
-                    "msg": "Expected 4 octets in '2001:db00::1'",
-                    "type": "value_error.addressvalue",
-                }
-            ],
+            [{"loc": ("ip",), "msg": "Expected 4 octets in '2001:db00::1'", "type": "value_error.addressvalue"}],
         ),
     ],
 )
@@ -175,13 +141,7 @@ def test_loose_ip_v4_network_fails(value, errors):
     [
         (
             "hello,world",
-            [
-                {
-                    "loc": ("ip",),
-                    "msg": "At least 3 parts expected in 'hello,world'",
-                    "type": "value_error.addressvalue",
-                }
-            ],
+            [{"loc": ("ip",), "msg": "At least 3 parts expected in 'hello,world'", "type": "value_error.addressvalue"}],
         ),
         (
             "192.168.0.1.1.1/24",
@@ -215,13 +175,7 @@ def test_loose_ip_v4_network_fails(value, errors):
         ),
         (
             "192.168.0.1/24",
-            [
-                {
-                    "loc": ("ip",),
-                    "msg": "At least 3 parts expected in '192.168.0.1'",
-                    "type": "value_error.addressvalue",
-                }
-            ],
+            [{"loc": ("ip",), "msg": "At least 3 parts expected in '192.168.0.1'", "type": "value_error.addressvalue"}],
         ),
     ],
 )

@@ -9,11 +9,5 @@ from pycfmodel.model.resources.properties.statement_condition import StatementCo
 from pycfmodel.model.resources.properties.tag import Tag
 
 Properties = Union[
-    Policy,
-    PolicyDocument,
-    SecurityGroupEgressProp,
-    SecurityGroupIngressProp,
-    Statement,
-    StatementCondition,
-    Tag,
+    Policy, PolicyDocument, SecurityGroupEgressProp, SecurityGroupIngressProp, Statement, StatementCondition, Tag
 ]

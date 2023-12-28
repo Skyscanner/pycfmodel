@@ -42,12 +42,7 @@ def valid_opensearch_domain_from_aws_documentation_examples():
                     "DedicatedMasterCount": "3",
                 },
                 "DomainName": "test",
-                "EBSOptions": {
-                    "EBSEnabled": True,
-                    "Iops": "0",
-                    "VolumeSize": "20",
-                    "VolumeType": "gp2",
-                },
+                "EBSOptions": {"EBSEnabled": True, "Iops": "0", "VolumeSize": "20", "VolumeType": "gp2"},
                 "EngineVersion": "OpenSearch_1.0",
                 "LogPublishingOptions": {
                     "ES_APPLICATION_LOGS": {
@@ -89,9 +84,7 @@ def valid_opensearch_domain_with_access_policies():
     )
 
 
-def test_valid_empty_opensearch_domain_resource_can_be_built(
-    valid_empty_opensearch_domain,
-):
+def test_valid_empty_opensearch_domain_resource_can_be_built(valid_empty_opensearch_domain):
     assert valid_empty_opensearch_domain.Type == "AWS::OpenSearchService::Domain"
     assert valid_empty_opensearch_domain.Properties.AccessPolicies is None
     assert valid_empty_opensearch_domain.Properties.AdvancedOptions is None
@@ -203,19 +196,10 @@ def test_valid_opensearch_domain_from_aws_documentation_examples_resource_can_be
 
 def test_raise_error_if_invalid_fields_in_resource():
     with pytest.raises(ValidationError) as exc_info:
-        OpenSearchDomain(
-            **{
-                "Type": "AWS::OpenSearchService::Domain",
-                "Properties": {"DomainName": []},
-            }
-        )
+        OpenSearchDomain(**{"Type": "AWS::OpenSearchService::Domain", "Properties": {"DomainName": []}})
 
     assert exc_info.value.errors() == [
-        {
-            "loc": ("Properties", "DomainName"),
-            "msg": "str type expected",
-            "type": "type_error.str",
-        },
+        {"loc": ("Properties", "DomainName"), "msg": "str type expected", "type": "type_error.str"},
         {
             "loc": ("Properties", "DomainName", "__root__"),
             "msg": "FunctionDict should only have 1 key and be a function",
@@ -229,9 +213,7 @@ def test_raise_error_if_invalid_fields_in_resource():
     ]
 
 
-def test_can_obtain_policy_documents_from_inherited_method(
-    valid_opensearch_domain_with_access_policies,
-):
+def test_can_obtain_policy_documents_from_inherited_method(valid_opensearch_domain_with_access_policies):
     assert len(valid_opensearch_domain_with_access_policies.policy_documents) == 1
     assert valid_opensearch_domain_with_access_policies.policy_documents == [
         OptionallyNamedPolicyDocument(

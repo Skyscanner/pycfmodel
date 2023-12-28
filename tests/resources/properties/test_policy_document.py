@@ -16,10 +16,7 @@ def policy_document_one_statement():
             "Version": "2012-10-17",
             "Statement": {
                 "Effect": "Allow",
-                "Principal": {
-                    "Service": ["ec2.amazonaws.com"],
-                    "AWS": "arn:aws:iam::324320755747:root",
-                },
+                "Principal": {"Service": ["ec2.amazonaws.com"], "AWS": "arn:aws:iam::324320755747:root"},
                 "Action": ["sts:AssumeRole"],
             },
         }
@@ -34,18 +31,12 @@ def policy_document_multi_statement():
             "Statement": [
                 {
                     "Effect": "Allow",
-                    "Principal": {
-                        "Service": ["ec2.amazonaws.com"],
-                        "AWS": "arn:aws:iam::324320755747:root",
-                    },
+                    "Principal": {"Service": ["ec2.amazonaws.com"], "AWS": "arn:aws:iam::324320755747:root"},
                     "Action": ["sts:AssumeRole"],
                 },
                 {
                     "Effect": "Allow",
-                    "Principal": {
-                        "Service": ["ec2.amazonaws.com"],
-                        "AWS": "arn:aws:iam::324320755747:root",
-                    },
+                    "Principal": {"Service": ["ec2.amazonaws.com"], "AWS": "arn:aws:iam::324320755747:root"},
                     "Action": ["sts:AssumeRole"],
                 },
             ],
@@ -56,16 +47,7 @@ def policy_document_multi_statement():
 @fixture
 def policy_document_star_resource():
     return PolicyDocument(
-        **{
-            "Statement": [
-                {
-                    "Action": ["*"],
-                    "Effect": "Allow",
-                    "Resource": "*",
-                    "Principal": {"AWS": ["156460612806"]},
-                }
-            ]
-        }
+        **{"Statement": [{"Action": ["*"], "Effect": "Allow", "Resource": "*", "Principal": {"AWS": ["156460612806"]}}]}
     )
 
 
@@ -362,20 +344,13 @@ def test_policy_document_chan_check_if_the_statement_effect_is_allow_or_deny(sta
     assert PolicyDocument._is_statement_effect_allow(statement_effect=statement_effect) == is_allow
 
 
-def test_policy_document_condition_with_source_ip(
-    policy_document_condition_with_source_ip: PolicyDocument,
-):
+def test_policy_document_condition_with_source_ip(policy_document_condition_with_source_ip: PolicyDocument):
     assert policy_document_condition_with_source_ip.Statement[0].Condition.IpAddress == {
-        "aws:SourceIp": [
-            IPv4Network("116.202.65.160/32"),
-            IPv4Network("116.202.68.32/27"),
-        ]
+        "aws:SourceIp": [IPv4Network("116.202.65.160/32"), IPv4Network("116.202.68.32/27")]
     }
 
 
-def test_policy_document_condition_with_source_vpce(
-    policy_document_condition_with_source_vpce: PolicyDocument,
-):
+def test_policy_document_condition_with_source_vpce(policy_document_condition_with_source_vpce: PolicyDocument):
     assert policy_document_condition_with_source_vpce.Statement[0].Condition.IpAddress == {
         "aws:SourceVpce": ["vpce-123456"]
     }
