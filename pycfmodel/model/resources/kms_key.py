@@ -24,13 +24,15 @@ class KMSKeyProperties(CustomModel):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html)
     """
 
+    BypassPolicyLockoutSafetyCheck: Optional[ResolvableBool] = None
     Description: Optional[ResolvableStr] = None
-    EnableKeyRotation: Optional[ResolvableBool] = None
     Enabled: Optional[ResolvableBool] = None
+    EnableKeyRotation: Optional[ResolvableBool] = None
     KeyPolicy: Resolvable[PolicyDocument]
-    KeyUsage: Optional[ResolvableStr] = None
     KeySpec: Optional[ResolvableStr] = None
+    KeyUsage: Optional[ResolvableStr] = None
     MultiRegion: Optional[ResolvableBool] = None
+    Origin: Optional[ResolvableStr] = None
     PendingWindowInDays: Optional[ResolvableInt] = None
     Tags: Optional[Resolvable[List[Tag]]] = None
 

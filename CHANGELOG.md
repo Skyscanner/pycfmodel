@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.21.2
+### Fixes
+- Add the BypassPolicyLockoutSafetyCheck and Origin fields in the KMS resource
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+
 ## 0.21.1
 ### Fixes
 - Documentation building.
