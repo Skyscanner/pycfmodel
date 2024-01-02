@@ -9,13 +9,13 @@ install_requires = ["pydantic~=1.0"]
 
 dev_requires = [
     "black>=22.1.0",
-    "flake8>=3.8.3",
     "httpx>=0.14.2",
     "isort>=5.4.2",
     "pip-tools>=2.0.2",
     "pytest>=6.0.1",
     "pytest-cov>=2.10.1",
     "pytest-repeat==0.9.3",
+    "ruff",
 ]
 
 docs_requires = [
@@ -28,7 +28,7 @@ docs_requires = [
 
 setup(
     name="pycfmodel",
-    version="0.21.1",
+    version="0.21.2",
     description="A python model for CloudFormation scripts",
     author="Skyscanner Product Security",
     author_email="security@skyscanner.net",
@@ -39,5 +39,8 @@ setup(
     python_requires=">=3.7",
     install_requires=install_requires,
     tests_require=dev_requires,
-    extras_require={"dev": dev_requires, "docs": docs_requires},
+    extras_require={
+        "dev": dev_requires,
+        "docs": docs_requires,
+    },
 )
