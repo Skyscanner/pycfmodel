@@ -71,3 +71,8 @@ skip-magic-trailing-comma = false
 
 # Like Black, automatically detect the appropriate line ending.
 line-ending = "auto"
+
+[tool.pytest.ini_options]
+markers = [
+    "actions: marks tests that checks the full list of IAM actions (deselect with '-m \"not actions\"')",
+]

@@ -37,6 +37,12 @@ coverage:
 	coverage xml -i -o build/coverage.xml
 	coverage html
 
+coverage-master:
+	coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v -m "not actions"
+	coverage report
+	coverage xml -i -o build/coverage.xml
+	coverage html
+
 test: lint unit
 
 test-docs:
