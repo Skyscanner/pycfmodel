@@ -4,10 +4,10 @@ install:
 	pip install -r requirements.txt
 
 install-dev:
-	pip install -r requirements.txt -r requirements-dev.txt .
+	pip install -r requirements-dev.txt .
 
 install-docs:
-	pip install -r requirements.txt -r requirements-docs.txt .
+	pip install -r requirements-docs.txt .
 
 format: isort-format black-format
 
