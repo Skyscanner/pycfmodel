@@ -28,7 +28,7 @@ class KMSKeyProperties(CustomModel):
     Description: Optional[ResolvableStr] = None
     Enabled: Optional[ResolvableBool] = None
     EnableKeyRotation: Optional[ResolvableBool] = None
-    KeyPolicy: Resolvable[PolicyDocument]
+    KeyPolicy: Optional[Resolvable[PolicyDocument]] = None
     KeySpec: Optional[ResolvableStr] = None
     KeyUsage: Optional[ResolvableStr] = None
     MultiRegion: Optional[ResolvableBool] = None
