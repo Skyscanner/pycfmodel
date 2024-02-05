@@ -71,7 +71,7 @@ def kms_key_no_policy():
             "Properties": {
                 "Enabled": True,
                 "EnableKeyRotation": True,
-            }
+            },
         }
     )
 
