@@ -184,4 +184,4 @@ def test_kms_policy_documents(kms_key):
 
 
 def test_kms_no_policy(kms_key_no_policy):
-    assert kms_key_no_policy.Properties.KeyPolicy == None
+    assert kms_key_no_policy.Properties.KeyPolicy is None
