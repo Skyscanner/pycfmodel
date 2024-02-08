@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 0.22.0
+### Fixes
+- KeyPolicy made optional for KMS Key resource type.
+
 ## 0.21.2
 ### Fixes
 - Add the BypassPolicyLockoutSafetyCheck and Origin fields in the KMS resource
