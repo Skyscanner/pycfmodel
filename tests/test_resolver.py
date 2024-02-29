@@ -815,3 +815,25 @@ def test_resolve_find_in_map_for_bool_values_in_map(params, expected_resolved_va
 
     result = resolve_find_in_map(function_body=function_body, params=params, mappings=mappings, conditions={})
     assert result == expected_resolved_value
+
+
+def test_resolve_globals_with_values_and_referencing_parameters():
+    """
+    This test aims to be able to solve these type of templates:
+    https://github.com/Skyscanner/cfripper/issues/259#issuecomment-1824485673
+    """
+    template = {
+        "AWSTemplateFormatVersion": "2012-12-12",
+        "Transform": "AWS::Serverless-2016-10-31",
+        "Parameters": {
+            "ProjectName": {"Type": "String", "Default": "my-project"},
+            "Environment": {"Type": "String", "Default": "development"},
+        },
+        "Globals": {"Function": {"Tags": {"Env": {"Ref": "Environment"}, "Project": {"Ref": "ProjectName"}}}},
+        "Resources": {"MySNSTopic": {"Type": "AWS::SNS::Topic"}},
+    }
+
+    model = parse(template).resolve()
+
+    assert model.Globals.get("Function").get("Tags").get("Env") == "development"
+    assert model.Globals.get("Function").get("Tags").get("Project") == "my-project"
