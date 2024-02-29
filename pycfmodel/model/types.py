@@ -1,39 +1,48 @@
 from datetime import date, datetime
 from ipaddress import IPv4Network, IPv6Network, _BaseNetwork
-from typing import Any, Dict, Generator, List, TypeVar, Union
+from typing import Any, List, Type, TypeVar, Union
 
-from pydantic.networks import NetworkType
-from pydantic.typing import AnyCallable
+from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
+from pydantic.json_schema import JsonSchemaValue
+from pydantic_core import core_schema
 
 from pycfmodel.model.base import FunctionDict
 
 
 class LooseIPv4Network(_BaseNetwork):
     @classmethod
-    def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
-        field_schema.update(type="string", format="looseipv4network")
+    def __get_pydantic_json_schema__(
+        cls, core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> JsonSchemaValue:
+        json_schema = {}
+        json_schema.update(type="string", format="looseipv4network")
+        return json_schema
 
     @classmethod
-    def __get_validators__(cls) -> Generator[AnyCallable, None, None]:
-        yield cls.validate
+    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        return core_schema.no_info_plain_validator_function(cls.validate)
 
     @classmethod
-    def validate(cls, value: NetworkType) -> IPv4Network:
-        return IPv4Network(value, False)
+    def validate(cls, __input_value: Any) -> IPv4Network:
+        return IPv4Network(__input_value, False)
 
 
 class LooseIPv6Network(_BaseNetwork):
     @classmethod
-    def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
-        field_schema.update(type="string", format="looseipv6network")
+    def __get_pydantic_json_schema__(
+        cls, core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> JsonSchemaValue:
+        json_schema = {}
+        json_schema.update(type="string", format="looseipv6network")
+        return json_schema
 
     @classmethod
-    def __get_validators__(cls) -> Generator[AnyCallable, None, None]:
-        yield cls.validate
+    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        return core_schema.no_info_plain_validator_function(cls.validate)
 
     @classmethod
-    def validate(cls, value: NetworkType) -> IPv6Network:
-        return IPv6Network(value, False)
+    def validate(cls, __input_value: Any) -> IPv6Network:
+        return IPv6Network(__input_value, False)
 
 
 class SemiStrictBool(int):
@@ -42,23 +51,27 @@ class SemiStrictBool(int):
     """
 
     @classmethod
-    def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
-        field_schema.update(type="boolean")
+    def __get_pydantic_json_schema__(
+        cls, core_schema: core_schema.CoreSchema, handler: GetJsonSchemaHandler
+    ) -> JsonSchemaValue:
+        json_schema = {}
+        json_schema.update(type="boolean")
+        return json_schema
 
     @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
+    def __get_pydantic_core_schema__(cls, source: Type[Any], handler: GetCoreSchemaHandler) -> core_schema.CoreSchema:
+        return core_schema.no_info_plain_validator_function(cls.validate)
 
     @classmethod
-    def validate(cls, value: Any) -> bool:
+    def validate(cls, __input_value: Any) -> bool:
         """
         Ensure that we only allow bools.
         """
-        if isinstance(value, bool):
-            return value
+        if isinstance(__input_value, bool):
+            return __input_value
 
-        if isinstance(value, str) and value.lower() in ("true", "false"):
-            return value.lower() == "true"
+        if isinstance(__input_value, str) and __input_value.lower() in ("true", "false"):
+            return __input_value.lower() == "true"
 
         raise ValueError("Value given can't be validated as bool")
 

@@ -1,7 +1,7 @@
 import logging
 from typing import ClassVar, Optional
 
-from pydantic import Extra, validator
+from pydantic import ConfigDict, field_validator
 
 from pycfmodel.model.generic import Generic
 from pycfmodel.model.resources.resource import Resource
@@ -19,10 +19,9 @@ class GenericResource(Resource):
     Type: str
     Properties: Optional[Generic] = None
 
-    class Config(Resource.Config):
-        extra = Extra.allow
+    model_config = ConfigDict(extra="allow")
 
-    @validator("Type", pre=True)
+    @field_validator("Type")
     def check_type(cls, value, values, **kwargs):
         if value in _EXISTING_RESOURCE_TYPES:
             if cls.ALLOW_EXISTING_TYPES:

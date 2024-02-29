@@ -1,6 +1,6 @@
 from typing import Any, ClassVar, Dict, List, Optional
 
-from pydantic import validator
+from pydantic import field_validator
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.generic import Generic
@@ -23,7 +23,8 @@ class Resource(CustomModel):
     UpdatePolicy: Optional[Dict] = None
     UpdateReplacePolicy: Optional[ResolvableStr] = None
 
-    @validator("Type")
+    @field_validator("Type")
+    @classmethod
     def check_type(cls, value):
         if value != cls.TYPE_VALUE:
             raise ValueError(f"Value needs to be {cls.TYPE_VALUE}")

@@ -2,7 +2,7 @@ import json
 from contextlib import suppress
 from typing import Union
 
-from pydantic import BaseModel, Extra, ValidationError, root_validator, validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 from pycfmodel.model.base import FunctionDict
 from pycfmodel.model.resources.properties.types import Properties
@@ -25,14 +25,15 @@ class _Auxiliar(BaseModel):
         Properties,
         ResolvableBoolOrList,
         ResolvableIntOrList,
-        ResolvableDatetimeOrList,
         ResolvableDateOrList,
+        ResolvableDatetimeOrList,
         ResolvableIPOrList,
         ResolvableArnOrList,
         ResolvableStrOrList,
-    ]
+    ] = Field(union_mode="left_to_right")
 
-    @validator("aux", pre=True)
+    @field_validator("aux", mode="before")
+    @classmethod
     def validate_string_property_formatted_as_json(cls, value):
         """
         We have detected some properties that are defined as String in CloudFormation but including a
@@ -71,10 +72,10 @@ class _Auxiliar(BaseModel):
 class Generic(BaseModel):
     """Any property under this class will be cast to an existing model of `pycfmodel` if possible."""
 
-    class Config(BaseModel.Config):
-        extra = Extra.allow
+    model_config = ConfigDict(extra="allow")
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def casting(cls, values):
         return {k: _Auxiliar.cast(v) for k, v in values.items()}
 

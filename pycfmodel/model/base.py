@@ -1,12 +1,10 @@
-from pydantic import BaseModel, Extra, root_validator
+from pydantic import BaseModel, ConfigDict, model_validator
 
 from pycfmodel.utils import is_resolvable_dict
 
 
 class CustomModel(BaseModel):
-    class Config(BaseModel.Config):
-        extra = Extra.forbid
-        underscore_attrs_are_private = True
+    model_config = ConfigDict(extra="forbid")
 
     def dict(self, *args, exclude_unset=True, **kwargs):
         return super().dict(*args, **kwargs, exclude_unset=exclude_unset)
@@ -15,10 +13,10 @@ class CustomModel(BaseModel):
 class FunctionDict(BaseModel):
     # Inheriting directly from base model as we want to allow extra fields
     # and there are no default values that we need to suppress
-    class Config(BaseModel.Config):
-        extra = Extra.allow
+    model_config = ConfigDict(extra="allow")
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def check_if_valid_function(cls, values):
         if not is_resolvable_dict(values):
             raise ValueError("FunctionDict should only have 1 key and be a function")
