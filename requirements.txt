@@ -4,5 +4,5 @@
 #
 #    make freeze
 #
-pydantic==1.9.0
+pydantic==1.10.13
 typing-extensions==4.7.1
