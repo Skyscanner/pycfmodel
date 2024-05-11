@@ -65,12 +65,12 @@ class _Auxiliar(BaseModel):
             for v in value:
                 v = _Auxiliar.cast(v)
                 if isinstance(v, dict):
-                    v = Generic.parse_obj(v)
+                    v = Generic.model_validate(v)
                 auxiliar_list.append(v)
             value = auxiliar_list
 
         if isinstance(value, dict):
-            value = Generic.parse_obj(value)
+            value = Generic.model_validate(value)
 
         return value
 
