@@ -4,8 +4,10 @@ from typing import Dict, List
 import pytest
 
 from pycfmodel import parse
+from pycfmodel.model.generic import Generic
 from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.kms_key import KMSKey
+from pycfmodel.model.resources.properties.statement import Principal
 from pycfmodel.resolver import resolve, resolve_find_in_map
 
 
@@ -559,7 +561,9 @@ def test_resolve_scenario_1():
 
     assert statement.Action == "*"
     assert statement.Resource == "*"
-    assert role.Properties.AssumeRolePolicyDocument.Statement[0].Principal == {"AWS": "arn:aws:iam::123:root"}
+    assert role.Properties.AssumeRolePolicyDocument.Statement[0].Principal == Principal(
+        AWS="arn:aws:iam::123:root", CanonicalUser=None, Federated=None, Service=None
+    )
 
 
 def test_resolve_scenario_2():
@@ -693,10 +697,9 @@ def test_resolve_ssm():
         },
     }
     model = parse(template).resolve(extra_params={"some-service-arn:1": "vpc-123-abc"})
-    assert model.Resources["InstanceHTTPTargets"].Properties == {
-        "Cluster": "UNDEFINED_PARAM_main-k8s-cluster-arn:3",
-        "ServiceArn": "vpc-123-abc",
-    }
+    assert model.Resources["InstanceHTTPTargets"].Properties == Generic(
+        ServiceArn="vpc-123-abc", Cluster="UNDEFINED_PARAM_main-k8s-cluster-arn:3"
+    )
 
 
 def test_resolve_booleans():

@@ -1,4 +1,5 @@
-from ipaddress import AddressValueError, IPv4Network, IPv6Network
+import json
+from ipaddress import IPv4Network, IPv6Network
 
 import pytest
 from pydantic import BaseModel, ValidationError
@@ -97,9 +98,9 @@ def test_loose_ip_v6_is_not_strict(value):
             "hello,world",
             [
                 {
-                    "ctx": {"error": AddressValueError("Expected 4 octets in 'hello,world'")},
+                    "ctx": {"error": ("Expected 4 octets in 'hello,world'")},
                     "input": "hello,world",
-                    "loc": ("ip",),
+                    "loc": ["ip"],
                     "msg": "Value error, Expected 4 octets in 'hello,world'",
                     "type": "value_error",
                     "url": "https://errors.pydantic.dev/2.7/v/value_error",
@@ -110,9 +111,9 @@ def test_loose_ip_v6_is_not_strict(value):
             "192.168.0.1.1.1/24",
             [
                 {
-                    "ctx": {"error": AddressValueError("Expected 4 octets in '192.168.0.1.1.1'")},
+                    "ctx": {"error": ("Expected 4 octets in '192.168.0.1.1.1'")},
                     "input": "192.168.0.1.1.1/24",
-                    "loc": ("ip",),
+                    "loc": ["ip"],
                     "msg": "Value error, Expected 4 octets in '192.168.0.1.1.1'",
                     "type": "value_error",
                     "url": "https://errors.pydantic.dev/2.7/v/value_error",
@@ -123,9 +124,9 @@ def test_loose_ip_v6_is_not_strict(value):
             -1,
             [
                 {
-                    "ctx": {"error": AddressValueError("-1 (< 0) is not permitted as an IPv4 address")},
+                    "ctx": {"error": ("-1 (< 0) is not permitted as an IPv4 address")},
                     "input": -1,
-                    "loc": ("ip",),
+                    "loc": ["ip"],
                     "msg": "Value error, -1 (< 0) is not permitted as an IPv4 address",
                     "type": "value_error",
                     "url": "https://errors.pydantic.dev/2.7/v/value_error",
@@ -137,12 +138,12 @@ def test_loose_ip_v6_is_not_strict(value):
             [
                 {
                     "ctx": {
-                        "error": AddressValueError(
+                        "error": (
                             "340282366920938463463374607431768211457 (>= 2**32) is not permitted as an IPv4 address"
                         )
                     },
                     "input": 340282366920938463463374607431768211457,
-                    "loc": ("ip",),
+                    "loc": ["ip"],
                     "msg": "Value error, 340282366920938463463374607431768211457 (>= 2**32) is "
                     "not permitted as an IPv4 address",
                     "type": "value_error",
@@ -154,9 +155,9 @@ def test_loose_ip_v6_is_not_strict(value):
             "2001:db00::1/120",
             [
                 {
-                    "ctx": {"error": AddressValueError("Expected 4 octets in '2001:db00::1'")},
+                    "ctx": {"error": ("Expected 4 octets in '2001:db00::1'")},
                     "input": "2001:db00::1/120",
-                    "loc": ("ip",),
+                    "loc": ["ip"],
                     "msg": "Value error, Expected 4 octets in '2001:db00::1'",
                     "type": "value_error",
                     "url": "https://errors.pydantic.dev/2.7/v/value_error",
@@ -171,7 +172,7 @@ def test_loose_ip_v4_network_fails(value, errors):
 
     with pytest.raises(ValidationError) as exc_info:
         Model(ip=value)
-    assert exc_info.value.errors() == errors
+    assert json.loads(exc_info.value.json()) == errors
 
 
 @pytest.mark.parametrize(
@@ -181,9 +182,9 @@ def test_loose_ip_v4_network_fails(value, errors):
             "hello,world",
             [
                 {
-                    "ctx": {"error": AddressValueError("At least 3 parts expected in 'hello,world'")},
+                    "ctx": {"error": ("At least 3 parts expected in 'hello,world'")},
                     "input": "hello,world",
-                    "loc": ("ip",),
+                    "loc": ["ip"],
                     "msg": "Value error, At least 3 parts expected in 'hello,world'",
                     "type": "value_error",
                     "url": "https://errors.pydantic.dev/2.7/v/value_error",
@@ -194,9 +195,9 @@ def test_loose_ip_v4_network_fails(value, errors):
             "192.168.0.1.1.1/24",
             [
                 {
-                    "ctx": {"error": AddressValueError("At least 3 parts expected in '192.168.0.1.1.1'")},
+                    "ctx": {"error": ("At least 3 parts expected in '192.168.0.1.1.1'")},
                     "input": "192.168.0.1.1.1/24",
-                    "loc": ("ip",),
+                    "loc": ["ip"],
                     "msg": "Value error, At least 3 parts expected in '192.168.0.1.1.1'",
                     "type": "value_error",
                     "url": "https://errors.pydantic.dev/2.7/v/value_error",
@@ -207,10 +208,10 @@ def test_loose_ip_v4_network_fails(value, errors):
             -1,
             [
                 {
-                    "ctx": {"error": AddressValueError("At least 3 parts expected in '192.168.0.1.1.1'")},
-                    "input": "192.168.0.1.1.1/24",
-                    "loc": ("ip",),
-                    "msg": "Value error, At least 3 parts expected in '192.168.0.1.1.1'",
+                    "ctx": {"error": "-1 (< 0) is not permitted as an IPv6 address"},
+                    "input": -1,
+                    "loc": ["ip"],
+                    "msg": "Value error, -1 (< 0) is not permitted as an IPv6 address",
                     "type": "value_error",
                     "url": "https://errors.pydantic.dev/2.7/v/value_error",
                 }
@@ -221,12 +222,12 @@ def test_loose_ip_v4_network_fails(value, errors):
             [
                 {
                     "ctx": {
-                        "error": AddressValueError(
+                        "error": (
                             "340282366920938463463374607431768211457 (>= 2**128) is not permitted as an IPv6 address"
                         )
                     },
                     "input": 340282366920938463463374607431768211457,
-                    "loc": ("ip",),
+                    "loc": ["ip"],
                     "msg": "Value error, 340282366920938463463374607431768211457 (>= 2**128) is "
                     "not permitted as an IPv6 address",
                     "type": "value_error",
@@ -238,9 +239,9 @@ def test_loose_ip_v4_network_fails(value, errors):
             "192.168.0.1/24",
             [
                 {
-                    "ctx": {"error": AddressValueError("At least 3 parts expected in '192.168.0.1'")},
+                    "ctx": {"error": ("At least 3 parts expected in '192.168.0.1'")},
                     "input": "192.168.0.1/24",
-                    "loc": ("ip",),
+                    "loc": ["ip"],
                     "msg": "Value error, At least 3 parts expected in '192.168.0.1'",
                     "type": "value_error",
                     "url": "https://errors.pydantic.dev/2.7/v/value_error",
@@ -255,4 +256,4 @@ def test_loose_ip_v6_network_fails(value, errors):
 
     with pytest.raises(ValidationError) as exc_info:
         Model(ip=value)
-    assert exc_info.value.errors() == errors
+    assert json.loads(exc_info.value.json()) == errors

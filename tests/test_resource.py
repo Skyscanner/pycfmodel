@@ -7,7 +7,7 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
 
 
 @pytest.mark.parametrize(
-    "template,expected_policy_documents,expected_policy_documents_length",
+    "template,expected_policy_documents",
     [
         (
             {
@@ -16,7 +16,6 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                 "Resources": {"NonexistentResource": {"Type": "AWS::Non::Existent", "Properties": {}}},
             },
             [],
-            0,
         ),
         (
             {
@@ -30,7 +29,6 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                 },
             },
             [],
-            0,
         ),
         (
             {
@@ -56,7 +54,6 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                     name=None,
                 )
             ],
-            1,
         ),
         (
             {
@@ -91,7 +88,6 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                     name=None,
                 ),
             ],
-            2,
         ),
         (
             {
@@ -130,7 +126,6 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                     name=None,
                 ),
             ],
-            2,
         ),
         (
             {
@@ -173,7 +168,6 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                     name=None,
                 ),
             ],
-            2,
         ),
         (
             {
@@ -209,7 +203,6 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                     name=None,
                 ),
             ],
-            2,
         ),
         (
             {
@@ -241,7 +234,6 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                     name="APolicyName",
                 )
             ],
-            1,
         ),
         (
             {
@@ -250,13 +242,9 @@ from pycfmodel.model.utils import OptionallyNamedPolicyDocument
                 "Resources": {"NonexistentResource": {"Type": "AWS::Non::Existent"}},
             },
             [],
-            0,
         ),
     ],
 )
-def test_given_a_template_with_a_resource_it_should_return_its_policy_documents(
-    template, expected_policy_documents, expected_policy_documents_length
-):
+def test_given_a_template_with_a_resource_it_should_return_its_policy_documents(template, expected_policy_documents):
     resource = parse(template).Resources["NonexistentResource"]
     assert resource.policy_documents == expected_policy_documents
-    assert len(resource.policy_documents) == expected_policy_documents_length
