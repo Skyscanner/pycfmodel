@@ -329,7 +329,7 @@ class StatementCondition(CustomModel):
 
     def eval(self, values):
         if self._eval is None:
-            self._eval = self.build_eval(self.dict())
+            self._eval = self.build_eval(self.model_dump())
         return self._eval(values)
 
     @classmethod
@@ -345,3 +345,9 @@ class StatementCondition(CustomModel):
         except Exception:
             logger.exception("Error raised while evaluating condition")
             return None
+
+    def __eq__(self, other: Any) -> bool:
+        if isinstance(other, self.__class__):
+            return self.model_dump(exclude={"eval"}) == other.model_dump(exclude={"eval"})
+        else:
+            return self.model_dump() == other

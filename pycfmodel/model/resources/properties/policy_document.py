@@ -1,6 +1,6 @@
 from typing import List, Optional, Pattern, Union
 
-from pydantic import ConfigDict, Extra
+from pydantic import ConfigDict
 
 from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 from pycfmodel.model.resources.properties.property import Property

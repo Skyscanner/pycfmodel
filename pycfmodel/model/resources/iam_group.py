@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional
+from typing import ClassVar, List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy import Policy
@@ -34,8 +34,7 @@ class IAMGroup(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::IAM::Group"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::IAM::Group"]
     Properties: Optional[Resolvable[IAMGroupProperties]] = None
 
     @property

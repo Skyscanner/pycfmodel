@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional
+from typing import ClassVar, List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
@@ -46,6 +46,5 @@ class KMSKey(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::KMS::Key"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::KMS::Key"]
     Properties: Resolvable[KMSKeyProperties]

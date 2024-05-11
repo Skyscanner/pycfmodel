@@ -1,13 +1,10 @@
-from pydantic import BaseModel, ConfigDict, Extra, model_validator
+from pydantic import BaseModel, ConfigDict, model_validator
 
 from pycfmodel.utils import is_resolvable_dict
 
 
 class CustomModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
-
-    def dict(self, *args, exclude_unset=True, **kwargs):
-        return super().dict(*args, **kwargs, exclude_unset=exclude_unset)
 
 
 class FunctionDict(BaseModel):

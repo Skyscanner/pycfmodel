@@ -12,7 +12,7 @@ def test_recursive():
     value = {"a": {"b": {"c": 1}}}
     generic_value = Generic.parse_obj(value)
     assert generic_value == Generic(a=Generic(b=Generic(c=1)))
-    assert generic_value.dict() == value
+    assert generic_value.model_dump() == value
 
 
 @pytest.mark.parametrize(

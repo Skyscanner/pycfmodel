@@ -38,7 +38,7 @@ class LooseIPv4Network:
         )
 
     @classmethod
-    def _validate(cls, input_value: Any, /) -> IPv4Network:
+    def _validate(cls, input_value: Any) -> IPv4Network:
         return cls(input_value)
 
 
@@ -67,7 +67,7 @@ class LooseIPv6Network:
         )
 
     @classmethod
-    def _validate(cls, input_value: Any, /) -> IPv6Network:
+    def _validate(cls, input_value: Any) -> IPv6Network:
         return cls(input_value)
 
 
@@ -105,7 +105,7 @@ class SemiStrictBool:
         )
 
     @classmethod
-    def _validate(cls, input_value: Any, /) -> IPv6Network:
+    def _validate(cls, input_value: Any) -> IPv6Network:
         return cls(input_value)
 
 
