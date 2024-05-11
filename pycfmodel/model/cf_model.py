@@ -32,7 +32,7 @@ class CFModel(CustomModel):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html)
     """
 
-    AWSTemplateFormatVersion: Optional[date]
+    AWSTemplateFormatVersion: Optional[date] = None
     Conditions: Optional[Dict] = {}
     Description: Optional[str] = None
     Mappings: Optional[Dict[str, Dict[str, Dict[str, Any]]]] = {}
@@ -41,7 +41,7 @@ class CFModel(CustomModel):
     Parameters: Optional[Dict[str, Parameter]] = {}
     Resources: Dict[str, Resolvable[Union[ResourceModels, GenericResource]]] = {}
     Rules: Optional[Dict] = {}
-    Transform: Optional[Union[str, List[str]]]
+    Transform: Optional[Union[str, List[str]]] = None
 
     PSEUDO_PARAMETERS: ClassVar[Dict[str, Union[str, List[str]]]] = {
         # default pseudo parameters

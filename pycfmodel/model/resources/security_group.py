@@ -64,7 +64,7 @@ class RDSDBSecurityGroupProperties(CustomModel):
     """
 
     DBSecurityGroupIngress: List[DBSecurityGroupIngressProp]
-    EC2VpcId: Optional[ResolvableStr]
+    EC2VpcId: Optional[ResolvableStr] = None
     GroupDescription: ResolvableStr
     Tags: Optional[Resolvable[List[Tag]]] = None
 

@@ -1,4 +1,4 @@
-from ipaddress import IPv4Network, IPv6Network
+from ipaddress import AddressValueError, IPv4Network, IPv6Network
 
 import pytest
 from pydantic import BaseModel, ValidationError
@@ -95,19 +95,40 @@ def test_loose_ip_v6_is_not_strict(value):
     [
         (
             "hello,world",
-            [{"loc": ("ip",), "msg": "Expected 4 octets in 'hello,world'", "type": "value_error.addressvalue"}],
+            [
+                {
+                    "ctx": {"error": AddressValueError("Expected 4 octets in 'hello,world'")},
+                    "input": "hello,world",
+                    "loc": ("ip",),
+                    "msg": "Value error, Expected 4 octets in 'hello,world'",
+                    "type": "value_error",
+                    "url": "https://errors.pydantic.dev/2.7/v/value_error",
+                }
+            ],
         ),
         (
             "192.168.0.1.1.1/24",
-            [{"loc": ("ip",), "msg": "Expected 4 octets in '192.168.0.1.1.1'", "type": "value_error.addressvalue"}],
+            [
+                {
+                    "ctx": {"error": AddressValueError("Expected 4 octets in '192.168.0.1.1.1'")},
+                    "input": "192.168.0.1.1.1/24",
+                    "loc": ("ip",),
+                    "msg": "Value error, Expected 4 octets in '192.168.0.1.1.1'",
+                    "type": "value_error",
+                    "url": "https://errors.pydantic.dev/2.7/v/value_error",
+                }
+            ],
         ),
         (
             -1,
             [
                 {
+                    "ctx": {"error": AddressValueError("-1 (< 0) is not permitted as an IPv4 address")},
+                    "input": -1,
                     "loc": ("ip",),
-                    "msg": "-1 (< 0) is not permitted as an IPv4 address",
-                    "type": "value_error.addressvalue",
+                    "msg": "Value error, -1 (< 0) is not permitted as an IPv4 address",
+                    "type": "value_error",
+                    "url": "https://errors.pydantic.dev/2.7/v/value_error",
                 }
             ],
         ),
@@ -115,15 +136,32 @@ def test_loose_ip_v6_is_not_strict(value):
             2**128 + 1,
             [
                 {
+                    "ctx": {
+                        "error": AddressValueError(
+                            "340282366920938463463374607431768211457 (>= 2**32) is not permitted as an IPv4 address"
+                        )
+                    },
+                    "input": 340282366920938463463374607431768211457,
                     "loc": ("ip",),
-                    "msg": "340282366920938463463374607431768211457 (>= 2**32) is not permitted as an IPv4 address",
-                    "type": "value_error.addressvalue",
+                    "msg": "Value error, 340282366920938463463374607431768211457 (>= 2**32) is "
+                    "not permitted as an IPv4 address",
+                    "type": "value_error",
+                    "url": "https://errors.pydantic.dev/2.7/v/value_error",
                 }
             ],
         ),
         (
             "2001:db00::1/120",
-            [{"loc": ("ip",), "msg": "Expected 4 octets in '2001:db00::1'", "type": "value_error.addressvalue"}],
+            [
+                {
+                    "ctx": {"error": AddressValueError("Expected 4 octets in '2001:db00::1'")},
+                    "input": "2001:db00::1/120",
+                    "loc": ("ip",),
+                    "msg": "Value error, Expected 4 octets in '2001:db00::1'",
+                    "type": "value_error",
+                    "url": "https://errors.pydantic.dev/2.7/v/value_error",
+                }
+            ],
         ),
     ],
 )
@@ -141,15 +179,27 @@ def test_loose_ip_v4_network_fails(value, errors):
     [
         (
             "hello,world",
-            [{"loc": ("ip",), "msg": "At least 3 parts expected in 'hello,world'", "type": "value_error.addressvalue"}],
+            [
+                {
+                    "ctx": {"error": AddressValueError("At least 3 parts expected in 'hello,world'")},
+                    "input": "hello,world",
+                    "loc": ("ip",),
+                    "msg": "Value error, At least 3 parts expected in 'hello,world'",
+                    "type": "value_error",
+                    "url": "https://errors.pydantic.dev/2.7/v/value_error",
+                }
+            ],
         ),
         (
             "192.168.0.1.1.1/24",
             [
                 {
+                    "ctx": {"error": AddressValueError("At least 3 parts expected in '192.168.0.1.1.1'")},
+                    "input": "192.168.0.1.1.1/24",
                     "loc": ("ip",),
-                    "msg": "At least 3 parts expected in '192.168.0.1.1.1'",
-                    "type": "value_error.addressvalue",
+                    "msg": "Value error, At least 3 parts expected in '192.168.0.1.1.1'",
+                    "type": "value_error",
+                    "url": "https://errors.pydantic.dev/2.7/v/value_error",
                 }
             ],
         ),
@@ -157,9 +207,12 @@ def test_loose_ip_v4_network_fails(value, errors):
             -1,
             [
                 {
+                    "ctx": {"error": AddressValueError("At least 3 parts expected in '192.168.0.1.1.1'")},
+                    "input": "192.168.0.1.1.1/24",
                     "loc": ("ip",),
-                    "msg": "-1 (< 0) is not permitted as an IPv6 address",
-                    "type": "value_error.addressvalue",
+                    "msg": "Value error, At least 3 parts expected in '192.168.0.1.1.1'",
+                    "type": "value_error",
+                    "url": "https://errors.pydantic.dev/2.7/v/value_error",
                 }
             ],
         ),
@@ -167,15 +220,32 @@ def test_loose_ip_v4_network_fails(value, errors):
             2**128 + 1,
             [
                 {
+                    "ctx": {
+                        "error": AddressValueError(
+                            "340282366920938463463374607431768211457 (>= 2**128) is not permitted as an IPv6 address"
+                        )
+                    },
+                    "input": 340282366920938463463374607431768211457,
                     "loc": ("ip",),
-                    "msg": "340282366920938463463374607431768211457 (>= 2**128) is not permitted as an IPv6 address",
-                    "type": "value_error.addressvalue",
+                    "msg": "Value error, 340282366920938463463374607431768211457 (>= 2**128) is "
+                    "not permitted as an IPv6 address",
+                    "type": "value_error",
+                    "url": "https://errors.pydantic.dev/2.7/v/value_error",
                 }
             ],
         ),
         (
             "192.168.0.1/24",
-            [{"loc": ("ip",), "msg": "At least 3 parts expected in '192.168.0.1'", "type": "value_error.addressvalue"}],
+            [
+                {
+                    "ctx": {"error": AddressValueError("At least 3 parts expected in '192.168.0.1'")},
+                    "input": "192.168.0.1/24",
+                    "loc": ("ip",),
+                    "msg": "Value error, At least 3 parts expected in '192.168.0.1'",
+                    "type": "value_error",
+                    "url": "https://errors.pydantic.dev/2.7/v/value_error",
+                }
+            ],
         ),
     ],
 )

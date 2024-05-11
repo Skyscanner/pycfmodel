@@ -43,7 +43,7 @@ class IAMUser(Resource):
 
     TYPE_VALUE: ClassVar = "AWS::IAM::User"
     Type: str = TYPE_VALUE
-    Properties: Optional[Resolvable[IAMUserProperties]]
+    Properties: Optional[Resolvable[IAMUserProperties]] = None
 
     def has_hardcoded_credentials(self) -> bool:
         """Returns True if login profile password contains a hardcoded string, otherwise False."""

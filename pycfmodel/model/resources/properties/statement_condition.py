@@ -1,10 +1,8 @@
-import binascii
 import logging
-from base64 import b64decode
 from typing import Any, Callable, Dict, Optional, Tuple, Union
 from unicodedata import normalize
 
-from pydantic import root_validator, validator
+from pydantic import model_validator
 
 from pycfmodel.model.base import CustomModel, FunctionDict
 from pycfmodel.model.types import (
@@ -155,195 +153,179 @@ class StatementCondition(CustomModel):
     [documentation from AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_multi-value-conditions.html).
     """
 
-    ArnEquals: Optional[Dict[str, ResolvableArnOrList]]
-    ArnLike: Optional[Dict[str, ResolvableArnOrList]]
-    ArnNotEquals: Optional[Dict[str, ResolvableArnOrList]]
-    ArnNotLike: Optional[Dict[str, ResolvableArnOrList]]
-    ArnEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ArnLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ArnNotEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ArnNotLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ForAllValuesArnEquals: Optional[Dict[str, ResolvableArnOrList]]
-    ForAllValuesArnLike: Optional[Dict[str, ResolvableArnOrList]]
-    ForAllValuesArnNotEquals: Optional[Dict[str, ResolvableArnOrList]]
-    ForAllValuesArnNotLike: Optional[Dict[str, ResolvableArnOrList]]
-    ForAllValuesArnEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ForAllValuesArnLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ForAllValuesArnNotEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ForAllValuesArnNotLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ForAnyValueArnEquals: Optional[Dict[str, ResolvableArnOrList]]
-    ForAnyValueArnLike: Optional[Dict[str, ResolvableArnOrList]]
-    ForAnyValueArnNotEquals: Optional[Dict[str, ResolvableArnOrList]]
-    ForAnyValueArnNotLike: Optional[Dict[str, ResolvableArnOrList]]
-    ForAnyValueArnEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ForAnyValueArnLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ForAnyValueArnNotEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]]
-    ForAnyValueArnNotLikeIfExists: Optional[Dict[str, ResolvableArnOrList]]
+    ArnEquals: Optional[Dict[str, ResolvableArnOrList]] = None
+    ArnLike: Optional[Dict[str, ResolvableArnOrList]] = None
+    ArnNotEquals: Optional[Dict[str, ResolvableArnOrList]] = None
+    ArnNotLike: Optional[Dict[str, ResolvableArnOrList]] = None
+    ArnEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ArnLikeIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ArnNotEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ArnNotLikeIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAllValuesArnEquals: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAllValuesArnLike: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAllValuesArnNotEquals: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAllValuesArnNotLike: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAllValuesArnEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAllValuesArnLikeIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAllValuesArnNotEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAllValuesArnNotLikeIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAnyValueArnEquals: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAnyValueArnLike: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAnyValueArnNotEquals: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAnyValueArnNotLike: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAnyValueArnEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAnyValueArnLikeIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAnyValueArnNotEqualsIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
+    ForAnyValueArnNotLikeIfExists: Optional[Dict[str, ResolvableArnOrList]] = None
 
-    Bool: Optional[Dict[str, ResolvableBoolOrList]]
-    BoolIfExists: Optional[Dict[str, ResolvableBoolOrList]]
-    ForAllValuesBool: Optional[Dict[str, ResolvableBoolOrList]]
-    ForAllValuesBoolIfExists: Optional[Dict[str, ResolvableBoolOrList]]
-    ForAnyValueBool: Optional[Dict[str, ResolvableBoolOrList]]
-    ForAnyValueBoolIfExists: Optional[Dict[str, ResolvableBoolOrList]]
+    Bool: Optional[Dict[str, ResolvableBoolOrList]] = None
+    BoolIfExists: Optional[Dict[str, ResolvableBoolOrList]] = None
+    ForAllValuesBool: Optional[Dict[str, ResolvableBoolOrList]] = None
+    ForAllValuesBoolIfExists: Optional[Dict[str, ResolvableBoolOrList]] = None
+    ForAnyValueBool: Optional[Dict[str, ResolvableBoolOrList]] = None
+    ForAnyValueBoolIfExists: Optional[Dict[str, ResolvableBoolOrList]] = None
 
-    BinaryEquals: Optional[Dict[str, ResolvableBytesOrList]]
-    BinaryEqualsIfExists: Optional[Dict[str, ResolvableBytesOrList]]
-    ForAllValuesBinaryEquals: Optional[Dict[str, ResolvableBytesOrList]]
-    ForAllValuesBinaryEqualsIfExists: Optional[Dict[str, ResolvableBytesOrList]]
-    ForAnyValueBinaryEquals: Optional[Dict[str, ResolvableBytesOrList]]
-    ForAnyValueBinaryEqualsIfExists: Optional[Dict[str, ResolvableBytesOrList]]
+    BinaryEquals: Optional[Dict[str, ResolvableBytesOrList]] = None
+    BinaryEqualsIfExists: Optional[Dict[str, ResolvableBytesOrList]] = None
+    ForAllValuesBinaryEquals: Optional[Dict[str, ResolvableBytesOrList]] = None
+    ForAllValuesBinaryEqualsIfExists: Optional[Dict[str, ResolvableBytesOrList]] = None
+    ForAnyValueBinaryEquals: Optional[Dict[str, ResolvableBytesOrList]] = None
+    ForAnyValueBinaryEqualsIfExists: Optional[Dict[str, ResolvableBytesOrList]] = None
 
-    DateEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateNotEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateLessThan: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateLessThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateGreaterThan: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateGreaterThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateNotEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateLessThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateLessThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateGreaterThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    DateGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateNotEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateLessThan: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateLessThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateGreaterThan: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateGreaterThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateNotEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateLessThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateLessThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateGreaterThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAllValuesDateGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateNotEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateLessThan: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateLessThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateGreaterThan: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateGreaterThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateNotEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateLessThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateLessThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateGreaterThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
-    ForAnyValueDateGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]]
+    DateEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateNotEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateLessThan: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateLessThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateGreaterThan: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateGreaterThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateNotEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateLessThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateLessThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateGreaterThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    DateGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateNotEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateLessThan: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateLessThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateGreaterThan: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateGreaterThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateNotEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateLessThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateLessThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateGreaterThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAllValuesDateGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateNotEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateLessThan: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateLessThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateGreaterThan: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateGreaterThanEquals: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateNotEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateLessThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateLessThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateGreaterThanIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
+    ForAnyValueDateGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableDatetimeOrList]] = None
 
-    IpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    NotIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    IpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    NotIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    ForAllValuesIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    ForAllValuesNotIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    ForAnyValueIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    ForAnyValueNotIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    ForAllValuesIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    ForAllValuesNotIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    ForAnyValueIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
-    ForAnyValueNotIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]]
+    IpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    NotIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    IpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    NotIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    ForAllValuesIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    ForAllValuesNotIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    ForAnyValueIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    ForAnyValueNotIpAddress: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    ForAllValuesIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    ForAllValuesNotIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    ForAnyValueIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
+    ForAnyValueNotIpAddressIfExists: Optional[Dict[str, Union[ResolvableIPOrList, ResolvableStrOrList]]] = None
 
-    Null: Optional[Dict[str, ResolvableBool]]
-    ForAllValuesNull: Optional[Dict[str, ResolvableBool]]
-    ForAnyValueNull: Optional[Dict[str, ResolvableBool]]
+    Null: Optional[Dict[str, ResolvableBool]] = None
+    ForAllValuesNull: Optional[Dict[str, ResolvableBool]] = None
+    ForAnyValueNull: Optional[Dict[str, ResolvableBool]] = None
 
-    NumericEquals: Optional[Dict[str, ResolvableIntOrList]]
-    NumericNotEquals: Optional[Dict[str, ResolvableIntOrList]]
-    NumericLessThan: Optional[Dict[str, ResolvableIntOrList]]
-    NumericLessThanEquals: Optional[Dict[str, ResolvableIntOrList]]
-    NumericGreaterThan: Optional[Dict[str, ResolvableIntOrList]]
-    NumericGreaterThanEquals: Optional[Dict[str, ResolvableIntOrList]]
-    NumericEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    NumericNotEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    NumericLessThanIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    NumericLessThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    NumericGreaterThanIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    NumericGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericEquals: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericNotEquals: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericLessThan: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericLessThanEquals: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericGreaterThan: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericGreaterThanEquals: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericNotEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericLessThanIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericLessThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericGreaterThanIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAllValuesNumericGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericEquals: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericNotEquals: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericLessThan: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericLessThanEquals: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericGreaterThan: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericGreaterThanEquals: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericNotEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericLessThanIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericLessThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericGreaterThanIfExists: Optional[Dict[str, ResolvableIntOrList]]
-    ForAnyValueNumericGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]]
+    NumericEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericNotEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericLessThan: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericLessThanEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericGreaterThan: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericGreaterThanEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericNotEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericLessThanIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericLessThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericGreaterThanIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    NumericGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericNotEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericLessThan: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericLessThanEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericGreaterThan: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericGreaterThanEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericNotEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericLessThanIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericLessThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericGreaterThanIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAllValuesNumericGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericNotEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericLessThan: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericLessThanEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericGreaterThan: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericGreaterThanEquals: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericNotEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericLessThanIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericLessThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericGreaterThanIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
+    ForAnyValueNumericGreaterThanEqualsIfExists: Optional[Dict[str, ResolvableIntOrList]] = None
 
-    StringEquals: Optional[Dict[str, ResolvableStrOrList]]
-    StringNotEquals: Optional[Dict[str, ResolvableStrOrList]]
-    StringEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]]
-    StringNotEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]]
-    StringLike: Optional[Dict[str, ResolvableStrOrList]]
-    StringNotLike: Optional[Dict[str, ResolvableStrOrList]]
-    StringEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    StringNotEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    StringEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    StringNotEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    StringLikeIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    StringNotLikeIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringEquals: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringNotEquals: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringNotEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringLike: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringNotLike: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringNotEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringNotEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringLikeIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAllValuesStringNotLikeIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringEquals: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringNotEquals: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringNotEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringLike: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringNotLike: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringNotEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringNotEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringLikeIfExists: Optional[Dict[str, ResolvableStrOrList]]
-    ForAnyValueStringNotLikeIfExists: Optional[Dict[str, ResolvableStrOrList]]
+    StringEquals: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringNotEquals: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringNotEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringLike: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringNotLike: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringNotEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringNotEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringLikeIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    StringNotLikeIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringEquals: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringNotEquals: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringNotEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringLike: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringNotLike: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringNotEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringNotEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringLikeIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAllValuesStringNotLikeIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringEquals: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringNotEquals: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringNotEqualsIgnoreCase: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringLike: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringNotLike: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringNotEqualsIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringNotEqualsIgnoreCaseIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringLikeIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
+    ForAnyValueStringNotLikeIfExists: Optional[Dict[str, ResolvableStrOrList]] = None
 
     _eval: Optional[Callable] = None
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def remove_colon(cls, values):
         return {key.replace(":", ""): value for key, value in values.items()}
-
-    @validator(
-        "BinaryEquals",
-        "BinaryEqualsIfExists",
-        "ForAllValuesBinaryEquals",
-        "ForAllValuesBinaryEqualsIfExists",
-        "ForAnyValueBinaryEquals",
-        "ForAnyValueBinaryEqualsIfExists",
-        each_item=True,
-        pre=True,
-    )
-    def validate_binary(cls, value: Any) -> bytearray:
-        try:
-            value = b64decode(value)
-        except binascii.Error:
-            raise ValueError("Binary value not valid")
-        return value
 
     def eval(self, values):
         if self._eval is None:
@@ -363,9 +345,3 @@ class StatementCondition(CustomModel):
         except Exception:
             logger.exception("Error raised while evaluating condition")
             return None
-
-    def __eq__(self, other: Any) -> bool:
-        if isinstance(other, self.__class__):
-            return self.dict(exclude_unset={"eval"}) == other.dict(exclude_unset={"eval"})
-        else:
-            return self.dict() == other
