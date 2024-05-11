@@ -4,7 +4,7 @@ from datetime import date, datetime
 from ipaddress import IPv4Network, IPv6Network
 from typing import Any, List, TypeVar, Union
 
-from pydantic import BeforeValidator, GetCoreSchemaHandler
+from pydantic import BeforeValidator, Field, GetCoreSchemaHandler
 from pydantic._internal import _schema_generation_shared
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
@@ -105,7 +105,7 @@ class SemiStrictBool:
         )
 
     @classmethod
-    def _validate(cls, input_value: Any) -> IPv6Network:
+    def _validate(cls, input_value: Any) -> bool:
         return cls(input_value)
 
 
@@ -122,8 +122,8 @@ Binary = Annotated[bytes, BeforeValidator(validate_binary)]
 
 T = TypeVar("T")
 
-Resolvable = Union[T, FunctionDict]
-InstanceOrListOf = Union[T, List[T]]
+Resolvable = Annotated[Union[T, FunctionDict], Field(union_mode="left_to_right")]
+InstanceOrListOf = Annotated[Union[T, List[T]], Field(union_mode="left_to_right")]
 
 ResolvableStr = Resolvable[str]
 ResolvableArn = ResolvableStr
@@ -135,6 +135,10 @@ ResolvableBool = Resolvable[SemiStrictBool]
 
 ResolvableIPv4Network = Resolvable[LooseIPv4Network]
 ResolvableIPv6Network = Resolvable[LooseIPv6Network]
+ResolvableIPvXNetwork = Annotated[
+    Union[ResolvableIPv4Network, ResolvableIPv6Network], Field(union_mode="left_to_right")
+]
+
 
 ResolvableIntOrStr = Resolvable[Union[int, str]]
 
@@ -142,7 +146,7 @@ ResolvableIntOrStr = Resolvable[Union[int, str]]
 ResolvableStrOrList = InstanceOrListOf[ResolvableStr]
 ResolvableArnOrList = InstanceOrListOf[ResolvableArn]
 ResolvableIntOrList = InstanceOrListOf[ResolvableInt]
-ResolvableIPOrList = InstanceOrListOf[Union[ResolvableIPv4Network, ResolvableIPv6Network]]
+ResolvableIPOrList = InstanceOrListOf[ResolvableIPvXNetwork]
 ResolvableBoolOrList = InstanceOrListOf[ResolvableBool]
 ResolvableBytesOrList = InstanceOrListOf[Binary]
 ResolvableDateOrList = InstanceOrListOf[ResolvableDate]

@@ -4,14 +4,18 @@ from datetime import date
 from ipaddress import IPv4Network, IPv6Network
 from typing import Dict, List, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing_extensions import Annotated
 
 from pycfmodel.constants import AWS_NOVALUE, CONTAINS_CF_PARAM, CONTAINS_SSM_PARAMETER
 from pycfmodel.utils import is_resolvable_dict
 
 logger = logging.getLogger(__file__)
 
-ValidResolvers = Union[str, int, bool, float, List, Dict, date]
+ValidResolvers = Annotated[
+    Union[str, int, bool, float, List, Dict, date],
+    Field(union_mode="left_to_right"),
+]
 
 
 def _extended_bool(value) -> bool:

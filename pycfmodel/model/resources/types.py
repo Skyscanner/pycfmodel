@@ -5,6 +5,7 @@ from typing_extensions import Annotated
 
 from pycfmodel.model.resources.ec2_vpc_endpoint_policy import EC2VpcEndpointPolicy
 from pycfmodel.model.resources.es_domain import ESDomain
+from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.iam_group import IAMGroup
 from pycfmodel.model.resources.iam_managed_policy import IAMManagedPolicy
 from pycfmodel.model.resources.iam_policy import IAMPolicy
@@ -43,3 +44,5 @@ ResourceModels = Annotated[
     ],
     Field(discriminator="Type"),
 ]
+
+AllResourcesType = Annotated[Union[ResourceModels, GenericResource], Field(union_mode="left_to_right")]
