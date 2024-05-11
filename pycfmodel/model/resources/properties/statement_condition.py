@@ -325,7 +325,9 @@ class StatementCondition(CustomModel):
     @model_validator(mode="before")
     @classmethod
     def remove_colon(cls, values):
-        return {key.replace(":", ""): value for key, value in values.items()}
+        if isinstance(values, dict):
+            return {key.replace(":", ""): value for key, value in values.items()}
+        return values
 
     def eval(self, values):
         if self._eval is None:

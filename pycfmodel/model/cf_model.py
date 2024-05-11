@@ -5,9 +5,8 @@ from pycfmodel.action_expander import expand_actions
 from pycfmodel.constants import AWS_NOVALUE
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.parameter import Parameter
-from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.resources.types import ResourceModels
+from pycfmodel.model.resources.types import AllResourcesType
 from pycfmodel.model.types import Resolvable
 from pycfmodel.resolver import _extended_bool, resolve
 
@@ -39,7 +38,7 @@ class CFModel(CustomModel):
     Metadata: Optional[Dict[str, Any]] = None
     Outputs: Optional[Dict[str, Dict[str, Union[str, Dict]]]] = {}
     Parameters: Optional[Dict[str, Parameter]] = {}
-    Resources: Dict[str, Resolvable[Union[ResourceModels, GenericResource]]] = {}
+    Resources: Dict[str, Resolvable[AllResourcesType]] = {}
     Rules: Optional[Dict] = {}
     Transform: Optional[Union[str, List[str]]] = None
 

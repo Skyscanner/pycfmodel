@@ -2,7 +2,8 @@ import json
 from contextlib import suppress
 from typing import Union
 
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, field_validator, model_validator
+from typing_extensions import Annotated
 
 from pycfmodel.model.base import FunctionDict
 from pycfmodel.model.resources.properties.types import Properties
@@ -18,9 +19,8 @@ from pycfmodel.model.types import (
     ResolvableStrOrList,
 )
 
-
-class _Auxiliar(BaseModel):
-    aux: Union[
+AuxType = Annotated[
+    Union[
         FunctionDict,
         Properties,
         ResolvableBoolOrList,
@@ -30,7 +30,13 @@ class _Auxiliar(BaseModel):
         ResolvableIPOrList,
         ResolvableArnOrList,
         ResolvableStrOrList,
-    ] = Field(union_mode="left_to_right")
+    ],
+    Field(union_mode="left_to_right"),
+]
+
+
+class _Auxiliar(BaseModel):
+    aux: AuxType
 
     @field_validator("aux", mode="before")
     @classmethod
@@ -51,7 +57,7 @@ class _Auxiliar(BaseModel):
 
     @classmethod
     def cast(cls, value):
-        with suppress(ValidationError):
+        with suppress(Exception):
             value = _Auxiliar(aux=value).aux
 
         if isinstance(value, list):
