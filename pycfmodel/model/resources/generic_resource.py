@@ -1,12 +1,9 @@
-import logging
 from typing import Optional
 
 from pydantic import ConfigDict, field_validator
 
 from pycfmodel.model.generic import Generic
 from pycfmodel.model.resources.resource import Resource
-
-logger = logging.getLogger(__file__)
 
 
 class GenericResource(Resource):
@@ -26,5 +23,5 @@ class GenericResource(Resource):
             klass.model_fields["Type"].annotation.__args__[0] for klass in ResourceModels.__args__[0].__args__
         }
         if value in existing_resource_types:
-            logger.warning(f"Instantiating a GenericResource from a {value} in {values}")
+            raise ValueError(f"Instantiation of GenericResource from {value} in {values} not allowed")
         return value
