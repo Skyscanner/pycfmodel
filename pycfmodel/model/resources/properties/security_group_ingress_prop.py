@@ -59,10 +59,10 @@ class SecurityGroupIngressProp(Property):
 
 
 class DBSecurityGroupIngressProp(Property):
-    CIDRIP: Optional[ResolvableIPv4Network]
-    EC2SecurityGroupId: Optional[ResolvableStr]
-    EC2SecurityGroupName: Optional[ResolvableStr]
-    EC2SecurityGroupOwnerId: Optional[ResolvableStr]
+    CIDRIP: Optional[ResolvableIPv4Network] = None
+    EC2SecurityGroupId: Optional[ResolvableStr] = None
+    EC2SecurityGroupName: Optional[ResolvableStr] = None
+    EC2SecurityGroupOwnerId: Optional[ResolvableStr] = None
 
     def is_public(self) -> bool:
         """Returns True if `CidrIp` is public otherwise False."""

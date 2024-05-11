@@ -1,6 +1,6 @@
 from typing import List, Optional, Pattern, Union
 
-from pydantic import Extra
+from pydantic import ConfigDict, Extra
 
 from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 from pycfmodel.model.resources.properties.property import Property
@@ -20,8 +20,7 @@ class PolicyDocument(Property):
     - Version: An optional date indicating the version of the policy document being used.
     """
 
-    class Config(Property.Config):
-        extra = Extra.allow
+    model_config = ConfigDict(extra="allow")
 
     Statement: Resolvable[Union[Statement, List[Resolvable[Statement]]]]
     Id: Optional[ResolvableStr] = None

@@ -1,7 +1,7 @@
 import logging
 from typing import List, Optional, Pattern, Union
 
-from pydantic import validator
+from pydantic import field_validator
 
 from pycfmodel.action_expander import _expand_action
 from pycfmodel.model.base import FunctionDict
@@ -52,7 +52,8 @@ class Statement(Property):
     NotResource: Optional[ResolvableStrOrList] = None
     Condition: Optional[StatementCondition] = None
 
-    @validator("Effect")
+    @field_validator("Effect")
+    @classmethod
     def allowed_values_for_effect_and_capitalized(cls, v: ResolvableStr):
         if isinstance(v, str):
             v = v.capitalize()
