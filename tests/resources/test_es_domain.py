@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from pydantic import ValidationError
 
@@ -165,26 +167,26 @@ def test_raise_error_if_invalid_fields_in_resource():
     with pytest.raises(ValidationError) as exc_info:
         ESDomain(**{"Type": "AWS::Elasticsearch::Domain", "Properties": {"DomainName": []}})
 
-    assert exc_info.value.errors() == [
+    assert json.loads(exc_info.value.json()) == [
         {
             "input": [],
-            "loc": ("Properties", "ESDomainProperties", "DomainName", "str"),
+            "loc": ["Properties", "ESDomainProperties", "DomainName", "str"],
             "msg": "Input should be a valid string",
             "type": "string_type",
             "url": "https://errors.pydantic.dev/2.7/v/string_type",
         },
         {
-            "ctx": {"error": ValueError("FunctionDict should only have 1 key and be a function")},
+            "ctx": {"error": "FunctionDict should only have 1 key and be a function"},
             "input": [],
-            "loc": ("Properties", "ESDomainProperties", "DomainName", "FunctionDict"),
+            "loc": ["Properties", "ESDomainProperties", "DomainName", "FunctionDict"],
             "msg": "Value error, FunctionDict should only have 1 key and be a function",
             "type": "value_error",
             "url": "https://errors.pydantic.dev/2.7/v/value_error",
         },
         {
-            "ctx": {"error": ValueError("FunctionDict should only have 1 key and be a function")},
+            "ctx": {"error": "FunctionDict should only have 1 key and be a function"},
             "input": {"DomainName": []},
-            "loc": ("Properties", "FunctionDict"),
+            "loc": ["Properties", "FunctionDict"],
             "msg": "Value error, FunctionDict should only have 1 key and be a function",
             "type": "value_error",
             "url": "https://errors.pydantic.dev/2.7/v/value_error",

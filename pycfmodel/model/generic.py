@@ -2,7 +2,7 @@ import json
 from contextlib import suppress
 from typing import Union
 
-from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, ValidationError, field_validator, model_validator
 from typing_extensions import Annotated
 
 from pycfmodel.model.base import FunctionDict
@@ -25,8 +25,8 @@ AuxType = Annotated[
         Properties,
         ResolvableBoolOrList,
         ResolvableIntOrList,
-        ResolvableDatetimeOrList,
         ResolvableDateOrList,
+        ResolvableDatetimeOrList,
         ResolvableIPOrList,
         ResolvableArnOrList,
         ResolvableStrOrList,
@@ -57,7 +57,7 @@ class _Auxiliar(BaseModel):
 
     @classmethod
     def cast(cls, value):
-        with suppress(Exception):
+        with suppress(ValidationError):
             value = _Auxiliar(aux=value).aux
 
         if isinstance(value, list):
@@ -83,7 +83,9 @@ class Generic(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def casting(cls, values):
-        return {k: _Auxiliar.cast(v) for k, v in values.items()}
+        if isinstance(values, dict):
+            return {k: _Auxiliar.cast(v) for k, v in values.items()}
+        raise ValueError(f"Not supported type: {type(values)}")
 
 
 ResolvableGeneric = Resolvable[Generic]
