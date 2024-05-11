@@ -1,6 +1,8 @@
 import pytest
 
 from pycfmodel.model.cf_model import CFModel
+from pycfmodel.model.generic import Generic
+from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.iam_user import IAMUser
 
 
@@ -30,11 +32,46 @@ def test_basic_json(model: CFModel):
 
 def test_resources_filtered_by_type():
     generic_resource = {"Logical ID": {"Type": "Resource type", "Properties": {"foo": "bar"}}}
-    user = {"User": IAMUser()}
+    user = {"User": IAMUser(Type="AWS::IAM::User")}
 
     model = CFModel(Resources={**generic_resource, **user})
-    assert model.resources_filtered_by_type(("Resource type",)) == generic_resource
-    assert model.resources_filtered_by_type(("Resource type", IAMUser)) == {**generic_resource, **user}
+    assert model.resources_filtered_by_type(("Resource type",)) == {
+        "Logical ID": GenericResource(
+            Type="Resource type",
+            Condition=None,
+            CreatePolicy=None,
+            DeletionPolicy=None,
+            DependsOn=None,
+            Metadata=None,
+            UpdatePolicy=None,
+            UpdateReplacePolicy=None,
+            Properties=Generic(foo="bar"),
+        )
+    }
+    assert model.resources_filtered_by_type(("Resource type", IAMUser)) == {
+        "Logical ID": GenericResource(
+            Type="Resource type",
+            Condition=None,
+            CreatePolicy=None,
+            DeletionPolicy=None,
+            DependsOn=None,
+            Metadata=None,
+            UpdatePolicy=None,
+            UpdateReplacePolicy=None,
+            Properties=Generic(foo="bar"),
+        ),
+        "User": IAMUser(
+            Type="AWS::IAM::User",
+            Condition=None,
+            CreatePolicy=None,
+            DeletionPolicy=None,
+            DependsOn=None,
+            Metadata=None,
+            UpdatePolicy=None,
+            UpdateReplacePolicy=None,
+            Properties=None,
+        ),
+    }
     assert model.resources_filtered_by_type((IAMUser,)) == user
 
 

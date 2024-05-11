@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
 from pycfmodel.constants import AWS_NOVALUE, CONTAINS_CF_PARAM, CONTAINS_SSM_PARAMETER
+from pycfmodel.model.base import FunctionDict
 from pycfmodel.utils import is_resolvable_dict
 
 logger = logging.getLogger(__file__)
@@ -51,6 +52,11 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
             if resolved_value != AWS_NOVALUE:
                 result.append(resolved_value)
         return result
+
+    if isinstance(function, FunctionDict):
+        function_name = next(iter(function.model_fields_set))
+        function_resolver = FUNCTION_MAPPINGS[function_name]
+        return function_resolver(getattr(function, function_name), params, mappings, conditions)
 
     if isinstance(function, dict):
         if is_resolvable_dict(function):
