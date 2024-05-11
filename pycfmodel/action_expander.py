@@ -34,9 +34,9 @@ def _expand_actions(actions: Union[str, List[str]], not_action=False) -> List[st
 def expand_actions(obj):
     if isinstance(obj, dict):
         for key, value in obj.items():
-            if key == "Action":
+            if key == "Action" and value is not None:
                 obj[key] = _expand_actions(value)
-            elif key == "NotAction":
+            elif key == "NotAction" and value is not None:
                 obj[key] = _expand_actions(value, not_action=True)
             else:
                 obj[key] = expand_actions(value)
