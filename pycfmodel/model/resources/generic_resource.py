@@ -9,7 +9,7 @@ from pycfmodel.model.resources.resource import Resource
 class GenericResource(Resource):
     """This class is used for all resource types that don't have a dedicated class."""
 
-    Type: str
+    Type: Optional[str] = None  # Optional to handle cases like "AWS::CloudFormation::Authentication"
     Properties: Optional[Generic] = None
 
     model_config = ConfigDict(extra="allow")
