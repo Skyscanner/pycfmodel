@@ -18,6 +18,7 @@ class GenericResource(Resource):
     model_config = ConfigDict(extra="allow")
 
     @field_validator("Type", mode="before")
+    @classmethod
     def check_type(cls, value, values, **kwargs):
         from pycfmodel.model.resources.types import ResourceModels
 
