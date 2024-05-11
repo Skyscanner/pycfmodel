@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional
+from typing import ClassVar, List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.generic import ResolvableGeneric
@@ -57,6 +57,5 @@ class ESDomain(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticsearch-domain.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::Elasticsearch::Domain"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::Elasticsearch::Domain"]
     Properties: Resolvable[ESDomainProperties]

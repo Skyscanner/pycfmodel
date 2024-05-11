@@ -122,7 +122,7 @@ class Statement(Property):
             elif is_resolvable_dict(principals):
                 principal_list.append(principals)
             elif isinstance(principals, Principal):
-                for value in principals.dict().values():
+                for value in principals.model_dump().values():
                     if isinstance(value, (str, FunctionDict)):
                         principal_list.append(value)
                     elif isinstance(value, list):

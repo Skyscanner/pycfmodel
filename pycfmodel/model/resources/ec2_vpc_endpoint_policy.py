@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional
+from typing import ClassVar, List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument as resource_policy_document
@@ -43,8 +43,7 @@ class EC2VpcEndpointPolicy(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::EC2::VPCEndpoint"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::EC2::VPCEndpoint"]
     Properties: Resolvable[EC2VpcEndpointPolicyProperties]
 
     @property

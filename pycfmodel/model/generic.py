@@ -2,7 +2,7 @@ import json
 from contextlib import suppress
 from typing import Union
 
-from pydantic import BaseModel, ConfigDict, ValidationError, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 from pycfmodel.model.base import FunctionDict
 from pycfmodel.model.resources.properties.types import Properties
@@ -30,7 +30,7 @@ class _Auxiliar(BaseModel):
         ResolvableIPOrList,
         ResolvableArnOrList,
         ResolvableStrOrList,
-    ]
+    ] = Field(union_mode="left_to_right")
 
     @field_validator("aux", mode="before")
     @classmethod

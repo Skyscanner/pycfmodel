@@ -75,7 +75,7 @@ class CFModel(CustomModel):
                 params[key] = ref_value
 
         extended_parameters = {**self.PSEUDO_PARAMETERS, **params, **extra_params}
-        dict_value = self.dict()
+        dict_value = self.model_dump()
 
         conditions = dict_value.pop("Conditions", {})
         resolved_conditions = {}
@@ -109,7 +109,7 @@ class CFModel(CustomModel):
         python3 scripts/generate_cloudformation_actions_file.py
         ```
         """
-        dict_value = self.dict()
+        dict_value = self.model_dump()
 
         resources = dict_value.pop("Resources")
         expanded_resources = {key: expand_actions(value) for key, value in resources.items()}

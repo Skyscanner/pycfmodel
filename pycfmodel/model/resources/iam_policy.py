@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional
+from typing import ClassVar, List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
@@ -36,8 +36,7 @@ class IAMPolicy(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::IAM::Policy"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::IAM::Policy"]
     Properties: Resolvable[IAMPolicyProperties]
 
     @property

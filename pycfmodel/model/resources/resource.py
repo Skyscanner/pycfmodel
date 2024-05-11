@@ -23,13 +23,6 @@ class Resource(CustomModel):
     UpdatePolicy: Optional[Dict] = None
     UpdateReplacePolicy: Optional[ResolvableStr] = None
 
-    @field_validator("Type")
-    @classmethod
-    def check_type(cls, value):
-        if value != cls.TYPE_VALUE:
-            raise ValueError(f"Value needs to be {cls.TYPE_VALUE}")
-        return value
-
     def has_hardcoded_credentials(self) -> bool:
         if not self.Metadata or not self.Metadata.get("AWS::CloudFormation::Authentication"):
             return False

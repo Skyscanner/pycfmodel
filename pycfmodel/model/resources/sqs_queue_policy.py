@@ -1,4 +1,4 @@
-from typing import ClassVar, List
+from typing import ClassVar, List, Literal
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
@@ -30,8 +30,7 @@ class SQSQueuePolicy(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::SQS::QueuePolicy"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::SQS::QueuePolicy"]
     Properties: Resolvable[SQSQueuePolicyProperties]
 
     @property

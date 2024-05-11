@@ -1,4 +1,4 @@
-from typing import ClassVar, Optional
+from typing import ClassVar, Literal, Optional
 
 from pycfmodel.model.resources.properties.security_group_ingress_prop import (
     DBSecurityGroupIngressResourceProp,
@@ -41,8 +41,7 @@ class SecurityGroupIngress(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-ingress.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroupIngress"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::EC2::SecurityGroupIngress"]
     Properties: SecurityGroupIngressProperties
 
     def ipv4_slash_zero(self) -> bool:
@@ -53,6 +52,5 @@ class SecurityGroupIngress(Resource):
 
 
 class RDSDBSecurityGroupIngress(Resource):
-    TYPE_VALUE: ClassVar = "AWS::RDS::DBSecurityGroupIngress"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::RDS::DBSecurityGroupIngress"]
     Properties: DBSecurityGroupIngressResourceProp

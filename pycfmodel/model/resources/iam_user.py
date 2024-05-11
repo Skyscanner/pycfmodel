@@ -1,4 +1,4 @@
-from typing import ClassVar, Dict, List, Optional
+from typing import ClassVar, Dict, List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.parameter import Parameter
@@ -41,8 +41,7 @@ class IAMUser(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::IAM::User"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::IAM::User"]
     Properties: Optional[Resolvable[IAMUserProperties]] = None
 
     def has_hardcoded_credentials(self) -> bool:
