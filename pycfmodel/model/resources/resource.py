@@ -1,7 +1,5 @@
 from typing import Any, ClassVar, Dict, List, Optional
 
-from pydantic import field_validator
-
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.generic import Generic
 from pycfmodel.model.parameter import Parameter

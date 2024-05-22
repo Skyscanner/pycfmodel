@@ -2,7 +2,7 @@ import json
 from contextlib import suppress
 from typing import Union
 
-from pydantic import BaseModel, ConfigDict, Field, TypeAdapter, ValidationError, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 from typing_extensions import Annotated
 
 from pycfmodel.model.base import FunctionDict

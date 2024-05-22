@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Literal, Optional, Union
+from typing import List, Literal, Optional, Union
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.security_group_egress_prop import SecurityGroupEgressProp
