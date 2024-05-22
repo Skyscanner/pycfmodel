@@ -1,4 +1,4 @@
-from typing import ClassVar, Literal, Optional
+from typing import Literal, Optional
 
 from pycfmodel.model.resources.properties.security_group_ingress_prop import (
     DBSecurityGroupIngressResourceProp,

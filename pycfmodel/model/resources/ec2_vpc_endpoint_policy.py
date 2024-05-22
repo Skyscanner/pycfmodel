@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Literal, Optional
+from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument as resource_policy_document

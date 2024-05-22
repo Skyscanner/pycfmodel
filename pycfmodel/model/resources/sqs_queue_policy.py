@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Literal
+from typing import List, Literal
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
