@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 1.0.0
+### Breaking changes
+- Pydantic updated to v2 including a reformat of the repository to comply with the new API.
+
 ## 0.22.0
 ### Fixes
 - KeyPolicy made optional for KMS Key resource type.
