@@ -135,7 +135,7 @@ ResolvableBool = Resolvable[SemiStrictBool]
 
 ResolvableIPv4Network = Resolvable[LooseIPv4Network]
 ResolvableIPv6Network = Resolvable[LooseIPv6Network]
-ResolvableIPvXNetwork = Annotated[
+ResolvableIPNetwork = Annotated[
     Union[ResolvableIPv4Network, ResolvableIPv6Network], Field(union_mode="left_to_right")
 ]
 
@@ -146,7 +146,7 @@ ResolvableIntOrStr = Resolvable[Union[int, str]]
 ResolvableStrOrList = InstanceOrListOf[ResolvableStr]
 ResolvableArnOrList = InstanceOrListOf[ResolvableArn]
 ResolvableIntOrList = InstanceOrListOf[ResolvableInt]
-ResolvableIPOrList = InstanceOrListOf[ResolvableIPvXNetwork]
+ResolvableIPOrList = InstanceOrListOf[ResolvableIPNetwork]
 ResolvableBoolOrList = InstanceOrListOf[ResolvableBool]
 ResolvableBytesOrList = InstanceOrListOf[Binary]
 ResolvableDateOrList = InstanceOrListOf[ResolvableDate]
