@@ -135,9 +135,7 @@ ResolvableBool = Resolvable[SemiStrictBool]
 
 ResolvableIPv4Network = Resolvable[LooseIPv4Network]
 ResolvableIPv6Network = Resolvable[LooseIPv6Network]
-ResolvableIPNetwork = Annotated[
-    Union[ResolvableIPv4Network, ResolvableIPv6Network], Field(union_mode="left_to_right")
-]
+ResolvableIPNetwork = Annotated[Union[ResolvableIPv4Network, ResolvableIPv6Network], Field(union_mode="left_to_right")]
 
 
 ResolvableIntOrStr = Resolvable[Union[int, str]]

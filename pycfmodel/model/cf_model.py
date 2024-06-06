@@ -1,14 +1,19 @@
 from datetime import date
-from typing import Any, ClassVar, Collection, Dict, List, Optional, Type, Union
+from typing import Annotated, Any, ClassVar, Collection, Dict, List, Optional, Type, Union
+
+from pydantic import Field
 
 from pycfmodel.action_expander import expand_actions
 from pycfmodel.constants import AWS_NOVALUE
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.parameter import Parameter
+from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.resources.types import AllResourcesType
+from pycfmodel.model.resources.types import ResourceModels
 from pycfmodel.model.types import Resolvable
 from pycfmodel.resolver import _extended_bool, resolve
+
+AllResourcesType = Annotated[Union[ResourceModels, GenericResource], Field(union_mode="left_to_right")]
 
 
 class CFModel(CustomModel):
