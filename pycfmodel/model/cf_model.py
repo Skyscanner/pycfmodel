@@ -1,7 +1,8 @@
 from datetime import date
-from typing import Annotated, Any, ClassVar, Collection, Dict, List, Optional, Type, Union
+from typing import Any, ClassVar, Collection, Dict, List, Optional, Type, Union
 
 from pydantic import Field
+from typing_extensions import Annotated
 
 from pycfmodel.action_expander import expand_actions
 from pycfmodel.constants import AWS_NOVALUE
