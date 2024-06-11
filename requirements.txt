@@ -4,7 +4,7 @@
 #
 #    make freeze
 #
-annotated-types==0.6.0
-pydantic==2.7.1
-pydantic-core==2.18.2
-typing-extensions==4.11.0
+annotated-types==0.7.0
+pydantic==2.7.3
+pydantic-core==2.18.4
+typing-extensions==4.12.2

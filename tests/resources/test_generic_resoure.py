@@ -5,7 +5,7 @@ from pycfmodel.model.resources.properties.statement_condition import StatementCo
 
 
 def test_generic_resource():
-    resource = GenericResource.parse_obj(
+    resource = GenericResource.model_validate(
         {
             "Type": "AWS::ECR::RegistryPolicy",
             "Properties": {
@@ -42,7 +42,7 @@ def test_generic_resource():
 
 
 def test_generic_resource_with_policy_document_in_a_string_property():
-    resource = GenericResource.parse_obj(
+    resource = GenericResource.model_validate(
         {
             "Type": "AWS::Logs::ResourcePolicy",
             "Properties": {
@@ -67,7 +67,7 @@ def test_generic_resource_with_policy_document_in_a_string_property():
 
 
 def test_generic_resource_with_bad_json_as_string_is_converted_to_a_string_property():
-    resource = GenericResource.parse_obj(
+    resource = GenericResource.model_validate(
         {
             "Type": "AWS::Logs::ResourcePolicy",
             "Properties": {
@@ -82,7 +82,7 @@ def test_generic_resource_with_bad_json_as_string_is_converted_to_a_string_prope
 
 
 def test_parse_generic_resource_without_properties():
-    resource = GenericResource.parse_obj({"Type": "AWS::SNS::Topic"})
+    resource = GenericResource.model_validate({"Type": "AWS::SNS::Topic"})
     assert isinstance(resource, GenericResource)
     assert resource.Properties is None
     assert resource.Type == "AWS::SNS::Topic"
