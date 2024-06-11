@@ -26,6 +26,6 @@ from pycfmodel.model.resources.properties.statement import Principal
 )
 def test_principal(principal):
     try:
-        Principal.parse_obj(principal)
+        Principal.model_validate(principal)
     except ValidationError as exc:
         assert False, f"{principal} raised an exception {exc}"

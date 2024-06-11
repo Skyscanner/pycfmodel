@@ -11,7 +11,7 @@ def test_loose_ip_v4_network_type():
     class Model(BaseModel):
         ip_network: LooseIPv4Network
 
-    model_schema = Model.schema()
+    model_schema = Model.model_json_schema()
     assert model_schema == {
         "title": "Model",
         "type": "object",
@@ -24,7 +24,7 @@ def test_loose_ip_v6_network_type():
     class Model(BaseModel):
         ip_network: LooseIPv6Network
 
-    model_schema = Model.schema()
+    model_schema = Model.model_json_schema()
     assert model_schema == {
         "title": "Model",
         "type": "object",
