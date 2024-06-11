@@ -2,7 +2,7 @@ import binascii
 from base64 import b64decode
 from datetime import date, datetime
 from ipaddress import IPv4Network, IPv6Network
-from typing import Any, List, TypeVar, Union
+from typing import Any, List, TypeVar, Union, Type
 
 from pydantic import BeforeValidator, Field, GetCoreSchemaHandler
 from pydantic._internal import _schema_generation_shared
@@ -30,7 +30,7 @@ class LooseIPv4Network:
     @classmethod
     def __get_pydantic_core_schema__(
         cls,
-        _source: type[Any],
+        _source: Type[Any],
         _handler: GetCoreSchemaHandler,
     ) -> core_schema.CoreSchema:
         return core_schema.no_info_plain_validator_function(
@@ -59,7 +59,7 @@ class LooseIPv6Network:
     @classmethod
     def __get_pydantic_core_schema__(
         cls,
-        _source: type[Any],
+        _source: Type[Any],
         _handler: GetCoreSchemaHandler,
     ) -> core_schema.CoreSchema:
         return core_schema.no_info_plain_validator_function(
@@ -97,7 +97,7 @@ class SemiStrictBool:
     @classmethod
     def __get_pydantic_core_schema__(
         cls,
-        _source: type[Any],
+        _source: Type[Any],
         _handler: GetCoreSchemaHandler,
     ) -> core_schema.CoreSchema:
         return core_schema.no_info_plain_validator_function(
