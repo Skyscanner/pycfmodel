@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## 1.0.0
 ### Breaking changes
 - Pydantic updated to v2 including a reformat of the repository to comply with the new API.
+- Drops python 3.7 support due to pydantic upgrade
 
 ## 0.22.0
 ### Fixes
