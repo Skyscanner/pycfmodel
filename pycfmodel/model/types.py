@@ -2,7 +2,7 @@ import binascii
 from base64 import b64decode
 from datetime import date, datetime
 from ipaddress import IPv4Network, IPv6Network
-from typing import Any, List, TypeVar, Union, Type
+from typing import Any, List, Type, TypeVar, Union
 
 from pydantic import BeforeValidator, Field, GetCoreSchemaHandler
 from pydantic._internal import _schema_generation_shared
