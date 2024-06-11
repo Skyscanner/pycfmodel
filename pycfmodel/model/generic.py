@@ -26,7 +26,7 @@ AuxType = Annotated[
         ResolvableBoolOrList,
         ResolvableIntOrList,
         ResolvableDateOrList,
-        ResolvableDatetimeOrList,   # Date can be parsed as Datetime in pydantic v2 so should be ordered accordingly
+        ResolvableDatetimeOrList,  # Date can be parsed as Datetime in pydantic v2 so should be ordered accordingly
         ResolvableIPOrList,
         ResolvableArnOrList,
         ResolvableStrOrList,
