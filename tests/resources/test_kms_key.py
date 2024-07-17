@@ -88,6 +88,7 @@ def test_actions(kms_key):
         "kms:DeleteAlias",
         "kms:DeleteCustomKeyStore",
         "kms:DeleteImportedKeyMaterial",
+        "kms:DeriveSharedSecret",
         "kms:DescribeCustomKeyStores",
         "kms:DescribeKey",
         "kms:DisableKey",
