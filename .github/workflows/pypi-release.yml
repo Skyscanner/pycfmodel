@@ -6,8 +6,13 @@ on:
 
 jobs:
   build:
+    name: upload release to PyPI
     runs-on: ubuntu-latest
-
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pycfmodel
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
@@ -25,5 +30,3 @@ jobs:
 
       - name: Publish distribution 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.pypi_password }}
