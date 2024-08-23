@@ -208,6 +208,8 @@ def test_resolve_scenario_2():
         "lambda:DeleteLayerVersion",
         "lambda:DeleteProvisionedConcurrencyConfig",
         "lambda:DisableReplication",
+        'lambda:GetFunctionRecursionConfig',
+        'lambda:PutFunctionRecursionConfig',
         "lambda:EnableReplication",
         "lambda:GetAccountSettings",
         "lambda:GetAlias",
