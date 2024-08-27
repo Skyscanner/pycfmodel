@@ -16624,6 +16624,7 @@ CLOUDFORMATION_ACTIONS = [
     "wellarchitected:UpgradeReviewTemplateLensReview",
     "wickr:CreateAdminSession",
     "wickr:CreateNetwork",
+    "wickr:DeleteNetwork",
     "wickr:ListNetworks",
     "wickr:ListTagsForResource",
     "wickr:TagResource",
