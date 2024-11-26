@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 1.0.1
+### Fixes
+- Fixes security issue https://github.com/Skyscanner/pycfmodel/security/dependabot/13
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+- Bumps several dependencies
+
 ## 1.0.0
 ### Breaking changes
 - Pydantic updated to v2 including a reformat of the repository to comply with the new API.
