@@ -4,8 +4,11 @@ All notable changes to this project will be documented in this file.
 ## 1.0.1
 ### Breaking changes
 - Drops python 3.8 support due to pydantic upgrade
+### Fixes
+- Fixes security issue https://github.com/Skyscanner/pycfmodel/security/dependabot/13
 ### Updates
 - Update `CLOUDFORMATION_ACTIONS`.
+- Bumps several dependencies
 
 ## 1.0.0
 ### Breaking changes
