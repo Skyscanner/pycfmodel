@@ -28,7 +28,7 @@ docs_requires = [
 
 setup(
     name="pycfmodel",
-    version="1.0.0",
+    version="1.0.1",
     description="A python model for CloudFormation scripts",
     author="Skyscanner Product Security",
     author_email="security@skyscanner.net",
@@ -36,7 +36,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Skyscanner/pycfmodel",
     packages=find_namespace_packages(exclude=("tests", "docs")),
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     install_requires=install_requires,
     tests_require=dev_requires,
     extras_require={
