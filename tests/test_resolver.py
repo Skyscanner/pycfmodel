@@ -98,6 +98,7 @@ def test_sub(function, expected_output):
 def test_select(function, expected_output):
     assert resolve(function=function, params={}, mappings={}, conditions={}) == expected_output
 
+
 def test_select_index_bigger_than_list_does_not_fail_resolving_stack():
     template = {
         "Resources": {
@@ -131,6 +132,7 @@ def test_select_index_bigger_than_list_does_not_fail_resolving_stack():
     model = parse(template).resolve()
     resource = model.Resources["RecordSetGroup"]
     assert isinstance(resource, GenericResource)
+
 
 @pytest.mark.parametrize(
     "function, expected_output",
