@@ -1,15 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## 1.0.2
-### Fixes
-- Fixes IndexError when resolving selecting from lists of unresolved values
-### Updates
-- Update `CLOUDFORMATION_ACTIONS`.
-
 ## 1.0.1
 ### Fixes
 - Fixes security issue https://github.com/Skyscanner/pycfmodel/security/dependabot/13
+- Fixes IndexError when resolving selecting from lists of unresolved values
 ### Updates
 - Update `CLOUDFORMATION_ACTIONS`.
 - Bumps several dependencies
