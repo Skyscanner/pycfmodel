@@ -137,7 +137,14 @@ def resolve_select(function_body, params: Dict, mappings: Dict[str, Dict], condi
     index, list_values = function_body
     resolved_index = int(resolve(index, params, mappings, conditions))
     resolved_list = resolve(list_values, params, mappings, conditions)
-    return resolved_list[resolved_index]
+    try:
+        return resolved_list[resolved_index]
+    except IndexError:
+        # In some scenarios, pycfmodel can't resolve some references within resources
+        # Such as GETATT, making in Selects lists smaller than the desired index.
+        # Instead of failing at resolving the model, we will return an empty list instead.
+        logger.warning("Index is bigger than resolved list, returning empty list.")
+        return []
 
 
 def resolve_split(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> List[str]:

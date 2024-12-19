@@ -92,15 +92,45 @@ def test_sub(function, expected_output):
         ({"Fn::Select": ["0", ["apples", "grapes", "oranges", "mangoes"]]}, "apples"),
         ({"Fn::Select": ["1", ["apples", "grapes", "oranges", "mangoes"]]}, "grapes"),
         ({"Fn::Select": ["2", ["apples", "grapes", "oranges", "mangoes"]]}, "oranges"),
+        ({"Fn::Select": ["1", ["apples"]]}, []),
     ],
 )
 def test_select(function, expected_output):
-    parameters = {}
-    mappings = {}
-    conditions = {}
+    assert resolve(function=function, params={}, mappings={}, conditions={}) == expected_output
 
-    assert resolve(function, parameters, mappings, conditions) == expected_output
+def test_select_index_bigger_than_list_does_not_fail_resolving_stack():
+    template = {
+        "Resources": {
+            "RecordSetGroup": {
+                "Type": "AWS::Route53::RecordSetGroup",
+                "Properties": {
+                    "HostedZoneId": "ZONEID",
+                    "RecordSets": [
+                        {
+                            "Name": "*.domain.io",
+                            "ResourceRecords": [
+                                {
+                                    "Fn::Select": [
+                                        1,
+                                        {
+                                            "Fn::Split": [
+                                                ":",
+                                                "UNSPLITTABLE_STRING_RESOLVED_FROM_OTHER_FUNCTIONS",
+                                            ]
+                                        },
+                                    ]
+                                }
+                            ],
+                        }
+                    ],
+                },
+            },
+        }
+    }
 
+    model = parse(template).resolve()
+    resource = model.Resources["RecordSetGroup"]
+    assert isinstance(resource, GenericResource)
 
 @pytest.mark.parametrize(
     "function, expected_output",
