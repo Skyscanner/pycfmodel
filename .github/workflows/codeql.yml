@@ -60,11 +60,15 @@ jobs:
         run: |
           echo "SARIF_RESULTS=$(gzip -c ../results/${{ matrix.language }}.sarif | base64 -w0)" >> $GITHUB_ENV
 
+      - name: Prepare CodeQL Upload
+        run: |
+          echo '{"commit_sha": "${{ github.sha }}", "ref": "${{ github.ref }}", "sarif": "${{ env.SARIF_RESULTS }}"}' > ./codeql-upload.json
+
       - name: Upload CodeQL Results
         run: |
           curl --fail-with-body \
             -X POST \
             -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            -d '{"commit_sha": "${{ github.sha }}", "ref": "${{ github.ref }}", "sarif": "${{ env.SARIF_RESULTS }}"}' \
+            --data "@codeql-upload.json" \
             https://api.github.com/repos/${{ github.repository }}/code-scanning/sarifs
