@@ -56,13 +56,17 @@ jobs:
       #   https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/managing-allowed-ip-addresses-for-your-organization#using-github-actions-with-an-ip-allow-list
       # * Can't use codeql-action/analyze with custom token
       #   https://support.github.com/ticket/enterprise/3427/3214517
-      - name: Prepare CodeQL Results
+      - name: Prepare for CodeQL Upload
         run: |
-          echo "SARIF_RESULTS=$(gzip -c ../results/${{ matrix.language }}.sarif | base64 -w0)" >> $GITHUB_ENV
+          echo '{"commit_sha": "${{ github.sha }}", "ref": "${{ github.ref }}"}' > ./codeql-upload.json
 
-      - name: Prepare CodeQL Upload
+      - name: Gzip CodeQL SARIF Result
         run: |
-          echo '{"commit_sha": "${{ github.sha }}", "ref": "${{ github.ref }}", "sarif": "${{ env.SARIF_RESULTS }}"}' > ./codeql-upload.json
+          gzip -c ../results/${{ matrix.language }}.sarif | base64 -w0 > codeql-results.sarif.gz.base64
+    
+      - name: Staple SARIF result to CodeQL upload
+        run: |
+          jq --rawfile sarif codeql-results.sarif.gz.base64 '.sarif = $sarif' codeql-upload.json > codeql-upload-with-sarif.json
 
       - name: Upload CodeQL Results
         run: |
@@ -70,5 +74,5 @@ jobs:
             -X POST \
             -H "Authorization: token ${{ steps.app-token.outputs.token }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            --data "@codeql-upload.json" \
+            --data "@codeql-upload-with-sarif.json" \
             https://api.github.com/repos/${{ github.repository }}/code-scanning/sarifs
