@@ -46,7 +46,6 @@ jobs:
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"
-        with:
           token: ${{ steps.app-token.outputs.token }}
           upload: never
 
