@@ -41,6 +41,8 @@ jobs:
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
+        with:
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
@@ -56,7 +58,7 @@ jobs:
       #   https://support.github.com/ticket/enterprise/3427/3214517
       - name: Prepare CodeQL Results
         run: |
-          echo "SARIF_RESULTS=$(gzip -c ../results/go.sarif | base64 -w0)" >> $GITHUB_ENV
+          echo "SARIF_RESULTS=$(gzip -c ../results/${{ matrix.language }}.sarif | base64 -w0)" >> $GITHUB_ENV
 
       - name: Upload CodeQL Results
         run: |
