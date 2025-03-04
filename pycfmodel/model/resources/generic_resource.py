@@ -10,7 +10,13 @@ logger = logging.getLogger(__name__)
 
 
 class GenericResource(Resource):
-    """This class is used for all resource types that don't have a dedicated class."""
+    """
+    This class is used for all resource types that don't have a dedicated class.
+    Setting _strict to False will allow creation of GenericResources that have an explicit model class,
+    this is very useful to work around incomplete model definitions or things that are not implemented yet
+    like AWS:NoValue. _strict defaults to True. In that case you can't instantiate GenericResources when
+    there's a model for that type of resource.
+    """
 
     Type: Optional[str] = None  # Optional to handle cases like "AWS::CloudFormation::Authentication"
     Properties: Optional[Generic] = None
