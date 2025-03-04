@@ -10,7 +10,7 @@ from pycfmodel.model.resources.properties.statement_condition import StatementCo
 from pycfmodel.model.types import ResolvableStr, ResolvableStrOrList
 from pycfmodel.utils import is_resolvable_dict
 
-logger = logging.getLogger(__file__)
+logger = logging.getLogger(__name__)
 
 
 class Principal(Property):
