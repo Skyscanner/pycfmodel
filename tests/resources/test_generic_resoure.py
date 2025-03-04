@@ -1,3 +1,10 @@
+from unittest.mock import patch
+
+import pytest
+from pydantic import ValidationError
+from pytest import fixture
+
+from pycfmodel.model.cf_model import CFModel
 from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.properties.statement import Principal, Statement
@@ -86,3 +93,32 @@ def test_parse_generic_resource_without_properties():
     assert isinstance(resource, GenericResource)
     assert resource.Properties is None
     assert resource.Type == "AWS::SNS::Topic"
+
+
+@fixture
+def broken_template():
+    return {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Resources": {
+            "MyS3Bucket": {
+                "Type": "AWS::S3::Bucket",
+                "Properties": {
+                    "BucketName": "my-test-bucket",
+                    "Tags": [{"Key": "test_novalue", "Value": {"Fn::Ref": "AWS::NoValue"}}],
+                },
+            }
+        },
+    }
+
+
+def test_strict_validation(broken_template):
+    with pytest.raises(ValidationError) as error:
+        CFModel(**broken_template)
+    assert error is not None
+
+
+def test_non_strict_validation(broken_template, caplog):
+    with patch.object(GenericResource, "_strict", False):
+        result = CFModel(**broken_template)
+    assert "Instantiation of GenericResource from AWS::S3::Bucket" in caplog.text
+    assert isinstance(result.Resources["MyS3Bucket"], GenericResource)
