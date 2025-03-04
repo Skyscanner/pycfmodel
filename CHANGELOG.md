@@ -4,7 +4,6 @@ All notable changes to this project will be documented in this file.
 ## 1.1.0
 ### Updates
 - Update `CLOUDFORMATION_ACTIONS`.
-- Bumps several dependencies
 - Add a `_strict` option in GenericResource. Defaulting to True. See docs for more info
 
 ## 1.0.1
