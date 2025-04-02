@@ -15,6 +15,15 @@ Homepage = "https://github.com/Skyscanner/pycfmodel"
 name = "Skyscanner Product Security"
 email = "security@skyscanner.net"
 
+[build-system]
+requires = [
+    "setuptools",
+]
+
+[tool.setuptools.packages.find]
+where = ["pycfmodel"]
+exclude = ["tests", "docs"]
+
 [project.optional-dependencies]
 dev = [
     "black>=22.1.0",
