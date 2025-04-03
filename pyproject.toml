@@ -22,7 +22,7 @@ requires = [
 
 [tool.setuptools.packages.find]
 where = ["pycfmodel"]
-exclude = ["tests", "docs"]
+exclude = ["tests"]
 
 [project.optional-dependencies]
 dev = [
