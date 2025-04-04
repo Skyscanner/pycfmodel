@@ -37,9 +37,9 @@ extra_css:
 
 extra:
   social:
-    - type: 'github'
+    - icon: fontawesome/brands/github-alt
       link: 'https://github.com/Skyscanner'
-    - type: 'twitter'
+    - icon: fontawesome/brands/twitter
       link: 'https://twitter.com/skyscannereng'
-    - type: 'linkedin'
+    - icon: fontawesome/brands/linkedin
       link: 'https://www.linkedin.com/company/skyscanner/'
