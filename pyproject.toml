@@ -12,7 +12,7 @@ dependencies = [
 Homepage = "https://github.com/Skyscanner/pycfmodel"
 
 [[project.authors]]
-name = "Skyscanner Product Security"
+name = "Skyscanner Security"
 email = "security@skyscanner.net"
 
 [build-system]
