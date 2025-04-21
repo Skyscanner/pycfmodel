@@ -21,12 +21,12 @@ jobs:
         with:
           python-version: '3.9'
 
-      - run: pip install setuptools wheel
+      - run: pip install setuptools wheel build
 
       - run: make install
 
       - name: Build a binary wheel
-        run: python setup.py sdist bdist_wheel
+        run: python -m build
 
       - name: Publish distribution 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
