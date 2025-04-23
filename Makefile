@@ -50,20 +50,20 @@ test-docs:
 
 FREEZE_OPTIONS = --no-emit-index-url --no-annotate -v --resolver=backtracking
 freeze-base:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile $(FREEZE_OPTIONS) setup.py --output-file requirements.txt
+	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml $(FREEZE_OPTIONS) --output-file requirements.txt
 freeze-dev:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile $(FREEZE_OPTIONS) setup.py --extra dev --output-file requirements-dev.txt
+	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra dev $(FREEZE_OPTIONS) --output-file requirements-dev.txt
 freeze-docs:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile $(FREEZE_OPTIONS) setup.py --extra docs --output-file requirements-docs.txt
+	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra docs $(FREEZE_OPTIONS) --output-file requirements-docs.txt
 
 freeze: freeze-base freeze-dev freeze-docs
 
 freeze-base-upgrade:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile $(FREEZE_OPTIONS) --upgrade setup.py --output-file requirements.txt
+	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml $(FREEZE_OPTIONS) --upgrade --output-file requirements.txt
 freeze-dev-upgrade:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile $(FREEZE_OPTIONS) --upgrade setup.py --extra dev --output-file requirements-dev.txt
+	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra dev $(FREEZE_OPTIONS) --upgrade --output-file requirements-dev.txt
 freeze-docs-upgrade:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile $(FREEZE_OPTIONS) --upgrade setup.py --extra docs --output-file requirements-docs.txt
+	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra docs $(FREEZE_OPTIONS) --upgrade --output-file requirements-docs.txt
 
 freeze-upgrade: freeze-base-upgrade freeze-dev-upgrade freeze-docs-upgrade
 

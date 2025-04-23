@@ -1,3 +1,49 @@
+[project]
+name = "pycfmodel"
+version = "1.1.0"
+readme = "README.md"
+description="A python model for Cloud Formation scripts"
+requires-python=">=3.9.0"
+dependencies = [
+    "pydantic~=2.7"
+]
+
+[project.urls]
+Homepage = "https://github.com/Skyscanner/pycfmodel"
+
+[[project.authors]]
+name = "Skyscanner Security"
+email = "security@skyscanner.net"
+
+[build-system]
+requires = [
+    "setuptools", "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["pycfmodel"]
+exclude = ["tests", "docs"]
+
+[project.optional-dependencies]
+dev = [
+    "black>=22.1.0",
+    "httpx>=0.14.2",
+    "isort>=5.4.2",
+    "pip-tools>=2.0.2",
+    "pytest>=6.0.1",
+    "pytest-cov>=2.10.1",
+    "pytest-repeat==0.9.3",
+    "ruff"
+]
+docs = [
+    "AutoMacDoc==0.3",
+    "livereload==2.6.3",
+    "mkdocs-material==4.6.3",
+    "mkdocs==1.6.0",
+    "mkdocstrings==0.10.0"
+]
+
 [tool.black]
 line-length = 120
 target_version = ['py39']
