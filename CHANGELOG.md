@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## 1.1.1
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+- Update dependency constraint on docs requirements.
+### Fixes
+- Fixes security issue https://github.com/Skyscanner/pycfmodel/security/dependabot/19
+
 ## 1.1.0
 ### Updates
 - Update `CLOUDFORMATION_ACTIONS`.
