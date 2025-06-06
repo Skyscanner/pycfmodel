@@ -26,11 +26,11 @@ markdown_extensions:
   - toc:
       permalink: true
 
+watch:
+  - pycfmodel/
+  
 plugins:
   - search
-  - mkdocstrings:
-      watch:
-        - pycfmodel/
 
 extra_css:
   - 'stylesheets/extra.css'

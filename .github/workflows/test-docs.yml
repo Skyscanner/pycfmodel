@@ -16,10 +16,6 @@ jobs:
         with:
           python-version: 3.9
           
-      - name: set pythonpath
-        run: |
-          echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
-
       - run: make install-docs
 
       - run: make test-docs
