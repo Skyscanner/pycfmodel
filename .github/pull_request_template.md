@@ -5,5 +5,4 @@
 
 ## Checklist
 
-- [ ] I have updated the CHANGELOG.md
 - [ ] I have updated the pyproject.toml

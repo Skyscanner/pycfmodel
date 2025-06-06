@@ -1,3 +1,7 @@
+> ### This file is no longer used to track changes.
+> ### Please check the [releases](https://github.com/Skyscanner/pycfmodel/releases) page of this repo for future changelog information 
+
+
 # Change Log
 All notable changes to this project will be documented in this file.
 

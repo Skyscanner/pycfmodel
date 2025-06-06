@@ -10,6 +10,10 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/Skyscanner/pycfmodel"
+Repository = "https://github.com/Skyscanner/pycfmodel"
+"Bug Tracker" = "https://github.com/Skyscanner/pycfmodel/issues"
+Documentation = "https://pycfmodel.readthedocs.io"
+Changelog = "https://github.com/Skyscanner/pycfmodel/releases"
 
 [[project.authors]]
 name = "Skyscanner Security"
