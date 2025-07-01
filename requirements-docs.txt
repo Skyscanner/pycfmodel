@@ -20,7 +20,7 @@ livereload==2.7.1
 markdown==3.6
 markupsafe==2.1.5
 mergedeep==1.3.4
-mkdocs==1.6.0
+mkdocs==1.6.1
 mkdocs-get-deps==0.2.0
 mkdocs-material==9.6.11
 mkdocs-material-extensions==1.3.1
