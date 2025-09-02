@@ -38,7 +38,7 @@ pytkdocs==0.2.1
 pyyaml==6.0.1
 pyyaml-env-tag==0.1
 requests==2.32.4
-six==1.16.0
+six==1.17.0
 soupsieve==2.5
 tornado==6.5
 typing-extensions==4.12.2
