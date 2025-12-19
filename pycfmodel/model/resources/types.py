@@ -19,6 +19,7 @@ from pycfmodel.model.resources.security_group_egress import SecurityGroupEgress
 from pycfmodel.model.resources.security_group_ingress import RDSDBSecurityGroupIngress, SecurityGroupIngress
 from pycfmodel.model.resources.sns_topic_policy import SNSTopicPolicy
 from pycfmodel.model.resources.sqs_queue_policy import SQSQueuePolicy
+from pycfmodel.model.resources.wafv2_ip_set import WAFv2IPSet
 
 ResourceModels = Annotated[
     Union[
@@ -40,6 +41,7 @@ ResourceModels = Annotated[
         SecurityGroupIngress,
         SNSTopicPolicy,
         SQSQueuePolicy,
+        WAFv2IPSet,
     ],
     Field(discriminator="Type"),
 ]
