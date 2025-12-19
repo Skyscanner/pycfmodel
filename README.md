@@ -51,6 +51,7 @@ inspecting CloudFormation scripts.
     * Security Group Ingress
     * SNS Topic Policy
     * SQS Queue Policy
+    * WAFv2 IP Set
 * Transform
 
 ## Example
