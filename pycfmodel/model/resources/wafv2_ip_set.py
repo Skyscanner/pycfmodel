@@ -3,7 +3,7 @@ from typing import List, Literal, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableStr, ResolvableIPOrList
 
 
 class WAFv2IPSetProperties(CustomModel):
@@ -22,7 +22,7 @@ class WAFv2IPSetProperties(CustomModel):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-ipset.html)
     """
 
-    Addresses: List[str]
+    Addresses: ResolvableIPOrList
     Description: Optional[ResolvableStr] = None
     IPAddressVersion: ResolvableStr
     Name: Optional[ResolvableStr] = None

@@ -1,3 +1,5 @@
+from ipaddress import IPv4Network
+
 from pycfmodel.model.resources.wafv2_ip_set import WAFv2IPSet, WAFv2IPSetProperties
 
 
@@ -22,8 +24,8 @@ def test_wafv2_ipset_with_large_cidr():
     assert resource.Type == "AWS::WAFv2::IPSet"
     assert isinstance(resource.Properties, WAFv2IPSetProperties)
     assert len(resource.Properties.Addresses) == 3
-    assert resource.Properties.Addresses[0] == "17.0.0.0/8"
-    assert isinstance(resource.Properties.Addresses[0], str)
+    assert resource.Properties.Addresses[0] == IPv4Network('17.0.0.0/8')
+    assert isinstance(resource.Properties.Addresses[0], IPv4Network)
     assert resource.Properties.IPAddressVersion == "IPV4"
     assert resource.Properties.Scope == "CLOUDFRONT"
 
@@ -74,3 +76,21 @@ def test_wafv2_ipset_with_tags():
     assert resource.Properties.Scope == "REGIONAL"
     assert len(resource.Properties.Tags) == 2
     assert resource.Properties.Tags[0].Key == "Environment"
+
+
+def test_wafv2_ipset_with_invalid_ip():
+    """Test that WAFv2::IPSet fails validation when given an invalid IP address."""
+    import pytest
+    from pydantic import ValidationError
+
+    resource_dict = {
+        "Type": "AWS::WAFv2::IPSet",
+        "Properties": {
+            "Addresses": ["not.a.valid.ip"],
+            "IPAddressVersion": "IPV4",
+            "Scope": "CLOUDFRONT",
+        },
+    }
+
+    with pytest.raises(ValidationError):
+        WAFv2IPSet(**resource_dict)
