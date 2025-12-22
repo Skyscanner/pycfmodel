@@ -3,7 +3,7 @@ from typing import List, Literal, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableStr, ResolvableIPOrList
+from pycfmodel.model.types import Resolvable, ResolvableIPOrList, ResolvableStr
 
 
 class WAFv2IPSetProperties(CustomModel):

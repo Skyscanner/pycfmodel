@@ -24,7 +24,7 @@ def test_wafv2_ipset_with_large_cidr():
     assert resource.Type == "AWS::WAFv2::IPSet"
     assert isinstance(resource.Properties, WAFv2IPSetProperties)
     assert len(resource.Properties.Addresses) == 3
-    assert resource.Properties.Addresses[0] == IPv4Network('17.0.0.0/8')
+    assert resource.Properties.Addresses[0] == IPv4Network("17.0.0.0/8")
     assert isinstance(resource.Properties.Addresses[0], IPv4Network)
     assert resource.Properties.IPAddressVersion == "IPV4"
     assert resource.Properties.Scope == "CLOUDFRONT"
