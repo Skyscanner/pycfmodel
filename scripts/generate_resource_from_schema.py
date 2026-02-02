@@ -25,52 +25,62 @@ import re
 import sys
 import zipfile
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Set, Tuple
 
 import httpx
 
 SCHEMA_URL_TEMPLATE = "https://schema.cloudformation.{region}.amazonaws.com/CloudformationSchema.zip"
 DEFAULT_REGION = "us-east-1"
 
-# Cache for downloaded schemas
-_schemas_cache: Optional[Dict[str, Any]] = None
+
+class SchemaRegistry:
+    """Downloads and caches CloudFormation schemas from AWS."""
+
+    def __init__(self):
+        self._cache: Dict[str, Dict[str, Any]] = {}
+
+    def download_schemas(self, region: str = DEFAULT_REGION) -> Dict[str, Any]:
+        """Download all CloudFormation schemas for a region."""
+        if region in self._cache:
+            return self._cache[region]
+
+        url = SCHEMA_URL_TEMPLATE.format(region=region)
+        print(f"Downloading schemas from {url}...", file=sys.stderr)
+        response = httpx.get(url, timeout=60.0)
+        response.raise_for_status()
+
+        schemas = {}
+        with zipfile.ZipFile(io.BytesIO(response.content)) as zf:
+            for name in zf.namelist():
+                if name.endswith(".json"):
+                    with zf.open(name) as f:
+                        schema = json.load(f)
+                        type_name = schema.get("typeName", "")
+                        if type_name:
+                            schemas[type_name] = schema
+
+        self._cache[region] = schemas
+        print(f"Downloaded {len(schemas)} schemas", file=sys.stderr)
+        return schemas
+
+    def get_schema(self, resource_type: str, region: str = DEFAULT_REGION) -> Dict[str, Any]:
+        """Get the schema for a specific resource type."""
+        schemas = self.download_schemas(region)
+        if resource_type not in schemas:
+            available = [t for t in schemas.keys() if resource_type.split("::")[-1] in t]
+            raise ValueError(
+                f"Resource type '{resource_type}' not found in schema registry.\n" f"Similar types: {available[:10]}"
+            )
+        return schemas[resource_type]
 
 
-def download_schemas(region: str = DEFAULT_REGION) -> Dict[str, Any]:
-    """Download all CloudFormation schemas for a region."""
-    global _schemas_cache
-    if _schemas_cache is not None:
-        return _schemas_cache
-
-    url = SCHEMA_URL_TEMPLATE.format(region=region)
-    print(f"Downloading schemas from {url}...", file=sys.stderr)
-    response = httpx.get(url, timeout=60.0)
-    response.raise_for_status()
-
-    schemas = {}
-    with zipfile.ZipFile(io.BytesIO(response.content)) as zf:
-        for name in zf.namelist():
-            if name.endswith(".json"):
-                with zf.open(name) as f:
-                    schema = json.load(f)
-                    type_name = schema.get("typeName", "")
-                    if type_name:
-                        schemas[type_name] = schema
-
-    _schemas_cache = schemas
-    print(f"Downloaded {len(schemas)} schemas", file=sys.stderr)
-    return schemas
+# Default registry instance for module-level functions
+_registry = SchemaRegistry()
 
 
 def get_schema(resource_type: str, region: str = DEFAULT_REGION) -> Dict[str, Any]:
     """Get the schema for a specific resource type."""
-    schemas = download_schemas(region)
-    if resource_type not in schemas:
-        available = [t for t in schemas.keys() if resource_type.split("::")[-1] in t]
-        raise ValueError(
-            f"Resource type '{resource_type}' not found in schema registry.\n" f"Similar types: {available[:10]}"
-        )
-    return schemas[resource_type]
+    return _registry.get_schema(resource_type, region)
 
 
 def resource_type_to_class_names(resource_type: str) -> Tuple[str, str, str]:
@@ -695,7 +705,7 @@ Examples:
     args = parser.parse_args()
 
     if args.list_types:
-        schemas = download_schemas(args.region)
+        schemas = _registry.download_schemas(args.region)
         for resource_type in sorted(schemas.keys()):
             print(resource_type)
         return 0

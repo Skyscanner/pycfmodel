@@ -1,9 +1,13 @@
 """Tests for the resource generator script."""
 
+import importlib.util
 import subprocess
 import sys
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
+from types import ModuleType
+from typing import Generator
 
 import pytest
 
@@ -13,6 +17,37 @@ from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.resources.s3_bucket import S3Bucket
 
 SCRIPT_PATH = Path(__file__).parent.parent / "scripts" / "generate_resource_from_schema.py"
+
+
+@contextmanager
+def generate_and_load_module(resource_type: str, module_name: str) -> Generator[ModuleType, None, None]:
+    """Generate code for a resource type and load it as a module.
+
+    Args:
+        resource_type: AWS CloudFormation resource type (e.g., "AWS::Lambda::Function")
+        module_name: Name to use for the generated module
+
+    Yields:
+        The loaded module containing the generated classes
+    """
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT_PATH), resource_type],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, f"Script failed for {resource_type}: {result.stderr}"
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(result.stdout)
+        temp_path = f.name
+
+    try:
+        spec = importlib.util.spec_from_file_location(module_name, temp_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        yield module
+    finally:
+        Path(temp_path).unlink()
 
 
 class TestGeneratedCodeCompilation:
@@ -62,52 +97,14 @@ class TestGeneratedCodeFunctionality:
     @pytest.fixture
     def generated_lambda_module(self):
         """Generate and load Lambda function module."""
-        result = subprocess.run(
-            [sys.executable, str(SCRIPT_PATH), "AWS::Lambda::Function"],
-            capture_output=True,
-            text=True,
-        )
-        assert result.returncode == 0
-
-        # Write to temp file and import
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write(result.stdout)
-            temp_path = f.name
-
-        import importlib.util
-
-        spec = importlib.util.spec_from_file_location("generated_lambda", temp_path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-
-        yield module
-
-        # Cleanup
-        Path(temp_path).unlink()
+        with generate_and_load_module("AWS::Lambda::Function", "generated_lambda") as module:
+            yield module
 
     @pytest.fixture
     def generated_ec2_module(self):
         """Generate and load EC2 VPC module."""
-        result = subprocess.run(
-            [sys.executable, str(SCRIPT_PATH), "AWS::EC2::VPC"],
-            capture_output=True,
-            text=True,
-        )
-        assert result.returncode == 0
-
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-            f.write(result.stdout)
-            temp_path = f.name
-
-        import importlib.util
-
-        spec = importlib.util.spec_from_file_location("generated_ec2_vpc", temp_path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-
-        yield module
-
-        Path(temp_path).unlink()
+        with generate_and_load_module("AWS::EC2::VPC", "generated_ec2_vpc") as module:
+            yield module
 
     def test_generated_lambda_inherits_from_resource(self, generated_lambda_module):
         """Test that generated Lambda class inherits from Resource."""
