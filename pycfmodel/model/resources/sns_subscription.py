@@ -7,11 +7,8 @@ Auto-generated from AWS CloudFormation schema for AWS::SNS::Subscription.
 from typing import Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable
-from pycfmodel.model.types import ResolvableBool
-from pycfmodel.model.types import ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableStr
 
 
 class SNSSubscriptionProperties(CustomModel):
@@ -37,14 +34,14 @@ class SNSSubscriptionProperties(CustomModel):
 
     Protocol: ResolvableStr
     TopicArn: ResolvableStr
-    DeliveryPolicy: Optional[ResolvableGeneric] = None
+    DeliveryPolicy: Optional[Resolvable[dict]] = None
     Endpoint: Optional[ResolvableStr] = None
-    FilterPolicy: Optional[ResolvableGeneric] = None
+    FilterPolicy: Optional[Resolvable[dict]] = None
     FilterPolicyScope: Optional[ResolvableStr] = None
     RawMessageDelivery: Optional[ResolvableBool] = None
-    RedrivePolicy: Optional[ResolvableGeneric] = None
+    RedrivePolicy: Optional[Resolvable[dict]] = None
     Region: Optional[ResolvableStr] = None
-    ReplayPolicy: Optional[ResolvableGeneric] = None
+    ReplayPolicy: Optional[Resolvable[dict]] = None
     SubscriptionRoleArn: Optional[ResolvableStr] = None
 
 

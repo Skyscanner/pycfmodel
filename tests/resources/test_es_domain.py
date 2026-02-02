@@ -94,10 +94,9 @@ def test_valid_es_domain_from_aws_documentation_examples_resource_can_be_built(
     )
 
     assert (
-        getattr(
-            valid_es_domain_from_aws_documentation_examples.Properties.AdvancedOptions,
-            "rest.action.multi.allow_explicit_index",
-        )
+        valid_es_domain_from_aws_documentation_examples.Properties.AdvancedOptions[
+            "rest.action.multi.allow_explicit_index"
+        ]
         is True
     )
 
@@ -135,26 +134,36 @@ def test_valid_es_domain_from_aws_documentation_examples_resource_can_be_built(
     assert valid_es_domain_from_aws_documentation_examples.Properties.EncryptionAtRestOptions is None
 
     assert (
-        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.ES_APPLICATION_LOGS.CloudWatchLogsLogGroupArn
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["ES_APPLICATION_LOGS"][
+            "CloudWatchLogsLogGroupArn"
+        ]
         == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-application-logs"
     )
     assert (
-        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.ES_APPLICATION_LOGS.Enabled
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["ES_APPLICATION_LOGS"][
+            "Enabled"
+        ]
         is True
     )
     assert (
-        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.SEARCH_SLOW_LOGS.CloudWatchLogsLogGroupArn
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["SEARCH_SLOW_LOGS"][
+            "CloudWatchLogsLogGroupArn"
+        ]
         == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-slow-logs"
     )
     assert (
-        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.SEARCH_SLOW_LOGS.Enabled is True
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["SEARCH_SLOW_LOGS"]["Enabled"]
+        is True
     )
     assert (
-        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.INDEX_SLOW_LOGS.CloudWatchLogsLogGroupArn
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["INDEX_SLOW_LOGS"][
+            "CloudWatchLogsLogGroupArn"
+        ]
         == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearchservice/domains/es-index-slow-logs"
     )
     assert (
-        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.INDEX_SLOW_LOGS.Enabled is True
+        valid_es_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["INDEX_SLOW_LOGS"]["Enabled"]
+        is True
     )
 
     assert valid_es_domain_from_aws_documentation_examples.Properties.NodeToNodeEncryptionOptions is None

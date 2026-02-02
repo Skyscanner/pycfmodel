@@ -7,13 +7,8 @@ Auto-generated from AWS CloudFormation schema for AWS::ElasticLoadBalancingV2::L
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable
-from pycfmodel.model.types import ResolvableBool
-from pycfmodel.model.types import ResolvableInt
-from pycfmodel.model.types import ResolvableModel
-from pycfmodel.model.types import ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
 
 
 class AuthenticateCognitoConfig(CustomModel):
@@ -22,9 +17,9 @@ class AuthenticateCognitoConfig(CustomModel):
     """
 
     UserPoolArn: ResolvableStr
-    UserPoolClientId: ResolvableGeneric
+    UserPoolClientId: ResolvableStr
     UserPoolDomain: ResolvableStr
-    AuthenticationRequestExtraParams: Optional[ResolvableGeneric] = None
+    AuthenticationRequestExtraParams: Optional[Resolvable[dict]] = None
     OnUnauthenticatedRequest: Optional[ResolvableStr] = None
     Scope: Optional[ResolvableStr] = None
     SessionCookieName: Optional[ResolvableStr] = None
@@ -44,7 +39,7 @@ class AuthenticateOidcConfig(CustomModel):
     Issuer: ResolvableStr
     TokenEndpoint: ResolvableStr
     UserInfoEndpoint: ResolvableStr
-    AuthenticationRequestExtraParams: Optional[ResolvableGeneric] = None
+    AuthenticationRequestExtraParams: Optional[Resolvable[dict]] = None
     ClientSecret: Optional[ResolvableStr] = None
     OnUnauthenticatedRequest: Optional[ResolvableStr] = None
     Scope: Optional[ResolvableStr] = None
@@ -61,7 +56,7 @@ class Certificate(CustomModel):
     Specifies an SSL server certificate to use as the default certificate for a secure listener.
     """
 
-    CertificateArn: Optional[ResolvableGeneric] = None
+    CertificateArn: Optional[ResolvableStr] = None
 
 
 ResolvableCertificate = ResolvableModel(Certificate)
@@ -94,9 +89,7 @@ ResolvableJwtValidationActionAdditionalClaim = ResolvableModel(JwtValidationActi
 
 
 class JwtValidationConfig(CustomModel):
-    """
-    
-    """
+    """ """
 
     Issuer: ResolvableStr
     JwksEndpoint: ResolvableStr

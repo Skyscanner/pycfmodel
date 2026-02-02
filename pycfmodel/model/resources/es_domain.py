@@ -1,11 +1,134 @@
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
+
+
+class ESCognitoOptions(CustomModel):
+    """Configures Amazon Cognito authentication for Kibana."""
+
+    Enabled: Optional[ResolvableBool] = None
+    IdentityPoolId: Optional[ResolvableStr] = None
+    RoleArn: Optional[ResolvableStr] = None
+    UserPoolId: Optional[ResolvableStr] = None
+
+
+ResolvableESCognitoOptions = ResolvableModel(ESCognitoOptions)
+
+
+class ESDomainEndpointOptions(CustomModel):
+    """Specifies additional options for the domain endpoint."""
+
+    CustomEndpoint: Optional[ResolvableStr] = None
+    CustomEndpointCertificateArn: Optional[ResolvableStr] = None
+    CustomEndpointEnabled: Optional[ResolvableBool] = None
+    EnforceHTTPS: Optional[ResolvableBool] = None
+    TLSSecurityPolicy: Optional[ResolvableStr] = None
+
+
+ResolvableESDomainEndpointOptions = ResolvableModel(ESDomainEndpointOptions)
+
+
+class ESEBSOptions(CustomModel):
+    """Amazon EBS volume configurations."""
+
+    EBSEnabled: Optional[ResolvableBool] = None
+    Iops: Optional[ResolvableInt] = None
+    VolumeSize: Optional[ResolvableInt] = None
+    VolumeType: Optional[ResolvableStr] = None
+
+
+ResolvableESEBSOptions = ResolvableModel(ESEBSOptions)
+
+
+class ESEncryptionAtRestOptions(CustomModel):
+    """Encryption at rest configuration."""
+
+    Enabled: Optional[ResolvableBool] = None
+    KmsKeyId: Optional[ResolvableStr] = None
+
+
+ResolvableESEncryptionAtRestOptions = ResolvableModel(ESEncryptionAtRestOptions)
+
+
+class ESNodeToNodeEncryptionOptions(CustomModel):
+    """Node-to-node encryption configuration."""
+
+    Enabled: Optional[ResolvableBool] = None
+
+
+ResolvableESNodeToNodeEncryptionOptions = ResolvableModel(ESNodeToNodeEncryptionOptions)
+
+
+class ESSnapshotOptions(CustomModel):
+    """Automated snapshot configuration."""
+
+    AutomatedSnapshotStartHour: Optional[ResolvableInt] = None
+
+
+ResolvableESSnapshotOptions = ResolvableModel(ESSnapshotOptions)
+
+
+class ESVPCOptions(CustomModel):
+    """VPC configuration."""
+
+    SecurityGroupIds: Optional[Resolvable[List[ResolvableStr]]] = None
+    SubnetIds: Optional[Resolvable[List[ResolvableStr]]] = None
+
+
+ResolvableESVPCOptions = ResolvableModel(ESVPCOptions)
+
+
+class ESMasterUserOptions(CustomModel):
+    """Master user options for fine-grained access control."""
+
+    MasterUserARN: Optional[ResolvableStr] = None
+    MasterUserName: Optional[ResolvableStr] = None
+    MasterUserPassword: Optional[ResolvableStr] = None
+
+
+ResolvableESMasterUserOptions = ResolvableModel(ESMasterUserOptions)
+
+
+class ESAdvancedSecurityOptions(CustomModel):
+    """Specifies options for fine-grained access control."""
+
+    Enabled: Optional[ResolvableBool] = None
+    InternalUserDatabaseEnabled: Optional[ResolvableBool] = None
+    MasterUserOptions: Optional[ResolvableESMasterUserOptions] = None
+
+
+ResolvableESAdvancedSecurityOptions = ResolvableModel(ESAdvancedSecurityOptions)
+
+
+class ESZoneAwarenessConfig(CustomModel):
+    """Zone awareness configuration."""
+
+    AvailabilityZoneCount: Optional[ResolvableInt] = None
+
+
+ResolvableESZoneAwarenessConfig = ResolvableModel(ESZoneAwarenessConfig)
+
+
+class ElasticsearchClusterConfig(CustomModel):
+    """Cluster configuration."""
+
+    DedicatedMasterCount: Optional[ResolvableInt] = None
+    DedicatedMasterEnabled: Optional[ResolvableBool] = None
+    DedicatedMasterType: Optional[ResolvableStr] = None
+    InstanceCount: Optional[ResolvableInt] = None
+    InstanceType: Optional[ResolvableStr] = None
+    WarmCount: Optional[ResolvableInt] = None
+    WarmEnabled: Optional[ResolvableBool] = None
+    WarmType: Optional[ResolvableStr] = None
+    ZoneAwarenessConfig: Optional[ResolvableESZoneAwarenessConfig] = None
+    ZoneAwarenessEnabled: Optional[ResolvableBool] = None
+
+
+ResolvableElasticsearchClusterConfig = ResolvableModel(ElasticsearchClusterConfig)
 
 
 class ESDomainProperties(CustomModel):
@@ -32,20 +155,20 @@ class ESDomainProperties(CustomModel):
     """
 
     AccessPolicies: Optional[Resolvable[PolicyDocument]] = None
-    AdvancedOptions: Optional[ResolvableGeneric] = None
-    AdvancedSecurityOptions: Optional[ResolvableGeneric] = None
-    CognitoOptions: Optional[ResolvableGeneric] = None
-    DomainEndpointOptions: Optional[ResolvableGeneric] = None
+    AdvancedOptions: Optional[Resolvable[dict]] = None
+    AdvancedSecurityOptions: Optional[ResolvableESAdvancedSecurityOptions] = None
+    CognitoOptions: Optional[ResolvableESCognitoOptions] = None
+    DomainEndpointOptions: Optional[ResolvableESDomainEndpointOptions] = None
     DomainName: Optional[ResolvableStr] = None
-    EBSOptions: Optional[ResolvableGeneric] = None
-    ElasticsearchClusterConfig: Optional[ResolvableGeneric] = None
+    EBSOptions: Optional[ResolvableESEBSOptions] = None
+    ElasticsearchClusterConfig: Optional[ResolvableElasticsearchClusterConfig] = None
     ElasticsearchVersion: Optional[ResolvableStr] = None
-    EncryptionAtRestOptions: Optional[ResolvableGeneric] = None
-    LogPublishingOptions: Optional[ResolvableGeneric] = None
-    NodeToNodeEncryptionOptions: Optional[ResolvableGeneric] = None
-    SnapshotOptions: Optional[ResolvableGeneric] = None
+    EncryptionAtRestOptions: Optional[ResolvableESEncryptionAtRestOptions] = None
+    LogPublishingOptions: Optional[Resolvable[dict]] = None
+    NodeToNodeEncryptionOptions: Optional[ResolvableESNodeToNodeEncryptionOptions] = None
+    SnapshotOptions: Optional[ResolvableESSnapshotOptions] = None
     Tags: Optional[Resolvable[List[Tag]]] = None
-    VPCOptions: Optional[ResolvableGeneric] = None
+    VPCOptions: Optional[ResolvableESVPCOptions] = None
 
 
 class ESDomain(Resource):

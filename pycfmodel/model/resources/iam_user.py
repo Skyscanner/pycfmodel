@@ -1,9 +1,9 @@
 from typing import Dict, List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.parameter import Parameter
 from pycfmodel.model.resources.properties.policy import Policy
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableStr
 from pycfmodel.model.utils import OptionallyNamedPolicyDocument
@@ -31,7 +31,7 @@ class IAMUserProperties(CustomModel):
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
     Policies: Optional[Resolvable[List[Resolvable[Policy]]]] = None
-    Tags: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    Tags: Optional[Resolvable[List[Tag]]] = None
     UserName: Optional[ResolvableStr] = None
 
 

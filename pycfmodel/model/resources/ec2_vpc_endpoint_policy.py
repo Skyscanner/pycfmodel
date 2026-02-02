@@ -1,11 +1,21 @@
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument as resource_policy_document
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableModel, ResolvableStr
 from pycfmodel.model.utils import OptionallyNamedPolicyDocument
+
+
+class DnsOptions(CustomModel):
+    """DNS options for VPC endpoint."""
+
+    DnsRecordIpType: Optional[ResolvableStr] = None
+    PrivateDnsOnlyForInboundResolverEndpoint: Optional[ResolvableBool] = None
+
+
+ResolvableDnsOptions = ResolvableModel(DnsOptions)
 
 
 class EC2VpcEndpointPolicyProperties(CustomModel):
@@ -30,7 +40,7 @@ class EC2VpcEndpointPolicyProperties(CustomModel):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpcendpoint.html)
     """
 
-    DnsOptions: Optional[ResolvableGeneric] = None
+    DnsOptions: Optional[ResolvableDnsOptions] = None
     IpAddressType: Optional[ResolvableStr] = None
     PolicyDocument: Optional[Resolvable[resource_policy_document]] = None
     PrivateDnsEnabled: Optional[ResolvableBool] = None
@@ -41,7 +51,7 @@ class EC2VpcEndpointPolicyProperties(CustomModel):
     ServiceNetworkArn: Optional[ResolvableStr] = None
     ServiceRegion: Optional[ResolvableStr] = None
     SubnetIds: Optional[Resolvable[List[ResolvableStr]]] = None
-    Tags: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    Tags: Optional[Resolvable[List[Tag]]] = None
     VpcEndpointType: Optional[ResolvableStr] = None
     VpcId: ResolvableStr
 

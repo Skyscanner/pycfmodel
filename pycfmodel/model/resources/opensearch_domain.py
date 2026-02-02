@@ -1,11 +1,144 @@
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
 from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
+
+
+class CognitoOptions(CustomModel):
+    """Configures Amazon Cognito authentication for OpenSearch Dashboards."""
+
+    Enabled: Optional[ResolvableBool] = None
+    IdentityPoolId: Optional[ResolvableStr] = None
+    RoleArn: Optional[ResolvableStr] = None
+    UserPoolId: Optional[ResolvableStr] = None
+
+
+ResolvableCognitoOptions = ResolvableModel(CognitoOptions)
+
+
+class DomainEndpointOptions(CustomModel):
+    """Specifies additional options for the domain endpoint."""
+
+    CustomEndpoint: Optional[ResolvableStr] = None
+    CustomEndpointCertificateArn: Optional[ResolvableStr] = None
+    CustomEndpointEnabled: Optional[ResolvableBool] = None
+    EnforceHTTPS: Optional[ResolvableBool] = None
+    TLSSecurityPolicy: Optional[ResolvableStr] = None
+
+
+ResolvableDomainEndpointOptions = ResolvableModel(DomainEndpointOptions)
+
+
+class EBSOptions(CustomModel):
+    """Amazon EBS volume configurations."""
+
+    EBSEnabled: Optional[ResolvableBool] = None
+    Iops: Optional[ResolvableInt] = None
+    Throughput: Optional[ResolvableInt] = None
+    VolumeSize: Optional[ResolvableInt] = None
+    VolumeType: Optional[ResolvableStr] = None
+
+
+ResolvableEBSOptions = ResolvableModel(EBSOptions)
+
+
+class EncryptionAtRestOptions(CustomModel):
+    """Encryption at rest configuration."""
+
+    Enabled: Optional[ResolvableBool] = None
+    KmsKeyId: Optional[ResolvableStr] = None
+
+
+ResolvableEncryptionAtRestOptions = ResolvableModel(EncryptionAtRestOptions)
+
+
+class NodeToNodeEncryptionOptions(CustomModel):
+    """Node-to-node encryption configuration."""
+
+    Enabled: Optional[ResolvableBool] = None
+
+
+ResolvableNodeToNodeEncryptionOptions = ResolvableModel(NodeToNodeEncryptionOptions)
+
+
+class SnapshotOptions(CustomModel):
+    """Automated snapshot configuration."""
+
+    AutomatedSnapshotStartHour: Optional[ResolvableInt] = None
+
+
+ResolvableSnapshotOptions = ResolvableModel(SnapshotOptions)
+
+
+class SoftwareUpdateOptions(CustomModel):
+    """Software update options."""
+
+    AutoSoftwareUpdateEnabled: Optional[ResolvableBool] = None
+
+
+ResolvableSoftwareUpdateOptions = ResolvableModel(SoftwareUpdateOptions)
+
+
+class VPCOptions(CustomModel):
+    """VPC configuration."""
+
+    SecurityGroupIds: Optional[Resolvable[List[ResolvableStr]]] = None
+    SubnetIds: Optional[Resolvable[List[ResolvableStr]]] = None
+
+
+ResolvableVPCOptions = ResolvableModel(VPCOptions)
+
+
+class MasterUserOptions(CustomModel):
+    """Master user options for fine-grained access control."""
+
+    MasterUserARN: Optional[ResolvableStr] = None
+    MasterUserName: Optional[ResolvableStr] = None
+    MasterUserPassword: Optional[ResolvableStr] = None
+
+
+ResolvableMasterUserOptions = ResolvableModel(MasterUserOptions)
+
+
+class AdvancedSecurityOptions(CustomModel):
+    """Specifies options for fine-grained access control."""
+
+    Enabled: Optional[ResolvableBool] = None
+    InternalUserDatabaseEnabled: Optional[ResolvableBool] = None
+    MasterUserOptions: Optional[ResolvableMasterUserOptions] = None
+
+
+ResolvableAdvancedSecurityOptions = ResolvableModel(AdvancedSecurityOptions)
+
+
+class ZoneAwarenessConfig(CustomModel):
+    """Zone awareness configuration."""
+
+    AvailabilityZoneCount: Optional[ResolvableInt] = None
+
+
+ResolvableZoneAwarenessConfig = ResolvableModel(ZoneAwarenessConfig)
+
+
+class ClusterConfig(CustomModel):
+    """Cluster configuration."""
+
+    DedicatedMasterCount: Optional[ResolvableInt] = None
+    DedicatedMasterEnabled: Optional[ResolvableBool] = None
+    DedicatedMasterType: Optional[ResolvableStr] = None
+    InstanceCount: Optional[ResolvableInt] = None
+    InstanceType: Optional[ResolvableStr] = None
+    WarmCount: Optional[ResolvableInt] = None
+    WarmEnabled: Optional[ResolvableBool] = None
+    WarmType: Optional[ResolvableStr] = None
+    ZoneAwarenessConfig: Optional[ResolvableZoneAwarenessConfig] = None
+    ZoneAwarenessEnabled: Optional[ResolvableBool] = None
+
+
+ResolvableClusterConfig = ResolvableModel(ClusterConfig)
 
 
 class OpenSearchDomainProperties(CustomModel):
@@ -38,26 +171,26 @@ class OpenSearchDomainProperties(CustomModel):
     """
 
     AccessPolicies: Optional[Resolvable[PolicyDocument]] = None
-    AdvancedOptions: Optional[ResolvableGeneric] = None
-    AdvancedSecurityOptions: Optional[ResolvableGeneric] = None
-    AIMLOptions: Optional[ResolvableGeneric] = None
-    ClusterConfig: Optional[ResolvableGeneric] = None
-    CognitoOptions: Optional[ResolvableGeneric] = None
-    DomainEndpointOptions: Optional[ResolvableGeneric] = None
+    AdvancedOptions: Optional[Resolvable[dict]] = None
+    AdvancedSecurityOptions: Optional[ResolvableAdvancedSecurityOptions] = None
+    AIMLOptions: Optional[Resolvable[dict]] = None
+    ClusterConfig: Optional[ResolvableClusterConfig] = None
+    CognitoOptions: Optional[ResolvableCognitoOptions] = None
+    DomainEndpointOptions: Optional[ResolvableDomainEndpointOptions] = None
     DomainName: Optional[ResolvableStr] = None
-    EBSOptions: Optional[ResolvableGeneric] = None
-    EncryptionAtRestOptions: Optional[ResolvableGeneric] = None
+    EBSOptions: Optional[ResolvableEBSOptions] = None
+    EncryptionAtRestOptions: Optional[ResolvableEncryptionAtRestOptions] = None
     EngineVersion: Optional[ResolvableStr] = None
-    IdentityCenterOptions: Optional[ResolvableGeneric] = None
+    IdentityCenterOptions: Optional[Resolvable[dict]] = None
     IPAddressType: Optional[ResolvableStr] = None
-    LogPublishingOptions: Optional[ResolvableGeneric] = None
-    NodeToNodeEncryptionOptions: Optional[ResolvableGeneric] = None
-    OffPeakWindowOptions: Optional[ResolvableGeneric] = None
+    LogPublishingOptions: Optional[Resolvable[dict]] = None
+    NodeToNodeEncryptionOptions: Optional[ResolvableNodeToNodeEncryptionOptions] = None
+    OffPeakWindowOptions: Optional[Resolvable[dict]] = None
     SkipShardMigrationWait: Optional[ResolvableBool] = None
-    SnapshotOptions: Optional[ResolvableGeneric] = None
-    SoftwareUpdateOptions: Optional[ResolvableGeneric] = None
+    SnapshotOptions: Optional[ResolvableSnapshotOptions] = None
+    SoftwareUpdateOptions: Optional[ResolvableSoftwareUpdateOptions] = None
     Tags: Optional[Resolvable[List[Tag]]] = None
-    VPCOptions: Optional[ResolvableGeneric] = None
+    VPCOptions: Optional[ResolvableVPCOptions] = None
 
 
 class OpenSearchDomain(Resource):

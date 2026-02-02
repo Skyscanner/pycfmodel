@@ -7,19 +7,12 @@ Auto-generated from AWS CloudFormation schema for AWS::SQS::Queue.
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable
-from pycfmodel.model.types import ResolvableBool
-from pycfmodel.model.types import ResolvableInt
-from pycfmodel.model.types import ResolvableModel
-from pycfmodel.model.types import ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
 
 
 class Tag(CustomModel):
-    """
-    
-    """
+    """ """
 
     Key: ResolvableStr
     Value: ResolvableStr
@@ -65,8 +58,8 @@ class SQSQueueProperties(CustomModel):
     MessageRetentionPeriod: Optional[ResolvableInt] = None
     QueueName: Optional[ResolvableStr] = None
     ReceiveMessageWaitTimeSeconds: Optional[ResolvableInt] = None
-    RedriveAllowPolicy: Optional[ResolvableGeneric] = None
-    RedrivePolicy: Optional[ResolvableGeneric] = None
+    RedriveAllowPolicy: Optional[Resolvable[dict]] = None
+    RedrivePolicy: Optional[Resolvable[dict]] = None
     SqsManagedSseEnabled: Optional[ResolvableBool] = None
     Tags: Optional[Resolvable[List[Tag]]] = None
     VisibilityTimeout: Optional[ResolvableInt] = None

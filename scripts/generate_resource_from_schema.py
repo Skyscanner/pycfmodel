@@ -68,8 +68,7 @@ def get_schema(resource_type: str, region: str = DEFAULT_REGION) -> Dict[str, An
     if resource_type not in schemas:
         available = [t for t in schemas.keys() if resource_type.split("::")[-1] in t]
         raise ValueError(
-            f"Resource type '{resource_type}' not found in schema registry.\n"
-            f"Similar types: {available[:10]}"
+            f"Resource type '{resource_type}' not found in schema registry.\n" f"Similar types: {available[:10]}"
         )
     return schemas[resource_type]
 
