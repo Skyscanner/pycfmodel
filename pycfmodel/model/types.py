@@ -170,9 +170,7 @@ class _ResolvableModelValidator:
     ) -> core_schema.CoreSchema:
         model_cls = self.model_cls
 
-        def validate(value: Any) -> Union[BaseModel, FunctionDict, None]:
-            if value is None:
-                return None
+        def validate(value: Any) -> Union[BaseModel, FunctionDict]:
             if isinstance(value, FunctionDict):
                 return value
             if isinstance(value, model_cls):
@@ -210,7 +208,7 @@ def ResolvableModel(model_cls: Type[BaseModel]) -> type:
         ResolvableNestedModel = ResolvableModel(NestedModel)
 
         class ParentModel(CustomModel):
-            nested: Optional[ResolvableNestedModel] = None
+            nested: Optional[ResolvableNestedModel] = None  # Use Optional for nullable
 
     Args:
         model_cls: The Pydantic model class to make resolvable.
@@ -219,6 +217,6 @@ def ResolvableModel(model_cls: Type[BaseModel]) -> type:
         An Annotated type that accepts either the model or a FunctionDict.
     """
     return Annotated[
-        Union[model_cls, FunctionDict, None],
+        Union[model_cls, FunctionDict],
         _ResolvableModelValidator(model_cls),
     ]

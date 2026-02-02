@@ -172,6 +172,11 @@ def resource_type_to_class_names(resource_type: str) -> Tuple[str, str, str]:
 class CodeGenerator:
     """Generates Python code for CloudFormation resources with nested types."""
 
+    # Definitions that should use existing pycfmodel types instead of being generated
+    REUSE_EXISTING_TYPES = {
+        "Tag": ("from pycfmodel.model.resources.properties.tag import Tag", "Tag"),
+    }
+
     def __init__(self, resource_type: str, schema: Dict[str, Any]):
         self.resource_type = resource_type
         self.schema = schema
@@ -219,6 +224,13 @@ class CodeGenerator:
             ref = prop_schema["$ref"]
             if ref.startswith("#/definitions/"):
                 def_name = ref.split("/")[-1]
+
+                # Check if we should reuse an existing pycfmodel type
+                if def_name in self.REUSE_EXISTING_TYPES:
+                    import_stmt, type_name = self.REUSE_EXISTING_TYPES[def_name]
+                    self.imports.add(import_stmt)
+                    return type_name
+
                 # Check if the definition is actually an object with properties
                 # If it's an array or primitive type, inline it instead of generating a class
                 definition = self.definitions.get(def_name, {})
@@ -251,9 +263,8 @@ class CodeGenerator:
                     self.imports.add("from pycfmodel.model.types import ResolvableModel")
                     return f"Resolvable{def_name}"
                 else:
-                    # Unknown or complex type, fall back to ResolvableGeneric
-                    self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-                    return "ResolvableGeneric"
+                    # Unknown or complex type, fall back to Resolvable[dict]
+                    return "Resolvable[dict]"
 
         # Handle anyOf/oneOf
         if "anyOf" in prop_schema or "oneOf" in prop_schema:
@@ -280,19 +291,16 @@ class CodeGenerator:
                         else:
                             # Fall back to inline handling
                             return self.get_type_for_schema(variant, is_required, context)
-            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-            return "ResolvableGeneric"
+            return "Resolvable[dict]"
 
         json_type = prop_schema.get("type")
 
         if json_type is None:
-            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-            return "ResolvableGeneric"
+            return "Resolvable[dict]"
 
         # Handle multiple types (e.g., ["string", "object"])
         if isinstance(json_type, list):
-            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-            return "ResolvableGeneric"
+            return "Resolvable[dict]"
 
         # Handle array types
         if json_type == "array":
@@ -307,7 +315,7 @@ class CodeGenerator:
             "integer": "ResolvableInt",
             "number": "ResolvableInt",
             "boolean": "ResolvableBool",
-            "object": "ResolvableGeneric",
+            "object": "Resolvable[dict]",
         }
 
         if json_type in type_map:
@@ -318,13 +326,10 @@ class CodeGenerator:
                 self.imports.add("from pycfmodel.model.types import ResolvableInt")
             elif type_str == "ResolvableBool":
                 self.imports.add("from pycfmodel.model.types import ResolvableBool")
-            elif type_str == "ResolvableGeneric":
-                self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
             return type_str
 
         # Fallback
-        self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-        return "ResolvableGeneric"
+        return "Resolvable[dict]"
 
     def _get_item_type(self, items: Dict[str, Any]) -> str:
         """Get the type for array items."""
@@ -332,6 +337,13 @@ class CodeGenerator:
             ref = items["$ref"]
             if ref.startswith("#/definitions/"):
                 def_name = ref.split("/")[-1]
+
+                # Check if we should reuse an existing pycfmodel type
+                if def_name in self.REUSE_EXISTING_TYPES:
+                    import_stmt, type_name = self.REUSE_EXISTING_TYPES[def_name]
+                    self.imports.add(import_stmt)
+                    return type_name
+
                 definition = self.definitions.get(def_name, {})
                 if definition.get("type") == "object" or definition.get("properties"):
                     # Generate a nested model class for array items
@@ -342,8 +354,7 @@ class CodeGenerator:
                     nested_items = definition.get("items", {})
                     return self._get_item_type(nested_items)
                 else:
-                    self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-                    return "ResolvableGeneric"
+                    return "dict"
 
         item_type = items.get("type")
         if item_type == "string":
@@ -352,12 +363,9 @@ class CodeGenerator:
         elif item_type == "integer":
             self.imports.add("from pycfmodel.model.types import ResolvableInt")
             return "ResolvableInt"
-        elif item_type == "object":
-            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-            return "ResolvableGeneric"
         else:
-            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-            return "ResolvableGeneric"
+            # For object or unknown types, use dict
+            return "dict"
 
     def get_definition_dependencies(self, def_name: str) -> Set[str]:
         """Get the set of definitions that this definition depends on."""
@@ -433,6 +441,10 @@ class CodeGenerator:
 
     def should_generate_class(self, def_name: str) -> bool:
         """Check if this definition should become a class (vs being inlined)."""
+        # Don't generate classes for types we reuse from pycfmodel
+        if def_name in self.REUSE_EXISTING_TYPES:
+            return False
+
         definition = self.definitions.get(def_name, {})
         if not definition:
             return False

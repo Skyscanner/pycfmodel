@@ -7,6 +7,7 @@ Auto-generated from AWS CloudFormation schema for AWS::S3::Bucket.
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
 
@@ -600,18 +601,6 @@ class StorageClassAnalysis(CustomModel):
 
 
 ResolvableStorageClassAnalysis = ResolvableModel(StorageClassAnalysis)
-
-
-class Tag(CustomModel):
-    """
-    A container of a key value name pair.
-    """
-
-    Key: ResolvableStr
-    Value: ResolvableStr
-
-
-ResolvableTag = ResolvableModel(Tag)
 
 
 class TagFilter(CustomModel):
