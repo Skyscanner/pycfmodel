@@ -12,7 +12,20 @@ from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable
 from pycfmodel.model.types import ResolvableBool
 from pycfmodel.model.types import ResolvableInt
+from pycfmodel.model.types import ResolvableModel
 from pycfmodel.model.types import ResolvableStr
+
+
+class Tag(CustomModel):
+    """
+    
+    """
+
+    Key: ResolvableStr
+    Value: ResolvableStr
+
+
+ResolvableTag = ResolvableModel(Tag)
 
 
 class SQSQueueProperties(CustomModel):
@@ -55,7 +68,7 @@ class SQSQueueProperties(CustomModel):
     RedriveAllowPolicy: Optional[ResolvableGeneric] = None
     RedrivePolicy: Optional[ResolvableGeneric] = None
     SqsManagedSseEnabled: Optional[ResolvableBool] = None
-    Tags: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    Tags: Optional[Resolvable[List[Tag]]] = None
     VisibilityTimeout: Optional[ResolvableInt] = None
 
 

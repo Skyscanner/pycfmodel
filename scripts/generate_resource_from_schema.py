@@ -247,10 +247,10 @@ class CodeGenerator:
                         self.imports.add("from pycfmodel.model.types import ResolvableBool")
                     return type_str
                 elif def_type == "object" or definition.get("properties"):
-                    # For nested models, use ResolvableGeneric due to Pydantic v2 limitations
-                    # with union_mode annotation on model schemas
-                    self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-                    return "ResolvableGeneric"
+                    # Generate a nested model class and use ResolvableModel
+                    self.needed_definitions.add(def_name)
+                    self.imports.add("from pycfmodel.model.types import ResolvableModel")
+                    return f"Resolvable{def_name}"
                 else:
                     # Unknown or complex type, fall back to ResolvableGeneric
                     self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
@@ -274,8 +274,10 @@ class CodeGenerator:
                         def_name = ref.split("/")[-1]
                         definition = self.definitions.get(def_name, {})
                         if definition.get("type") == "object" or definition.get("properties"):
-                            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-                            return "ResolvableGeneric"
+                            # Generate a nested model class and use ResolvableModel
+                            self.needed_definitions.add(def_name)
+                            self.imports.add("from pycfmodel.model.types import ResolvableModel")
+                            return f"Resolvable{def_name}"
                         else:
                             # Fall back to inline handling
                             return self.get_type_for_schema(variant, is_required, context)
@@ -331,11 +333,11 @@ class CodeGenerator:
             ref = items["$ref"]
             if ref.startswith("#/definitions/"):
                 def_name = ref.split("/")[-1]
-                # Check if the definition is an object - if so, use ResolvableGeneric
                 definition = self.definitions.get(def_name, {})
                 if definition.get("type") == "object" or definition.get("properties"):
-                    self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-                    return "ResolvableGeneric"
+                    # Generate a nested model class for array items
+                    self.needed_definitions.add(def_name)
+                    return def_name
                 elif definition.get("type") == "array":
                     # Inline nested arrays
                     nested_items = definition.get("items", {})
@@ -493,6 +495,12 @@ class CodeGenerator:
 
         lines.append("")
         lines.append("")
+        # Add the type alias immediately after the class
+        # This needs ResolvableModel import
+        self.imports.add("from pycfmodel.model.types import ResolvableModel")
+        lines.append(f"Resolvable{def_name} = ResolvableModel({def_name})")
+        lines.append("")
+        lines.append("")
 
         return lines
 
@@ -559,6 +567,7 @@ class CodeGenerator:
         lines.append("")
 
         # Add definition classes first (they need to be defined before Properties class)
+        # Each class is immediately followed by its ResolvableX type alias
         lines.extend(definition_code_lines)
 
         # Properties class

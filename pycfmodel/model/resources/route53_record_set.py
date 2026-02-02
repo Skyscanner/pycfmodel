@@ -7,12 +7,76 @@ Auto-generated from AWS CloudFormation schema for AWS::Route53::RecordSet.
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable
 from pycfmodel.model.types import ResolvableBool
 from pycfmodel.model.types import ResolvableInt
+from pycfmodel.model.types import ResolvableModel
 from pycfmodel.model.types import ResolvableStr
+
+
+class AliasTarget(CustomModel):
+    """
+    AliasTarget configuration.
+    """
+
+    DNSName: ResolvableStr
+    HostedZoneId: ResolvableStr
+    EvaluateTargetHealth: Optional[ResolvableBool] = None
+
+
+ResolvableAliasTarget = ResolvableModel(AliasTarget)
+
+
+class CidrRoutingConfig(CustomModel):
+    """
+    CidrRoutingConfig configuration.
+    """
+
+    CollectionId: ResolvableStr
+    LocationName: ResolvableStr
+
+
+ResolvableCidrRoutingConfig = ResolvableModel(CidrRoutingConfig)
+
+
+class Coordinates(CustomModel):
+    """
+    Coordinates configuration.
+    """
+
+    Latitude: ResolvableStr
+    Longitude: ResolvableStr
+
+
+ResolvableCoordinates = ResolvableModel(Coordinates)
+
+
+class GeoLocation(CustomModel):
+    """
+    GeoLocation configuration.
+    """
+
+    ContinentCode: Optional[ResolvableStr] = None
+    CountryCode: Optional[ResolvableStr] = None
+    SubdivisionCode: Optional[ResolvableStr] = None
+
+
+ResolvableGeoLocation = ResolvableModel(GeoLocation)
+
+
+class GeoProximityLocation(CustomModel):
+    """
+    GeoProximityLocation configuration.
+    """
+
+    AWSRegion: Optional[ResolvableStr] = None
+    Bias: Optional[ResolvableInt] = None
+    Coordinates: Optional[ResolvableCoordinates] = None
+    LocalZoneGroup: Optional[ResolvableStr] = None
+
+
+ResolvableGeoProximityLocation = ResolvableModel(GeoProximityLocation)
 
 
 class Route53RecordSetProperties(CustomModel):
@@ -44,12 +108,12 @@ class Route53RecordSetProperties(CustomModel):
 
     Name: ResolvableStr
     Type: ResolvableStr
-    AliasTarget: Optional[ResolvableGeneric] = None
-    CidrRoutingConfig: Optional[ResolvableGeneric] = None
+    AliasTarget: Optional[ResolvableAliasTarget] = None
+    CidrRoutingConfig: Optional[ResolvableCidrRoutingConfig] = None
     Comment: Optional[ResolvableStr] = None
     Failover: Optional[ResolvableStr] = None
-    GeoLocation: Optional[ResolvableGeneric] = None
-    GeoProximityLocation: Optional[ResolvableGeneric] = None
+    GeoLocation: Optional[ResolvableGeoLocation] = None
+    GeoProximityLocation: Optional[ResolvableGeoProximityLocation] = None
     HealthCheckId: Optional[ResolvableStr] = None
     HostedZoneId: Optional[ResolvableStr] = None
     HostedZoneName: Optional[ResolvableStr] = None

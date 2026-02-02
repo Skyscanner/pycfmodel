@@ -7,12 +7,62 @@ Auto-generated from AWS CloudFormation schema for AWS::ElasticLoadBalancingV2::T
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable
 from pycfmodel.model.types import ResolvableBool
 from pycfmodel.model.types import ResolvableInt
+from pycfmodel.model.types import ResolvableModel
 from pycfmodel.model.types import ResolvableStr
+
+
+class Matcher(CustomModel):
+    """
+    Matcher configuration.
+    """
+
+    GrpcCode: Optional[ResolvableStr] = None
+    HttpCode: Optional[ResolvableStr] = None
+
+
+ResolvableMatcher = ResolvableModel(Matcher)
+
+
+class Tag(CustomModel):
+    """
+    Tag configuration.
+    """
+
+    Key: ResolvableStr
+    Value: ResolvableStr
+
+
+ResolvableTag = ResolvableModel(Tag)
+
+
+class TargetDescription(CustomModel):
+    """
+    TargetDescription configuration.
+    """
+
+    Id: ResolvableStr
+    AvailabilityZone: Optional[ResolvableStr] = None
+    Port: Optional[ResolvableInt] = None
+    QuicServerId: Optional[ResolvableStr] = None
+
+
+ResolvableTargetDescription = ResolvableModel(TargetDescription)
+
+
+class TargetGroupAttribute(CustomModel):
+    """
+    TargetGroupAttribute configuration.
+    """
+
+    Key: Optional[ResolvableStr] = None
+    Value: Optional[ResolvableStr] = None
+
+
+ResolvableTargetGroupAttribute = ResolvableModel(TargetGroupAttribute)
 
 
 class ELBv2TargetGroupProperties(CustomModel):
@@ -53,16 +103,16 @@ class ELBv2TargetGroupProperties(CustomModel):
     HealthCheckTimeoutSeconds: Optional[ResolvableInt] = None
     HealthyThresholdCount: Optional[ResolvableInt] = None
     IpAddressType: Optional[ResolvableStr] = None
-    Matcher: Optional[ResolvableGeneric] = None
+    Matcher: Optional[ResolvableMatcher] = None
     Name: Optional[ResolvableStr] = None
     Port: Optional[ResolvableInt] = None
     Protocol: Optional[ResolvableStr] = None
     ProtocolVersion: Optional[ResolvableStr] = None
-    Tags: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    Tags: Optional[Resolvable[List[Tag]]] = None
     TargetControlPort: Optional[ResolvableInt] = None
-    TargetGroupAttributes: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    TargetGroupAttributes: Optional[Resolvable[List[TargetGroupAttribute]]] = None
     TargetType: Optional[ResolvableStr] = None
-    Targets: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    Targets: Optional[Resolvable[List[TargetDescription]]] = None
     UnhealthyThresholdCount: Optional[ResolvableInt] = None
     VpcId: Optional[ResolvableStr] = None
 

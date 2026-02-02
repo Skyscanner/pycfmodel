@@ -12,7 +12,400 @@ from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable
 from pycfmodel.model.types import ResolvableBool
 from pycfmodel.model.types import ResolvableInt
+from pycfmodel.model.types import ResolvableModel
 from pycfmodel.model.types import ResolvableStr
+
+
+class AcceleratorCountRequest(CustomModel):
+    """
+    ``AcceleratorCountRequest`` is a property of the ``InstanceRequirements`` property of the [AWS::AutoScaling::AutoScalingGroup LaunchTemplateOverrides](https://docs.
+    """
+
+    Max: Optional[ResolvableInt] = None
+    Min: Optional[ResolvableInt] = None
+
+
+ResolvableAcceleratorCountRequest = ResolvableModel(AcceleratorCountRequest)
+
+
+class AcceleratorTotalMemoryMiBRequest(CustomModel):
+    """
+    ``AcceleratorTotalMemoryMiBRequest`` is a property of the ``InstanceRequirements`` property of the [AWS::AutoScaling::AutoScalingGroup LaunchTemplateOverrides](https://docs.
+    """
+
+    Max: Optional[ResolvableInt] = None
+    Min: Optional[ResolvableInt] = None
+
+
+ResolvableAcceleratorTotalMemoryMiBRequest = ResolvableModel(AcceleratorTotalMemoryMiBRequest)
+
+
+class AvailabilityZoneDistribution(CustomModel):
+    """
+    ``AvailabilityZoneDistribution`` is a property of the [AWS::AutoScaling::AutoScalingGroup](https://docs.
+    """
+
+    CapacityDistributionStrategy: Optional[ResolvableStr] = None
+
+
+ResolvableAvailabilityZoneDistribution = ResolvableModel(AvailabilityZoneDistribution)
+
+
+class AvailabilityZoneImpairmentPolicy(CustomModel):
+    """
+    Describes an Availability Zone impairment policy.
+    """
+
+    ImpairedZoneHealthCheckBehavior: ResolvableStr
+    ZonalShiftEnabled: ResolvableBool
+
+
+ResolvableAvailabilityZoneImpairmentPolicy = ResolvableModel(AvailabilityZoneImpairmentPolicy)
+
+
+class BaselineEbsBandwidthMbpsRequest(CustomModel):
+    """
+    ``BaselineEbsBandwidthMbpsRequest`` is a property of the ``InstanceRequirements`` property of the [AWS::AutoScaling::AutoScalingGroup LaunchTemplateOverrides](https://docs.
+    """
+
+    Max: Optional[ResolvableInt] = None
+    Min: Optional[ResolvableInt] = None
+
+
+ResolvableBaselineEbsBandwidthMbpsRequest = ResolvableModel(BaselineEbsBandwidthMbpsRequest)
+
+
+class CapacityReservationTarget(CustomModel):
+    """
+    The target for the Capacity Reservation.
+    """
+
+    CapacityReservationIds: Optional[Resolvable[List[ResolvableStr]]] = None
+    CapacityReservationResourceGroupArns: Optional[Resolvable[List[ResolvableStr]]] = None
+
+
+ResolvableCapacityReservationTarget = ResolvableModel(CapacityReservationTarget)
+
+
+class CapacityReservationSpecification(CustomModel):
+    """
+    Describes the Capacity Reservation preference and targeting options.
+    """
+
+    CapacityReservationPreference: ResolvableStr
+    CapacityReservationTarget: Optional[ResolvableCapacityReservationTarget] = None
+
+
+ResolvableCapacityReservationSpecification = ResolvableModel(CapacityReservationSpecification)
+
+
+class InstanceMaintenancePolicy(CustomModel):
+    """
+    ``InstanceMaintenancePolicy`` is a property of the [AWS::AutoScaling::AutoScalingGroup](https://docs.
+    """
+
+    MaxHealthyPercentage: Optional[ResolvableInt] = None
+    MinHealthyPercentage: Optional[ResolvableInt] = None
+
+
+ResolvableInstanceMaintenancePolicy = ResolvableModel(InstanceMaintenancePolicy)
+
+
+class InstancesDistribution(CustomModel):
+    """
+    Use this structure to specify the distribution of On-Demand Instances and Spot Instances and the allocation strategies used to fulfill On-Demand and Spot capacities for a mixed instances policy.
+    """
+
+    OnDemandAllocationStrategy: Optional[ResolvableStr] = None
+    OnDemandBaseCapacity: Optional[ResolvableInt] = None
+    OnDemandPercentageAboveBaseCapacity: Optional[ResolvableInt] = None
+    SpotAllocationStrategy: Optional[ResolvableStr] = None
+    SpotInstancePools: Optional[ResolvableInt] = None
+    SpotMaxPrice: Optional[ResolvableStr] = None
+
+
+ResolvableInstancesDistribution = ResolvableModel(InstancesDistribution)
+
+
+class LaunchTemplateSpecification(CustomModel):
+    """
+    Specifies a launch template to use when provisioning EC2 instances for an Auto Scaling group.
+    """
+
+    Version: ResolvableStr
+    LaunchTemplateId: Optional[ResolvableStr] = None
+    LaunchTemplateName: Optional[ResolvableStr] = None
+
+
+ResolvableLaunchTemplateSpecification = ResolvableModel(LaunchTemplateSpecification)
+
+
+class LifecycleHookSpecification(CustomModel):
+    """
+    ``LifecycleHookSpecification`` specifies a lifecycle hook for the ``LifecycleHookSpecificationList`` property of the [AWS::AutoScaling::AutoScalingGroup](https://docs.
+    """
+
+    LifecycleHookName: ResolvableStr
+    LifecycleTransition: ResolvableStr
+    DefaultResult: Optional[ResolvableStr] = None
+    HeartbeatTimeout: Optional[ResolvableInt] = None
+    NotificationMetadata: Optional[ResolvableStr] = None
+    NotificationTargetARN: Optional[ResolvableStr] = None
+    RoleARN: Optional[ResolvableStr] = None
+
+
+ResolvableLifecycleHookSpecification = ResolvableModel(LifecycleHookSpecification)
+
+
+class MemoryGiBPerVCpuRequest(CustomModel):
+    """
+    ``MemoryGiBPerVCpuRequest`` is a property of the ``InstanceRequirements`` property of the [AWS::AutoScaling::AutoScalingGroup LaunchTemplateOverrides](https://docs.
+    """
+
+    Max: Optional[ResolvableInt] = None
+    Min: Optional[ResolvableInt] = None
+
+
+ResolvableMemoryGiBPerVCpuRequest = ResolvableModel(MemoryGiBPerVCpuRequest)
+
+
+class MemoryMiBRequest(CustomModel):
+    """
+    ``MemoryMiBRequest`` is a property of the ``InstanceRequirements`` property of the [AWS::AutoScaling::AutoScalingGroup LaunchTemplateOverrides](https://docs.
+    """
+
+    Max: Optional[ResolvableInt] = None
+    Min: Optional[ResolvableInt] = None
+
+
+ResolvableMemoryMiBRequest = ResolvableModel(MemoryMiBRequest)
+
+
+class MetricsCollection(CustomModel):
+    """
+    ``MetricsCollection`` is a property of the [AWS::AutoScaling::AutoScalingGroup](https://docs.
+    """
+
+    Granularity: ResolvableStr
+    Metrics: Optional[Resolvable[List[ResolvableStr]]] = None
+
+
+ResolvableMetricsCollection = ResolvableModel(MetricsCollection)
+
+
+class NetworkBandwidthGbpsRequest(CustomModel):
+    """
+    ``NetworkBandwidthGbpsRequest`` is a property of the ``InstanceRequirements`` property of the [AWS::AutoScaling::AutoScalingGroup LaunchTemplateOverrides](https://docs.
+    """
+
+    Max: Optional[ResolvableInt] = None
+    Min: Optional[ResolvableInt] = None
+
+
+ResolvableNetworkBandwidthGbpsRequest = ResolvableModel(NetworkBandwidthGbpsRequest)
+
+
+class NetworkInterfaceCountRequest(CustomModel):
+    """
+    ``NetworkInterfaceCountRequest`` is a property of the ``InstanceRequirements`` property of the [AWS::AutoScaling::AutoScalingGroup LaunchTemplateOverrides](https://docs.
+    """
+
+    Max: Optional[ResolvableInt] = None
+    Min: Optional[ResolvableInt] = None
+
+
+ResolvableNetworkInterfaceCountRequest = ResolvableModel(NetworkInterfaceCountRequest)
+
+
+class NotificationConfiguration(CustomModel):
+    """
+    A structure that specifies an Amazon SNS notification configuration for the ``NotificationConfigurations`` property of the [AWS::AutoScaling::AutoScalingGroup](https://docs.
+    """
+
+    TopicARN: ResolvableGeneric
+    NotificationTypes: Optional[Resolvable[List[ResolvableStr]]] = None
+
+
+ResolvableNotificationConfiguration = ResolvableModel(NotificationConfiguration)
+
+
+class PerformanceFactorReferenceRequest(CustomModel):
+    """
+    Specify an instance family to use as the baseline reference for CPU performance.
+    """
+
+    InstanceFamily: Optional[ResolvableStr] = None
+
+
+ResolvablePerformanceFactorReferenceRequest = ResolvableModel(PerformanceFactorReferenceRequest)
+
+
+class CpuPerformanceFactorRequest(CustomModel):
+    """
+    The CPU performance to consider, using an instance family as the baseline reference.
+    """
+
+    References: Optional[Resolvable[List[PerformanceFactorReferenceRequest]]] = None
+
+
+ResolvableCpuPerformanceFactorRequest = ResolvableModel(CpuPerformanceFactorRequest)
+
+
+class BaselinePerformanceFactorsRequest(CustomModel):
+    """
+    The baseline performance to consider, using an instance family as a baseline reference.
+    """
+
+    Cpu: Optional[ResolvableCpuPerformanceFactorRequest] = None
+
+
+ResolvableBaselinePerformanceFactorsRequest = ResolvableModel(BaselinePerformanceFactorsRequest)
+
+
+class RetentionTriggers(CustomModel):
+    """
+    Defines the specific triggers that cause instances to be retained in a Retained state rather than terminated.
+    """
+
+    TerminateHookAbandon: Optional[ResolvableStr] = None
+
+
+ResolvableRetentionTriggers = ResolvableModel(RetentionTriggers)
+
+
+class InstanceLifecyclePolicy(CustomModel):
+    """
+    The instance lifecycle policy for the Auto Scaling group.
+    """
+
+    RetentionTriggers: Optional[ResolvableRetentionTriggers] = None
+
+
+ResolvableInstanceLifecyclePolicy = ResolvableModel(InstanceLifecyclePolicy)
+
+
+class TagProperty(CustomModel):
+    """
+    A structure that specifies a tag for the ``Tags`` property of [AWS::AutoScaling::AutoScalingGroup](https://docs.
+    """
+
+    Key: ResolvableStr
+    PropagateAtLaunch: ResolvableBool
+    Value: ResolvableStr
+
+
+ResolvableTagProperty = ResolvableModel(TagProperty)
+
+
+class TotalLocalStorageGBRequest(CustomModel):
+    """
+    ``TotalLocalStorageGBRequest`` is a property of the ``InstanceRequirements`` property of the [AWS::AutoScaling::AutoScalingGroup LaunchTemplateOverrides](https://docs.
+    """
+
+    Max: Optional[ResolvableInt] = None
+    Min: Optional[ResolvableInt] = None
+
+
+ResolvableTotalLocalStorageGBRequest = ResolvableModel(TotalLocalStorageGBRequest)
+
+
+class TrafficSourceIdentifier(CustomModel):
+    """
+    Identifying information for a traffic source.
+    """
+
+    Identifier: ResolvableStr
+    Type: ResolvableStr
+
+
+ResolvableTrafficSourceIdentifier = ResolvableModel(TrafficSourceIdentifier)
+
+
+class VCpuCountRequest(CustomModel):
+    """
+    ``VCpuCountRequest`` is a property of the ``InstanceRequirements`` property of the [AWS::AutoScaling::AutoScalingGroup LaunchTemplateOverrides](https://docs.
+    """
+
+    Max: Optional[ResolvableInt] = None
+    Min: Optional[ResolvableInt] = None
+
+
+ResolvableVCpuCountRequest = ResolvableModel(VCpuCountRequest)
+
+
+class InstanceRequirements(CustomModel):
+    """
+    The attributes for the instance types for a mixed instances policy.
+    """
+
+    MemoryMiB: ResolvableMemoryMiBRequest
+    VCpuCount: ResolvableVCpuCountRequest
+    AcceleratorCount: Optional[ResolvableAcceleratorCountRequest] = None
+    AcceleratorManufacturers: Optional[Resolvable[List[ResolvableStr]]] = None
+    AcceleratorNames: Optional[Resolvable[List[ResolvableStr]]] = None
+    AcceleratorTotalMemoryMiB: Optional[ResolvableAcceleratorTotalMemoryMiBRequest] = None
+    AcceleratorTypes: Optional[Resolvable[List[ResolvableStr]]] = None
+    AllowedInstanceTypes: Optional[Resolvable[List[ResolvableStr]]] = None
+    BareMetal: Optional[ResolvableStr] = None
+    BaselineEbsBandwidthMbps: Optional[ResolvableBaselineEbsBandwidthMbpsRequest] = None
+    BaselinePerformanceFactors: Optional[ResolvableBaselinePerformanceFactorsRequest] = None
+    BurstablePerformance: Optional[ResolvableStr] = None
+    CpuManufacturers: Optional[Resolvable[List[ResolvableStr]]] = None
+    ExcludedInstanceTypes: Optional[Resolvable[List[ResolvableStr]]] = None
+    InstanceGenerations: Optional[Resolvable[List[ResolvableStr]]] = None
+    LocalStorage: Optional[ResolvableStr] = None
+    LocalStorageTypes: Optional[Resolvable[List[ResolvableStr]]] = None
+    MaxSpotPriceAsPercentageOfOptimalOnDemandPrice: Optional[ResolvableInt] = None
+    MemoryGiBPerVCpu: Optional[ResolvableMemoryGiBPerVCpuRequest] = None
+    NetworkBandwidthGbps: Optional[ResolvableNetworkBandwidthGbpsRequest] = None
+    NetworkInterfaceCount: Optional[ResolvableNetworkInterfaceCountRequest] = None
+    OnDemandMaxPricePercentageOverLowestPrice: Optional[ResolvableInt] = None
+    RequireHibernateSupport: Optional[ResolvableBool] = None
+    SpotMaxPricePercentageOverLowestPrice: Optional[ResolvableInt] = None
+    TotalLocalStorageGB: Optional[ResolvableTotalLocalStorageGBRequest] = None
+
+
+ResolvableInstanceRequirements = ResolvableModel(InstanceRequirements)
+
+
+class LaunchTemplateOverrides(CustomModel):
+    """
+    Use this structure to let Amazon EC2 Auto Scaling do the following when the Auto Scaling group has a mixed instances policy:
+  +  Override the instance type that is specified in the launch template.
+    """
+
+    ImageId: Optional[ResolvableStr] = None
+    InstanceRequirements: Optional[ResolvableInstanceRequirements] = None
+    InstanceType: Optional[ResolvableStr] = None
+    LaunchTemplateSpecification: Optional[ResolvableLaunchTemplateSpecification] = None
+    WeightedCapacity: Optional[ResolvableStr] = None
+
+
+ResolvableLaunchTemplateOverrides = ResolvableModel(LaunchTemplateOverrides)
+
+
+class LaunchTemplate(CustomModel):
+    """
+    Use this structure to specify the launch templates and instance types (overrides) for a mixed instances policy.
+    """
+
+    LaunchTemplateSpecification: ResolvableLaunchTemplateSpecification
+    Overrides: Optional[Resolvable[List[LaunchTemplateOverrides]]] = None
+
+
+ResolvableLaunchTemplate = ResolvableModel(LaunchTemplate)
+
+
+class MixedInstancesPolicy(CustomModel):
+    """
+    Use this structure to launch multiple instance types and On-Demand Instances and Spot Instances within a single Auto Scaling group.
+    """
+
+    LaunchTemplate: ResolvableLaunchTemplate
+    InstancesDistribution: Optional[ResolvableInstancesDistribution] = None
+
+
+ResolvableMixedInstancesPolicy = ResolvableModel(MixedInstancesPolicy)
 
 
 class AutoScalingAutoScalingGroupProperties(CustomModel):
@@ -69,11 +462,11 @@ class AutoScalingAutoScalingGroupProperties(CustomModel):
     MaxSize: ResolvableStr
     MinSize: ResolvableStr
     AutoScalingGroupName: Optional[ResolvableStr] = None
-    AvailabilityZoneDistribution: Optional[ResolvableGeneric] = None
-    AvailabilityZoneImpairmentPolicy: Optional[ResolvableGeneric] = None
+    AvailabilityZoneDistribution: Optional[ResolvableAvailabilityZoneDistribution] = None
+    AvailabilityZoneImpairmentPolicy: Optional[ResolvableAvailabilityZoneImpairmentPolicy] = None
     AvailabilityZones: Optional[Resolvable[List[ResolvableStr]]] = None
     CapacityRebalance: Optional[ResolvableBool] = None
-    CapacityReservationSpecification: Optional[ResolvableGeneric] = None
+    CapacityReservationSpecification: Optional[ResolvableCapacityReservationSpecification] = None
     Context: Optional[ResolvableStr] = None
     Cooldown: Optional[ResolvableStr] = None
     DefaultInstanceWarmup: Optional[ResolvableInt] = None
@@ -82,25 +475,25 @@ class AutoScalingAutoScalingGroupProperties(CustomModel):
     HealthCheckGracePeriod: Optional[ResolvableInt] = None
     HealthCheckType: Optional[ResolvableStr] = None
     InstanceId: Optional[ResolvableStr] = None
-    InstanceLifecyclePolicy: Optional[ResolvableGeneric] = None
-    InstanceMaintenancePolicy: Optional[ResolvableGeneric] = None
+    InstanceLifecyclePolicy: Optional[ResolvableInstanceLifecyclePolicy] = None
+    InstanceMaintenancePolicy: Optional[ResolvableInstanceMaintenancePolicy] = None
     LaunchConfigurationName: Optional[ResolvableStr] = None
-    LaunchTemplate: Optional[ResolvableGeneric] = None
-    LifecycleHookSpecificationList: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    LaunchTemplate: Optional[ResolvableLaunchTemplateSpecification] = None
+    LifecycleHookSpecificationList: Optional[Resolvable[List[LifecycleHookSpecification]]] = None
     LoadBalancerNames: Optional[Resolvable[List[ResolvableStr]]] = None
     MaxInstanceLifetime: Optional[ResolvableInt] = None
-    MetricsCollection: Optional[Resolvable[List[ResolvableGeneric]]] = None
-    MixedInstancesPolicy: Optional[ResolvableGeneric] = None
+    MetricsCollection: Optional[Resolvable[List[MetricsCollection]]] = None
+    MixedInstancesPolicy: Optional[ResolvableMixedInstancesPolicy] = None
     NewInstancesProtectedFromScaleIn: Optional[ResolvableBool] = None
-    NotificationConfiguration: Optional[ResolvableGeneric] = None
-    NotificationConfigurations: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    NotificationConfiguration: Optional[ResolvableNotificationConfiguration] = None
+    NotificationConfigurations: Optional[Resolvable[List[NotificationConfiguration]]] = None
     PlacementGroup: Optional[ResolvableStr] = None
     ServiceLinkedRoleARN: Optional[ResolvableStr] = None
     SkipZonalShiftValidation: Optional[ResolvableBool] = None
-    Tags: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    Tags: Optional[Resolvable[List[TagProperty]]] = None
     TargetGroupARNs: Optional[Resolvable[List[ResolvableStr]]] = None
     TerminationPolicies: Optional[Resolvable[List[ResolvableStr]]] = None
-    TrafficSources: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    TrafficSources: Optional[Resolvable[List[TrafficSourceIdentifier]]] = None
     VPCZoneIdentifier: Optional[Resolvable[List[ResolvableStr]]] = None
 
 

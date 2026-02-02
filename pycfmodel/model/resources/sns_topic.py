@@ -11,7 +11,46 @@ from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable
 from pycfmodel.model.types import ResolvableBool
+from pycfmodel.model.types import ResolvableModel
 from pycfmodel.model.types import ResolvableStr
+
+
+class LoggingConfig(CustomModel):
+    """
+    The ``LoggingConfig`` property type specifies the ``Delivery`` status logging configuration for an [AWS::SNS::Topic](https://docs.
+    """
+
+    Protocol: ResolvableStr
+    FailureFeedbackRoleArn: Optional[ResolvableStr] = None
+    SuccessFeedbackRoleArn: Optional[ResolvableStr] = None
+    SuccessFeedbackSampleRate: Optional[ResolvableStr] = None
+
+
+ResolvableLoggingConfig = ResolvableModel(LoggingConfig)
+
+
+class Subscription(CustomModel):
+    """
+    ``Subscription`` is an embedded property that describes the subscription endpoints of an SNS topic.
+    """
+
+    Endpoint: ResolvableStr
+    Protocol: ResolvableStr
+
+
+ResolvableSubscription = ResolvableModel(Subscription)
+
+
+class Tag(CustomModel):
+    """
+    The list of tags to be added to the specified topic.
+    """
+
+    Key: ResolvableStr
+    Value: ResolvableStr
+
+
+ResolvableTag = ResolvableModel(Tag)
 
 
 class SNSTopicProperties(CustomModel):
@@ -44,14 +83,14 @@ class SNSTopicProperties(CustomModel):
     ArchivePolicy: Optional[ResolvableGeneric] = None
     ContentBasedDeduplication: Optional[ResolvableBool] = None
     DataProtectionPolicy: Optional[ResolvableGeneric] = None
-    DeliveryStatusLogging: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    DeliveryStatusLogging: Optional[Resolvable[List[LoggingConfig]]] = None
     DisplayName: Optional[ResolvableStr] = None
     FifoThroughputScope: Optional[ResolvableStr] = None
     FifoTopic: Optional[ResolvableBool] = None
     KmsMasterKeyId: Optional[ResolvableStr] = None
     SignatureVersion: Optional[ResolvableStr] = None
-    Subscription: Optional[Resolvable[List[ResolvableGeneric]]] = None
-    Tags: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    Subscription: Optional[Resolvable[List[Subscription]]] = None
+    Tags: Optional[Resolvable[List[Tag]]] = None
     TopicName: Optional[ResolvableStr] = None
     TracingConfig: Optional[ResolvableStr] = None
 

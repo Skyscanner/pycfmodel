@@ -7,12 +7,80 @@ Auto-generated from AWS CloudFormation schema for AWS::CloudWatch::Alarm.
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable
 from pycfmodel.model.types import ResolvableBool
 from pycfmodel.model.types import ResolvableInt
+from pycfmodel.model.types import ResolvableModel
 from pycfmodel.model.types import ResolvableStr
+
+
+class Dimension(CustomModel):
+    """
+    Dimension is an embedded property of the ``AWS::CloudWatch::Alarm`` type.
+    """
+
+    Name: ResolvableStr
+    Value: ResolvableStr
+
+
+ResolvableDimension = ResolvableModel(Dimension)
+
+
+class Metric(CustomModel):
+    """
+    The ``Metric`` property type represents a specific metric.
+    """
+
+    Dimensions: Optional[Resolvable[List[Dimension]]] = None
+    MetricName: Optional[ResolvableStr] = None
+    Namespace: Optional[ResolvableStr] = None
+
+
+ResolvableMetric = ResolvableModel(Metric)
+
+
+class MetricStat(CustomModel):
+    """
+    This structure defines the metric to be returned, along with the statistics, period, and units.
+    """
+
+    Metric: ResolvableMetric
+    Period: ResolvableInt
+    Stat: ResolvableStr
+    Unit: Optional[ResolvableStr] = None
+
+
+ResolvableMetricStat = ResolvableModel(MetricStat)
+
+
+class MetricDataQuery(CustomModel):
+    """
+    The ``MetricDataQuery`` property type specifies the metric data to return, and whether this call is just retrieving a batch set of data for one metric, or is performing a math expression on metric data.
+    """
+
+    Id: ResolvableStr
+    AccountId: Optional[ResolvableStr] = None
+    Expression: Optional[ResolvableStr] = None
+    Label: Optional[ResolvableStr] = None
+    MetricStat: Optional[ResolvableMetricStat] = None
+    Period: Optional[ResolvableInt] = None
+    ReturnData: Optional[ResolvableBool] = None
+
+
+ResolvableMetricDataQuery = ResolvableModel(MetricDataQuery)
+
+
+class Tag(CustomModel):
+    """
+    One of the key-value pairs associated with the alarm.
+    """
+
+    Key: ResolvableStr
+    Value: ResolvableStr
+
+
+ResolvableTag = ResolvableModel(Tag)
 
 
 class CloudWatchAlarmProperties(CustomModel):
@@ -54,17 +122,17 @@ class CloudWatchAlarmProperties(CustomModel):
     AlarmDescription: Optional[ResolvableStr] = None
     AlarmName: Optional[ResolvableStr] = None
     DatapointsToAlarm: Optional[ResolvableInt] = None
-    Dimensions: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    Dimensions: Optional[Resolvable[List[Dimension]]] = None
     EvaluateLowSampleCountPercentile: Optional[ResolvableStr] = None
     ExtendedStatistic: Optional[ResolvableStr] = None
     InsufficientDataActions: Optional[Resolvable[List[ResolvableStr]]] = None
     MetricName: Optional[ResolvableStr] = None
-    Metrics: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    Metrics: Optional[Resolvable[List[MetricDataQuery]]] = None
     Namespace: Optional[ResolvableStr] = None
     OKActions: Optional[Resolvable[List[ResolvableStr]]] = None
     Period: Optional[ResolvableInt] = None
     Statistic: Optional[ResolvableStr] = None
-    Tags: Optional[Resolvable[List[ResolvableGeneric]]] = None
+    Tags: Optional[Resolvable[List[Tag]]] = None
     Threshold: Optional[ResolvableInt] = None
     ThresholdMetricId: Optional[ResolvableStr] = None
     TreatMissingData: Optional[ResolvableStr] = None
