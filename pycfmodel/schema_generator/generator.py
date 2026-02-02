@@ -19,9 +19,6 @@ from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, Res
 SCHEMA_URL_TEMPLATE = "https://schema.cloudformation.{region}.amazonaws.com/CloudformationSchema.zip"
 DEFAULT_REGION = "us-east-1"
 
-# Cache for downloaded schemas
-_schema_cache: Dict[str, Dict[str, Any]] = {}
-
 
 @lru_cache(maxsize=1)
 def _download_schemas(region: str = DEFAULT_REGION) -> Dict[str, Any]:
