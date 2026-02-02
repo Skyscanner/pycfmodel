@@ -89,10 +89,10 @@ def test_generic_resource_with_bad_json_as_string_is_converted_to_a_string_prope
 
 
 def test_parse_generic_resource_without_properties():
-    resource = GenericResource.model_validate({"Type": "AWS::SNS::Topic"})
+    resource = GenericResource.model_validate({"Type": "AWS::CloudTrail::Trail"})
     assert isinstance(resource, GenericResource)
     assert resource.Properties is None
-    assert resource.Type == "AWS::SNS::Topic"
+    assert resource.Type == "AWS::CloudTrail::Trail"
 
 
 @fixture

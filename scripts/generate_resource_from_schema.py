@@ -79,6 +79,8 @@ def resource_type_to_class_names(resource_type: str) -> Tuple[str, str, str]:
 
     AWS::Lambda::Function -> (LambdaFunction, LambdaFunctionProperties, lambda_function.py)
     AWS::EC2::SecurityGroup -> (EC2SecurityGroup, EC2SecurityGroupProperties, ec2_security_group.py)
+    AWS::IAM::Role -> (IAMRole, IAMRoleProperties, iam_role.py)
+    AWS::DynamoDB::Table -> (DynamoDBTable, DynamoDBTableProperties, dynamodb_table.py)
     """
     parts = resource_type.split("::")
     if len(parts) != 3:
@@ -86,14 +88,86 @@ def resource_type_to_class_names(resource_type: str) -> Tuple[str, str, str]:
 
     service, resource = parts[1], parts[2]
 
-    # Handle special cases to match existing conventions
-    class_name = f"{service}{resource}"
+    # Map service names to their canonical forms for class names
+    # Some services use acronyms (IAM, EC2), others use CamelCase
+    service_class_map = {
+        "IAM": "IAM",
+        "EC2": "EC2",
+        "RDS": "RDS",
+        "SQS": "SQS",
+        "SNS": "SNS",
+        "KMS": "KMS",
+        "ECS": "ECS",
+        "ECR": "ECR",
+        "EFS": "EFS",
+        "EMR": "EMR",
+        "SSM": "SSM",
+        "WAF": "WAF",
+        "ACM": "ACM",
+        "DynamoDB": "DynamoDB",
+        "CloudWatch": "CloudWatch",
+        "Route53": "Route53",
+        "AutoScaling": "AutoScaling",
+        "ElasticLoadBalancingV2": "ELBv2",
+        "ElasticLoadBalancing": "ELB",
+        "ElastiCache": "ElastiCache",
+        "ApplicationAutoScaling": "ApplicationAutoScaling",
+        "Lambda": "Lambda",
+        "ApiGateway": "ApiGateway",
+        "CloudFormation": "CloudFormation",
+        "Logs": "Logs",
+        "Events": "Events",
+        "Glue": "Glue",
+        "CodeBuild": "CodeBuild",
+        "StepFunctions": "StepFunctions",
+        "SecretsManager": "SecretsManager",
+    }
+
+    # Map service names to their filename prefixes
+    service_file_map = {
+        "IAM": "iam",
+        "EC2": "ec2",
+        "RDS": "rds",
+        "SQS": "sqs",
+        "SNS": "sns",
+        "KMS": "kms",
+        "ECS": "ecs",
+        "ECR": "ecr",
+        "EFS": "efs",
+        "EMR": "emr",
+        "SSM": "ssm",
+        "WAF": "waf",
+        "ACM": "acm",
+        "DynamoDB": "dynamodb",
+        "CloudWatch": "cloudwatch",
+        "Route53": "route53",
+        "AutoScaling": "autoscaling",
+        "ElasticLoadBalancingV2": "elbv2",
+        "ElasticLoadBalancing": "elb",
+        "ElastiCache": "elasticache",
+        "ApplicationAutoScaling": "application_autoscaling",
+        "Lambda": "lambda",
+        "ApiGateway": "apigateway",
+        "CloudFormation": "cloudformation",
+        "Logs": "logs",
+        "Events": "events",
+        "Glue": "glue",
+        "CodeBuild": "codebuild",
+        "StepFunctions": "stepfunctions",
+        "SecretsManager": "secretsmanager",
+    }
+
+    service_class = service_class_map.get(service, service)
+    service_file = service_file_map.get(service, service.lower())
+
+    class_name = f"{service_class}{resource}"
     properties_class_name = f"{class_name}Properties"
 
-    # Convert to snake_case for filename
-    filename = re.sub(r"(?<!^)(?=[A-Z])", "_", class_name).lower()
+    # Convert resource name to snake_case for filename
+    resource_snake = re.sub(r"(?<!^)(?=[A-Z])", "_", resource).lower()
+    filename = f"{service_file}_{resource_snake}.py"
 
-    return class_name, properties_class_name, f"{filename}.py"
+    return class_name, properties_class_name, filename
 
 
 def json_type_to_python_type(
@@ -131,6 +205,11 @@ def json_type_to_python_type(
         return "ResolvableGeneric", imports
 
     if json_type is None:
+        imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+        return "ResolvableGeneric", imports
+
+    # Handle multiple types (e.g., ["string", "object"])
+    if isinstance(json_type, list):
         imports.add("from pycfmodel.model.generic import ResolvableGeneric")
         return "ResolvableGeneric", imports
 
