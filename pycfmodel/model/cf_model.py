@@ -1,18 +1,22 @@
+import logging
 from datetime import date
 from typing import Any, ClassVar, Collection, Dict, List, Optional, Type, Union
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from typing_extensions import Annotated
 
 from pycfmodel.action_expander import expand_actions
 from pycfmodel.constants import AWS_NOVALUE
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.parameter import Parameter
+from pycfmodel.model.resources.dynamic_resource import get_or_create_dynamic_model, is_dynamic_generation_enabled
 from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.resources.types import ResourceModels
 from pycfmodel.model.types import Resolvable
 from pycfmodel.resolver import _extended_bool, resolve
+
+logger = logging.getLogger(__name__)
 
 AllResourcesType = Annotated[Union[ResourceModels, GenericResource], Field(union_mode="left_to_right")]
 
@@ -47,6 +51,78 @@ class CFModel(CustomModel):
     Resources: Dict[str, Resolvable[AllResourcesType]] = {}
     Rules: Optional[Dict] = {}
     Transform: Optional[Union[str, List[str]]] = None
+
+    @model_validator(mode="wrap")
+    @classmethod
+    def _parse_resources_with_dynamic_generation(cls, data: Any, handler) -> "CFModel":
+        """
+        Parse resources using dynamic model generation when enabled.
+
+        This model validator pre-processes resources to use dynamically generated models
+        for resource types that are not explicitly modeled in pycfmodel.
+        """
+        if not isinstance(data, dict):
+            return handler(data)
+
+        resources = data.get("Resources")
+        if not resources or not isinstance(resources, dict):
+            return handler(data)
+
+        if not is_dynamic_generation_enabled():
+            return handler(data)
+
+        # Get the set of explicitly modeled resource types
+        existing_resource_types = {
+            klass.model_fields["Type"].annotation.__args__[0] for klass in ResourceModels.__args__[0].__args__
+        }
+
+        # Store dynamic resources to inject after normal parsing
+        dynamic_resources = {}
+        remaining_resources = {}
+
+        for resource_name, resource_data in resources.items():
+            # If it's already a Resource instance, keep it
+            if isinstance(resource_data, Resource):
+                dynamic_resources[resource_name] = resource_data
+                continue
+
+            # If it's not a dict, pass through
+            if not isinstance(resource_data, dict):
+                remaining_resources[resource_name] = resource_data
+                continue
+
+            resource_type = resource_data.get("Type")
+
+            # If it's an explicitly modeled type, let normal Pydantic parsing handle it
+            if resource_type in existing_resource_types:
+                remaining_resources[resource_name] = resource_data
+                continue
+
+            # Try dynamic generation for unmodeled types
+            dynamic_model = get_or_create_dynamic_model(resource_type)
+            if dynamic_model is not None:
+                try:
+                    parsed_instance = dynamic_model.model_validate(resource_data)
+                    dynamic_resources[resource_name] = parsed_instance
+                    continue
+                except Exception as e:
+                    logger.debug(f"Failed to parse {resource_type} with dynamic model: {e}")
+
+            # Fall back to normal parsing (will use GenericResource)
+            remaining_resources[resource_name] = resource_data
+
+        # Create a modified data dict with only the remaining resources
+        modified_data = dict(data)
+        modified_data["Resources"] = remaining_resources
+
+        # Let the default handler parse the remaining data
+        model = handler(modified_data)
+
+        # Merge dynamic resources into the parsed model
+        if dynamic_resources:
+            model.Resources.update(dynamic_resources)
+
+        return model
 
     PSEUDO_PARAMETERS: ClassVar[Dict[str, Union[str, List[str]]]] = {
         # default pseudo parameters
