@@ -11,6 +11,7 @@ class S3BucketProperties(CustomModel):
     """
     Properties:
 
+    - AbacStatus: The ABAC status of the general purpose bucket.
     - AccelerateConfiguration: Configures the transfer acceleration state for an Amazon S3 bucket.
     - AccessControl: A canned access control list (ACL) that grants predefined permissions to the bucket.
     - AnalyticsConfigurations: Specifies the configuration and any analyses for the analytics filter of an Amazon S3 bucket.
@@ -21,6 +22,8 @@ class S3BucketProperties(CustomModel):
     - InventoryConfigurations: Specifies the inventory configuration for an Amazon S3 bucket.
     - LifecycleConfiguration: Specifies the lifecycle configuration for objects in an Amazon S3 bucket.
     - LoggingConfiguration: Settings that define where logs are stored.
+    - MetadataConfiguration: The S3 Metadata configuration for a general purpose bucket.
+    - MetadataTableConfiguration: The metadata table configuration of an S3 general purpose bucket.
     - MetricsConfigurations: Specifies a metrics configuration for the CloudWatch request metrics.
     - NotificationConfiguration: Defines how Amazon S3 handles bucket notifications.
     - ObjectLockConfiguration: Places an Object Lock configuration on the specified bucket.
@@ -35,6 +38,7 @@ class S3BucketProperties(CustomModel):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html)
     """
 
+    AbacStatus: Optional[ResolvableStr] = None
     AccelerateConfiguration: Optional[ResolvableGeneric] = None
     AccessControl: Optional[ResolvableStr] = None
     AnalyticsConfigurations: Optional[Resolvable[List[ResolvableGeneric]]] = None
@@ -45,6 +49,8 @@ class S3BucketProperties(CustomModel):
     InventoryConfigurations: Optional[Resolvable[List[ResolvableGeneric]]] = None
     LifecycleConfiguration: Optional[ResolvableGeneric] = None
     LoggingConfiguration: Optional[ResolvableGeneric] = None
+    MetadataConfiguration: Optional[ResolvableGeneric] = None
+    MetadataTableConfiguration: Optional[ResolvableGeneric] = None
     MetricsConfigurations: Optional[Resolvable[List[ResolvableGeneric]]] = None
     NotificationConfiguration: Optional[ResolvableGeneric] = None
     ObjectLockConfiguration: Optional[ResolvableGeneric] = None

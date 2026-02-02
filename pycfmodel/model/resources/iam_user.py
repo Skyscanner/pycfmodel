@@ -1,6 +1,7 @@
 from typing import Dict, List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
+from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.parameter import Parameter
 from pycfmodel.model.resources.properties.policy import Policy
 from pycfmodel.model.resources.resource import Resource
@@ -18,6 +19,7 @@ class IAMUserProperties(CustomModel):
     - Path: Path to the user.
     - PermissionsBoundary: ARN of the policy used to set the permissions boundary.
     - Policies: A list of [policy][pycfmodel.model.resources.properties.policy.Policy] objects.
+    - Tags: A list of tags to attach to the new user.
     - UserName: Name of the user.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html)
@@ -29,6 +31,7 @@ class IAMUserProperties(CustomModel):
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
     Policies: Optional[Resolvable[List[Resolvable[Policy]]]] = None
+    Tags: Optional[Resolvable[List[ResolvableGeneric]]] = None
     UserName: Optional[ResolvableStr] = None
 
 

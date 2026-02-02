@@ -19,6 +19,7 @@ class KMSKeyProperties(CustomModel):
     - KeySpec: Specifies the type of CMK to create.
     - MultiRegion: Allows multi-Region primary CMK to be replicated in other AWS Regions.
     - PendingWindowInDays: Number of days in the waiting period before AWS KMS deletes a CMK that has been removed from a CloudFormation stack.
+    - RotationPeriodInDays: Custom period of time between each rotation date.
     - Tags: Array of key-value pairs.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html)
@@ -34,6 +35,7 @@ class KMSKeyProperties(CustomModel):
     MultiRegion: Optional[ResolvableBool] = None
     Origin: Optional[ResolvableStr] = None
     PendingWindowInDays: Optional[ResolvableInt] = None
+    RotationPeriodInDays: Optional[ResolvableInt] = None
     Tags: Optional[Resolvable[List[Tag]]] = None
 
 
