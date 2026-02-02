@@ -9,7 +9,9 @@ from typing import List, Literal, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableInt, ResolvableStr
+from pycfmodel.model.types import Resolvable
+from pycfmodel.model.types import ResolvableInt
+from pycfmodel.model.types import ResolvableStr
 
 
 class ELBv2ListenerProperties(CustomModel):

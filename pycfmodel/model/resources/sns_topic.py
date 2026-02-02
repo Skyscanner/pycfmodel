@@ -9,7 +9,9 @@ from typing import List, Literal, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableStr
+from pycfmodel.model.types import Resolvable
+from pycfmodel.model.types import ResolvableBool
+from pycfmodel.model.types import ResolvableStr
 
 
 class SNSTopicProperties(CustomModel):
@@ -57,8 +59,6 @@ class SNSTopicProperties(CustomModel):
 class SNSTopic(Resource):
     """
     The ``AWS::SNS::Topic`` resource creates a topic to which notifications can be published.
-  One account can create a maximum of 100,000 standard topics and 1,000 FIFO topics. For more information, see [endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/sns.html) in the *General Reference*.
-   The structure of ``AUTHPARAMS`` depends on the .signature of the API request. For more information, see [Examples of the complete Signature Version 4 signing process](https://docs.aws.amazon.com/general/latest/gr/sigv4-signed-request-examples.html) in the *General Reference*.
 
     Properties:
 

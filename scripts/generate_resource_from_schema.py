@@ -13,6 +13,7 @@ Usage:
 The generated files follow the existing pycfmodel conventions:
 - Properties class with Optional fields for each property
 - Resource class inheriting from Resource base class
+- Nested definition classes for complex types (e.g., AvailabilityZoneImpairmentPolicy)
 - Proper type annotations using Resolvable, ResolvableStr, etc.
 - Docstrings with AWS documentation links
 """
@@ -24,7 +25,7 @@ import re
 import sys
 import zipfile
 from pathlib import Path
-from typing import Any, Dict, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import httpx
 
@@ -89,7 +90,6 @@ def resource_type_to_class_names(resource_type: str) -> Tuple[str, str, str]:
     service, resource = parts[1], parts[2]
 
     # Map service names to their canonical forms for class names
-    # Some services use acronyms (IAM, EC2), others use CamelCase
     service_class_map = {
         "IAM": "IAM",
         "EC2": "EC2",
@@ -170,227 +170,464 @@ def resource_type_to_class_names(resource_type: str) -> Tuple[str, str, str]:
     return class_name, properties_class_name, filename
 
 
-def json_type_to_python_type(
-    json_type: Optional[str],
-    property_schema: Dict[str, Any],
-    definitions: Dict[str, Any],
-    property_name: str,
-    is_required: bool,
-) -> Tuple[str, Set[str]]:
-    """
-    Convert JSON schema type to Python type annotation.
+class CodeGenerator:
+    """Generates Python code for CloudFormation resources with nested types."""
 
-    Returns (type_annotation, set of imports needed)
-    """
-    imports = set()
+    def __init__(self, resource_type: str, schema: Dict[str, Any]):
+        self.resource_type = resource_type
+        self.schema = schema
+        self.definitions = schema.get("definitions", {})
+        self.properties = schema.get("properties", {})
+        self.required_props = set(schema.get("required", []))
+        self.description = schema.get("description", f"{resource_type} resource")
 
-    # Handle $ref
-    if "$ref" in property_schema:
-        ref = property_schema["$ref"]
-        if ref.startswith("#/definitions/"):
-            # For complex nested types, use ResolvableGeneric
-            imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-            return "ResolvableGeneric", imports
+        # Filter out read-only properties
+        read_only = set()
+        for prop_path in schema.get("readOnlyProperties", []):
+            if prop_path.startswith("/properties/"):
+                read_only.add(prop_path.split("/")[-1])
+        self.properties = {k: v for k, v in self.properties.items() if k not in read_only}
 
-    # Handle anyOf/oneOf
-    if "anyOf" in property_schema or "oneOf" in property_schema:
-        variants = property_schema.get("anyOf") or property_schema.get("oneOf", [])
-        for variant in variants:
-            if variant.get("type") == "array":
-                imports.add("from typing import List")
-                imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-                imports.add("from pycfmodel.model.types import Resolvable")
-                return "Resolvable[List[ResolvableGeneric]]", imports
-        imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-        return "ResolvableGeneric", imports
+        # Track which definitions we need to generate
+        self.needed_definitions: Set[str] = set()
+        self.generated_definitions: Set[str] = set()
 
-    if json_type is None:
-        imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-        return "ResolvableGeneric", imports
+        # Track dependencies between definitions for topological sorting
+        self.definition_dependencies: Dict[str, Set[str]] = {}
 
-    # Handle multiple types (e.g., ["string", "object"])
-    if isinstance(json_type, list):
-        imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-        return "ResolvableGeneric", imports
+        # Imports
+        self.imports: Set[str] = {
+            "from typing import Literal",
+            "from pycfmodel.model.base import CustomModel",
+            "from pycfmodel.model.resources.resource import Resource",
+            "from pycfmodel.model.types import Resolvable",
+        }
 
-    # Handle array types
-    if json_type == "array":
-        items = property_schema.get("items", {})
-        imports.add("from typing import List")
-        imports.add("from pycfmodel.model.types import Resolvable")
+        # Class name info
+        class_name, props_class_name, _ = resource_type_to_class_names(resource_type)
+        self.class_name = class_name
+        self.props_class_name = props_class_name
 
+    def get_type_for_schema(
+        self,
+        prop_schema: Dict[str, Any],
+        is_required: bool,
+        context: str = "",
+    ) -> str:
+        """Convert a JSON schema to a Python type annotation."""
+        # Handle $ref to definitions
+        if "$ref" in prop_schema:
+            ref = prop_schema["$ref"]
+            if ref.startswith("#/definitions/"):
+                def_name = ref.split("/")[-1]
+                # Check if the definition is actually an object with properties
+                # If it's an array or primitive type, inline it instead of generating a class
+                definition = self.definitions.get(def_name, {})
+                def_type = definition.get("type")
+                if def_type == "array":
+                    # Inline the array type
+                    items = definition.get("items", {})
+                    item_type = self._get_item_type(items)
+                    self.imports.add("from typing import List")
+                    return f"Resolvable[List[{item_type}]]"
+                elif def_type in ("string", "integer", "number", "boolean"):
+                    # Inline primitive types
+                    type_map = {
+                        "string": "ResolvableStr",
+                        "integer": "ResolvableInt",
+                        "number": "ResolvableInt",
+                        "boolean": "ResolvableBool",
+                    }
+                    type_str = type_map[def_type]
+                    if type_str == "ResolvableStr":
+                        self.imports.add("from pycfmodel.model.types import ResolvableStr")
+                    elif type_str == "ResolvableInt":
+                        self.imports.add("from pycfmodel.model.types import ResolvableInt")
+                    elif type_str == "ResolvableBool":
+                        self.imports.add("from pycfmodel.model.types import ResolvableBool")
+                    return type_str
+                elif def_type == "object" or definition.get("properties"):
+                    # For nested models, use ResolvableGeneric due to Pydantic v2 limitations
+                    # with union_mode annotation on model schemas
+                    self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+                    return "ResolvableGeneric"
+                else:
+                    # Unknown or complex type, fall back to ResolvableGeneric
+                    self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+                    return "ResolvableGeneric"
+
+        # Handle anyOf/oneOf
+        if "anyOf" in prop_schema or "oneOf" in prop_schema:
+            variants = prop_schema.get("anyOf") or prop_schema.get("oneOf", [])
+            # Check if any variant is an array
+            for variant in variants:
+                if variant.get("type") == "array":
+                    items = variant.get("items", {})
+                    item_type = self._get_item_type(items)
+                    self.imports.add("from typing import List")
+                    return f"Resolvable[List[{item_type}]]"
+            # Check for $ref in variants
+            for variant in variants:
+                if "$ref" in variant:
+                    ref = variant["$ref"]
+                    if ref.startswith("#/definitions/"):
+                        def_name = ref.split("/")[-1]
+                        definition = self.definitions.get(def_name, {})
+                        if definition.get("type") == "object" or definition.get("properties"):
+                            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+                            return "ResolvableGeneric"
+                        else:
+                            # Fall back to inline handling
+                            return self.get_type_for_schema(variant, is_required, context)
+            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+            return "ResolvableGeneric"
+
+        json_type = prop_schema.get("type")
+
+        if json_type is None:
+            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+            return "ResolvableGeneric"
+
+        # Handle multiple types (e.g., ["string", "object"])
+        if isinstance(json_type, list):
+            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+            return "ResolvableGeneric"
+
+        # Handle array types
+        if json_type == "array":
+            items = prop_schema.get("items", {})
+            item_type = self._get_item_type(items)
+            self.imports.add("from typing import List")
+            return f"Resolvable[List[{item_type}]]"
+
+        # Simple type mappings
+        type_map = {
+            "string": "ResolvableStr",
+            "integer": "ResolvableInt",
+            "number": "ResolvableInt",
+            "boolean": "ResolvableBool",
+            "object": "ResolvableGeneric",
+        }
+
+        if json_type in type_map:
+            type_str = type_map[json_type]
+            if type_str == "ResolvableStr":
+                self.imports.add("from pycfmodel.model.types import ResolvableStr")
+            elif type_str == "ResolvableInt":
+                self.imports.add("from pycfmodel.model.types import ResolvableInt")
+            elif type_str == "ResolvableBool":
+                self.imports.add("from pycfmodel.model.types import ResolvableBool")
+            elif type_str == "ResolvableGeneric":
+                self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+            return type_str
+
+        # Fallback
+        self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+        return "ResolvableGeneric"
+
+    def _get_item_type(self, items: Dict[str, Any]) -> str:
+        """Get the type for array items."""
         if "$ref" in items:
-            imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-            return "Resolvable[List[ResolvableGeneric]]", imports
+            ref = items["$ref"]
+            if ref.startswith("#/definitions/"):
+                def_name = ref.split("/")[-1]
+                # Check if the definition is an object - if so, use ResolvableGeneric
+                definition = self.definitions.get(def_name, {})
+                if definition.get("type") == "object" or definition.get("properties"):
+                    self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+                    return "ResolvableGeneric"
+                elif definition.get("type") == "array":
+                    # Inline nested arrays
+                    nested_items = definition.get("items", {})
+                    return self._get_item_type(nested_items)
+                else:
+                    self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+                    return "ResolvableGeneric"
 
         item_type = items.get("type")
         if item_type == "string":
-            imports.add("from pycfmodel.model.types import ResolvableStr")
-            return "Resolvable[List[ResolvableStr]]", imports
+            self.imports.add("from pycfmodel.model.types import ResolvableStr")
+            return "ResolvableStr"
         elif item_type == "integer":
-            imports.add("from pycfmodel.model.types import ResolvableInt")
-            return "Resolvable[List[ResolvableInt]]", imports
+            self.imports.add("from pycfmodel.model.types import ResolvableInt")
+            return "ResolvableInt"
         elif item_type == "object":
-            imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-            return "Resolvable[List[ResolvableGeneric]]", imports
+            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+            return "ResolvableGeneric"
         else:
-            imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-            return "Resolvable[List[ResolvableGeneric]]", imports
+            self.imports.add("from pycfmodel.model.generic import ResolvableGeneric")
+            return "ResolvableGeneric"
 
-    # Simple type mappings
-    type_map = {
-        "string": ("ResolvableStr", {"from pycfmodel.model.types import ResolvableStr"}),
-        "integer": ("ResolvableInt", {"from pycfmodel.model.types import ResolvableInt"}),
-        "number": ("ResolvableInt", {"from pycfmodel.model.types import ResolvableInt"}),
-        "boolean": ("ResolvableBool", {"from pycfmodel.model.types import ResolvableBool"}),
-        "object": ("ResolvableGeneric", {"from pycfmodel.model.generic import ResolvableGeneric"}),
-    }
+    def get_definition_dependencies(self, def_name: str) -> Set[str]:
+        """Get the set of definitions that this definition depends on."""
+        if def_name in self.definition_dependencies:
+            return self.definition_dependencies[def_name]
 
-    if json_type in type_map:
-        type_str, type_imports = type_map[json_type]
-        imports.update(type_imports)
-        return type_str, imports
+        deps: Set[str] = set()
+        definition = self.definitions.get(def_name, {})
+        if not definition:
+            self.definition_dependencies[def_name] = deps
+            return deps
 
-    # Fallback
-    imports.add("from pycfmodel.model.generic import ResolvableGeneric")
-    return "ResolvableGeneric", imports
+        # Check properties for $ref
+        props = definition.get("properties", {})
+        for prop_schema in props.values():
+            self._collect_refs(prop_schema, deps)
+
+        # Also check array items for $ref
+        if "items" in definition:
+            self._collect_refs(definition["items"], deps)
+
+        self.definition_dependencies[def_name] = deps
+        return deps
+
+    def _collect_refs(self, schema: Dict[str, Any], refs: Set[str]) -> None:
+        """Recursively collect all $ref definitions from a schema."""
+        if "$ref" in schema:
+            ref = schema["$ref"]
+            if ref.startswith("#/definitions/"):
+                refs.add(ref.split("/")[-1])
+        if "items" in schema:
+            self._collect_refs(schema["items"], refs)
+        for key in ("anyOf", "oneOf"):
+            if key in schema:
+                for variant in schema[key]:
+                    self._collect_refs(variant, refs)
+
+    def topological_sort_definitions(self, definitions: Set[str]) -> List[str]:
+        """Sort definitions topologically so dependencies come first."""
+        # Build dependency graph
+        for def_name in definitions:
+            self.get_definition_dependencies(def_name)
+
+        # Kahn's algorithm for topological sort
+        in_degree: Dict[str, int] = {d: 0 for d in definitions}
+        for def_name in definitions:
+            for dep in self.definition_dependencies.get(def_name, set()):
+                if dep in definitions:
+                    in_degree[def_name] += 1
+
+        # Start with nodes that have no dependencies
+        queue = [d for d in definitions if in_degree[d] == 0]
+        result = []
+
+        while queue:
+            # Sort queue for deterministic output
+            queue.sort()
+            node = queue.pop(0)
+            result.append(node)
+
+            # For each definition that depends on this node
+            for def_name in definitions:
+                if node in self.definition_dependencies.get(def_name, set()):
+                    in_degree[def_name] -= 1
+                    if in_degree[def_name] == 0:
+                        queue.append(def_name)
+
+        # If there are cycles, add remaining definitions in alphabetical order
+        remaining = set(definitions) - set(result)
+        result.extend(sorted(remaining))
+
+        return result
+
+    def should_generate_class(self, def_name: str) -> bool:
+        """Check if this definition should become a class (vs being inlined)."""
+        definition = self.definitions.get(def_name, {})
+        if not definition:
+            return False
+        def_type = definition.get("type")
+        # Only generate classes for objects with properties
+        if def_type == "object" or definition.get("properties"):
+            return True
+        return False
+
+    def generate_definition_class(self, def_name: str) -> List[str]:
+        """Generate a class for a schema definition."""
+        if def_name in self.generated_definitions:
+            return []
+        self.generated_definitions.add(def_name)
+
+        definition = self.definitions.get(def_name, {})
+        if not definition:
+            return []
+
+        # Skip non-object definitions (arrays, primitives)
+        if not self.should_generate_class(def_name):
+            return []
+
+        props = definition.get("properties", {})
+        required = set(definition.get("required", []))
+        desc = definition.get("description", f"{def_name} configuration.")
+
+        lines = []
+        lines.append(f"class {def_name}(CustomModel):")
+        lines.append('    """')
+        # Truncate description to first sentence or 200 chars
+        short_desc = desc.split(".")[0] + "." if "." in desc else desc[:200]
+        lines.append(f"    {short_desc}")
+        lines.append('    """')
+        lines.append("")
+
+        # Generate fields
+        fields = []
+        for prop_name, prop_schema in sorted(props.items()):
+            is_required = prop_name in required
+            type_annotation = self.get_type_for_schema(prop_schema, is_required, def_name)
+
+            if not is_required:
+                type_annotation = f"Optional[{type_annotation}]"
+                self.imports.add("from typing import Optional")
+
+            default = "" if is_required else " = None"
+            fields.append((prop_name, type_annotation, default, is_required))
+
+        # Sort: required first, then optional
+        required_fields = [(n, t, d) for n, t, d, r in fields if r]
+        optional_fields = [(n, t, d) for n, t, d, r in fields if not r]
+
+        for prop_name, type_annotation, default in required_fields + optional_fields:
+            lines.append(f"    {prop_name}: {type_annotation}{default}")
+
+        if not fields:
+            lines.append("    pass")
+
+        lines.append("")
+        lines.append("")
+
+        return lines
+
+    def generate(self) -> str:
+        """Generate the complete Python code for the resource."""
+        # First pass: collect all needed definitions from properties
+        property_fields = []
+        for prop_name, prop_schema in sorted(self.properties.items()):
+            is_required = prop_name in self.required_props
+            type_annotation = self.get_type_for_schema(prop_schema, is_required)
+
+            if not is_required:
+                type_annotation = f"Optional[{type_annotation}]"
+                self.imports.add("from typing import Optional")
+
+            default = "" if is_required else " = None"
+            prop_desc = prop_schema.get("description", "")
+            property_fields.append((prop_name, type_annotation, default, prop_desc, is_required))
+
+        # Collect all needed definition classes (recursively)
+        while self.needed_definitions - self.generated_definitions:
+            pending = self.needed_definitions - self.generated_definitions
+            for def_name in pending:
+                # Just mark as generated and collect dependencies
+                self.generated_definitions.add(def_name)
+                deps = self.get_definition_dependencies(def_name)
+                self.needed_definitions.update(deps)
+
+        # Reset generated_definitions for actual code generation
+        all_definitions = self.generated_definitions.copy()
+        self.generated_definitions = set()
+
+        # Sort definitions topologically and generate code
+        definition_code_lines = []
+        sorted_defs = self.topological_sort_definitions(all_definitions)
+        for def_name in sorted_defs:
+            definition_code_lines.extend(self.generate_definition_class(def_name))
+
+        # Build imports
+        typing_imports = sorted([i for i in self.imports if i.startswith("from typing")])
+        pycfmodel_imports = sorted([i for i in self.imports if i.startswith("from pycfmodel")])
+
+        # Generate code
+        lines = ['"""']
+        lines.append(f"{self.class_name} resource for AWS CloudFormation.")
+        lines.append("")
+        lines.append(f"Auto-generated from AWS CloudFormation schema for {self.resource_type}.")
+        lines.append('"""')
+        lines.append("")
+
+        # Combine typing imports
+        typing_names = []
+        for imp in typing_imports:
+            match = re.search(r"from typing import (.+)", imp)
+            if match:
+                typing_names.extend(match.group(1).split(", "))
+        if typing_names:
+            lines.append(f"from typing import {', '.join(sorted(set(typing_names)))}")
+        lines.append("")
+
+        for imp in pycfmodel_imports:
+            lines.append(imp)
+        lines.append("")
+        lines.append("")
+
+        # Add definition classes first (they need to be defined before Properties class)
+        lines.extend(definition_code_lines)
+
+        # Properties class
+        lines.append(f"class {self.props_class_name}(CustomModel):")
+        lines.append('    """')
+        lines.append(f"    Properties for {self.resource_type}.")
+        lines.append("")
+        lines.append("    Properties:")
+        lines.append("")
+        for prop_name, _, _, prop_desc, _ in property_fields:
+            short_desc = prop_desc[:80] + "..." if len(prop_desc) > 80 else prop_desc
+            lines.append(f"    - {prop_name}: {short_desc}")
+        lines.append("")
+        lines.append(
+            f"    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-{self.resource_type.lower().replace('::', '-').replace('aws-', '')}.html)"
+        )
+        lines.append('    """')
+        lines.append("")
+
+        # Sort fields: required first, then optional
+        required_fields = [(n, t, d) for n, t, d, _, r in property_fields if r]
+        optional_fields = [(n, t, d) for n, t, d, _, r in property_fields if not r]
+
+        for prop_name, type_annotation, default in required_fields + optional_fields:
+            lines.append(f"    {prop_name}: {type_annotation}{default}")
+
+        if not property_fields:
+            lines.append("    pass")
+
+        lines.append("")
+        lines.append("")
+
+        # Resource class
+        lines.append(f"class {self.class_name}(Resource):")
+        lines.append('    """')
+        # Truncate description
+        desc_lines = self.description.split("\n")[0][:200]
+        lines.append(f"    {desc_lines}")
+        lines.append("")
+        lines.append("    Properties:")
+        lines.append("")
+        lines.append(
+            f"    - Properties: A [{self.props_class_name}][pycfmodel.model.resources.{resource_type_to_class_names(self.resource_type)[2][:-3]}.{self.props_class_name}] object."
+        )
+        lines.append("")
+        lines.append(
+            f"    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-{self.resource_type.lower().replace('::', '-').replace('aws-', '')}.html)"
+        )
+        lines.append('    """')
+        lines.append("")
+        lines.append(f'    Type: Literal["{self.resource_type}"]')
+
+        # Determine if Properties should be Optional
+        has_required_props = any(r for _, _, _, _, r in property_fields)
+        if has_required_props:
+            lines.append(f"    Properties: Resolvable[{self.props_class_name}]")
+        else:
+            lines.append(f"    Properties: Optional[Resolvable[{self.props_class_name}]] = None")
+
+        lines.append("")
+
+        return "\n".join(lines)
 
 
 def generate_resource_code(resource_type: str, region: str = DEFAULT_REGION) -> str:
     """Generate Python code for a pycfmodel resource."""
     schema = get_schema(resource_type, region)
-    class_name, props_class_name, _ = resource_type_to_class_names(resource_type)
-
-    # Extract schema components
-    properties = schema.get("properties", {})
-    definitions = schema.get("definitions", {})
-    required_props = set(schema.get("required", []))
-    description = schema.get("description", f"{resource_type} resource")
-
-    # Filter out read-only properties
-    read_only = set()
-    for prop_path in schema.get("readOnlyProperties", []):
-        if prop_path.startswith("/properties/"):
-            read_only.add(prop_path.split("/")[-1])
-    properties = {k: v for k, v in properties.items() if k not in read_only}
-
-    # Collect imports
-    all_imports = {
-        "from typing import Literal",
-        "from pycfmodel.model.base import CustomModel",
-        "from pycfmodel.model.resources.resource import Resource",
-        "from pycfmodel.model.types import Resolvable",
-    }
-
-    # Generate property fields
-    property_fields = []
-    has_optional = False
-    has_list = False
-
-    for prop_name, prop_schema in sorted(properties.items()):
-        is_required = prop_name in required_props
-        prop_type = prop_schema.get("type")
-        prop_description = prop_schema.get("description", "")
-
-        type_annotation, imports = json_type_to_python_type(
-            prop_type, prop_schema, definitions, prop_name, is_required
-        )
-        all_imports.update(imports)
-
-        if not is_required:
-            has_optional = True
-            type_annotation = f"Optional[{type_annotation}]"
-
-        if "List" in type_annotation:
-            has_list = True
-
-        default = " = None" if not is_required else ""
-        property_fields.append((prop_name, type_annotation, default, prop_description))
-
-    if has_optional:
-        all_imports.add("from typing import Optional")
-    if has_list and "from typing import List" not in all_imports:
-        all_imports.add("from typing import List")
-
-    # Sort imports
-    typing_imports = sorted([i for i in all_imports if i.startswith("from typing")])
-    pycfmodel_imports = sorted([i for i in all_imports if i.startswith("from pycfmodel")])
-
-    # Generate code
-    lines = ['"""']
-    lines.append(f"{class_name} resource for AWS CloudFormation.")
-    lines.append("")
-    lines.append(f"Auto-generated from AWS CloudFormation schema for {resource_type}.")
-    lines.append('"""')
-    lines.append("")
-
-    # Combine typing imports
-    typing_names = []
-    for imp in typing_imports:
-        match = re.search(r"from typing import (.+)", imp)
-        if match:
-            typing_names.extend(match.group(1).split(", "))
-    if typing_names:
-        lines.append(f"from typing import {', '.join(sorted(set(typing_names)))}")
-    lines.append("")
-
-    for imp in pycfmodel_imports:
-        lines.append(imp)
-    lines.append("")
-    lines.append("")
-
-    # Properties class
-    lines.append(f"class {props_class_name}(CustomModel):")
-    lines.append('    """')
-    lines.append(f"    Properties for {resource_type}.")
-    lines.append("")
-    lines.append("    Properties:")
-    lines.append("")
-    for prop_name, _, _, prop_desc in property_fields:
-        short_desc = prop_desc[:80] + "..." if len(prop_desc) > 80 else prop_desc
-        lines.append(f"    - {prop_name}: {short_desc}")
-    lines.append("")
-    lines.append(f"    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-{resource_type.lower().replace('::', '-').replace('aws-', '')}.html)")
-    lines.append('    """')
-    lines.append("")
-
-    # Sort fields: required first, then optional
-    required_fields = [(n, t, d, desc) for n, t, d, desc in property_fields if d == ""]
-    optional_fields = [(n, t, d, desc) for n, t, d, desc in property_fields if d != ""]
-
-    for prop_name, type_annotation, default, _ in required_fields + optional_fields:
-        lines.append(f"    {prop_name}: {type_annotation}{default}")
-
-    if not property_fields:
-        lines.append("    pass")
-
-    lines.append("")
-    lines.append("")
-
-    # Resource class
-    lines.append(f"class {class_name}(Resource):")
-    lines.append('    """')
-    lines.append(f"    {description}")
-    lines.append("")
-    lines.append("    Properties:")
-    lines.append("")
-    lines.append(f"    - Properties: A [{props_class_name}][pycfmodel.model.resources.{resource_type_to_class_names(resource_type)[2][:-3]}.{props_class_name}] object.")
-    lines.append("")
-    lines.append(f"    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-{resource_type.lower().replace('::', '-').replace('aws-', '')}.html)")
-    lines.append('    """')
-    lines.append("")
-    lines.append(f'    Type: Literal["{resource_type}"]')
-
-    # Determine if Properties should be Optional
-    has_required_props = any(d == "" for _, _, d, _ in property_fields)
-    if has_required_props:
-        lines.append(f"    Properties: Resolvable[{props_class_name}]")
-    else:
-        lines.append(f"    Properties: Optional[Resolvable[{props_class_name}]] = None")
-
-    lines.append("")
-
-    return "\n".join(lines)
+    generator = CodeGenerator(resource_type, schema)
+    return generator.generate()
 
 
 def main():

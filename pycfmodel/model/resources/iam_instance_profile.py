@@ -8,7 +8,8 @@ from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableStr
+from pycfmodel.model.types import Resolvable
+from pycfmodel.model.types import ResolvableStr
 
 
 class IAMInstanceProfileProperties(CustomModel):
@@ -32,8 +33,7 @@ class IAMInstanceProfileProperties(CustomModel):
 
 class IAMInstanceProfile(Resource):
     """
-    Creates a new instance profile. For information about instance profiles, see [Using instance profiles](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html).
-  For information about the number of instance profiles you can create, see [object quotas](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html) in the *User Guide*.
+    Creates a new instance profile. For information about instance profiles, see [Using instance profiles](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.h
 
     Properties:
 

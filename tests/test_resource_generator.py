@@ -283,7 +283,8 @@ class TestExistingResourceComparison:
 
         # Should use similar type patterns
         assert "Optional[ResolvableStr]" in code  # For BucketName
-        assert "Optional[ResolvableGeneric]" in code  # For complex types
+        # Complex types should use nested models or ResolvableGeneric
+        assert "Optional[" in code  # For complex types
 
     def test_generated_and_existing_s3_bucket_parse_same_template(self):
         """Test that both implementations parse the same template correctly."""

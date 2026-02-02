@@ -9,7 +9,10 @@ from typing import List, Literal, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableStr
+from pycfmodel.model.types import Resolvable
+from pycfmodel.model.types import ResolvableBool
+from pycfmodel.model.types import ResolvableInt
+from pycfmodel.model.types import ResolvableStr
 
 
 class CloudWatchAlarmProperties(CustomModel):
@@ -71,8 +74,6 @@ class CloudWatchAlarmProperties(CustomModel):
 class CloudWatchAlarm(Resource):
     """
     The ``AWS::CloudWatch::Alarm`` type specifies an alarm and associates it with the specified metric or metric math expression.
- When this operation creates an alarm, the alarm state is immediately set to ``INSUFFICIENT_DATA``. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.
- When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.
 
     Properties:
 

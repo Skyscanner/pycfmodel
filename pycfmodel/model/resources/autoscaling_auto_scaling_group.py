@@ -9,7 +9,10 @@ from typing import List, Literal, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.generic import ResolvableGeneric
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableStr
+from pycfmodel.model.types import Resolvable
+from pycfmodel.model.types import ResolvableBool
+from pycfmodel.model.types import ResolvableInt
+from pycfmodel.model.types import ResolvableStr
 
 
 class AutoScalingAutoScalingGroupProperties(CustomModel):
@@ -103,10 +106,7 @@ class AutoScalingAutoScalingGroupProperties(CustomModel):
 
 class AutoScalingAutoScalingGroup(Resource):
     """
-    The ``AWS::AutoScaling::AutoScalingGroup`` resource defines an Amazon EC2 Auto Scaling group, which is a collection of Amazon EC2 instances that are treated as a logical grouping for the purposes of automatic scaling and management. 
- For more information about Amazon EC2 Auto Scaling, see the [Amazon EC2 Auto Scaling User Guide](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html). 
-  Amazon EC2 Auto Scaling configures instances launched as part of an Auto Scaling group using either a [launch template](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-launchtemplate.html) or a launch configuration. We strongly recommend that you do not use launch configurations. For more information, see [Launch configurations](https://docs.aws.amazon.com/autoscaling/ec2/userguide/launch-configurations.html) in the *Amazon EC2 Auto Scaling User Guide*.
- For help migrating from launch configurations to launch templates, see [Migrate CloudFormation stacks from launch configurations to launch templates](https://docs.aws.amazon.com/autoscaling/ec2/userguide/migrate-launch-configurations-with-cloudformation.html) in the *Amazon EC2 Auto Scaling User Guide*.
+    The ``AWS::AutoScaling::AutoScalingGroup`` resource defines an Amazon EC2 Auto Scaling group, which is a collection of Amazon EC2 instances that are treated as a logical grouping for the purposes of a
 
     Properties:
 
