@@ -27,7 +27,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install httpx
+        run: pip install -r requirements-scripts.txt
 
       - name: Generate CloudFormation actions file
         run: python scripts/generate_cloudformation_actions_file.py
