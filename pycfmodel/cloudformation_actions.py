@@ -6722,6 +6722,7 @@ CLOUDFORMATION_ACTIONS = [
     "ec2:ImportSnapshot",
     "ec2:ImportVolume",
     "ec2:InjectApiError",
+    "ec2:InjectVolumeIOLatency",
     "ec2:ListImagesInRecycleBin",
     "ec2:ListSnapshotsInRecycleBin",
     "ec2:ListVolumesInRecycleBin",
