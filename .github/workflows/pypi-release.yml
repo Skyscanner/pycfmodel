@@ -20,6 +20,8 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@0c5e2b8115b80b4c7c5ddf6ffdd634974642d182 # v5.4.1
+        with:
+          enable-cache: false  # Disable cache for release builds to prevent cache poisoning
 
       - name: Setup python
         run: uv python install 3.9
