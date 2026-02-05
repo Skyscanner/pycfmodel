@@ -14,6 +14,8 @@ Core functionality:
 
 ## Development Commands
 
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
+
 ### Setup
 ```bash
 make install-dev          # Install all development dependencies
@@ -23,8 +25,8 @@ make install-dev          # Install all development dependencies
 ```bash
 make test                 # Run linting and unit tests
 make unit                 # Run only unit tests
-pytest -svvv tests        # Run tests with verbose output
-pytest tests/path/to/test.py::test_name  # Run a specific test
+uv run pytest -svvv tests # Run tests with verbose output
+uv run pytest tests/path/to/test.py::test_name  # Run a specific test
 make coverage             # Run tests with coverage report
 ```
 
@@ -36,8 +38,8 @@ make format               # Format code with isort and black
 
 ### Dependency Management
 ```bash
-make freeze               # Regenerate all requirements files from pyproject.toml
-make freeze-upgrade       # Upgrade all dependencies and regenerate requirements files
+make lock                 # Update uv.lock file
+make lock-upgrade         # Upgrade all dependencies and update uv.lock
 ```
 
 ### Documentation
@@ -49,7 +51,8 @@ make test-docs            # Build docs to verify no issues
 ### Updating AWS Actions
 If `tests/test_constants.py::test_cloudformation_actions` fails:
 ```bash
-python3 scripts/generate_cloudformation_actions_file.py
+make install-cloudformation-update  # Install dependencies for the update script
+make cloudformation-update          # Fetch latest IAM actions and update the file
 ```
 This fetches the latest IAM actions from AWS and updates `pycfmodel/cloudformation_actions.py`.
 
