@@ -116,9 +116,12 @@ make test
 make freeze
 ```
 
+### Updating CloudFormation Actions
+
 If the test `tests/test_constants.py::test_cloudformation_actions` is failing, it can be resolved by updating the known
 AWS Actions:
 
 ```bash
-python3 scripts/generate_cloudformation_actions_file.py
+make install-cloudformation-update
+make cloudformation-update
 ```

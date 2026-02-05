@@ -49,7 +49,8 @@ make test-docs            # Build docs to verify no issues
 ### Updating AWS Actions
 If `tests/test_constants.py::test_cloudformation_actions` fails:
 ```bash
-python3 scripts/generate_cloudformation_actions_file.py
+make install-cloudformation-update  # Install dependencies for the update script
+make cloudformation-update          # Fetch latest IAM actions and update the file
 ```
 This fetches the latest IAM actions from AWS and updates `pycfmodel/cloudformation_actions.py`.
 

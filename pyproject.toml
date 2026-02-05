@@ -47,6 +47,9 @@ docs = [
     "mkdocs==1.6.1",
     "mkdocstrings==0.28.3"
 ]
+cloudformation-update = [
+    "httpx>=0.14.2"
+]
 
 [tool.black]
 line-length = 120

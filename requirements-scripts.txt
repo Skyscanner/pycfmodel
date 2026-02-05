@@ -1,3 +1,0 @@
-# Dependencies for scripts in the scripts/ directory
-# Used by GitHub Actions workflows
-httpx==0.27.0

@@ -9,6 +9,12 @@ install-dev:
 install-docs:
 	pip install -r requirements.txt -r requirements-docs.txt .
 
+install-cloudformation-update:
+	pip install -r requirements.txt -r requirements-cloudformation-update.txt .
+
+cloudformation-update:
+	python3 scripts/generate_cloudformation_actions_file.py
+
 format: isort-format black-format
 
 isort-format:
@@ -55,8 +61,10 @@ freeze-dev:
 	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra dev $(FREEZE_OPTIONS) --output-file requirements-dev.txt
 freeze-docs:
 	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra docs $(FREEZE_OPTIONS) --output-file requirements-docs.txt
+freeze-cloudformation-update:
+	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra cloudformation-update $(FREEZE_OPTIONS) --output-file requirements-cloudformation-update.txt
 
-freeze: freeze-base freeze-dev freeze-docs
+freeze: freeze-base freeze-dev freeze-docs freeze-cloudformation-update
 
 freeze-base-upgrade:
 	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml $(FREEZE_OPTIONS) --upgrade --output-file requirements.txt
@@ -64,9 +72,12 @@ freeze-dev-upgrade:
 	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra dev $(FREEZE_OPTIONS) --upgrade --output-file requirements-dev.txt
 freeze-docs-upgrade:
 	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra docs $(FREEZE_OPTIONS) --upgrade --output-file requirements-docs.txt
+freeze-cloudformation-update-upgrade:
+	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra cloudformation-update $(FREEZE_OPTIONS) --upgrade --output-file requirements-cloudformation-update.txt
 
-freeze-upgrade: freeze-base-upgrade freeze-dev-upgrade freeze-docs-upgrade
+freeze-upgrade: freeze-base-upgrade freeze-dev-upgrade freeze-docs-upgrade freeze-cloudformation-update-upgrade
 
-.PHONY: install install-dev install-docs format isort-format black-format lint isort-lint black-lint flake8-lint unit \
-        coverage test freeze freeze-upgrade freeze-base freeze-dev freeze-docs freeze-base-upgrade freeze-dev-upgrade \
-        freeze-docs-upgrade
+.PHONY: install install-dev install-docs install-cloudformation-update format isort-format black-format lint isort-lint \
+        black-lint flake8-lint unit coverage test cloudformation-update freeze freeze-upgrade freeze-base freeze-dev \
+        freeze-docs freeze-cloudformation-update freeze-base-upgrade freeze-dev-upgrade freeze-docs-upgrade \
+        freeze-cloudformation-update-upgrade

@@ -27,10 +27,10 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install -r requirements-scripts.txt
+        run: make install-cloudformation-update
 
       - name: Generate CloudFormation actions file
-        run: python scripts/generate_cloudformation_actions_file.py
+        run: make cloudformation-update
 
       - name: Get current date
         id: date
