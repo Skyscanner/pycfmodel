@@ -1,58 +1,48 @@
-SOURCES = $(shell find . -name "*.py")
-
 install:
-	uv sync --no-dev
+	uv sync --no-dev --frozen
 
 install-dev:
-	uv sync --all-extras
+	uv sync --all-extras --frozen
 
 install-docs:
-	uv sync --extra docs
+	uv sync --extra docs --frozen
 
 install-cloudformation-update:
-	uv sync --extra cloudformation-update
+	uv sync --extra cloudformation-update --frozen
 
 cloudformation-update:
-	uv run python scripts/generate_cloudformation_actions_file.py
+	uv run --frozen python scripts/generate_cloudformation_actions_file.py
 
-format: isort-format black-format
+fix:
+	uv run --frozen ruff check --fix .
 
-isort-format:
-	uv run isort .
+format:
+	uv run --frozen isort .
+	uv run --frozen black .
 
-black-format:
-	uv run black .
-
-lint: isort-lint black-lint ruff-lint
-
-isort-lint:
-	uv run isort --check-only .
-
-black-lint:
-	uv run black --check .
-
-ruff-lint:
-	uv run ruff check .
+lint:
+	uv run --frozen isort --check-only .
+	uv run --frozen black --check .
+	uv run --frozen ruff check .
 
 unit:
-	uv run pytest -svvv tests
+	uv run --frozen pytest -svvv tests
 
 coverage:
-	uv run coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
-	uv run coverage report
-	uv run coverage xml -i -o build/coverage.xml
-	uv run coverage html
+	uv run --frozen coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
+	uv run --frozen coverage report
+	uv run --frozen coverage xml -i -o build/coverage.xml
+	uv run --frozen coverage html
 
-coverage-master:
-	uv run coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v -m "not actions"
-	uv run coverage report
-	uv run coverage xml -i -o build/coverage.xml
-	uv run coverage html
+coverage-html:
+	uv run --frozen coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
+	uv run --frozen coverage html
+	open htmlcov/index.html
 
 test: lint unit
 
 test-docs:
-	uv run mkdocs build --strict
+	uv run --frozen mkdocs build --strict
 
 lock:
 	uv lock --default-index https://pypi.org/simple
@@ -60,5 +50,5 @@ lock:
 lock-upgrade:
 	uv lock --upgrade --default-index https://pypi.org/simple
 
-.PHONY: install install-dev install-docs install-cloudformation-update format isort-format black-format lint isort-lint \
-        black-lint ruff-lint unit coverage coverage-master test test-docs cloudformation-update lock lock-upgrade
+.PHONY: install install-dev install-docs install-cloudformation-update cloudformation-update \
+        fix format lint unit coverage coverage-html test test-docs lock lock-upgrade
