@@ -37,9 +37,15 @@ make format               # Format code with isort and black
 ```
 
 ### Dependency Management
+
+**Important:** This is an open-source project. Always use the public PyPI repository, not internal package registries. If your uv config has a custom default index (e.g., artifactory), override it when updating the lock file:
+
 ```bash
 make lock                 # Update uv.lock file
 make lock-upgrade         # Upgrade all dependencies and update uv.lock
+
+# If you have a custom default index configured, use:
+uv lock --default-index https://pypi.org/simple
 ```
 
 ### Documentation

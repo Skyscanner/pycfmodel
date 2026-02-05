@@ -55,10 +55,10 @@ test-docs:
 	uv run mkdocs build --strict
 
 lock:
-	uv lock
+	uv lock --default-index https://pypi.org/simple
 
 lock-upgrade:
-	uv lock --upgrade
+	uv lock --upgrade --default-index https://pypi.org/simple
 
 .PHONY: install install-dev install-docs install-cloudformation-update format isort-format black-format lint isort-lint \
         black-lint ruff-lint unit coverage coverage-master test test-docs cloudformation-update lock lock-upgrade
