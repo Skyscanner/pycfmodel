@@ -200,13 +200,17 @@ def test_raise_error_if_invalid_fields_in_resource():
     with pytest.raises(ValidationError) as exc_info:
         OpenSearchDomain(**{"Type": "AWS::OpenSearchService::Domain", "Properties": {"DomainName": []}})
 
-    assert json.loads(exc_info.value.json()) == [
+    errors = json.loads(exc_info.value.json())
+    # Remove 'url' field from comparison as it contains pydantic version
+    for error in errors:
+        error.pop("url", None)
+
+    assert errors == [
         {
             "input": [],
             "loc": ["Properties", "OpenSearchDomainProperties", "DomainName", "str"],
             "msg": "Input should be a valid string",
             "type": "string_type",
-            "url": "https://errors.pydantic.dev/2.7/v/string_type",
         },
         {
             "ctx": {"error": "FunctionDict should only have 1 key and be a function"},
@@ -214,7 +218,6 @@ def test_raise_error_if_invalid_fields_in_resource():
             "loc": ["Properties", "OpenSearchDomainProperties", "DomainName", "FunctionDict"],
             "msg": "Value error, FunctionDict should only have 1 key and be a function",
             "type": "value_error",
-            "url": "https://errors.pydantic.dev/2.7/v/value_error",
         },
         {
             "ctx": {"error": "FunctionDict should only have 1 key and be a function"},
@@ -222,7 +225,6 @@ def test_raise_error_if_invalid_fields_in_resource():
             "loc": ["Properties", "FunctionDict"],
             "msg": "Value error, FunctionDict should only have 1 key and be a function",
             "type": "value_error",
-            "url": "https://errors.pydantic.dev/2.7/v/value_error",
         },
     ]
 
