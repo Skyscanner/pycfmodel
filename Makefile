@@ -10,7 +10,7 @@ install-docs:
 	pip install -r requirements.txt -r requirements-docs.txt .
 
 install-cloudformation-update:
-	pip install -r requirements.txt -r requirements-cloudformation-update.txt .
+	pip install -r requirements-cloudformation-update.txt .
 
 cloudformation-update:
 	python3 scripts/generate_cloudformation_actions_file.py
