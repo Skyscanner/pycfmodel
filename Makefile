@@ -34,6 +34,12 @@ coverage:
 	uv run --frozen coverage xml -i -o build/coverage.xml
 	uv run --frozen coverage html
 
+coverage-master:
+	uv run --frozen coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v -m "not actions"
+	uv run --frozen coverage report
+	uv run --frozen coverage xml -i -o build/coverage.xml
+	uv run --frozen coverage html
+
 coverage-html:
 	uv run --frozen coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
 	uv run --frozen coverage html
@@ -51,4 +57,4 @@ lock-upgrade:
 	uv lock --upgrade --default-index https://pypi.org/simple
 
 .PHONY: install install-dev install-docs install-cloudformation-update cloudformation-update \
-        fix format lint unit coverage coverage-html test test-docs lock lock-upgrade
+        fix format lint unit coverage coverage-master coverage-html test test-docs lock lock-upgrade
