@@ -1,6 +1,9 @@
 from datetime import date
 from typing import Any, ClassVar, Collection, Dict, List, Optional, Type, Union
 
+from pydantic import Field
+from typing_extensions import Annotated
+
 from pycfmodel.action_expander import expand_actions
 from pycfmodel.constants import AWS_NOVALUE
 from pycfmodel.model.base import CustomModel
@@ -10,6 +13,8 @@ from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.resources.types import ResourceModels
 from pycfmodel.model.types import Resolvable
 from pycfmodel.resolver import _extended_bool, resolve
+
+AllResourcesType = Annotated[Union[ResourceModels, GenericResource], Field(union_mode="left_to_right")]
 
 
 class CFModel(CustomModel):
@@ -35,7 +40,7 @@ class CFModel(CustomModel):
     More info for Globals at [AWS Globals Docs](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy-globals.html)
     """
 
-    AWSTemplateFormatVersion: Optional[date]
+    AWSTemplateFormatVersion: Optional[date] = None
     Conditions: Optional[Dict] = {}
     Description: Optional[str] = None
     Globals: Optional[Dict] = {}
@@ -43,9 +48,9 @@ class CFModel(CustomModel):
     Metadata: Optional[Dict[str, Any]] = None
     Outputs: Optional[Dict[str, Dict[str, Union[str, Dict]]]] = {}
     Parameters: Optional[Dict[str, Parameter]] = {}
-    Resources: Dict[str, Resolvable[Union[ResourceModels, GenericResource]]] = {}
+    Resources: Dict[str, Resolvable[AllResourcesType]] = {}
     Rules: Optional[Dict] = {}
-    Transform: Optional[Union[str, List[str]]]
+    Transform: Optional[Union[str, List[str]]] = None
 
     PSEUDO_PARAMETERS: ClassVar[Dict[str, Union[str, List[str]]]] = {
         # default pseudo parameters
@@ -79,7 +84,7 @@ class CFModel(CustomModel):
                 params[key] = ref_value
 
         extended_parameters = {**self.PSEUDO_PARAMETERS, **params, **extra_params}
-        dict_value = self.dict()
+        dict_value = self.model_dump()
 
         conditions = dict_value.pop("Conditions", {})
         resolved_conditions = {}
@@ -122,7 +127,7 @@ class CFModel(CustomModel):
         python3 scripts/generate_cloudformation_actions_file.py
         ```
         """
-        dict_value = self.dict()
+        dict_value = self.model_dump()
 
         resources = dict_value.pop("Resources")
         expanded_resources = {key: expand_actions(value) for key, value in resources.items()}

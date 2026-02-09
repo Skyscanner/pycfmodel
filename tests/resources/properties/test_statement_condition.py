@@ -68,12 +68,12 @@ def test_all_possible_conditions():
         all_operators.add(f"ForAllValues{operator}")
         all_operators.add(f"ForAnyValue{operator}")
 
-    implemented_operators = sorted(StatementCondition.schema()["properties"].keys())
+    implemented_operators = sorted(StatementCondition.model_json_schema()["properties"].keys())
     assert implemented_operators == sorted(all_operators)
 
 
 def test_statement_condition_remove_colon():
-    assert StatementCondition.parse_obj(
+    assert StatementCondition.model_validate(
         {
             "ForAllValues:ArnEqualsIfExists": {"patata_1": "test_1"},
             "ForAnyValue:ArnEquals": {"patata_2": ["test_2", "test_3"]},
@@ -669,7 +669,7 @@ def test_statement_condition_eval_all_conditions_are_true(
 
 def test_statement_condition_without_resolving_raises_error():
     statement_condition_raw = {"StringLike": {"patata": {"Fn::Sub": "${ClusterId}*"}}}
-    statement_condition = StatementCondition.parse_obj(statement_condition_raw)
+    statement_condition = StatementCondition.model_validate(statement_condition_raw)
     with pytest.raises(StatementConditionBuildEvaluatorError):
         statement_condition.eval({"patata": "test_cluster"})
 
@@ -677,5 +677,5 @@ def test_statement_condition_without_resolving_raises_error():
 def test_statement_condition_with_resolver_works_fine():
     statement_condition_raw = {"StringLike": {"patata": {"Fn::Sub": "${ClusterId}*"}}}
     resolved_statement_condition_raw = resolve(statement_condition_raw, {"ClusterId": "test_cluster"}, {}, {})
-    resolved_statement_condition = StatementCondition.parse_obj(resolved_statement_condition_raw)
+    resolved_statement_condition = StatementCondition.model_validate(resolved_statement_condition_raw)
     assert resolved_statement_condition.eval({"patata": "test_cluster"}) is True

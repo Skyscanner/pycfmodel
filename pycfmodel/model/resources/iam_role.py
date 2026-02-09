@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional
+from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy import Policy
@@ -44,8 +44,7 @@ class IAMRole(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::IAM::Role"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::IAM::Role"]
     Properties: Resolvable[IAMRoleProperties]
 
     @property

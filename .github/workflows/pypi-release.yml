@@ -6,24 +6,32 @@ on:
 
 jobs:
   build:
+    name: Upload release to PyPI
     runs-on: ubuntu-latest
-
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pycfmodel
+    permissions:
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@0c5e2b8115b80b4c7c5ddf6ffdd634974642d182 # v5.4.1
+        with:
+          enable-cache: false  # Disable cache for release builds to prevent cache poisoning
 
       - name: Setup python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.7'
+        run: uv python install 3.9
 
-      - run: pip install setuptools wheel
-
-      - run: make install
-
-      - name: Build a binary wheel
-        run: python setup.py sdist bdist_wheel
+      - name: Build package
+        run: uv build
 
       - name: Publish distribution 📦 to PyPI
-        uses: pypa/gh-action-pypi-publish@master
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
         with:
-          password: ${{ secrets.pypi_password }}
+          # zizmor: ignore[use-trusted-publishing] https://github.com/pypi/warehouse/issues/17700
+          user: __token__
+          password: ${{ secrets.pypi_publish_token }}

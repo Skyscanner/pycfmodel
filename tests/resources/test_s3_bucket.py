@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from pydantic import ValidationError
 
@@ -50,31 +52,50 @@ def test_extra_fields_not_allowed_s3_bucket():
             }
         )
 
-    assert exc_info.value.errors() == [
+    errors = json.loads(exc_info.value.json())
+    # Remove 'url' field from comparison as it contains pydantic version
+    for error in errors:
+        error.pop("url", None)
+
+    assert errors == [
         {
-            "loc": ("Properties", "AccelerateConfiguration"),
-            "msg": "value is not a valid dict",
-            "type": "type_error.dict",
-        },
-        {
-            "loc": ("Properties", "AccelerateConfiguration"),
-            "msg": "value is not a valid dict",
-            "type": "type_error.dict",
-        },
-        {
-            "loc": ("Properties", "AnalyticsConfigurations"),
-            "msg": "value is not a valid list",
-            "type": "type_error.list",
-        },
-        {
-            "loc": ("Properties", "AnalyticsConfigurations", "__root__"),
-            "msg": "FunctionDict should only have 1 key and be a function",
+            "ctx": {"error": "Not supported type: <class 'str'>"},
+            "input": "None",
+            "loc": ["Properties", "S3BucketProperties", "AccelerateConfiguration", "Generic"],
+            "msg": "Value error, Not supported type: <class 'str'>",
             "type": "value_error",
         },
-        {"loc": ("Properties", "foo"), "msg": "extra fields not permitted", "type": "value_error.extra"},
         {
-            "loc": ("Properties", "__root__"),
-            "msg": "FunctionDict should only have 1 key and be a function",
+            "ctx": {"error": "FunctionDict should only have 1 key and be a function"},
+            "input": "None",
+            "loc": ["Properties", "S3BucketProperties", "AccelerateConfiguration", "FunctionDict"],
+            "msg": "Value error, FunctionDict should only have 1 key and be a function",
+            "type": "value_error",
+        },
+        {
+            "input": {"a": "b"},
+            "loc": ["Properties", "S3BucketProperties", "AnalyticsConfigurations", "list[union[Generic,FunctionDict]]"],
+            "msg": "Input should be a valid list",
+            "type": "list_type",
+        },
+        {
+            "ctx": {"error": "FunctionDict should only have 1 key and be a function"},
+            "input": {"a": "b"},
+            "loc": ["Properties", "S3BucketProperties", "AnalyticsConfigurations", "FunctionDict"],
+            "msg": "Value error, FunctionDict should only have 1 key and be a function",
+            "type": "value_error",
+        },
+        {
+            "input": "bar",
+            "loc": ["Properties", "S3BucketProperties", "foo"],
+            "msg": "Extra inputs are not permitted",
+            "type": "extra_forbidden",
+        },
+        {
+            "ctx": {"error": "FunctionDict should only have 1 key and be a function"},
+            "input": {"AccelerateConfiguration": "None", "AnalyticsConfigurations": {"a": "b"}, "foo": "bar"},
+            "loc": ["Properties", "FunctionDict"],
+            "msg": "Value error, FunctionDict should only have 1 key and be a function",
             "type": "value_error",
         },
     ]

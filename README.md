@@ -51,6 +51,7 @@ inspecting CloudFormation scripts.
     * Security Group Ingress
     * SNS Topic Policy
     * SQS Queue Policy
+    * WAFv2 IP Set
 * Transform
 
 ## Example
@@ -108,16 +109,22 @@ assert rootRole.Properties.AssumeRolePolicyDocument.Statement[0].Principal == {"
 
 ## Local Development Commands
 
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
+
 ```bash
-make install-dev
-make coverage
-make test
-make freeze
+make install-dev    # Install all development dependencies
+make coverage       # Run tests with coverage
+make test           # Run linting and tests
+make lock           # Update uv.lock file
+make lock-upgrade   # Upgrade all dependencies and update uv.lock
 ```
+
+### Updating CloudFormation Actions
 
 If the test `tests/test_constants.py::test_cloudformation_actions` is failing, it can be resolved by updating the known
 AWS Actions:
 
 ```bash
-python3 scripts/generate_cloudformation_actions_file.py
+make install-cloudformation-update
+make cloudformation-update
 ```

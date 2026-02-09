@@ -4,14 +4,19 @@ from datetime import date
 from ipaddress import IPv4Network, IPv6Network
 from typing import Dict, List, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing_extensions import Annotated
 
 from pycfmodel.constants import AWS_NOVALUE, CONTAINS_CF_PARAM, CONTAINS_SSM_PARAMETER
+from pycfmodel.model.base import FunctionDict
 from pycfmodel.utils import is_resolvable_dict
 
 logger = logging.getLogger(__file__)
 
-ValidResolvers = Union[str, int, bool, float, List, Dict, date]
+ValidResolvers = Annotated[
+    Union[str, int, bool, float, List, Dict, date],
+    Field(union_mode="left_to_right"),
+]
 
 
 def _extended_bool(value) -> bool:
@@ -47,6 +52,11 @@ def resolve(function: ValidResolvers, params: Dict, mappings: Dict[str, Dict], c
             if resolved_value != AWS_NOVALUE:
                 result.append(resolved_value)
         return result
+
+    if isinstance(function, FunctionDict):
+        function_name = next(iter(function.model_fields_set))
+        function_resolver = FUNCTION_MAPPINGS[function_name]
+        return function_resolver(getattr(function, function_name), params, mappings, conditions)
 
     if isinstance(function, dict):
         if is_resolvable_dict(function):
@@ -127,7 +137,14 @@ def resolve_select(function_body, params: Dict, mappings: Dict[str, Dict], condi
     index, list_values = function_body
     resolved_index = int(resolve(index, params, mappings, conditions))
     resolved_list = resolve(list_values, params, mappings, conditions)
-    return resolved_list[resolved_index]
+    try:
+        return resolved_list[resolved_index]
+    except IndexError:
+        # In some scenarios, pycfmodel can't resolve some references within resources
+        # Such as GETATT, making in Selects lists smaller than the desired index.
+        # Instead of failing at resolving the model, we will return an empty list instead.
+        logger.warning("Index is bigger than resolved list, returning empty list.")
+        return []
 
 
 def resolve_split(function_body, params: Dict, mappings: Dict[str, Dict], conditions: Dict[str, bool]) -> List[str]:

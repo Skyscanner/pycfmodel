@@ -1,4 +1,4 @@
-from typing import ClassVar, Optional
+from typing import Literal, Optional
 
 from pycfmodel.model.resources.properties.security_group_egress_prop import SecurityGroupEgressProp
 from pycfmodel.model.resources.resource import Resource
@@ -34,8 +34,7 @@ class SecurityGroupEgress(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-security-group-egress.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroupEgress"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::EC2::SecurityGroupEgress"]
     Properties: SecurityGroupEgressProperties
 
     def ipv4_slash_zero(self) -> bool:

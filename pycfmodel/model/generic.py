@@ -2,7 +2,8 @@ import json
 from contextlib import suppress
 from typing import Union
 
-from pydantic import BaseModel, Extra, ValidationError, root_validator, validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
+from typing_extensions import Annotated
 
 from pycfmodel.model.base import FunctionDict
 from pycfmodel.model.resources.properties.types import Properties
@@ -18,21 +19,27 @@ from pycfmodel.model.types import (
     ResolvableStrOrList,
 )
 
-
-class _Auxiliar(BaseModel):
-    aux: Union[
+AuxType = Annotated[
+    Union[
         FunctionDict,
         Properties,
         ResolvableBoolOrList,
         ResolvableIntOrList,
-        ResolvableDatetimeOrList,
         ResolvableDateOrList,
+        ResolvableDatetimeOrList,  # Date can be parsed as Datetime in pydantic v2 so should be ordered accordingly
         ResolvableIPOrList,
         ResolvableArnOrList,
         ResolvableStrOrList,
-    ]
+    ],
+    Field(union_mode="left_to_right"),
+]
 
-    @validator("aux", pre=True)
+
+class _Auxiliar(BaseModel):
+    aux: AuxType
+
+    @field_validator("aux", mode="before")
+    @classmethod
     def validate_string_property_formatted_as_json(cls, value):
         """
         We have detected some properties that are defined as String in CloudFormation but including a
@@ -58,12 +65,12 @@ class _Auxiliar(BaseModel):
             for v in value:
                 v = _Auxiliar.cast(v)
                 if isinstance(v, dict):
-                    v = Generic.parse_obj(v)
+                    v = Generic.model_validate(v)
                 auxiliar_list.append(v)
             value = auxiliar_list
 
         if isinstance(value, dict):
-            value = Generic.parse_obj(value)
+            value = Generic.model_validate(value)
 
         return value
 
@@ -71,12 +78,14 @@ class _Auxiliar(BaseModel):
 class Generic(BaseModel):
     """Any property under this class will be cast to an existing model of `pycfmodel` if possible."""
 
-    class Config(BaseModel.Config):
-        extra = Extra.allow
+    model_config = ConfigDict(extra="allow")
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
+    @classmethod
     def casting(cls, values):
-        return {k: _Auxiliar.cast(v) for k, v in values.items()}
+        if isinstance(values, dict):
+            return {k: _Auxiliar.cast(v) for k, v in values.items()}
+        raise ValueError(f"Not supported type: {type(values)}")
 
 
 ResolvableGeneric = Resolvable[Generic]

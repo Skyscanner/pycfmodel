@@ -1,4 +1,4 @@
-from typing import ClassVar, List
+from typing import List, Literal
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
@@ -30,8 +30,7 @@ class S3BucketPolicy(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::S3::BucketPolicy"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::S3::BucketPolicy"]
     Properties: Resolvable[S3BucketPolicyProperties]
 
     @property

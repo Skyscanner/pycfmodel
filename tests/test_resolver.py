@@ -4,8 +4,10 @@ from typing import Dict, List
 import pytest
 
 from pycfmodel import parse
+from pycfmodel.model.generic import Generic
 from pycfmodel.model.resources.generic_resource import GenericResource
 from pycfmodel.model.resources.kms_key import KMSKey
+from pycfmodel.model.resources.properties.statement import Principal
 from pycfmodel.resolver import resolve, resolve_find_in_map
 
 
@@ -90,14 +92,46 @@ def test_sub(function, expected_output):
         ({"Fn::Select": ["0", ["apples", "grapes", "oranges", "mangoes"]]}, "apples"),
         ({"Fn::Select": ["1", ["apples", "grapes", "oranges", "mangoes"]]}, "grapes"),
         ({"Fn::Select": ["2", ["apples", "grapes", "oranges", "mangoes"]]}, "oranges"),
+        ({"Fn::Select": ["1", ["apples"]]}, []),
     ],
 )
 def test_select(function, expected_output):
-    parameters = {}
-    mappings = {}
-    conditions = {}
+    assert resolve(function=function, params={}, mappings={}, conditions={}) == expected_output
 
-    assert resolve(function, parameters, mappings, conditions) == expected_output
+
+def test_select_index_bigger_than_list_does_not_fail_resolving_stack():
+    template = {
+        "Resources": {
+            "RecordSetGroup": {
+                "Type": "AWS::Route53::RecordSetGroup",
+                "Properties": {
+                    "HostedZoneId": "ZONEID",
+                    "RecordSets": [
+                        {
+                            "Name": "*.domain.io",
+                            "ResourceRecords": [
+                                {
+                                    "Fn::Select": [
+                                        1,
+                                        {
+                                            "Fn::Split": [
+                                                ":",
+                                                "UNSPLITTABLE_STRING_RESOLVED_FROM_OTHER_FUNCTIONS",
+                                            ]
+                                        },
+                                    ]
+                                }
+                            ],
+                        }
+                    ],
+                },
+            },
+        }
+    }
+
+    model = parse(template).resolve()
+    resource = model.Resources["RecordSetGroup"]
+    assert isinstance(resource, GenericResource)
 
 
 @pytest.mark.parametrize(
@@ -559,7 +593,9 @@ def test_resolve_scenario_1():
 
     assert statement.Action == "*"
     assert statement.Resource == "*"
-    assert role.Properties.AssumeRolePolicyDocument.Statement[0].Principal == {"AWS": "arn:aws:iam::123:root"}
+    assert role.Properties.AssumeRolePolicyDocument.Statement[0].Principal == Principal(
+        AWS="arn:aws:iam::123:root", CanonicalUser=None, Federated=None, Service=None
+    )
 
 
 def test_resolve_scenario_2():
@@ -693,10 +729,9 @@ def test_resolve_ssm():
         },
     }
     model = parse(template).resolve(extra_params={"some-service-arn:1": "vpc-123-abc"})
-    assert model.Resources["InstanceHTTPTargets"].Properties == {
-        "Cluster": "UNDEFINED_PARAM_main-k8s-cluster-arn:3",
-        "ServiceArn": "vpc-123-abc",
-    }
+    assert model.Resources["InstanceHTTPTargets"].Properties == Generic(
+        ServiceArn="vpc-123-abc", Cluster="UNDEFINED_PARAM_main-k8s-cluster-arn:3"
+    )
 
 
 def test_resolve_booleans():

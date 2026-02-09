@@ -1,5 +1,46 @@
+> ### This file is no longer used to track changes.
+> ### Please check the [releases](https://github.com/Skyscanner/pycfmodel/releases) page of this repo for future changelog information 
+
+
 # Change Log
 All notable changes to this project will be documented in this file.
+
+## 1.1.1
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+- Update dependency constraint on docs requirements.
+### Fixes
+- Fixes security issue https://github.com/Skyscanner/pycfmodel/security/dependabot/19
+
+## 1.1.0
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+- Add a `_strict` option in GenericResource. Defaulting to True. See docs for more info
+
+## 1.0.1
+### Breaking changes
+- Drops python 3.8 support due to pydantic upgrade
+### Fixes
+- Fixes security issue https://github.com/Skyscanner/pycfmodel/security/dependabot/13
+- Fixes IndexError when resolving selecting from lists of unresolved values
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
+- Bumps several dependencies
+
+## 1.0.0
+### Breaking changes
+- Pydantic updated to v2 including a reformat of the repository to comply with the new API.
+- Drops python 3.7 support due to pydantic upgrade
+
+## 0.22.0
+### Fixes
+- KeyPolicy made optional for KMS Key resource type.
+
+## 0.21.2
+### Fixes
+- Add the BypassPolicyLockoutSafetyCheck and Origin fields in the KMS resource
+### Updates
+- Update `CLOUDFORMATION_ACTIONS`.
 
 ## 0.21.1
 ### Fixes

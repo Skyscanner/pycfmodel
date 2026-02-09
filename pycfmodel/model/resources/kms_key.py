@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional
+from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.policy_document import PolicyDocument
@@ -24,13 +24,15 @@ class KMSKeyProperties(CustomModel):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html)
     """
 
+    BypassPolicyLockoutSafetyCheck: Optional[ResolvableBool] = None
     Description: Optional[ResolvableStr] = None
-    EnableKeyRotation: Optional[ResolvableBool] = None
     Enabled: Optional[ResolvableBool] = None
-    KeyPolicy: Resolvable[PolicyDocument]
-    KeyUsage: Optional[ResolvableStr] = None
+    EnableKeyRotation: Optional[ResolvableBool] = None
+    KeyPolicy: Optional[Resolvable[PolicyDocument]] = None
     KeySpec: Optional[ResolvableStr] = None
+    KeyUsage: Optional[ResolvableStr] = None
     MultiRegion: Optional[ResolvableBool] = None
+    Origin: Optional[ResolvableStr] = None
     PendingWindowInDays: Optional[ResolvableInt] = None
     Tags: Optional[Resolvable[List[Tag]]] = None
 
@@ -44,6 +46,5 @@ class KMSKey(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kms-key.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::KMS::Key"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::KMS::Key"]
     Properties: Resolvable[KMSKeyProperties]

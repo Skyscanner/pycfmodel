@@ -1,10 +1,12 @@
 import json
 
 import httpx
+import pytest
 
 from pycfmodel.cloudformation_actions import CLOUDFORMATION_ACTIONS
 
 
+@pytest.mark.actions
 def test_cloudformation_actions():
     response = httpx.get("https://awspolicygen.s3.amazonaws.com/js/policies.js")
     response.raise_for_status()

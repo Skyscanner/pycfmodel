@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional, Union
+from typing import List, Literal, Optional, Union
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.security_group_egress_prop import SecurityGroupEgressProp
@@ -46,8 +46,7 @@ class SecurityGroup(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::EC2::SecurityGroup"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::EC2::SecurityGroup"]
     Properties: Resolvable[SecurityGroupProperties]
 
 
@@ -64,12 +63,11 @@ class RDSDBSecurityGroupProperties(CustomModel):
     """
 
     DBSecurityGroupIngress: List[DBSecurityGroupIngressProp]
-    EC2VpcId: Optional[ResolvableStr]
+    EC2VpcId: Optional[ResolvableStr] = None
     GroupDescription: ResolvableStr
     Tags: Optional[Resolvable[List[Tag]]] = None
 
 
 class RDSDBSecurityGroup(Resource):
-    TYPE_VALUE: ClassVar = "AWS::RDS::DBSecurityGroup"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::RDS::DBSecurityGroup"]
     Properties: Resolvable[RDSDBSecurityGroupProperties]

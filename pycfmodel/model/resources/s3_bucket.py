@@ -1,4 +1,4 @@
-from typing import ClassVar, List, Optional
+from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.generic import ResolvableGeneric
@@ -66,6 +66,5 @@ class S3Bucket(Resource):
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html)
     """
 
-    TYPE_VALUE: ClassVar = "AWS::S3::Bucket"
-    Type: str = TYPE_VALUE
+    Type: Literal["AWS::S3::Bucket"]
     Properties: Resolvable[S3BucketProperties]

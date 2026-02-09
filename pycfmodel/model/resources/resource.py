@@ -1,7 +1,5 @@
 from typing import Any, ClassVar, Dict, List, Optional
 
-from pydantic import validator
-
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.generic import Generic
 from pycfmodel.model.parameter import Parameter
@@ -22,12 +20,6 @@ class Resource(CustomModel):
     Metadata: Optional[Dict] = None
     UpdatePolicy: Optional[Dict] = None
     UpdateReplacePolicy: Optional[ResolvableStr] = None
-
-    @validator("Type")
-    def check_type(cls, value):
-        if value != cls.TYPE_VALUE:
-            raise ValueError(f"Value needs to be {cls.TYPE_VALUE}")
-        return value
 
     def has_hardcoded_credentials(self) -> bool:
         if not self.Metadata or not self.Metadata.get("AWS::CloudFormation::Authentication"):
@@ -56,9 +48,11 @@ class Resource(CustomModel):
         if self.Properties is None:
             return policy_documents
 
-        self.obtain_policy_documents(
-            policy_documents=policy_documents, properties=list(self.Properties.__dict__.values())
-        )
+        properties_list = []
+        for field in self.Properties.model_fields_set:
+            properties_list.append(getattr(self.Properties, field))
+
+        self.obtain_policy_documents(policy_documents=policy_documents, properties=properties_list)
         return policy_documents
 
     def obtain_policy_documents(self, policy_documents: List, properties: List[Any]):
@@ -79,9 +73,11 @@ class Resource(CustomModel):
             elif isinstance(property_type, list):
                 self.obtain_policy_documents(policy_documents=policy_documents, properties=property_type)
             elif isinstance(property_type, Generic):
-                self.obtain_policy_documents(
-                    policy_documents=policy_documents, properties=list(property_type.__dict__.values())
-                )
+                properties_list = []
+                for field in property_type.model_fields_set:
+                    properties_list.append(getattr(property_type, field))
+
+                self.obtain_policy_documents(policy_documents=policy_documents, properties=properties_list)
 
     @property
     def all_statement_conditions(self) -> List[StatementCondition]:

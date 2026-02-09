@@ -1,7 +1,7 @@
 import logging
 from typing import List, Optional, Pattern, Union
 
-from pydantic import validator
+from pydantic import field_validator
 
 from pycfmodel.action_expander import _expand_action
 from pycfmodel.model.base import FunctionDict
@@ -10,7 +10,7 @@ from pycfmodel.model.resources.properties.statement_condition import StatementCo
 from pycfmodel.model.types import ResolvableStr, ResolvableStrOrList
 from pycfmodel.utils import is_resolvable_dict
 
-logger = logging.getLogger(__file__)
+logger = logging.getLogger(__name__)
 
 
 class Principal(Property):
@@ -52,7 +52,8 @@ class Statement(Property):
     NotResource: Optional[ResolvableStrOrList] = None
     Condition: Optional[StatementCondition] = None
 
-    @validator("Effect")
+    @field_validator("Effect")
+    @classmethod
     def allowed_values_for_effect_and_capitalized(cls, v: ResolvableStr):
         if isinstance(v, str):
             v = v.capitalize()
@@ -121,7 +122,7 @@ class Statement(Property):
             elif is_resolvable_dict(principals):
                 principal_list.append(principals)
             elif isinstance(principals, Principal):
-                for value in principals.dict().values():
+                for value in principals.model_dump().values():
                     if isinstance(value, (str, FunctionDict)):
                         principal_list.append(value)
                     elif isinstance(value, list):

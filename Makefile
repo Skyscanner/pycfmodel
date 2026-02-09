@@ -1,51 +1,54 @@
-SOURCES = $(shell find . -name "*.py")
-
 install:
-	pip install -r requirements.txt
+	uv sync --no-dev --frozen
 
-install-dev: install
-	pip install -e ".[dev]"
+install-dev:
+	uv sync --all-extras --frozen
 
 install-docs:
-	pip install -e ".[dev,docs]"
+	uv sync --extra docs --frozen
 
-format: isort-format black-format
+install-cloudformation-update:
+	uv sync --extra cloudformation-update --frozen
 
-isort-format:
-	isort .
+cloudformation-update:
+	uv run --frozen python scripts/generate_cloudformation_actions_file.py
 
-black-format:
-	black .
+fix:
+	uv run --frozen ruff check --fix .
 
-lint: isort-lint black-lint flake8-lint
+format:
+	uv run --frozen isort .
+	uv run --frozen black .
 
-isort-lint:
-	isort --check-only .
-
-black-lint:
-	black --check .
-
-flake8-lint:
-	flake8 .
+lint:
+	uv run --frozen isort --check-only .
+	uv run --frozen black --check .
+	uv run --frozen ruff check .
 
 unit:
-	pytest -svvv tests
+	uv run --frozen pytest -svvv tests
 
 coverage:
-	coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
-	coverage report
-	coverage xml -i -o build/coverage.xml
-	coverage html
+	uv run --frozen coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
+	uv run --frozen coverage report
+	uv run --frozen coverage xml -i -o build/coverage.xml
+	uv run --frozen coverage html
+
+coverage-html:
+	uv run --frozen coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
+	uv run --frozen coverage html
+	open htmlcov/index.html
 
 test: lint unit
 
 test-docs:
-	mkdocs build --strict
+	uv run --frozen mkdocs build --strict
 
-freeze:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile --no-emit-index-url --no-annotate --output-file requirements.txt setup.py
+lock:
+	uv lock --default-index https://pypi.org/simple
 
-freeze-upgrade:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile --no-emit-index-url --upgrade --no-annotate --output-file requirements.txt setup.py
+lock-upgrade:
+	uv lock --upgrade --default-index https://pypi.org/simple
 
-.PHONY: install install-dev install-docs format isort-format black-format lint isort-lint black-lint flake8-lint unit coverage test freeze freeze-upgrade
+.PHONY: install install-dev install-docs install-cloudformation-update cloudformation-update \
+        fix format lint unit coverage coverage-html test test-docs lock lock-upgrade
