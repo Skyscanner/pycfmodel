@@ -14,6 +14,8 @@ Core functionality:
 
 ## Development Commands
 
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
+
 ### Setup
 ```bash
 make install-dev          # Install all development dependencies
@@ -23,8 +25,8 @@ make install-dev          # Install all development dependencies
 ```bash
 make test                 # Run linting and unit tests
 make unit                 # Run only unit tests
-pytest -svvv tests        # Run tests with verbose output
-pytest tests/path/to/test.py::test_name  # Run a specific test
+uv run pytest -svvv tests # Run tests with verbose output
+uv run pytest tests/path/to/test.py::test_name  # Run a specific test
 make coverage             # Run tests with coverage report
 ```
 
@@ -35,9 +37,15 @@ make format               # Format code with isort and black
 ```
 
 ### Dependency Management
+
+**Important:** This is an open-source project. Always use the public PyPI repository, not internal package registries. If your uv config has a custom default index (e.g., artifactory), override it when updating the lock file:
+
 ```bash
-make freeze               # Regenerate all requirements files from pyproject.toml
-make freeze-upgrade       # Upgrade all dependencies and regenerate requirements files
+make lock                 # Update uv.lock file
+make lock-upgrade         # Upgrade all dependencies and update uv.lock
+
+# If you have a custom default index configured, use:
+uv lock --default-index https://pypi.org/simple
 ```
 
 ### Documentation
