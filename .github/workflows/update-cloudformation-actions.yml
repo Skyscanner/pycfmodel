@@ -21,25 +21,33 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@0c5e2b8115b80b4c7c5ddf6ffdd634974642d182 # v5.4.1
+
       - name: Setup python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-        with:
-          python-version: '3.12'
+        run: uv python install 3.12
 
       - name: Install dependencies
-        run: pip install -r requirements-scripts.txt
+        run: make install-cloudformation-update
 
       - name: Generate CloudFormation actions file
-        run: python scripts/generate_cloudformation_actions_file.py
+        run: make cloudformation-update
 
       - name: Get current date
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
 
+      - name: Generate GitHub App token
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+        id: app-token
+        with:
+          app-id: ${{ vars.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           commit-message: "Update CloudFormation actions"
           title: "Update CloudFormation actions (${{ steps.date.outputs.date }})"
           body: |

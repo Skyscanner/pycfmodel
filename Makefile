@@ -1,72 +1,54 @@
-SOURCES = $(shell find . -name "*.py")
-
 install:
-	pip install -r requirements.txt
+	uv sync --no-dev --frozen
 
 install-dev:
-	pip install -r requirements.txt -r requirements-dev.txt .
+	uv sync --all-extras --frozen
 
 install-docs:
-	pip install -r requirements.txt -r requirements-docs.txt .
+	uv sync --extra docs --frozen
 
-format: isort-format black-format
+install-cloudformation-update:
+	uv sync --extra cloudformation-update --frozen
 
-isort-format:
-	isort .
+cloudformation-update:
+	uv run --frozen python scripts/generate_cloudformation_actions_file.py
 
-black-format:
-	black .
+fix:
+	uv run --frozen ruff check --fix .
 
-lint: isort-lint black-lint ruff-lint
+format:
+	uv run --frozen isort .
+	uv run --frozen black .
 
-isort-lint:
-	isort --check-only .
-
-black-lint:
-	black --check .
-
-ruff-lint:
-	ruff check .
+lint:
+	uv run --frozen isort --check-only .
+	uv run --frozen black --check .
+	uv run --frozen ruff check .
 
 unit:
-	pytest -svvv tests
+	uv run --frozen pytest -svvv tests
 
 coverage:
-	coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
-	coverage report
-	coverage xml -i -o build/coverage.xml
-	coverage html
+	uv run --frozen coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
+	uv run --frozen coverage report
+	uv run --frozen coverage xml -i -o build/coverage.xml
+	uv run --frozen coverage html
 
-coverage-master:
-	coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v -m "not actions"
-	coverage report
-	coverage xml -i -o build/coverage.xml
-	coverage html
+coverage-html:
+	uv run --frozen coverage run --source=pycfmodel --branch -m pytest tests/ --junitxml=build/test.xml -v
+	uv run --frozen coverage html
+	open htmlcov/index.html
 
 test: lint unit
 
 test-docs:
-	mkdocs build --strict
+	uv run --frozen mkdocs build --strict
 
-FREEZE_OPTIONS = --no-emit-index-url --no-annotate -v --resolver=backtracking
-freeze-base:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml $(FREEZE_OPTIONS) --output-file requirements.txt
-freeze-dev:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra dev $(FREEZE_OPTIONS) --output-file requirements-dev.txt
-freeze-docs:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra docs $(FREEZE_OPTIONS) --output-file requirements-docs.txt
+lock:
+	uv lock --default-index https://pypi.org/simple
 
-freeze: freeze-base freeze-dev freeze-docs
+lock-upgrade:
+	uv lock --upgrade --default-index https://pypi.org/simple
 
-freeze-base-upgrade:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml $(FREEZE_OPTIONS) --upgrade --output-file requirements.txt
-freeze-dev-upgrade:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra dev $(FREEZE_OPTIONS) --upgrade --output-file requirements-dev.txt
-freeze-docs-upgrade:
-	CUSTOM_COMPILE_COMMAND="make freeze" pip-compile pyproject.toml --extra docs $(FREEZE_OPTIONS) --upgrade --output-file requirements-docs.txt
-
-freeze-upgrade: freeze-base-upgrade freeze-dev-upgrade freeze-docs-upgrade
-
-.PHONY: install install-dev install-docs format isort-format black-format lint isort-lint black-lint flake8-lint unit \
-        coverage test freeze freeze-upgrade freeze-base freeze-dev freeze-docs freeze-base-upgrade freeze-dev-upgrade \
-        freeze-docs-upgrade
+.PHONY: install install-dev install-docs install-cloudformation-update cloudformation-update \
+        fix format lint unit coverage coverage-html test test-docs lock lock-upgrade
