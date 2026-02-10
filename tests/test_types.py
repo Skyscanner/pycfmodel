@@ -1,10 +1,12 @@
 import json
 from ipaddress import IPv4Network, IPv6Network
+from typing import Optional
 
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from pycfmodel.model.types import LooseIPv4Network, LooseIPv6Network
+from pycfmodel.model.base import CustomModel, FunctionDict
+from pycfmodel.model.types import LooseIPv4Network, LooseIPv6Network, ResolvableModel, ResolvableStr
 
 
 def test_loose_ip_v4_network_type():
@@ -255,3 +257,132 @@ def test_loose_ip_v6_network_fails(value, errors):
     for error in actual_errors:
         error.pop("url", None)
     assert actual_errors == errors
+
+
+# ResolvableModel tests
+
+
+class NestedModel(CustomModel):
+    """A nested model for testing ResolvableModel."""
+
+    field1: ResolvableStr
+    field2: Optional[ResolvableStr] = None
+
+
+ResolvableNestedModel = ResolvableModel(NestedModel)
+
+
+class ParentModel(CustomModel):
+    """A parent model that uses ResolvableModel for nested types."""
+
+    nested: Optional[ResolvableNestedModel] = None
+    nested_required: ResolvableNestedModel
+
+
+def test_resolvable_model_accepts_dict():
+    """ResolvableModel should accept a dict and convert it to the model."""
+    result = ParentModel(
+        nested={"field1": "value1", "field2": "value2"},
+        nested_required={"field1": "required_value"},
+    )
+
+    assert isinstance(result.nested, NestedModel)
+    assert result.nested.field1 == "value1"
+    assert result.nested.field2 == "value2"
+    assert isinstance(result.nested_required, NestedModel)
+    assert result.nested_required.field1 == "required_value"
+
+
+def test_resolvable_model_accepts_model_instance():
+    """ResolvableModel should accept an existing model instance."""
+    nested_instance = NestedModel(field1="value1")
+    result = ParentModel(nested=nested_instance, nested_required=nested_instance)
+
+    assert result.nested is nested_instance
+    assert result.nested_required is nested_instance
+
+
+def test_resolvable_model_accepts_ref():
+    """ResolvableModel should accept a Ref intrinsic function."""
+    result = ParentModel(
+        nested={"Ref": "NestedParam"},
+        nested_required={"Ref": "RequiredNestedParam"},
+    )
+
+    assert isinstance(result.nested, FunctionDict)
+    assert result.nested.Ref == "NestedParam"
+    assert isinstance(result.nested_required, FunctionDict)
+    assert result.nested_required.Ref == "RequiredNestedParam"
+
+
+def test_resolvable_model_accepts_fn_sub():
+    """ResolvableModel should accept Fn::Sub intrinsic function."""
+    result = ParentModel(
+        nested={"Fn::Sub": "${Param}"},
+        nested_required={"Fn::Sub": "required-${Param}"},
+    )
+
+    assert isinstance(result.nested, FunctionDict)
+    assert result.nested.model_dump()["Fn::Sub"] == "${Param}"
+    assert isinstance(result.nested_required, FunctionDict)
+
+
+def test_resolvable_model_accepts_fn_if():
+    """ResolvableModel should accept Fn::If intrinsic function."""
+    result = ParentModel(
+        nested={"Fn::If": ["Condition", {"field1": "value1"}, {"field1": "value2"}]},
+        nested_required={"Fn::If": ["Condition", {"field1": "v1"}, {"field1": "v2"}]},
+    )
+
+    assert isinstance(result.nested, FunctionDict)
+    assert isinstance(result.nested_required, FunctionDict)
+
+
+def test_resolvable_model_accepts_none_for_optional():
+    """ResolvableModel with Optional should accept None."""
+    result = ParentModel(nested=None, nested_required={"field1": "value"})
+
+    assert result.nested is None
+    assert isinstance(result.nested_required, NestedModel)
+
+
+def test_resolvable_model_rejects_invalid_dict():
+    """ResolvableModel should reject a dict missing required fields."""
+    with pytest.raises(ValidationError) as exc_info:
+        ParentModel(nested={"field2": "only_optional"}, nested_required={"field1": "value"})
+
+    errors = json.loads(exc_info.value.json())
+    assert any("field1" in str(e) for e in errors)
+
+
+def test_resolvable_model_rejects_invalid_type():
+    """ResolvableModel should reject invalid types like strings or lists."""
+    with pytest.raises(ValidationError):
+        ParentModel(nested="invalid_string", nested_required={"field1": "value"})
+
+    with pytest.raises(ValidationError):
+        ParentModel(nested=["invalid", "list"], nested_required={"field1": "value"})
+
+
+def test_resolvable_model_serialization():
+    """ResolvableModel should serialize correctly."""
+    result = ParentModel(
+        nested={"field1": "value1", "field2": "value2"},
+        nested_required={"field1": "required_value"},
+    )
+
+    dumped = result.model_dump()
+    assert dumped["nested"] == {"field1": "value1", "field2": "value2"}
+    assert dumped["nested_required"] == {"field1": "required_value", "field2": None}
+
+
+def test_resolvable_model_serialization_with_intrinsic():
+    """ResolvableModel with intrinsic functions should serialize correctly."""
+    result = ParentModel(
+        nested={"Ref": "NestedParam"},
+        nested_required={"Ref": "RequiredParam"},
+    )
+
+    dumped = result.model_dump()
+    assert dumped["nested"] == {"Ref": "NestedParam"}
+    assert dumped["nested_required"] == {"Ref": "RequiredParam"}

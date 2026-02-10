@@ -124,15 +124,16 @@ def test_valid_opensearch_domain_from_aws_documentation_examples_resource_can_be
         == "arn:aws:es:us-east-1:123456789012:domain/test/*"
     )
     assert (
-        getattr(
-            valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedOptions,
-            "rest.action.multi.allow_explicit_index",
-        )
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedOptions[
+            "rest.action.multi.allow_explicit_index"
+        ]
         is True
     )
 
     assert (
-        valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedOptions.override_main_response_version
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.AdvancedOptions[
+            "override_main_response_version"
+        ]
         is True
     )
 
@@ -166,27 +167,39 @@ def test_valid_opensearch_domain_from_aws_documentation_examples_resource_can_be
     assert valid_opensearch_domain_from_aws_documentation_examples.Properties.EncryptionAtRestOptions is None
 
     assert (
-        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.ES_APPLICATION_LOGS.CloudWatchLogsLogGroupArn
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["ES_APPLICATION_LOGS"][
+            "CloudWatchLogsLogGroupArn"
+        ]
         == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearch/domains/opensearch-application-logs"
     )
     assert (
-        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.ES_APPLICATION_LOGS.Enabled
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["ES_APPLICATION_LOGS"][
+            "Enabled"
+        ]
         is True
     )
     assert (
-        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.SEARCH_SLOW_LOGS.CloudWatchLogsLogGroupArn
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["SEARCH_SLOW_LOGS"][
+            "CloudWatchLogsLogGroupArn"
+        ]
         == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearch/domains/opensearch-slow-logs"
     )
     assert (
-        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.SEARCH_SLOW_LOGS.Enabled
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["SEARCH_SLOW_LOGS"][
+            "Enabled"
+        ]
         is True
     )
     assert (
-        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.INDEX_SLOW_LOGS.CloudWatchLogsLogGroupArn
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["INDEX_SLOW_LOGS"][
+            "CloudWatchLogsLogGroupArn"
+        ]
         == "arn:aws:logs:us-east-1:123456789012:log-group:/aws/opensearch/domains/opensearch-index-slow-logs"
     )
     assert (
-        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions.INDEX_SLOW_LOGS.Enabled
+        valid_opensearch_domain_from_aws_documentation_examples.Properties.LogPublishingOptions["INDEX_SLOW_LOGS"][
+            "Enabled"
+        ]
         is True
     )
 

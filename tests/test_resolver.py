@@ -828,13 +828,13 @@ def test_resolve_booleans_different_properties_for_generic_resource():
 
 
 def test_resolve_template_with_a_valid_resource_without_properties():
-    template = {"AWSTemplateFormatVersion": "2010-09-09", "Resources": {"MySNSTopic": {"Type": "AWS::SNS::Topic"}}}
+    template = {"AWSTemplateFormatVersion": "2010-09-09", "Resources": {"MyTrail": {"Type": "AWS::CloudTrail::Trail"}}}
 
     model = parse(template).resolve()
-    resource = model.Resources["MySNSTopic"]
+    resource = model.Resources["MyTrail"]
     assert isinstance(resource, GenericResource)
     assert resource.Properties is None
-    assert resource.Type == "AWS::SNS::Topic"
+    assert resource.Type == "AWS::CloudTrail::Trail"
 
 
 @pytest.mark.parametrize(

@@ -1,11 +1,26 @@
-from typing import Dict, List, Literal, Optional
+from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.parameter import Parameter
 from pycfmodel.model.resources.properties.policy import Policy
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableModel, ResolvableStr
 from pycfmodel.model.utils import OptionallyNamedPolicyDocument
+
+
+class LoginProfile(CustomModel):
+    """
+    Creates a password for the specified IAM user.
+
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user-loginprofile.html)
+    """
+
+    Password: ResolvableStr
+    PasswordResetRequired: Optional[ResolvableBool] = None
+
+
+ResolvableLoginProfile = ResolvableModel(LoginProfile)
 
 
 class IAMUserProperties(CustomModel):
@@ -18,17 +33,19 @@ class IAMUserProperties(CustomModel):
     - Path: Path to the user.
     - PermissionsBoundary: ARN of the policy used to set the permissions boundary.
     - Policies: A list of [policy][pycfmodel.model.resources.properties.policy.Policy] objects.
+    - Tags: A list of tags to attach to the new user.
     - UserName: Name of the user.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html)
     """
 
     Groups: Optional[Resolvable[List[ResolvableStr]]] = None
-    LoginProfile: Optional[Dict] = None
+    LoginProfile: Optional[ResolvableLoginProfile] = None
     ManagedPolicyArns: Optional[Resolvable[List[ResolvableStr]]] = None
     Path: Optional[ResolvableStr] = None
     PermissionsBoundary: Optional[ResolvableStr] = None
     Policies: Optional[Resolvable[List[Resolvable[Policy]]]] = None
+    Tags: Optional[Resolvable[List[Tag]]] = None
     UserName: Optional[ResolvableStr] = None
 
 
@@ -46,10 +63,11 @@ class IAMUser(Resource):
 
     def has_hardcoded_credentials(self) -> bool:
         """Returns True if login profile password contains a hardcoded string, otherwise False."""
-        if self.Properties:
+        if self.Properties and self.Properties.LoginProfile:
             login_profile = self.Properties.LoginProfile
-            if login_profile and login_profile.get("Password"):
-                if login_profile["Password"] != Parameter.NO_ECHO_NO_DEFAULT:
+            # LoginProfile could be a FunctionDict (intrinsic function) or LoginProfile model
+            if hasattr(login_profile, "Password") and login_profile.Password:
+                if login_profile.Password != Parameter.NO_ECHO_NO_DEFAULT:
                     return True
 
         return super().has_hardcoded_credentials()

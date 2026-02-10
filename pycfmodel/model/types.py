@@ -4,13 +4,14 @@ from datetime import date, datetime
 from ipaddress import IPv4Network, IPv6Network
 from typing import Any, List, Type, TypeVar, Union
 
-from pydantic import BeforeValidator, Field, GetCoreSchemaHandler
+from pydantic import BaseModel, BeforeValidator, Field, GetCoreSchemaHandler
 from pydantic._internal import _schema_generation_shared
 from pydantic.json_schema import JsonSchemaValue
 from pydantic_core import core_schema
 from typing_extensions import Annotated
 
 from pycfmodel.model.base import FunctionDict
+from pycfmodel.utils import is_resolvable_dict
 
 
 class LooseIPv4Network:
@@ -149,3 +150,73 @@ ResolvableBoolOrList = InstanceOrListOf[ResolvableBool]
 ResolvableBytesOrList = InstanceOrListOf[Binary]
 ResolvableDateOrList = InstanceOrListOf[ResolvableDate]
 ResolvableDatetimeOrList = InstanceOrListOf[ResolvableDatetime]
+
+
+class _ResolvableModelValidator:
+    """
+    Validator for ResolvableModel that handles Model | FunctionDict union.
+
+    This bypasses Pydantic's union_mode limitation which cannot be applied
+    to model schemas when both types are defined in the same file.
+    """
+
+    def __init__(self, model_cls: Type[BaseModel]):
+        self.model_cls = model_cls
+
+    def __get_pydantic_core_schema__(
+        self,
+        source_type: Any,
+        handler: GetCoreSchemaHandler,
+    ) -> core_schema.CoreSchema:
+        model_cls = self.model_cls
+
+        def validate(value: Any) -> Union[BaseModel, FunctionDict]:
+            if isinstance(value, FunctionDict):
+                return value
+            if isinstance(value, model_cls):
+                return value
+            if isinstance(value, dict):
+                if is_resolvable_dict(value):
+                    return FunctionDict.model_validate(value)
+                return model_cls.model_validate(value)
+            raise ValueError(f"Expected {model_cls.__name__}, FunctionDict, or dict")
+
+        return core_schema.no_info_plain_validator_function(
+            validate,
+            serialization=core_schema.plain_serializer_function_ser_schema(
+                lambda x: x.model_dump() if isinstance(x, BaseModel) else x
+            ),
+        )
+
+
+def ResolvableModel(model_cls: Type[BaseModel]) -> type:
+    """
+    Create a resolvable type for a nested Pydantic model.
+
+    This allows fields to accept either a model instance or a CloudFormation
+    intrinsic function (like {"Ref": "..."} or {"Fn::Sub": "..."}).
+
+    Unlike the regular Resolvable[T] type, this works with model classes
+    defined in the same file, avoiding Pydantic's union_mode limitation.
+
+    Usage:
+        class NestedModel(CustomModel):
+            field1: ResolvableStr
+            field2: ResolvableInt
+
+        # Create the resolvable type alias
+        ResolvableNestedModel = ResolvableModel(NestedModel)
+
+        class ParentModel(CustomModel):
+            nested: Optional[ResolvableNestedModel] = None  # Use Optional for nullable
+
+    Args:
+        model_cls: The Pydantic model class to make resolvable.
+
+    Returns:
+        An Annotated type that accepts either the model or a FunctionDict.
+    """
+    return Annotated[
+        Union[model_cls, FunctionDict],
+        _ResolvableModelValidator(model_cls),
+    ]
