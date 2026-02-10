@@ -7,7 +7,7 @@ Auto-generated from AWS CloudFormation schema for AWS::DynamoDB::Table.
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
-from pycfmodel.model.generic import ResolvableGeneric
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
 
@@ -119,13 +119,19 @@ class Projection(CustomModel):
 ResolvableProjection = ResolvableModel(Projection)
 
 
+# Pre-resolved list type to avoid class body name shadowing in LocalSecondaryIndex.
+# The LocalSecondaryIndex class has a field named "KeySchema" (default None) which shadows
+# the KeySchema class when Python evaluates List[KeySchema] inside the class body.
+_KeySchemaList = Resolvable[List[KeySchema]]
+
+
 class LocalSecondaryIndex(CustomModel):
     """
     Represents the properties of a local secondary index.
     """
 
     IndexName: ResolvableStr
-    KeySchema: Resolvable[List[KeySchema]]
+    KeySchema: _KeySchemaList
     Projection: ResolvableProjection
 
 
@@ -149,7 +155,7 @@ class ResourcePolicy(CustomModel):
     Creates or updates a resource-based policy document that contains the permissions for DDB resources, such as a table, its indexes, and stream.
     """
 
-    PolicyDocument: ResolvableGeneric
+    PolicyDocument: Resolvable[dict]
 
 
 ResolvableResourcePolicy = ResolvableModel(ResourcePolicy)
@@ -207,18 +213,6 @@ class StreamSpecification(CustomModel):
 ResolvableStreamSpecification = ResolvableModel(StreamSpecification)
 
 
-class Tag(CustomModel):
-    """
-    Describes a tag.
-    """
-
-    Key: ResolvableStr
-    Value: ResolvableStr
-
-
-ResolvableTag = ResolvableModel(Tag)
-
-
 class TimeToLiveSpecification(CustomModel):
     """
     Represents the settings used to enable or disable Time to Live (TTL) for the specified table.
@@ -243,13 +237,19 @@ class WarmThroughput(CustomModel):
 ResolvableWarmThroughput = ResolvableModel(WarmThroughput)
 
 
+# Pre-resolved list type to avoid class body name shadowing in GlobalSecondaryIndex.
+# The GlobalSecondaryIndex class has a field named "KeySchema" (default None) which shadows
+# the KeySchema class when Python evaluates List[KeySchema] inside the class body.
+_KeySchemaList = Resolvable[List[KeySchema]]
+
+
 class GlobalSecondaryIndex(CustomModel):
     """
     Represents the properties of a global secondary index.
     """
 
     IndexName: ResolvableStr
-    KeySchema: Resolvable[List[KeySchema]]
+    KeySchema: _KeySchemaList
     Projection: ResolvableProjection
     ContributorInsightsSpecification: Optional[ResolvableContributorInsightsSpecification] = None
     OnDemandThroughput: Optional[ResolvableOnDemandThroughput] = None
@@ -258,6 +258,12 @@ class GlobalSecondaryIndex(CustomModel):
 
 
 ResolvableGlobalSecondaryIndex = ResolvableModel(GlobalSecondaryIndex)
+
+
+# Pre-resolved list type to avoid class body name shadowing in DynamoDBTableProperties.
+# The DynamoDBTableProperties class has a field named "KeySchema" (default None) which shadows
+# the KeySchema class when Python evaluates List[KeySchema] inside the class body.
+_KeySchemaList = Resolvable[List[KeySchema]]
 
 
 class DynamoDBTableProperties(CustomModel):
@@ -293,7 +299,7 @@ class DynamoDBTableProperties(CustomModel):
        More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html)
     """
 
-    KeySchema: Resolvable[List[KeySchema]]
+    KeySchema: _KeySchemaList
     AttributeDefinitions: Optional[Resolvable[List[AttributeDefinition]]] = None
     BillingMode: Optional[ResolvableStr] = None
     ContributorInsightsSpecification: Optional[ResolvableContributorInsightsSpecification] = None

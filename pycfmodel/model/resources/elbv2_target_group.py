@@ -7,6 +7,7 @@ Auto-generated from AWS CloudFormation schema for AWS::ElasticLoadBalancingV2::T
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
 
@@ -21,18 +22,6 @@ class Matcher(CustomModel):
 
 
 ResolvableMatcher = ResolvableModel(Matcher)
-
-
-class Tag(CustomModel):
-    """
-    Tag configuration.
-    """
-
-    Key: ResolvableStr
-    Value: ResolvableStr
-
-
-ResolvableTag = ResolvableModel(Tag)
 
 
 class TargetDescription(CustomModel):
@@ -125,4 +114,4 @@ class ELBv2TargetGroup(Resource):
     """
 
     Type: Literal["AWS::ElasticLoadBalancingV2::TargetGroup"]
-    Properties: Optional[Resolvable[ELBv2TargetGroupProperties]] = None
+    Properties: Resolvable[ELBv2TargetGroupProperties] = ELBv2TargetGroupProperties()

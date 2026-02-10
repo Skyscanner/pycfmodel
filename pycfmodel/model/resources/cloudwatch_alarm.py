@@ -7,6 +7,7 @@ Auto-generated from AWS CloudFormation schema for AWS::CloudWatch::Alarm.
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
 
@@ -65,18 +66,6 @@ class MetricDataQuery(CustomModel):
 
 
 ResolvableMetricDataQuery = ResolvableModel(MetricDataQuery)
-
-
-class Tag(CustomModel):
-    """
-    One of the key-value pairs associated with the alarm.
-    """
-
-    Key: ResolvableStr
-    Value: ResolvableStr
-
-
-ResolvableTag = ResolvableModel(Tag)
 
 
 class CloudWatchAlarmProperties(CustomModel):

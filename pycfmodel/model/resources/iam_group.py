@@ -35,7 +35,7 @@ class IAMGroup(Resource):
     """
 
     Type: Literal["AWS::IAM::Group"]
-    Properties: Optional[Resolvable[IAMGroupProperties]] = None
+    Properties: Resolvable[IAMGroupProperties] = IAMGroupProperties()
 
     @property
     def policy_documents(self) -> List[OptionallyNamedPolicyDocument]:

@@ -814,6 +814,18 @@ class Transition(CustomModel):
 ResolvableTransition = ResolvableModel(Transition)
 
 
+# Pre-resolved list type to avoid class body name shadowing in Rule.
+# The Rule class has a field named "NoncurrentVersionTransition" (default None) which shadows
+# the NoncurrentVersionTransition class when Python evaluates List[NoncurrentVersionTransition] inside the class body.
+_NoncurrentVersionTransitionList = Resolvable[List[NoncurrentVersionTransition]]
+
+
+# Pre-resolved list type to avoid class body name shadowing in Rule.
+# The Rule class has a field named "Transition" (default None) which shadows
+# the Transition class when Python evaluates List[Transition] inside the class body.
+_TransitionList = Resolvable[List[Transition]]
+
+
 class Rule(CustomModel):
     """
     Specifies lifecycle rules for an Amazon S3 bucket.
@@ -828,13 +840,13 @@ class Rule(CustomModel):
     NoncurrentVersionExpiration: Optional[ResolvableNoncurrentVersionExpiration] = None
     NoncurrentVersionExpirationInDays: Optional[ResolvableInt] = None
     NoncurrentVersionTransition: Optional[ResolvableNoncurrentVersionTransition] = None
-    NoncurrentVersionTransitions: Optional[Resolvable[List[NoncurrentVersionTransition]]] = None
+    NoncurrentVersionTransitions: Optional[_NoncurrentVersionTransitionList] = None
     ObjectSizeGreaterThan: Optional[ResolvableStr] = None
     ObjectSizeLessThan: Optional[ResolvableStr] = None
     Prefix: Optional[ResolvableStr] = None
     TagFilters: Optional[Resolvable[List[TagFilter]]] = None
     Transition: Optional[ResolvableTransition] = None
-    Transitions: Optional[Resolvable[List[Transition]]] = None
+    Transitions: Optional[_TransitionList] = None
 
 
 ResolvableRule = ResolvableModel(Rule)
@@ -923,4 +935,4 @@ class S3Bucket(Resource):
     """
 
     Type: Literal["AWS::S3::Bucket"]
-    Properties: Optional[Resolvable[S3BucketProperties]] = None
+    Properties: Resolvable[S3BucketProperties] = S3BucketProperties()

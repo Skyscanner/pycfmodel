@@ -403,6 +403,18 @@ class MixedInstancesPolicy(CustomModel):
 ResolvableMixedInstancesPolicy = ResolvableModel(MixedInstancesPolicy)
 
 
+# Pre-resolved list type to avoid class body name shadowing in AutoScalingAutoScalingGroupProperties.
+# The AutoScalingAutoScalingGroupProperties class has a field named "MetricsCollection" (default None) which shadows
+# the MetricsCollection class when Python evaluates List[MetricsCollection] inside the class body.
+_MetricsCollectionList = Resolvable[List[MetricsCollection]]
+
+
+# Pre-resolved list type to avoid class body name shadowing in AutoScalingAutoScalingGroupProperties.
+# The AutoScalingAutoScalingGroupProperties class has a field named "NotificationConfiguration" (default None) which shadows
+# the NotificationConfiguration class when Python evaluates List[NotificationConfiguration] inside the class body.
+_NotificationConfigurationList = Resolvable[List[NotificationConfiguration]]
+
+
 class AutoScalingAutoScalingGroupProperties(CustomModel):
     """
        Properties for AWS::AutoScaling::AutoScalingGroup.
@@ -419,6 +431,7 @@ class AutoScalingAutoScalingGroupProperties(CustomModel):
        - Cooldown: *Only needed if you use simple scaling policies.*
     The amount of time, in secon...
        - DefaultInstanceWarmup: The amount of time, in seconds, until a new instance is considered to have finis...
+       - DeletionProtection:
        - DesiredCapacity: The desired capacity is the initial capacity of the Auto Scaling group at the ti...
        - DesiredCapacityType: The unit of measurement for the value specified for desired capacity. Amazon EC2...
        - HealthCheckGracePeriod: The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checki...
@@ -465,6 +478,7 @@ class AutoScalingAutoScalingGroupProperties(CustomModel):
     Context: Optional[ResolvableStr] = None
     Cooldown: Optional[ResolvableStr] = None
     DefaultInstanceWarmup: Optional[ResolvableInt] = None
+    DeletionProtection: Optional[ResolvableStr] = None
     DesiredCapacity: Optional[ResolvableStr] = None
     DesiredCapacityType: Optional[ResolvableStr] = None
     HealthCheckGracePeriod: Optional[ResolvableInt] = None
@@ -477,11 +491,11 @@ class AutoScalingAutoScalingGroupProperties(CustomModel):
     LifecycleHookSpecificationList: Optional[Resolvable[List[LifecycleHookSpecification]]] = None
     LoadBalancerNames: Optional[Resolvable[List[ResolvableStr]]] = None
     MaxInstanceLifetime: Optional[ResolvableInt] = None
-    MetricsCollection: Optional[Resolvable[List[MetricsCollection]]] = None
+    MetricsCollection: Optional[_MetricsCollectionList] = None
     MixedInstancesPolicy: Optional[ResolvableMixedInstancesPolicy] = None
     NewInstancesProtectedFromScaleIn: Optional[ResolvableBool] = None
     NotificationConfiguration: Optional[ResolvableNotificationConfiguration] = None
-    NotificationConfigurations: Optional[Resolvable[List[NotificationConfiguration]]] = None
+    NotificationConfigurations: Optional[_NotificationConfigurationList] = None
     PlacementGroup: Optional[ResolvableStr] = None
     ServiceLinkedRoleARN: Optional[ResolvableStr] = None
     SkipZonalShiftValidation: Optional[ResolvableBool] = None

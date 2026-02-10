@@ -7,6 +7,7 @@ Auto-generated from AWS CloudFormation schema for AWS::SNS::Topic.
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
 from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableModel, ResolvableStr
 
@@ -37,16 +38,10 @@ class Subscription(CustomModel):
 ResolvableSubscription = ResolvableModel(Subscription)
 
 
-class Tag(CustomModel):
-    """
-    The list of tags to be added to the specified topic.
-    """
-
-    Key: ResolvableStr
-    Value: ResolvableStr
-
-
-ResolvableTag = ResolvableModel(Tag)
+# Pre-resolved list type to avoid class body name shadowing in SNSTopicProperties.
+# The SNSTopicProperties class has a field named "Subscription" (default None) which shadows
+# the Subscription class when Python evaluates List[Subscription] inside the class body.
+_SubscriptionList = Resolvable[List[Subscription]]
 
 
 class SNSTopicProperties(CustomModel):
@@ -85,7 +80,7 @@ class SNSTopicProperties(CustomModel):
     FifoTopic: Optional[ResolvableBool] = None
     KmsMasterKeyId: Optional[ResolvableStr] = None
     SignatureVersion: Optional[ResolvableStr] = None
-    Subscription: Optional[Resolvable[List[Subscription]]] = None
+    Subscription: Optional[_SubscriptionList] = None
     Tags: Optional[Resolvable[List[Tag]]] = None
     TopicName: Optional[ResolvableStr] = None
     TracingConfig: Optional[ResolvableStr] = None
@@ -103,4 +98,4 @@ class SNSTopic(Resource):
     """
 
     Type: Literal["AWS::SNS::Topic"]
-    Properties: Optional[Resolvable[SNSTopicProperties]] = None
+    Properties: Resolvable[SNSTopicProperties] = SNSTopicProperties()

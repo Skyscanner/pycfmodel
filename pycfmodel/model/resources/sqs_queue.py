@@ -7,18 +7,9 @@ Auto-generated from AWS CloudFormation schema for AWS::SQS::Queue.
 from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
+from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
-
-
-class Tag(CustomModel):
-    """ """
-
-    Key: ResolvableStr
-    Value: ResolvableStr
-
-
-ResolvableTag = ResolvableModel(Tag)
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableStr
 
 
 class SQSQueueProperties(CustomModel):
@@ -77,4 +68,4 @@ class SQSQueue(Resource):
     """
 
     Type: Literal["AWS::SQS::Queue"]
-    Properties: Optional[Resolvable[SQSQueueProperties]] = None
+    Properties: Resolvable[SQSQueueProperties] = SQSQueueProperties()
