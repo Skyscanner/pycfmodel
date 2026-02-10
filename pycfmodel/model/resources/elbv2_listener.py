@@ -8,11 +8,7 @@ from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable
-from pycfmodel.model.types import ResolvableBool
-from pycfmodel.model.types import ResolvableInt
-from pycfmodel.model.types import ResolvableModel
-from pycfmodel.model.types import ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
 
 
 class AuthenticateCognitoConfig(CustomModel):
@@ -93,9 +89,7 @@ ResolvableJwtValidationActionAdditionalClaim = ResolvableModel(JwtValidationActi
 
 
 class JwtValidationConfig(CustomModel):
-    """
-    
-    """
+    """ """
 
     Issuer: ResolvableStr
     JwksEndpoint: ResolvableStr
@@ -245,4 +239,3 @@ class ELBv2Listener(Resource):
 
     Type: Literal["AWS::ElasticLoadBalancingV2::Listener"]
     Properties: Resolvable[ELBv2ListenerProperties]
-

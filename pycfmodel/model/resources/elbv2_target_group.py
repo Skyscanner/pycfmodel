@@ -9,11 +9,7 @@ from typing import List, Literal, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable
-from pycfmodel.model.types import ResolvableBool
-from pycfmodel.model.types import ResolvableInt
-from pycfmodel.model.types import ResolvableModel
-from pycfmodel.model.types import ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
 
 
 class Matcher(CustomModel):
@@ -63,8 +59,8 @@ class ELBv2TargetGroupProperties(CustomModel):
     - HealthCheckEnabled: Indicates whether health checks are enabled. If the target type is lambda, healt...
     - HealthCheckIntervalSeconds: The approximate amount of time, in seconds, between health checks of an individu...
     - HealthCheckPath: [HTTP/HTTPS health checks] The destination for health checks on the targets. [HT...
-    - HealthCheckPort: The port the load balancer uses when performing health checks on targets. 
-    - HealthCheckProtocol: The protocol the load balancer uses when performing health checks on targets. 
+    - HealthCheckPort: The port the load balancer uses when performing health checks on targets.
+    - HealthCheckProtocol: The protocol the load balancer uses when performing health checks on targets.
     - HealthCheckTimeoutSeconds: The amount of time, in seconds, during which no response from a target means a f...
     - HealthyThresholdCount: The number of consecutive health checks successes required before considering an...
     - IpAddressType: The type of IP address used for this target group. The possible values are ipv4 ...
@@ -119,4 +115,3 @@ class ELBv2TargetGroup(Resource):
 
     Type: Literal["AWS::ElasticLoadBalancingV2::TargetGroup"]
     Properties: Resolvable[ELBv2TargetGroupProperties] = ELBv2TargetGroupProperties()
-
