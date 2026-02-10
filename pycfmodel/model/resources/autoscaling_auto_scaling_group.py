@@ -223,6 +223,12 @@ class NotificationConfiguration(CustomModel):
 
 ResolvableNotificationConfiguration = ResolvableModel(NotificationConfiguration)
 
+# Pre-resolved list type to avoid class body name shadowing in AutoScalingAutoScalingGroupProperties.
+# That class has a field named "NotificationConfiguration" (default None) which shadows the
+# NotificationConfiguration class when Python evaluates List[NotificationConfiguration] inside
+# the class body, causing it to resolve to List[NoneType].
+_NotificationConfigurationList = Resolvable[List[NotificationConfiguration]]
+
 
 class PerformanceFactorReferenceRequest(CustomModel):
     """
@@ -481,7 +487,7 @@ class AutoScalingAutoScalingGroupProperties(CustomModel):
     MixedInstancesPolicy: Optional[ResolvableMixedInstancesPolicy] = None
     NewInstancesProtectedFromScaleIn: Optional[ResolvableBool] = None
     NotificationConfiguration: Optional[ResolvableNotificationConfiguration] = None
-    NotificationConfigurations: Optional[Resolvable[List[NotificationConfiguration]]] = None
+    NotificationConfigurations: Optional[_NotificationConfigurationList] = None
     PlacementGroup: Optional[ResolvableStr] = None
     ServiceLinkedRoleARN: Optional[ResolvableStr] = None
     SkipZonalShiftValidation: Optional[ResolvableBool] = None
