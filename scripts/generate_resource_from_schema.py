@@ -534,12 +534,8 @@ class CodeGenerator:
         """Generate module-level type alias lines to avoid class body name shadowing."""
         lines = []
         for original_class, alias_name in sorted(aliases.items()):
-            lines.append(
-                f"# Pre-resolved list type to avoid class body name shadowing in {class_name}."
-            )
-            lines.append(
-                f"# The {class_name} class has a field named \"{original_class}\" (default None) which shadows"
-            )
+            lines.append(f"# Pre-resolved list type to avoid class body name shadowing in {class_name}.")
+            lines.append(f'# The {class_name} class has a field named "{original_class}" (default None) which shadows')
             lines.append(
                 f"# the {original_class} class when Python evaluates List[{original_class}] inside the class body."
             )
@@ -684,9 +680,7 @@ class CodeGenerator:
         lines.extend(definition_code_lines)
 
         # Detect and fix field name shadowing in Properties class List[] annotations
-        props_fields_for_shadowing = [
-            (n, t, d, r) for n, t, d, _, r in property_fields
-        ]
+        props_fields_for_shadowing = [(n, t, d, r) for n, t, d, _, r in property_fields]
         props_aliases = self._detect_field_name_shadowing(props_fields_for_shadowing)
         if props_aliases:
             property_fields = [

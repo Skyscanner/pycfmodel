@@ -8,22 +8,21 @@ from typing import List, Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable
-from pycfmodel.model.types import ResolvableStr
+from pycfmodel.model.types import Resolvable, ResolvableStr
 
 
 class IAMInstanceProfileProperties(CustomModel):
     """
-    Properties for AWS::IAM::InstanceProfile.
+       Properties for AWS::IAM::InstanceProfile.
 
-    Properties:
+       Properties:
 
-    - InstanceProfileName: The name of the instance profile to create.
- This parameter allows (through its ...
-    - Path: The path to the instance profile. For more information about paths, see [IAM Ide...
-    - Roles: The name of the role to associate with the instance profile. Only one role can b...
+       - InstanceProfileName: The name of the instance profile to create.
+    This parameter allows (through its ...
+       - Path: The path to the instance profile. For more information about paths, see [IAM Ide...
+       - Roles: The name of the role to associate with the instance profile. Only one role can b...
 
-    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html)
+       More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html)
     """
 
     Roles: Resolvable[List[ResolvableStr]]
@@ -44,4 +43,3 @@ class IAMInstanceProfile(Resource):
 
     Type: Literal["AWS::IAM::InstanceProfile"]
     Properties: Resolvable[IAMInstanceProfileProperties]
-
