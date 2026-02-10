@@ -9,7 +9,11 @@ from typing import List, Literal, Optional
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.properties.tag import Tag
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableInt, ResolvableModel, ResolvableStr
+from pycfmodel.model.types import Resolvable
+from pycfmodel.model.types import ResolvableBool
+from pycfmodel.model.types import ResolvableInt
+from pycfmodel.model.types import ResolvableModel
+from pycfmodel.model.types import ResolvableStr
 
 
 class AbortIncompleteMultipartUpload(CustomModel):
@@ -246,12 +250,6 @@ class NoncurrentVersionTransition(CustomModel):
 
 
 ResolvableNoncurrentVersionTransition = ResolvableModel(NoncurrentVersionTransition)
-
-# Pre-resolved list type to avoid class body name shadowing in Rule.
-# The Rule class has a field named "NoncurrentVersionTransition" (default None) which shadows
-# the NoncurrentVersionTransition class when Python evaluates List[NoncurrentVersionTransition]
-# inside the class body, causing it to resolve to List[NoneType].
-_NoncurrentVersionTransitionList = Resolvable[List[NoncurrentVersionTransition]]
 
 
 class ObjectLockRule(CustomModel):
@@ -819,10 +817,16 @@ class Transition(CustomModel):
 
 ResolvableTransition = ResolvableModel(Transition)
 
+
 # Pre-resolved list type to avoid class body name shadowing in Rule.
-# The Rule class has a field named "Transition" (default None) which shadows the Transition
-# class when Python evaluates List[Transition] inside the class body, causing it to resolve
-# to List[NoneType].
+# The Rule class has a field named "NoncurrentVersionTransition" (default None) which shadows
+# the NoncurrentVersionTransition class when Python evaluates List[NoncurrentVersionTransition] inside the class body.
+_NoncurrentVersionTransitionList = Resolvable[List[NoncurrentVersionTransition]]
+
+
+# Pre-resolved list type to avoid class body name shadowing in Rule.
+# The Rule class has a field named "Transition" (default None) which shadows
+# the Transition class when Python evaluates List[Transition] inside the class body.
 _TransitionList = Resolvable[List[Transition]]
 
 
@@ -866,36 +870,36 @@ ResolvableLifecycleConfiguration = ResolvableModel(LifecycleConfiguration)
 
 class S3BucketProperties(CustomModel):
     """
-      Properties for AWS::S3::Bucket.
+    Properties for AWS::S3::Bucket.
 
-      Properties:
+    Properties:
 
-      - AbacStatus: The ABAC status of the general purpose bucket. When ABAC is enabled for the gene...
-      - AccelerateConfiguration: Configures the transfer acceleration state for an Amazon S3 bucket. For more inf...
-      - AccessControl: This is a legacy property, and it is not recommended for most use cases. A major...
-      - AnalyticsConfigurations: Specifies the configuration and any analyses for the analytics filter of an Amaz...
-      - BucketEncryption: Specifies default encryption for a bucket using server-side encryption with Amaz...
-      - BucketName: A name for the bucket. If you don't specify a name, AWS CloudFormation generates...
-      - CorsConfiguration: Describes the cross-origin access configuration for objects in an Amazon S3 buck...
-      - IntelligentTieringConfigurations: Defines how Amazon S3 handles Intelligent-Tiering storage.
-      - InventoryConfigurations: Specifies the S3 Inventory configuration for an Amazon S3 bucket. For more infor...
-      - LifecycleConfiguration: Specifies the lifecycle configuration for objects in an Amazon S3 bucket. For mo...
-      - LoggingConfiguration: Settings that define where logs are stored.
-      - MetadataConfiguration: The S3 Metadata configuration for a general purpose bucket.
-      - MetadataTableConfiguration: The metadata table configuration of an S3 general purpose bucket.
-      - MetricsConfigurations: Specifies a metrics configuration for the CloudWatch request metrics (specified ...
-      - NotificationConfiguration: Configuration that defines how Amazon S3 handles bucket notifications.
-      - ObjectLockConfiguration: This operation is not supported for directory buckets.
-    Places an Object Lock c...
-      - ObjectLockEnabled: Indicates whether this bucket has an Object Lock configuration enabled. Enable `...
-      - OwnershipControls: Configuration that defines how Amazon S3 handles Object Ownership rules.
-      - PublicAccessBlockConfiguration: Configuration that defines how Amazon S3 handles public access.
-      - ReplicationConfiguration: Configuration for replicating objects in an S3 bucket. To enable replication, yo...
-      - Tags: An arbitrary set of tags (key-value pairs) for this S3 bucket.
-      - VersioningConfiguration: Enables multiple versions of all objects in this bucket. You might enable versio...
-      - WebsiteConfiguration: Information used to configure the bucket as a static website. For more informati...
+    - AbacStatus: The ABAC status of the general purpose bucket. When ABAC is enabled for the gene...
+    - AccelerateConfiguration: Configures the transfer acceleration state for an Amazon S3 bucket. For more inf...
+    - AccessControl: This is a legacy property, and it is not recommended for most use cases. A major...
+    - AnalyticsConfigurations: Specifies the configuration and any analyses for the analytics filter of an Amaz...
+    - BucketEncryption: Specifies default encryption for a bucket using server-side encryption with Amaz...
+    - BucketName: A name for the bucket. If you don't specify a name, AWS CloudFormation generates...
+    - CorsConfiguration: Describes the cross-origin access configuration for objects in an Amazon S3 buck...
+    - IntelligentTieringConfigurations: Defines how Amazon S3 handles Intelligent-Tiering storage.
+    - InventoryConfigurations: Specifies the S3 Inventory configuration for an Amazon S3 bucket. For more infor...
+    - LifecycleConfiguration: Specifies the lifecycle configuration for objects in an Amazon S3 bucket. For mo...
+    - LoggingConfiguration: Settings that define where logs are stored.
+    - MetadataConfiguration: The S3 Metadata configuration for a general purpose bucket.
+    - MetadataTableConfiguration: The metadata table configuration of an S3 general purpose bucket.
+    - MetricsConfigurations: Specifies a metrics configuration for the CloudWatch request metrics (specified ...
+    - NotificationConfiguration: Configuration that defines how Amazon S3 handles bucket notifications.
+    - ObjectLockConfiguration: This operation is not supported for directory buckets.
+  Places an Object Lock c...
+    - ObjectLockEnabled: Indicates whether this bucket has an Object Lock configuration enabled. Enable `...
+    - OwnershipControls: Configuration that defines how Amazon S3 handles Object Ownership rules.
+    - PublicAccessBlockConfiguration: Configuration that defines how Amazon S3 handles public access.
+    - ReplicationConfiguration: Configuration for replicating objects in an S3 bucket. To enable replication, yo...
+    - Tags: An arbitrary set of tags (key-value pairs) for this S3 bucket.
+    - VersioningConfiguration: Enables multiple versions of all objects in this bucket. You might enable versio...
+    - WebsiteConfiguration: Information used to configure the bucket as a static website. For more informati...
 
-      More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3-bucket.html)
+    More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3-bucket.html)
     """
 
     AbacStatus: Optional[ResolvableStr] = None
@@ -936,3 +940,4 @@ class S3Bucket(Resource):
 
     Type: Literal["AWS::S3::Bucket"]
     Properties: Optional[Resolvable[S3BucketProperties]] = None
+

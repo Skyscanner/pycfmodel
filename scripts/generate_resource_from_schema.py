@@ -279,37 +279,64 @@ class CodeGenerator:
         # Handle anyOf/oneOf
         if "anyOf" in prop_schema or "oneOf" in prop_schema:
             variants = prop_schema.get("anyOf") or prop_schema.get("oneOf", [])
-            # Check if any variant is an array
-            for variant in variants:
-                if variant.get("type") == "array":
-                    items = variant.get("items", {})
-                    item_type = self._get_item_type(items)
-                    self.imports.add("from typing import List")
-                    return f"Resolvable[List[{item_type}]]"
-            # Check for $ref in variants
-            for variant in variants:
-                if "$ref" in variant:
-                    ref = variant["$ref"]
-                    if ref.startswith("#/definitions/"):
-                        def_name = ref.split("/")[-1]
-                        definition = self.definitions.get(def_name, {})
-                        if definition.get("type") == "object" or definition.get("properties"):
-                            # Generate a nested model class and use ResolvableModel
-                            self.needed_definitions.add(def_name)
-                            self.imports.add("from pycfmodel.model.types import ResolvableModel")
-                            return f"Resolvable{def_name}"
-                        else:
-                            # Fall back to inline handling
-                            return self.get_type_for_schema(variant, is_required, context)
-            return "Resolvable[dict]"
+
+            # Skip variants that are only relationshipRef metadata (not real type info).
+            # If all variants are just relationshipRef, fall through to the "type" field.
+            typed_variants = [v for v in variants if not (set(v.keys()) <= {"relationshipRef"})]
+
+            if typed_variants:
+                # Check if any variant is an array
+                for variant in typed_variants:
+                    if variant.get("type") == "array":
+                        items = variant.get("items", {})
+                        item_type = self._get_item_type(items)
+                        self.imports.add("from typing import List")
+                        return f"Resolvable[List[{item_type}]]"
+                # Check for $ref in variants
+                for variant in typed_variants:
+                    if "$ref" in variant:
+                        ref = variant["$ref"]
+                        if ref.startswith("#/definitions/"):
+                            def_name = ref.split("/")[-1]
+                            definition = self.definitions.get(def_name, {})
+                            if definition.get("type") == "object" or definition.get("properties"):
+                                # Generate a nested model class and use ResolvableModel
+                                self.needed_definitions.add(def_name)
+                                self.imports.add("from pycfmodel.model.types import ResolvableModel")
+                                return f"Resolvable{def_name}"
+                            else:
+                                # Fall back to inline handling
+                                return self.get_type_for_schema(variant, is_required, context)
+                return "Resolvable[dict]"
+            # All variants were relationshipRef only — fall through to use the "type" field
 
         json_type = prop_schema.get("type")
 
         if json_type is None:
             return "Resolvable[dict]"
 
-        # Handle multiple types (e.g., ["string", "object"])
+        # Handle multiple types (e.g., ["string", "object"]).
+        # If "object" is present, use Resolvable[dict] since it accepts both dicts and strings.
+        # Otherwise, use the first recognized primitive type.
         if isinstance(json_type, list):
+            if "object" in json_type:
+                return "Resolvable[dict]"
+            type_map = {
+                "string": "ResolvableStr",
+                "integer": "ResolvableInt",
+                "number": "ResolvableInt",
+                "boolean": "ResolvableBool",
+            }
+            for t in json_type:
+                if t in type_map:
+                    type_str = type_map[t]
+                    if type_str == "ResolvableStr":
+                        self.imports.add("from pycfmodel.model.types import ResolvableStr")
+                    elif type_str == "ResolvableInt":
+                        self.imports.add("from pycfmodel.model.types import ResolvableInt")
+                    elif type_str == "ResolvableBool":
+                        self.imports.add("from pycfmodel.model.types import ResolvableBool")
+                    return type_str
             return "Resolvable[dict]"
 
         # Handle array types

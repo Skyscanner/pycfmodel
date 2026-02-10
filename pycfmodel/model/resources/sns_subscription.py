@@ -8,7 +8,9 @@ from typing import Literal, Optional
 
 from pycfmodel.model.base import CustomModel
 from pycfmodel.model.resources.resource import Resource
-from pycfmodel.model.types import Resolvable, ResolvableBool, ResolvableStr
+from pycfmodel.model.types import Resolvable
+from pycfmodel.model.types import ResolvableBool
+from pycfmodel.model.types import ResolvableStr
 
 
 class SNSSubscriptionProperties(CustomModel):
@@ -58,3 +60,4 @@ class SNSSubscription(Resource):
 
     Type: Literal["AWS::SNS::Subscription"]
     Properties: Resolvable[SNSSubscriptionProperties]
+
