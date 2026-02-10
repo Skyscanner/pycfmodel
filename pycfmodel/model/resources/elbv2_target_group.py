@@ -118,5 +118,5 @@ class ELBv2TargetGroup(Resource):
     """
 
     Type: Literal["AWS::ElasticLoadBalancingV2::TargetGroup"]
-    Properties: Optional[Resolvable[ELBv2TargetGroupProperties]] = None
+    Properties: Resolvable[ELBv2TargetGroupProperties] = ELBv2TargetGroupProperties()
 
