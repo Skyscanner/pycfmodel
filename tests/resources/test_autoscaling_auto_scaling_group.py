@@ -174,6 +174,41 @@ def test_autoscaling_group_with_notification():
     assert asg.Properties.NotificationConfiguration.TopicARN == "arn:aws:sns:us-east-1:123456789012:my-topic"
 
 
+def test_autoscaling_group_with_notification_configurations():
+    """
+    Regression test: NotificationConfigurations must be parsed correctly as
+    List[NotificationConfiguration], not as List[NoneType] due to field name
+    shadowing from the singular NotificationConfiguration field in the class body.
+    """
+    asg = AutoScalingAutoScalingGroup(
+        **{
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "Properties": {
+                "MinSize": "1",
+                "MaxSize": "5",
+                "LaunchTemplate": {
+                    "LaunchTemplateId": "lt-123",
+                    "Version": "$Latest",
+                },
+                "VPCZoneIdentifier": ["subnet-123"],
+                "NotificationConfigurations": [
+                    {
+                        "TopicARN": "arn:aws:sns:us-east-1:123456789012:launch-topic",
+                        "NotificationTypes": ["autoscaling:EC2_INSTANCE_LAUNCH"],
+                    },
+                    {
+                        "TopicARN": "arn:aws:sns:us-east-1:123456789012:terminate-topic",
+                        "NotificationTypes": ["autoscaling:EC2_INSTANCE_TERMINATE"],
+                    },
+                ],
+            },
+        }
+    )
+    assert len(asg.Properties.NotificationConfigurations) == 2
+    assert asg.Properties.NotificationConfigurations[0].TopicARN == "arn:aws:sns:us-east-1:123456789012:launch-topic"
+    assert asg.Properties.NotificationConfigurations[1].TopicARN == "arn:aws:sns:us-east-1:123456789012:terminate-topic"
+
+
 def test_autoscaling_group_with_tags():
     asg = AutoScalingAutoScalingGroup(
         **{

@@ -464,6 +464,63 @@ class CodeGenerator:
             return True
         return False
 
+    def _detect_field_name_shadowing(self, fields: List[Tuple[str, str, str, bool]]) -> Dict[str, str]:
+        """
+        Detect fields whose names shadow class names used in List[] annotations of sibling fields.
+
+        When a class has a field like `Transition: Optional[...] = None` and another field
+        `Transitions: Optional[Resolvable[List[Transition]]] = None`, Python evaluates the
+        List[Transition] annotation inside the class body where `Transition` has already been
+        set to None (the default value), causing List[Transition] to resolve to List[NoneType].
+
+        Returns a dict mapping class names to their pre-resolved type alias names.
+        """
+        field_names = {name for name, _, _, _ in fields}
+        aliases = {}
+
+        for _, type_annotation, _, _ in fields:
+            # Find all List[ClassName] patterns in the annotation
+            match = re.search(r"Resolvable\[List\[(\w+)\]\]", type_annotation)
+            if match:
+                class_name = match.group(1)
+                if class_name in field_names and class_name not in aliases:
+                    alias_name = f"_{class_name}List"
+                    aliases[class_name] = alias_name
+
+        return aliases
+
+    def _apply_shadowing_aliases(
+        self, fields: List[Tuple[str, str, str, bool]], aliases: Dict[str, str]
+    ) -> List[Tuple[str, str, str, bool]]:
+        """Replace Resolvable[List[ClassName]] with the pre-resolved alias in field annotations."""
+        if not aliases:
+            return fields
+
+        result = []
+        for name, type_annotation, default, is_required in fields:
+            for class_name, alias_name in aliases.items():
+                type_annotation = type_annotation.replace(f"Resolvable[List[{class_name}]]", alias_name)
+            result.append((name, type_annotation, default, is_required))
+        return result
+
+    def _generate_shadowing_alias_lines(self, aliases: Dict[str, str], class_name: str) -> List[str]:
+        """Generate module-level type alias lines to avoid class body name shadowing."""
+        lines = []
+        for original_class, alias_name in sorted(aliases.items()):
+            lines.append(
+                f"# Pre-resolved list type to avoid class body name shadowing in {class_name}."
+            )
+            lines.append(
+                f"# The {class_name} class has a field named \"{original_class}\" (default None) which shadows"
+            )
+            lines.append(
+                f"# the {original_class} class when Python evaluates List[{original_class}] inside the class body."
+            )
+            lines.append(f"{alias_name} = Resolvable[List[{original_class}]]")
+            lines.append("")
+            lines.append("")
+        return lines
+
     def generate_definition_class(self, def_name: str) -> List[str]:
         """Generate a class for a schema definition."""
         if def_name in self.generated_definitions:
@@ -482,15 +539,6 @@ class CodeGenerator:
         required = set(definition.get("required", []))
         desc = definition.get("description", f"{def_name} configuration.")
 
-        lines = []
-        lines.append(f"class {def_name}(CustomModel):")
-        lines.append('    """')
-        # Truncate description to first sentence or 200 chars
-        short_desc = desc.split(".")[0] + "." if "." in desc else desc[:200]
-        lines.append(f"    {short_desc}")
-        lines.append('    """')
-        lines.append("")
-
         # Generate fields
         fields = []
         for prop_name, prop_schema in sorted(props.items()):
@@ -503,6 +551,23 @@ class CodeGenerator:
 
             default = "" if is_required else " = None"
             fields.append((prop_name, type_annotation, default, is_required))
+
+        # Detect and fix field name shadowing in List[] annotations
+        aliases = self._detect_field_name_shadowing(fields)
+        fields = self._apply_shadowing_aliases(fields, aliases)
+
+        lines = []
+
+        # Emit module-level type aliases before the class to avoid shadowing
+        lines.extend(self._generate_shadowing_alias_lines(aliases, def_name))
+
+        lines.append(f"class {def_name}(CustomModel):")
+        lines.append('    """')
+        # Truncate description to first sentence or 200 chars
+        short_desc = desc.split(".")[0] + "." if "." in desc else desc[:200]
+        lines.append(f"    {short_desc}")
+        lines.append('    """')
+        lines.append("")
 
         # Sort: required first, then optional
         required_fields = [(n, t, d) for n, t, d, r in fields if r]
@@ -590,6 +655,21 @@ class CodeGenerator:
         # Add definition classes first (they need to be defined before Properties class)
         # Each class is immediately followed by its ResolvableX type alias
         lines.extend(definition_code_lines)
+
+        # Detect and fix field name shadowing in Properties class List[] annotations
+        props_fields_for_shadowing = [
+            (n, t, d, r) for n, t, d, _, r in property_fields
+        ]
+        props_aliases = self._detect_field_name_shadowing(props_fields_for_shadowing)
+        if props_aliases:
+            property_fields = [
+                (n, t_new, d, desc, r)
+                for (n, _, d, desc, r), (_, t_new, _, _) in zip(
+                    property_fields,
+                    self._apply_shadowing_aliases(props_fields_for_shadowing, props_aliases),
+                )
+            ]
+            lines.extend(self._generate_shadowing_alias_lines(props_aliases, self.props_class_name))
 
         # Properties class
         lines.append(f"class {self.props_class_name}(CustomModel):")
