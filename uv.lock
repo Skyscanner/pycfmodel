@@ -1008,7 +1008,6 @@ wheels = [
 
 [[package]]
 name = "pycfmodel"
-version = "1.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "pydantic" },
