@@ -160,4 +160,5 @@ def test_elbv2_target_group_minimal():
         }
     )
     assert target_group.Type == "AWS::ElasticLoadBalancingV2::TargetGroup"
-    assert target_group.Properties is None
+    assert target_group.Properties is not None
+    assert target_group.Properties.TargetType is None

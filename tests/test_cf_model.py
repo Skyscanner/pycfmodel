@@ -69,7 +69,6 @@ def test_resources_filtered_by_type():
             Metadata=None,
             UpdatePolicy=None,
             UpdateReplacePolicy=None,
-            Properties=None,
         ),
     }
     assert model.resources_filtered_by_type((IAMUser,)) == user

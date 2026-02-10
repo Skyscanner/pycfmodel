@@ -939,5 +939,5 @@ class S3Bucket(Resource):
     """
 
     Type: Literal["AWS::S3::Bucket"]
-    Properties: Optional[Resolvable[S3BucketProperties]] = None
+    Properties: Resolvable[S3BucketProperties] = S3BucketProperties()
 

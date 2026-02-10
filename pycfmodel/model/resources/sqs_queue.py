@@ -71,5 +71,5 @@ class SQSQueue(Resource):
     """
 
     Type: Literal["AWS::SQS::Queue"]
-    Properties: Optional[Resolvable[SQSQueueProperties]] = None
+    Properties: Resolvable[SQSQueueProperties] = SQSQueueProperties()
 

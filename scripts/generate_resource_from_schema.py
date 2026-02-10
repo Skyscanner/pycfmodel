@@ -748,12 +748,13 @@ class CodeGenerator:
         lines.append("")
         lines.append(f'    Type: Literal["{self.resource_type}"]')
 
-        # Determine if Properties should be Optional
+        # When no properties are required, default to an empty properties object
+        # so that accessing Properties.SomeField returns None instead of raising AttributeError.
         has_required_props = any(r for _, _, _, _, r in property_fields)
         if has_required_props:
             lines.append(f"    Properties: Resolvable[{self.props_class_name}]")
         else:
-            lines.append(f"    Properties: Optional[Resolvable[{self.props_class_name}]] = None")
+            lines.append(f"    Properties: Resolvable[{self.props_class_name}] = {self.props_class_name}()")
 
         lines.append("")
 

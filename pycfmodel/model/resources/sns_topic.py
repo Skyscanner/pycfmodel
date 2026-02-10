@@ -101,5 +101,5 @@ class SNSTopic(Resource):
     """
 
     Type: Literal["AWS::SNS::Topic"]
-    Properties: Optional[Resolvable[SNSTopicProperties]] = None
+    Properties: Resolvable[SNSTopicProperties] = SNSTopicProperties()
 

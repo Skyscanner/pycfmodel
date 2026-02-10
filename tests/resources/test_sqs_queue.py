@@ -81,4 +81,5 @@ def test_sqs_queue_minimal():
         }
     )
     assert queue.Type == "AWS::SQS::Queue"
-    assert queue.Properties is None
+    assert queue.Properties is not None
+    assert queue.Properties.QueueName is None

@@ -80,4 +80,5 @@ def test_sns_topic_minimal():
         }
     )
     assert topic.Type == "AWS::SNS::Topic"
-    assert topic.Properties is None
+    assert topic.Properties is not None
+    assert topic.Properties.TopicName is None
