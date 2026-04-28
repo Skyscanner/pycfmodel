@@ -3,7 +3,7 @@ name = "pycfmodel"
 dynamic = ["version"]
 readme = "README.md"
 description="A python model for Cloud Formation scripts"
-requires-python=">=3.9.0"
+requires-python=">=3.10.0"
 dependencies = [
     "pydantic~=2.7"
 ]
@@ -33,9 +33,9 @@ exclude = ["tests", "docs"]
 
 [project.optional-dependencies]
 dev = [
-    "black>=22.1.0",
+    "black>=26.3.1",
     "isort>=5.4.2",
-    "pytest>=6.0.1",
+    "pytest>=9.0.3",
     "pytest-cov>=2.10.1",
     "pytest-repeat==0.9.3",
     "ruff"
@@ -53,7 +53,7 @@ cloudformation-update = [
 
 [tool.black]
 line-length = 120
-target_version = ['py39']
+target_version = ['py310']
 
 [tool.isort]
 multi_line_output = 3
@@ -97,8 +97,8 @@ exclude = [
 line-length = 120
 indent-width = 4
 
-# Assume Python 3.9
-target-version = "py39"
+# Assume Python 3.10
+target-version = "py310"
 
 [tool.ruff.lint]
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.

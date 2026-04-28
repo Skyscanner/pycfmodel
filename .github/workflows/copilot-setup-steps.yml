@@ -36,7 +36,7 @@ jobs:
           enable-cache: true
 
       - name: Setup Python
-        run: uv python install 3.9
+        run: uv python install 3.10
 
       - name: Install development dependencies
         run: make install-dev
