@@ -103,6 +103,7 @@ def test_actions(kms_key):
         "kms:GenerateDataKeyWithoutPlaintext",
         "kms:GenerateMac",
         "kms:GenerateRandom",
+        "kms:GetKeyLastUsage",
         "kms:GetKeyPolicy",
         "kms:GetKeyRotationStatus",
         "kms:GetParametersForImport",
