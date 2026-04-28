@@ -24,7 +24,7 @@ jobs:
           enable-cache: false  # Disable cache for release builds to prevent cache poisoning
 
       - name: Setup python
-        run: uv python install 3.9
+        run: uv python install 3.10
 
       - name: Build package
         run: uv build
