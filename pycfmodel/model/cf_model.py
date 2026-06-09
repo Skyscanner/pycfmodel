@@ -23,9 +23,10 @@ class CFModel(CustomModel):
 
     Properties:
 
-    - AWSTemplateFormatVersion
+    - AWSTemplateFormatVersion: The AWS CloudFormation template version that the template conforms to.
     - Conditions: Conditions that control behaviour of the template.
     - Description: Description for the template.
+    - Globals: TODO
     - Mappings: A 3 level mapping of keys and associated values.
     - Metadata: Additional information about the template.
     - Outputs: Output values of the template.
@@ -35,11 +36,14 @@ class CFModel(CustomModel):
     - Transform: For serverless applications, specifies the version of the AWS Serverless Application Model (AWS SAM) to use.
 
     More info at [AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html)
+
+    More info for Globals at [AWS Globals Docs](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-template-anatomy-globals.html)
     """
 
     AWSTemplateFormatVersion: Optional[date] = None
     Conditions: Optional[Dict] = {}
     Description: Optional[str] = None
+    Globals: Optional[Dict] = {}
     Mappings: Optional[Dict[str, Dict[str, Dict[str, Any]]]] = {}
     Metadata: Optional[Dict[str, Any]] = None
     Outputs: Optional[Dict[str, Dict[str, Union[str, Dict]]]] = {}
@@ -89,6 +93,12 @@ class CFModel(CustomModel):
                 {key: _extended_bool(resolve(value, extended_parameters, self.Mappings, resolved_conditions))}
             )
 
+        globals_cf = dict_value.pop("Globals", {})
+        resolved_globals = {
+            key: resolve(value, extended_parameters, self.Mappings, resolved_conditions)
+            for key, value in globals_cf.items()
+        }
+
         resources = dict_value.pop("Resources")
         resolved_resources = {
             key: resolve(value, extended_parameters, self.Mappings, resolved_conditions)
@@ -96,7 +106,10 @@ class CFModel(CustomModel):
             if value.get("Condition") is None
             or (value.get("Condition") is not None and resolved_conditions.get(value["Condition"], True))
         }
-        return CFModel(**dict_value, Conditions=resolved_conditions, Resources=resolved_resources)
+
+        return CFModel(
+            **dict_value, Conditions=resolved_conditions, Resources=resolved_resources, Globals=resolved_globals
+        )
 
     def expand_actions(self) -> "CFModel":
         """
@@ -139,3 +152,11 @@ class CFModel(CustomModel):
             if isinstance(resource, allowed_resource_classes) or resource.Type in allowed_types:
                 result[resource_name] = resource
         return result
+
+    def is_sam_model(self) -> bool:
+        transform = self.Transform
+        if self.Transform is None:
+            return False
+        if isinstance(transform, str):
+            transform = [transform]
+        return any(macro.startswith("AWS::Serverless") for macro in transform)
