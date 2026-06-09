@@ -151,7 +151,41 @@ def test_split(function, expected_output):
 
 
 @pytest.mark.parametrize(
-    "function, expected_output", [({"Fn::If": ["A", "a", "b"]}, "a"), ({"Fn::If": ["B", "a", "b"]}, "b")]
+    "function, expected_output",
+    [
+        ({"Fn::If": ["A", "a", "b"]}, "a"),
+        ({"Fn::If": ["B", "a", "b"]}, "b"),
+        (
+            {
+                "Fn::If": [
+                    "A",
+                    {"Key": "SecondTag", "Value": "true"},
+                    {"Key": "SecondTag", "Value": "false"},
+                ]
+            },
+            {"Key": "SecondTag", "Value": "true"},
+        ),
+        (
+            {
+                "Fn::If": [
+                    "A",
+                    {"Key": "SecondTag", "Value": "true"},
+                    {"Ref": "AWS::NoValue"},
+                ]
+            },
+            {"Key": "SecondTag", "Value": "true"},
+        ),
+        (
+            {
+                "Fn::If": [
+                    "B",
+                    {"Key": "SecondTag", "Value": "true"},
+                    {"Ref": "AWS::NoValue"},
+                ]
+            },
+            "UNDEFINED_PARAM_AWS::NoValue",
+        ),
+    ],
 )
 def test_if(function, expected_output):
     parameters = {}
@@ -850,3 +884,32 @@ def test_resolve_find_in_map_for_bool_values_in_map(params, expected_resolved_va
 
     result = resolve_find_in_map(function_body=function_body, params=params, mappings=mappings, conditions={})
     assert result == expected_resolved_value
+
+
+def test_resolve_tags_on_no_value_with_condition():
+    template = {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "TEST DESCRIPTION",
+        "Conditions": {"MyCustomCondition": {"Fn::Equals": [{"Ref": "AWS::AccountId"}, "123456789012"]}},
+        "Resources": {
+            "PublicS3Bucket": {
+                "Type": "AWS::S3::Bucket",
+                "Properties": {
+                    "BucketName": "test",
+                    "Tags": [
+                        {
+                            "Fn::If": [
+                                "MyCustomCondition",
+                                {"Key": "mysecretkey", "Value": "standard"},
+                                {"Ref": "AWS::NoValue"},
+                            ]
+                        }
+                    ],
+                },
+            }
+        },
+    }
+
+    model = parse(template).resolve()
+    resource = model.Resources["PublicS3Bucket"]
+    assert isinstance(resource, GenericResource)
