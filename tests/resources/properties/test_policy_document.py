@@ -270,7 +270,7 @@ def test_get_allowed_actions(policy_document_not_principal):
         "s3:GetObjectTorrent",
         "s3:GetObjectVersion",
         "s3:GetObjectVersionAcl",
-        "s3: GetObjectVersionAnnotation",
+        "s3:GetObjectVersionAnnotation",
         "s3:GetObjectVersionAnnotationForReplication",
         "s3:GetObjectVersionAttributes",
         "s3:GetObjectVersionForReplication",
