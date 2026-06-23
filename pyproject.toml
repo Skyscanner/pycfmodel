@@ -37,7 +37,7 @@ dev = [
     "isort>=5.4.2",
     "pytest>=9.0.3",
     "pytest-cov>=2.10.1",
-    "pytest-repeat==0.9.3",
+    "pytest-repeat==0.9.4",
     "ruff"
 ]
 docs = [
