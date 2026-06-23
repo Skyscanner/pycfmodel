@@ -45,7 +45,7 @@ docs = [
     "livereload==2.7.1",
     "mkdocs-material==9.6.11",
     "mkdocs==1.6.1",
-    "mkdocstrings==0.28.3"
+    "mkdocstrings==1.0.4"
 ]
 cloudformation-update = [
     "httpx>=0.14.2"
