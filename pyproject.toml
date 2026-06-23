@@ -129,3 +129,6 @@ line-ending = "auto"
 markers = [
     "actions: marks tests that checks the full list of IAM actions (deselect with '-m \"not actions\"')",
 ]
+
+[tool.uv]
+index-url = "https://pypi.org/simple"

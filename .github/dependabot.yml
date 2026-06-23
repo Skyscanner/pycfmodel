@@ -4,13 +4,20 @@
 # https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
+registries:
+  pypi:
+    type: python-index
+    url: https://pypi.org/simple
+    replaces-base: true
 updates:
-  - package-ecosystem: "pip" # See documentation for possible values
+  - package-ecosystem: "uv" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
       interval: "monthly"
     cooldown:
       default-days: 7
+    registries:
+      - pypi
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
