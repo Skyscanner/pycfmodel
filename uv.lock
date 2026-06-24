@@ -628,7 +628,7 @@ wheels = [
 
 [[package]]
 name = "mkdocstrings"
-version = "0.28.3"
+version = "1.0.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
@@ -636,12 +636,11 @@ dependencies = [
     { name = "markupsafe" },
     { name = "mkdocs" },
     { name = "mkdocs-autorefs" },
-    { name = "mkdocs-get-deps" },
     { name = "pymdown-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e3/48/d134ffefd61349ac96161078d836c7e0c15062e01104327c9a5b23398a0f/mkdocstrings-0.28.3.tar.gz", hash = "sha256:c753516b1b6cee12d00bf9c28255e22c0d71f34c721ca668971fce885d846e0f", size = 104109, upload-time = "2025-03-08T21:43:21.088Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1d/5d/f888d4d3eb31359b327bc9b17a212d6ef03fe0b0682fbb3fc2cb849fb12b/mkdocstrings-1.0.4.tar.gz", hash = "sha256:3969a6515b77db65fd097b53c1b7aa4ae840bd71a2ee62a6a3e89503446d7172", size = 100088, upload-time = "2026-04-15T09:16:53.376Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/47/5c/205e4991fad1fbfe78b0d1fcfcf85f55556bcc93a5d6d94c7935e8463b87/mkdocstrings-0.28.3-py3-none-any.whl", hash = "sha256:df5351ffd10477aa3c2ff5cdf17544b936477195436923660274d084a5c1359c", size = 35177, upload-time = "2025-03-08T21:43:19.355Z" },
+    { url = "https://files.pythonhosted.org/packages/6e/94/be70f8ee9c45f2f62b39a1f0e9303bc20e138a8f3b8e50ffd89498e177e1/mkdocstrings-1.0.4-py3-none-any.whl", hash = "sha256:63464b4b29053514f32a1dbbf604e52876d5e638111b0c295ab7ed3cac73ca9b", size = 35560, upload-time = "2026-04-15T09:16:51.436Z" },
 ]
 
 [[package]]
@@ -734,7 +733,7 @@ requires-dist = [
     { name = "livereload", marker = "extra == 'docs'", specifier = "==2.7.1" },
     { name = "mkdocs", marker = "extra == 'docs'", specifier = "==1.6.1" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = "==9.7.6" },
-    { name = "mkdocstrings", marker = "extra == 'docs'", specifier = "==0.28.3" },
+    { name = "mkdocstrings", marker = "extra == 'docs'", specifier = "==1.0.4" },
     { name = "pydantic", specifier = "~=2.7" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.0.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=2.10.1" },
