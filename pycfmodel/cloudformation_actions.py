@@ -4401,6 +4401,7 @@ CLOUDFORMATION_ACTIONS = [
     "cognito-idp:AdminForgetDevice",
     "cognito-idp:AdminGetDevice",
     "cognito-idp:AdminGetUser",
+    "cognito-idp:AdminGetUserAuthFactors",
     "cognito-idp:AdminInitiateAuth",
     "cognito-idp:AdminLinkProviderForUser",
     "cognito-idp:AdminListDevices",
