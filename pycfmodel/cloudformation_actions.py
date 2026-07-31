@@ -18742,6 +18742,7 @@ CLOUDFORMATION_ACTIONS = [
     "ses:ListVerifiedEmailAddresses",
     "ses:PutAccountDedicatedIpWarmupAttributes",
     "ses:PutAccountDetails",
+    "ses:PutAccountPricingAttributes",
     "ses:PutAccountSendingAttributes",
     "ses:PutAccountSuppressionAttributes",
     "ses:PutAccountVdmAttributes",
