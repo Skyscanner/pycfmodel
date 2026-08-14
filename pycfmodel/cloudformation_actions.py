@@ -209,6 +209,7 @@ CLOUDFORMATION_ACTIONS = [
     "acm:ListAcmeDomainValidations",
     "acm:ListAcmeEndpoints",
     "acm:ListAcmeExternalAccountBindings",
+    "acm:ListCertificateDomainValidations",
     "acm:ListCertificates",
     "acm:ListTagsForCertificate",
     "acm:ListTagsForResource",
