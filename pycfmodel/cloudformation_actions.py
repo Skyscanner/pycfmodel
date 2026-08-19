@@ -9920,6 +9920,8 @@ CLOUDFORMATION_ACTIONS = [
     "healthlake:SubmitPreAuthClaim",
     "healthlake:TagResource",
     "healthlake:TransformData",
+    "healthlake:TranslateConceptMapWithGet",
+    "healthlake:TranslateConceptMapWithPost",
     "healthlake:UntagResource",
     "healthlake:UpdateDataTransformationProfile",
     "healthlake:UpdateFHIRDatastore",
