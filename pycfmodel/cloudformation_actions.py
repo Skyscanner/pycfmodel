@@ -2313,6 +2313,7 @@ CLOUDFORMATION_ACTIONS = [
     "bedrock-mantle:CallWithBearerToken",
     "bedrock-mantle:CancelFineTuningJob",
     "bedrock-mantle:CancelInference",
+    "bedrock-mantle:CountTokens",
     "bedrock-mantle:CreateCustomizedModel",
     "bedrock-mantle:CreateFile",
     "bedrock-mantle:CreateFineTuningJob",
