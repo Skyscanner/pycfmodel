@@ -15001,6 +15001,7 @@ CLOUDFORMATION_ACTIONS = [
     "payment-cryptography:EncryptData",
     "payment-cryptography:ExportKey",
     "payment-cryptography:GenerateAs2805KekValidation",
+    "payment-cryptography:GenerateAuthRequestCryptogram",
     "payment-cryptography:GenerateCardValidationData",
     "payment-cryptography:GenerateMac",
     "payment-cryptography:GenerateMacEmvPinChange",
