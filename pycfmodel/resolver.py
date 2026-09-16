@@ -88,6 +88,8 @@ def resolve_ref(function_body, params: Dict, mappings: Dict[str, Dict], conditio
     resolved_ref = resolve(function_body, params, mappings, conditions)
     if resolved_ref in params:
         return params[resolved_ref]
+    # elif resolved_ref == AWS_NOVALUE: #todo - pending to resolve ref to no value?
+    #    return ""
     else:
         logger.warning(f"Using `UNDEFINED_PARAM_{resolved_ref}` for {resolved_ref}. Original value wasn't available.")
         return f"UNDEFINED_PARAM_{resolved_ref}"
