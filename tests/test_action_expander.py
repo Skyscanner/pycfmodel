@@ -280,6 +280,7 @@ def test_resolve_scenario_2():
         "lambda:ListMicrovmImageVersions",
         "lambda:ListMicrovmImages",
         "lambda:ListMicrovms",
+        "lambda:ListNetworkConnectorVersions",
         "lambda:ListNetworkConnectors",
         "lambda:ListProvisionedConcurrencyConfigs",
         "lambda:ListTags",
