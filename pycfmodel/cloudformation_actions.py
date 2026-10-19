@@ -20838,6 +20838,7 @@ CLOUDFORMATION_ACTIONS = [
     "transfer:DescribeWebApp",
     "transfer:DescribeWebAppCustomization",
     "transfer:DescribeWorkflow",
+    "transfer:ExportHostKey",
     "transfer:ImportCertificate",
     "transfer:ImportHostKey",
     "transfer:ImportSshPublicKey",
