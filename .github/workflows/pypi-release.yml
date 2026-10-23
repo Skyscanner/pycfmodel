@@ -14,14 +14,15 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e  # v10.3.2
         with:
-          enable-cache: false  # Disable cache for release builds to prevent cache poisoning
+          enable-cache: false
+          version: latest-known  # Disable cache for release builds to prevent cache poisoning
 
       - name: Setup python
         run: uv python install 3.10
@@ -30,7 +31,7 @@ jobs:
         run: uv build
 
       - name: Publish distribution 📦 to PyPI
-        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33  # v1.14.2
         with:
           # zizmor: ignore[use-trusted-publishing] https://github.com/pypi/warehouse/issues/17700
           user: __token__
