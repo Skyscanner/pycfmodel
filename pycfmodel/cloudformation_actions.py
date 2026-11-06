@@ -4085,6 +4085,7 @@ CLOUDFORMATION_ACTIONS = [
     "cloudwatch:DescribeAlarmsForMetric",
     "cloudwatch:DescribeAnomalyDetectors",
     "cloudwatch:DescribeInsightRules",
+    "cloudwatch:DetectGroupOutliers",
     "cloudwatch:DisableAlarmActions",
     "cloudwatch:DisableInsightRules",
     "cloudwatch:EnableAlarmActions",
