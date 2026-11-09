@@ -34,5 +34,5 @@ jobs:
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
       - uses: release-drafter/release-drafter@72967cdc98ddd3160f1fc3dff619de365e137dd0 # v7.9.0
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        with:
+          token: ${{ steps.app-token.outputs.token }}
