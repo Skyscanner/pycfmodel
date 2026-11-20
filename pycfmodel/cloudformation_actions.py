@@ -4574,6 +4574,7 @@ CLOUDFORMATION_ACTIONS = [
     "codeconnections:GetInstallationUrl",
     "codeconnections:GetRepositoryLink",
     "codeconnections:GetRepositorySyncStatus",
+    "codeconnections:GetResourcePolicy",
     "codeconnections:GetResourceSyncStatus",
     "codeconnections:GetSyncBlockerSummary",
     "codeconnections:GetSyncConfiguration",
