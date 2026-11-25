@@ -17488,6 +17488,7 @@ CLOUDFORMATION_ACTIONS = [
     "redshift:ListSavedQueries",
     "redshift:ListSchemas",
     "redshift:ListTables",
+    "redshift:ModifyAccountAttributes",
     "redshift:ModifyAquaConfiguration",
     "redshift:ModifyAuthenticationProfile",
     "redshift:ModifyAutonomicsDenylist",
