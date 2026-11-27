@@ -21,6 +21,32 @@ def test_recursive():
         # FunctionDict
         ({"Fn::ImportValue": "abc"}, FunctionDict(**{"Fn::ImportValue": "abc"})),
         ([{"Fn::ImportValue": "abc"}], [FunctionDict(**{"Fn::ImportValue": "abc"})]),
+        (
+            {"Fn::If": ["MyCustomCondition", {"Key": "mysecretkey", "Value": "standard"}, {"Ref": "AWS::NoValue"}]},
+            FunctionDict(
+                **{
+                    "Fn::If": [
+                        "MyCustomCondition",
+                        {"Key": "mysecretkey", "Value": "standard"},
+                        {"Ref": "AWS::NoValue"},
+                    ]
+                }
+            ),
+        ),
+        (
+            [{"Fn::If": ["MyCustomCondition", {"Key": "mysecretkey", "Value": "standard"}, {"Ref": "AWS::NoValue"}]}],
+            [
+                FunctionDict(
+                    **{
+                        "Fn::If": [
+                            "MyCustomCondition",
+                            {"Key": "mysecretkey", "Value": "standard"},
+                            {"Ref": "AWS::NoValue"},
+                        ]
+                    }
+                )
+            ],
+        ),
         # Properties
         ({"Key": "test", "Value": "potatoe"}, Tag(Key="test", Value="potatoe")),
         ([{"Key": "test", "Value": "potatoe"}], [Tag(Key="test", Value="potatoe")]),
